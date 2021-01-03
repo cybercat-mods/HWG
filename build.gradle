@@ -1,0 +1,98 @@
+plugins {
+	id 'fabric-loom' version '0.5-SNAPSHOT'
+	id 'maven-publish'
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation 'software.bernie.geckolib:fabric-1.16.4-geckolib:3.0.1:dev'
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cardinal_version}"
+    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cardinal_version}"
+    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cardinal_version}"
+	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-chunk:${cardinal_version}"
+    modApi("me.shedaniel.cloth:config-2:4.8.1"){
+      exclude module: 'fabric-api'
+    }
+    include "me.shedaniel.cloth:config-2:4.8.1"
+    modImplementation("me.sargunvohra.mcmods:autoconfig1u:3.3.1") {
+      exclude module: 'fabric-api'
+    }
+    include "me.sargunvohra.mcmods:autoconfig1u:3.3.1"
+    modImplementation("io.github.prospector:modmenu:1.14.6+build.31") {
+      exclude module: 'fabric-api'
+    }
+}
+
+repositories {
+	maven {
+		url = "https://maven.theillusivec4.top/"
+	}
+	maven {	
+		url = 'https://maven.fabricmc.net/io/github/prospector/modmenu/'
+	}
+	maven {
+        name = "Ladysnake Libs"
+        url = 'https://dl.bintray.com/ladysnake/libs'
+    }
+	maven {
+        url = "https://www.cursemaven.com"
+    }
+     maven {
+        name = "OnyxStudios"
+        url = "https://maven.abusedmaster.xyz"
+    }
+    maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	def targetVersion = 8
+	if (JavaVersion.current().isJava9Compatible()) {
+		 it.options.release = targetVersion
+	}
+}
+
+java {
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			// add all the jars that should be included when publishing to maven
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+
+	repositories {
+	}
+}
