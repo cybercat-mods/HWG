@@ -75,45 +75,49 @@ public class PistolItem extends RangedWeaponItem implements IAnimatable {
 					itemstack = new ItemStack(HWGItems.BULLETS);
 				}
 
-				if (!worldIn.isClient) {
-					BulletAmmo arrowitem = (BulletAmmo) (itemstack.getItem() instanceof BulletAmmo ? itemstack.getItem()
-							: HWGItems.BULLETS);
-					BulletEntity abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
-					abstractarrowentity = customeArrow(abstractarrowentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,
-							1.0F * 3.0F, 1.0F);
+				if (playerentity.getMainHandStack().getCooldown() == 0) {
 
-					int j = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
-					if (j > 0) {
-						abstractarrowentity.setDamage(abstractarrowentity.getDamage() + (double) j * 0.5D + 0.5D);
-					}
+					if (!worldIn.isClient) {
+						BulletAmmo arrowitem = (BulletAmmo) (itemstack.getItem() instanceof BulletAmmo
+								? itemstack.getItem()
+								: HWGItems.BULLETS);
+						BulletEntity abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
+						abstractarrowentity = customeArrow(abstractarrowentity);
+						abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,
+								1.0F * 3.0F, 1.0F);
 
-					int k = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
-					if (k > 0) {
-						abstractarrowentity.setPunch(k);
-					}
+						int j = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
+						if (j > 0) {
+							abstractarrowentity.setDamage(abstractarrowentity.getDamage() + (double) j * 0.5D + 0.5D);
+						}
 
-					if (EnchantmentHelper.getLevel(Enchantments.FLAME, stack) > 0) {
-						abstractarrowentity.setFireTicks(100);
-					}
+						int k = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
+						if (k > 0) {
+							abstractarrowentity.setPunch(k);
+						}
 
-					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
-					worldIn.spawnEntity(abstractarrowentity);
-				}
-				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-						SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1.0F,
-						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-				if (!playerentity.abilities.creativeMode) {
-					itemstack.decrement(1);
-					if (itemstack.isEmpty()) {
-						playerentity.inventory.removeOne(itemstack);
+						if (EnchantmentHelper.getLevel(Enchantments.FLAME, stack) > 0) {
+							abstractarrowentity.setFireTicks(100);
+						}
+
+						stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
+						worldIn.spawnEntity(abstractarrowentity);
 					}
-				}
-				AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack,
-						controllerName);
-				if (controller.getAnimationState() == AnimationState.Stopped) {
-					controller.markNeedsReload();
-					controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
+					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
+							playerentity.getZ(), SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1.0F,
+							1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					if (!playerentity.abilities.creativeMode) {
+						itemstack.decrement(1);
+						if (itemstack.isEmpty()) {
+							playerentity.inventory.removeOne(itemstack);
+						}
+					}
+					AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack,
+							controllerName);
+					if (controller.getAnimationState() == AnimationState.Stopped) {
+						controller.markNeedsReload();
+						controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
+					}
 				}
 			}
 		}

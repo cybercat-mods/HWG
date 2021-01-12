@@ -1,5 +1,7 @@
 package mod.azure.hwg.entity.projectiles;
 
+import java.util.List;
+
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
 import mod.azure.hwg.util.packet.EntityPacket;
@@ -13,6 +15,8 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -20,8 +24,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class BulletEntity extends PersistentProjectileEntity {
+public class BulletEntity extends PersistentProjectileEntity implements IAnimatable {
 
 	protected int timeInAir;
 	protected boolean inAir;
@@ -47,6 +57,22 @@ public class BulletEntity extends PersistentProjectileEntity {
 			this.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
 		}
 
+	}
+
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+		return PlayState.STOP;
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController<BulletEntity>(this, "controller", 0, this::predicate));
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
 	}
 
 	@Override
@@ -172,12 +198,26 @@ public class BulletEntity extends PersistentProjectileEntity {
 		}
 	}
 
+	private SoundEvent hitSound = this.getHitSound();
+	private List<Entity> hitEntities;
+
+	@Override
+	public void setSound(SoundEvent soundIn) {
+		this.hitSound = soundIn;
+	}
+
+	@Override
+	protected SoundEvent getHitSound() {
+		return SoundEvents.ITEM_ARMOR_EQUIP_IRON;
+	}
+
 	@Override
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
 			this.remove();
 		}
+		this.setSound(SoundEvents.ITEM_ARMOR_EQUIP_IRON);
 	}
 
 	@Override
