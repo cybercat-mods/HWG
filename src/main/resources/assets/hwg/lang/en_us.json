@@ -1,6 +1,7 @@
 {
 	"item.hwg.pistol": "Pistol",
 	"item.hwg.spistol": "Silenced Pistol",
+	"item.hwg.flamethrower": "Flamethrower",
 	"item.hwg.bullets": "Bullet",
 	"itemGroup.hwg.weapons": "HWG Weapons"
 }

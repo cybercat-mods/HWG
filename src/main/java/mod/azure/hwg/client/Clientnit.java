@@ -2,6 +2,7 @@ package mod.azure.hwg.client;
 
 import org.lwjgl.glfw.GLFW;
 
+import mod.azure.hwg.client.render.weapons.FlamethrowerRender;
 import mod.azure.hwg.client.render.weapons.PistolRender;
 import mod.azure.hwg.client.render.weapons.SPistolRender;
 import mod.azure.hwg.util.HWGItems;
@@ -26,6 +27,7 @@ public class Clientnit implements ClientModInitializer {
 //		ScreenRegistry.<GunTableDescription, GunTableScreen>register(HWGMod.SCREEN_HANDLER_TYPE, (gui, inventory, title) -> new GunTableScreen(gui, inventory.player, title));
 		GeoItemRenderer.registerItemRenderer(HWGItems.PISTOL, new PistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SPISTOL, new SPistolRender());
+		GeoItemRenderer.registerItemRenderer(HWGItems.FLAMETHROWER, new FlamethrowerRender());
 		ClientSidePacketRegistry.INSTANCE.register(EntityPacket.ID, (ctx, buf) -> {
 			EntityPacketOnClient.onPacket(ctx, buf);
 		});

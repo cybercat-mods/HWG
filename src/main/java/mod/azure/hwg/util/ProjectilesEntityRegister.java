@@ -5,6 +5,7 @@ import java.util.List;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
+import mod.azure.hwg.entity.projectiles.FlameFiring;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -21,6 +22,7 @@ public class ProjectilesEntityRegister {
 	public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList();
 
 	public static EntityType<BulletEntity> BULLETS = projectile(BulletEntity::new, "bullets");
+	public static EntityType<FlameFiring> FIRING = projectile(FlameFiring::new, "flame_firing");
 
 	private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id) {
 		return projectile(factory, id, true);
