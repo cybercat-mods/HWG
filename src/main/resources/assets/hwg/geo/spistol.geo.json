@@ -6,7 +6,7 @@
 				"identifier": "geometry.pistol",
 				"texture_width": 16,
 				"texture_height": 16,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 2,
 				"visible_bounds_height": 2.5,
 				"visible_bounds_offset": [0, 0.75, 0]
 			},
@@ -173,6 +173,21 @@
 								"west": {"uv": [6, 15], "uv_size": [10, 1]},
 								"up": {"uv": [0, 10], "uv_size": [0, -10]},
 								"down": {"uv": [0, 10], "uv_size": [0, -10]}
+							}
+						},
+						{
+							"origin": [1.5, 6, -9.5],
+							"size": [1, 1, 8],
+							"inflate": 0.1,
+							"pivot": [2, 6.5, -1.5],
+							"rotation": [0, 0, 45],
+							"uv": {
+								"north": {"uv": [12, 14], "uv_size": [1, 1]},
+								"east": {"uv": [10, 6], "uv_size": [-8, 1]},
+								"south": {"uv": [12, 14], "uv_size": [1, 1]},
+								"west": {"uv": [2, 7], "uv_size": [8, 1]},
+								"up": {"uv": [16, 15], "uv_size": [-1, -8]},
+								"down": {"uv": [16, 8], "uv_size": [-1, -8]}
 							}
 						}
 					]

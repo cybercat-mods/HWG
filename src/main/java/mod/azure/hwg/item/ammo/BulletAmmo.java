@@ -1,4 +1,4 @@
-package mod.azure.hwg.item;
+package mod.azure.hwg.item.ammo;
 
 import java.util.List;
 

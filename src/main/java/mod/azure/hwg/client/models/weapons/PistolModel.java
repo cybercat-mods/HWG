@@ -1,7 +1,7 @@
-package mod.azure.hwg.client.models;
+package mod.azure.hwg.client.models.weapons;
 
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.item.PistolItem;
+import mod.azure.hwg.item.weapons.PistolItem;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

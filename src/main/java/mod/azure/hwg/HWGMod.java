@@ -1,6 +1,7 @@
 package mod.azure.hwg;
 
-import mod.azure.hwg.client.render.PistolRender;
+import mod.azure.hwg.item.weapons.PistolItem;
+import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
 import net.fabricmc.api.ModInitializer;
@@ -21,6 +22,8 @@ public class HWGMod implements ModInitializer {
 	public static final String MODID = "hwg";
 	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons"))
 			.icon(() -> new ItemStack(HWGItems.PISTOL)).build();
+	public static final Identifier PISTOL = new Identifier(MODID, "pistol");
+	public static final Identifier SPISTOL = new Identifier(MODID, "spistol");
 
 	@Override
 	public void onInitialize() {
@@ -33,5 +36,19 @@ public class HWGMod implements ModInitializer {
 		RegistryEntryAddedCallback.event(BuiltinRegistries.BIOME).register((i, id, biome) -> {
 			// MobSpawn.addSpawnEntries();
 		});
+		ServerPlayNetworking.registerGlobalReceiver(PISTOL,
+				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+					if (player.getMainHandStack().getItem() instanceof PistolItem) {
+						((PistolItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+					}
+					;
+				});
+		ServerPlayNetworking.registerGlobalReceiver(SPISTOL,
+				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+					if (player.getMainHandStack().getItem() instanceof SPistolItem) {
+						((SPistolItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+					}
+					;
+				});
 	}
 }

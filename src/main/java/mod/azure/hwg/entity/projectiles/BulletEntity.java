@@ -1,7 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import java.util.List;
-
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
 import mod.azure.hwg.util.packet.EntityPacket;
@@ -81,7 +79,7 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
 	}
 
 	@Override
-	protected void age() {
+	public void age() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 40) {
 			this.remove();
@@ -198,8 +196,7 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
 		}
 	}
 
-	private SoundEvent hitSound = this.getHitSound();
-	private List<Entity> hitEntities;
+	public SoundEvent hitSound = this.getHitSound();
 
 	@Override
 	public void setSound(SoundEvent soundIn) {

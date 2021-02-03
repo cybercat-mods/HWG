@@ -1,6 +1,6 @@
 package mod.azure.hwg.client;
 
-import mod.azure.hwg.client.render.BulletRender;
+import mod.azure.hwg.client.render.projectiles.BulletRender;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 
