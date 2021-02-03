@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        jcenter()
+    	maven { url  = 'https://plugins.gradle.org/m2/' }
+    }
+}
+
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
 plugins {
 	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id 'maven-publish'
@@ -15,7 +25,8 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation 'software.bernie.geckolib:fabric-1.16.4-geckolib:3.0.1:dev'
+    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.16:dev'
+	modImplementation 'curse.maven:TDI-245733:3144149'
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cardinal_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cardinal_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cardinal_version}"
@@ -23,6 +34,7 @@ dependencies {
     modApi("me.shedaniel.cloth:config-2:4.8.1"){
       exclude module: 'fabric-api'
     }
+    modImplementation include("io.github.cottonmc:LibGui:3.3.2+1.16.4")
     include "me.shedaniel.cloth:config-2:4.8.1"
     modImplementation("me.sargunvohra.mcmods:autoconfig1u:3.3.1") {
       exclude module: 'fabric-api'
@@ -51,6 +63,10 @@ repositories {
         name = "OnyxStudios"
         url = "https://maven.abusedmaster.xyz"
     }
+    maven {
+        name = "CottonMC"
+        url = "https://server.bbkr.space/artifactory/libs-release"
+    }
     maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
 }
 
@@ -60,6 +76,22 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": project.version
 	}
+}
+
+processResources {
+	doLast {
+        def jsonMinifyStart = System.currentTimeMillis()
+        def jsonMinified = 0
+        def jsonBytesSaved = 0
+        fileTree(dir: outputs.files.asPath, include: '**/*.json').each { 
+            File file = it
+            jsonMinified++
+            def oldLength = file.length()
+            file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
+            jsonBytesSaved += oldLength - file.length()
+        }
+        println('Minified ' + jsonMinified + ' json files. Saved ' + jsonBytesSaved + ' bytes. Took ' + (System.currentTimeMillis() - jsonMinifyStart) + 'ms.')
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -78,6 +110,10 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
+}
+
+minecraft {
+	accessWidener "src/main/resources/hwg.accesswidener"
 }
 
 publishing {
