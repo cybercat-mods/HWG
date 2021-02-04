@@ -3,11 +3,9 @@
 	"item.hwg.spistol": "Silenced Pistol",
 	"item.hwg.flamethrower": "Flamethrower",
 	"item.hwg.bullets": "Bullet",
-	"entity.hwg.technodemon_lesser_1": "Technodemon Lesser 1",
-	"entity.hwg.technodemon_lesser_2": "Technodemon Lesser 2",
-	"entity.hwg.technodemon_lesser_3": "Technodemon Lesser 3",
-	"entity.hwg.technodemon_lesser_4": "Technodemon Lesser 4",
-	"entity.hwg.technodemon_greater_1": "Technodemon Greater 1",
-	"entity.hwg.technodemon_greater_2": "Technodemon Greater 2",
+	"entity.hwg.technodemon_lesser_1": "Lesser Technodemon",
+	"entity.hwg.technodemon_greater_1": "Greater Technodemon",
+	"item.hwg.lesser_spawn_egg": "Lesser Technodemon Spawn Egg",
+	"item.hwg.greater_spawn_egg": "Greater Technodemon Spawn Egg",
 	"itemGroup.hwg.weapons": "HWG Weapons"
 }

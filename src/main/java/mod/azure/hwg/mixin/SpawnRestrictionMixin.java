@@ -18,17 +18,9 @@ public class SpawnRestrictionMixin {
 	}
 
 	static {
-		register(HWGMobs.TECHNOLESSER1, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+		register(HWGMobs.TECHNOLESSER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
 				HostileEntity::canSpawnInDark);
-		register(HWGMobs.TECHNOLESSER2, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				HostileEntity::canSpawnInDark);
-		register(HWGMobs.TECHNOLESSER3, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				HostileEntity::canSpawnInDark);
-		register(HWGMobs.TECHNOLESSER4, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				HostileEntity::canSpawnInDark);
-		register(HWGMobs.TECHNOGREATER1, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
-				HostileEntity::canSpawnInDark);
-		register(HWGMobs.TECHNOGREATER2, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+		register(HWGMobs.TECHNOGREATER, SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
 				HostileEntity::canSpawnInDark);
 	}
 }

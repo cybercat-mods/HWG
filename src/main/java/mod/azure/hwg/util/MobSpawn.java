@@ -18,9 +18,9 @@ public class MobSpawn {
 		for (Biome biome : BuiltinRegistries.BIOME) {
 			if (biome.getCategory().equals(Biome.Category.NETHER)) {
 				addMobSpawnToBiome(biome, SpawnGroup.MONSTER,
-						new SpawnSettings.SpawnEntry(HWGMobs.TECHNOLESSER1, 30, 1, 2));
+						new SpawnSettings.SpawnEntry(HWGMobs.TECHNOLESSER, 30, 1, 2));
 				addMobSpawnToBiome(biome, SpawnGroup.MONSTER,
-						new SpawnSettings.SpawnEntry(HWGMobs.TECHNOLESSER2, 30, 1, 2));
+						new SpawnSettings.SpawnEntry(HWGMobs.TECHNOGREATER, 30, 1, 2));
 			}
 		}
 	}

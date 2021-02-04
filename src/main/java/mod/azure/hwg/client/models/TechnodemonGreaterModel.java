@@ -8,27 +8,27 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
-public class TechnodemonGreater1Model extends AnimatedGeoModel<TechnodemonGreaterEntity> {
+public class TechnodemonGreaterModel extends AnimatedGeoModel<TechnodemonGreaterEntity> {
 
-	public TechnodemonGreater1Model() {
+	public TechnodemonGreaterModel() {
 	}
 
 	@Override
 	public Identifier getModelLocation(TechnodemonGreaterEntity object) {
-		return new Identifier(HWGMod.MODID, "geo/technodemon_greater_1.geo.json");
+
+		return new Identifier(HWGMod.MODID, "geo/technodemon_greater_" + object.getVariant() + ".geo.json");
 	}
 
 	@Override
 	public Identifier getTextureLocation(TechnodemonGreaterEntity object) {
-		return new Identifier(HWGMod.MODID, "textures/entity/technodemon_greater_1.png");
+		return new Identifier(HWGMod.MODID, "textures/entity/technodemon_greater_" + object.getVariant() + ".png");
 	}
 
 	@Override
 	public Identifier getAnimationFileLocation(TechnodemonGreaterEntity object) {
-		return new Identifier(HWGMod.MODID, "animations/technodemon_greater_1.animation.json");
+		return new Identifier(HWGMod.MODID, "animations/technodemon_greater_" + object.getVariant() + ".animation.json");
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setLivingAnimations(TechnodemonGreaterEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
@@ -36,8 +36,8 @@ public class TechnodemonGreater1Model extends AnimatedGeoModel<TechnodemonGreate
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 		if (head != null) {
-			head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-			head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+			head.setRotationX((extraData.headPitch - 5) * ((float) Math.PI / 180F));
+			head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 340F));
 		}
 	}
 }

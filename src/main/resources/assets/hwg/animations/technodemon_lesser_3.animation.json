@@ -321,11 +321,11 @@
 							"vector": [0, 0, 0]
 						},
 						"0.56": {
-							"vector": [10, 0, 0],
+							"vector": [20, 0, 0],
 							"easing": "easeInOutSine"
 						},
 						"1.56": {
-							"vector": [-10, 0, 0],
+							"vector": [-20, 0, 0],
 							"easing": "easeInOutSine"
 						},
 						"2.08": {
@@ -340,11 +340,11 @@
 							"vector": [0, 0, 0]
 						},
 						"0.56": {
-							"vector": [-10, 0, 0],
+							"vector": [-20, 0, 0],
 							"easing": "easeInOutSine"
 						},
 						"1.56": {
-							"vector": [10, 0, 0],
+							"vector": [20, 0, 0],
 							"easing": "easeInOutSine"
 						},
 						"2.08": {

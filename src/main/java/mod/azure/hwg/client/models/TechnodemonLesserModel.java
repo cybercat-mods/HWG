@@ -8,27 +8,26 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
-public class TechnodemonLesser1Model extends AnimatedGeoModel<TechnodemonEntity> {
+public class TechnodemonLesserModel extends AnimatedGeoModel<TechnodemonEntity> {
 
-	public TechnodemonLesser1Model() {
+	public TechnodemonLesserModel() {
 	}
 
 	@Override
 	public Identifier getModelLocation(TechnodemonEntity object) {
-		return new Identifier(HWGMod.MODID, "geo/technodemon_lesser_1.geo.json");
+		return new Identifier(HWGMod.MODID, "geo/technodemon_lesser_" + object.getVariant() + ".geo.json");
 	}
 
 	@Override
 	public Identifier getTextureLocation(TechnodemonEntity object) {
-		return new Identifier(HWGMod.MODID, "textures/entity/technodemon_lesser_1.png");
+		return new Identifier(HWGMod.MODID, "textures/entity/technodemon_lesser_" + object.getVariant() + ".png");
 	}
 
 	@Override
 	public Identifier getAnimationFileLocation(TechnodemonEntity object) {
-		return new Identifier(HWGMod.MODID, "animations/technodemon_lesser_1.animation.json");
+		return new Identifier(HWGMod.MODID, "animations/technodemon_lesser_" + object.getVariant() + ".animation.json");
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setLivingAnimations(TechnodemonEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
@@ -36,8 +35,8 @@ public class TechnodemonLesser1Model extends AnimatedGeoModel<TechnodemonEntity>
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 		if (head != null) {
-			head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-			head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+			head.setRotationX((extraData.headPitch - 5) * ((float) Math.PI / 180F));
+			head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 340F));
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -18,8 +19,12 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -42,7 +47,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (event.isMoving()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
 			return PlayState.CONTINUE;
 		}
 		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
@@ -81,9 +86,26 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		this.dataTracker.set(SHOOTING, shooting);
 	}
 
+	@Override
 	protected void initDataTracker() {
 		super.initDataTracker();
 		this.dataTracker.startTracking(SHOOTING, false);
+	}
+
+	@Override
+	public void readCustomDataFromTag(CompoundTag tag) {
+		super.readCustomDataFromTag(tag);
+		this.setVariant(tag.getInt("Variant"));
+	}
+
+	@Override
+	public void writeCustomDataToTag(CompoundTag tag) {
+		super.writeCustomDataToTag(tag);
+		tag.putInt("Variant", this.getVariant());
+	}
+
+	public int getVariant() {
+		return MathHelper.clamp((Integer) this.dataTracker.get(VARIANT), 1, 4);
 	}
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
@@ -103,6 +125,22 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	@Override
 	protected float getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions) {
 		return 2.25F;
+	}
+
+	@Override
+	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
+			EntityData entityData, CompoundTag entityTag) {
+		this.setVariant(this.random.nextInt(5));
+		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
+	}
+
+	public void setVariant(int variant) {
+		this.dataTracker.set(VARIANT, variant);
+	}
+
+	@Override
+	public int getVariants() {
+		return 4;
 	}
 
 }
