@@ -16,15 +16,12 @@ public class HWGItems {
 	public static SPistolItem SPISTOL = item(new SPistolItem(), "spistol");
 	public static BulletAmmo BULLETS = item(new BulletAmmo(1.2F), "bullets");
 	public static FlamethrowerItem FLAMETHROWER = item(new FlamethrowerItem(), "flamethrower");
-	public static HWGSpawnEgg LESSER_SPAWN_EGG = item("lesser_spawn_egg", new HWGSpawnEgg(HWGMobs.TECHNOLESSER));
-	public static HWGSpawnEgg GREATER_SPAWN_EGG = item("greater_spawn_egg", new HWGSpawnEgg(HWGMobs.TECHNOGREATER));
+	public static HWGSpawnEgg SPY_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.SPY), "spy_spawn_egg");
+	public static HWGSpawnEgg MERC_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.MERC), "merc_spawn_egg");
+	public static HWGSpawnEgg LESSER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOLESSER), "lesser_spawn_egg");
+	public static HWGSpawnEgg GREATER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOGREATER), "greater_spawn_egg");
 
 	static <T extends Item> T item(T c, String id) {
-		Registry.register(Registry.ITEM, new Identifier(HWGMod.MODID, id), c);
-		return c;
-	}
-
-	static <T extends Item> T item(String id, T c) {
 		Registry.register(Registry.ITEM, new Identifier(HWGMod.MODID, id), c);
 		return c;
 	}

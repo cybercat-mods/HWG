@@ -7,5 +7,7 @@
 	"entity.hwg.technodemon_greater_1": "Greater Technodemon",
 	"item.hwg.lesser_spawn_egg": "Lesser Technodemon Spawn Egg",
 	"item.hwg.greater_spawn_egg": "Greater Technodemon Spawn Egg",
+	"item.hwg.merc_spawn_egg": "Merc Spawn Egg",
+	"item.hwg.spy_spawn_egg": "Spy Spawn Egg",
 	"itemGroup.hwg.weapons": "HWG Weapons"
 }

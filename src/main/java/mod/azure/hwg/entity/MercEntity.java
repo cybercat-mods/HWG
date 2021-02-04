@@ -38,6 +38,7 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.biome.Biome.Category;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -46,25 +47,25 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class TechnodemonEntity extends HWGEntity implements IAnimatable {
+public class MercEntity extends HWGEntity implements IAnimatable {
 
-	private final RangedAttackGoal<TechnodemonEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 20, 15.0F);
+	private final RangedAttackGoal<MercEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 20, 15.0F);
 	private final MeleeAttackGoal meleeAttackGoal = new MeleeAttackGoal(this, 1.2D, false) {
 		public void stop() {
 			super.stop();
-			TechnodemonEntity.this.setAttacking(false);
+			MercEntity.this.setAttacking(false);
 		}
 
 		public void start() {
 			super.start();
-			TechnodemonEntity.this.setAttacking(true);
+			MercEntity.this.setAttacking(true);
 		}
 	};
 
-	private static final TrackedData<Boolean> SHOOTING = DataTracker.registerData(TechnodemonEntity.class,
+	private static final TrackedData<Boolean> SHOOTING = DataTracker.registerData(MercEntity.class,
 			TrackedDataHandlerRegistry.BOOLEAN);
 
-	public TechnodemonEntity(EntityType<TechnodemonEntity> entityType, World worldIn) {
+	public MercEntity(EntityType<MercEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
 	}
 
@@ -85,7 +86,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController<TechnodemonEntity>(this, "controller", 0, this::predicate));
+		data.addAnimationController(new AnimationController<MercEntity>(this, "controller", 0, this::predicate));
 	}
 
 	@Override
@@ -129,6 +130,12 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		super.readCustomDataFromTag(tag);
 		this.updateAttackType();
 		this.setVariant(tag.getInt("Variant"));
+	}
+
+	@Override
+	public void writeCustomDataToTag(CompoundTag tag) {
+		super.writeCustomDataToTag(tag);
+		tag.putInt("Variant", this.getVariant());
 	}
 
 	public void equipStack(EquipmentSlot slot, ItemStack stack) {
@@ -175,7 +182,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	}
 
 	protected BulletEntity createArrowProjectile(ItemStack arrow, float damageModifier) {
-		return TechnodemonEntity.createArrowProjectile(this, arrow, damageModifier);
+		return MercEntity.createArrowProjectile(this, arrow, damageModifier);
 	}
 
 	public boolean canUseRangedWeapon(Item weapon) {
@@ -191,21 +198,15 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		return persistentProjectileEntity;
 	}
 
-	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
-		tag.putInt("Variant", this.getVariant());
-	}
-
 	public int getVariant() {
 		return MathHelper.clamp((Integer) this.dataTracker.get(VARIANT), 1, 4);
 	}
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_ARMOR, 4)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, 48D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
-				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_MAX_HEALTH, 20D)
+				.add(EntityAttributes.GENERIC_ARMOR, 3).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
+				.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	protected boolean shouldDrown() {
@@ -218,15 +219,23 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	protected float getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions) {
-		return 2.25F;
+		return 1.85F;
 	}
 
 	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
 			EntityData entityData, CompoundTag entityTag) {
-		this.setVariant(this.random.nextInt(5));
+		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		this.updateAttackType();
+		this.setVariant((Category.DESERT != null || Category.MESA != null) ? 1
+				: (Category.FOREST != null || Category.JUNGLE != null) ? 2 : Category.ICY != null ? 3 : 4);
+
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
+	}
+
+	private ItemStack makeInitialWeapon() {
+		return (double) this.random.nextFloat() < 0.5D ? new ItemStack(HWGItems.PISTOL)
+				: new ItemStack(HWGItems.PISTOL);
 	}
 
 	public void setVariant(int variant) {

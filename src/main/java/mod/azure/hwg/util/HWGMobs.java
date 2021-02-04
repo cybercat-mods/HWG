@@ -1,6 +1,8 @@
 package mod.azure.hwg.util;
 
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.entity.MercEntity;
+import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -21,6 +23,18 @@ public class HWGMobs {
 	public static final EntityType<TechnodemonGreaterEntity> TECHNOGREATER = Registry.register(Registry.ENTITY_TYPE,
 			new Identifier(HWGMod.MODID, "technodemon_greater_1"),
 			FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, TechnodemonGreaterEntity::new)
-					.dimensions(EntityDimensions.fixed(0.9f, 2.5F)).fireImmune().trackRangeBlocks(90)
+					.dimensions(EntityDimensions.fixed(1.3f, 3.5F)).fireImmune().trackRangeBlocks(90)
+					.trackedUpdateRate(4).build());
+	
+	public static final EntityType<MercEntity> MERC = Registry.register(Registry.ENTITY_TYPE,
+			new Identifier(HWGMod.MODID, "merc"),
+			FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, MercEntity::new)
+					.dimensions(EntityDimensions.fixed(0.9F, 2.15F)).trackRangeBlocks(90)
+					.trackedUpdateRate(4).build());
+	
+	public static final EntityType<SpyEntity> SPY = Registry.register(Registry.ENTITY_TYPE,
+			new Identifier(HWGMod.MODID, "spy"),
+			FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, SpyEntity::new)
+					.dimensions(EntityDimensions.fixed(0.9F, 2.15F)).trackRangeBlocks(90)
 					.trackedUpdateRate(4).build());
 }

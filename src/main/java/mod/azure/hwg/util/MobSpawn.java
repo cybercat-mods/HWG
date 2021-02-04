@@ -1,42 +1,47 @@
 package mod.azure.hwg.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import com.google.common.collect.ImmutableMap;
-
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.SpawnSettings;
 
+@SuppressWarnings("deprecation")
 public class MobSpawn {
 
 	public static void addSpawnEntries() {
-		for (Biome biome : BuiltinRegistries.BIOME) {
-			if (biome.getCategory().equals(Biome.Category.NETHER)) {
-				addMobSpawnToBiome(biome, SpawnGroup.MONSTER,
-						new SpawnSettings.SpawnEntry(HWGMobs.TECHNOLESSER, 30, 1, 2));
-				addMobSpawnToBiome(biome, SpawnGroup.MONSTER,
-						new SpawnSettings.SpawnEntry(HWGMobs.TECHNOGREATER, 30, 1, 2));
-			}
-		}
-	}
-
-	public static void addMobSpawnToBiome(Biome biome, SpawnGroup classification,
-			SpawnSettings.SpawnEntry... spawnInfos) {
-		convertImmutableSpawners(biome);
-		List<SpawnSettings.SpawnEntry> spawnersList = new ArrayList<>(
-				biome.getSpawnSettings().spawners.get(classification));
-		spawnersList.addAll(Arrays.asList(spawnInfos));
-		biome.getSpawnSettings().spawners.put(classification, spawnersList);
-	}
-
-	private static void convertImmutableSpawners(Biome biome) {
-		if (biome.getSpawnSettings().spawners instanceof ImmutableMap) {
-			biome.getSpawnSettings().spawners = new HashMap<>(biome.getSpawnSettings().spawners);
-		}
+		BiomeModifications.addSpawn(
+				BiomeSelectors.foundInOverworld()
+						.and(context -> !context.getBiome().getSpawnSettings()
+								.getSpawnEntry(HWGMobs.MERC.getSpawnGroup()).isEmpty()
+								&& context.getBiome().getCategory() != Biome.Category.OCEAN
+								&& (context.getBiome().getCategory() == Biome.Category.FOREST
+										|| context.getBiome().getCategory() == Biome.Category.TAIGA
+										|| context.getBiome().getCategory() == Biome.Category.DESERT
+										|| context.getBiome().getCategory() == Biome.Category.MESA
+										|| context.getBiome().getCategory() == Biome.Category.JUNGLE
+										|| context.getBiome().getCategory() == Biome.Category.PLAINS
+										|| context.getBiome().getCategory() == Biome.Category.ICY)),
+				SpawnGroup.MONSTER, HWGMobs.MERC, 10, 2, 5);
+		BiomeModifications.addSpawn(
+				BiomeSelectors.foundInOverworld()
+						.and(context -> !context.getBiome().getSpawnSettings()
+								.getSpawnEntry(HWGMobs.SPY.getSpawnGroup()).isEmpty()
+								&& context.getBiome().getCategory() != Biome.Category.OCEAN
+								&& context.getBiome().getCategory() == Biome.Category.TAIGA
+								|| context.getBiome().getCategory() == Biome.Category.MESA
+								|| context.getBiome().getCategory() == Biome.Category.JUNGLE),
+				SpawnGroup.MONSTER, HWGMobs.SPY, 10, 2, 5);
+		BiomeModifications.addSpawn(
+				BiomeSelectors.foundInTheNether()
+						.and(context -> !context.getBiome().getSpawnSettings()
+								.getSpawnEntry(HWGMobs.TECHNOLESSER.getSpawnGroup()).isEmpty()
+								&& context.getBiome().getCategory() == Biome.Category.NETHER),
+				SpawnGroup.MONSTER, HWGMobs.TECHNOLESSER, 10, 1, 2);
+		BiomeModifications.addSpawn(
+				BiomeSelectors.foundInTheNether()
+						.and(context -> !context.getBiome().getSpawnSettings()
+								.getSpawnEntry(HWGMobs.TECHNOGREATER.getSpawnGroup()).isEmpty()
+								&& context.getBiome().getCategory() == Biome.Category.NETHER),
+				SpawnGroup.MONSTER, HWGMobs.TECHNOGREATER, 10, 1, 2);
 	}
 }

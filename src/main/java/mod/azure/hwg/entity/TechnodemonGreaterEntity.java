@@ -2,16 +2,24 @@ package mod.azure.hwg.entity;
 
 import java.util.Random;
 
+import mod.azure.hwg.entity.goal.RangedAttackGoal;
+import mod.azure.hwg.entity.projectiles.BulletEntity;
+import mod.azure.hwg.item.ammo.BulletAmmo;
+import mod.azure.hwg.util.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.FollowTargetGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.RevengeGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -19,6 +27,9 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -26,6 +37,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -35,6 +47,20 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
+
+	private final RangedAttackGoal<TechnodemonGreaterEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 20,
+			15.0F);
+	private final MeleeAttackGoal meleeAttackGoal = new MeleeAttackGoal(this, 1.2D, false) {
+		public void stop() {
+			super.stop();
+			TechnodemonGreaterEntity.this.setAttacking(false);
+		}
+
+		public void start() {
+			super.start();
+			TechnodemonGreaterEntity.this.setAttacking(true);
+		}
+	};
 
 	private static final TrackedData<Boolean> SHOOTING = DataTracker.registerData(TechnodemonGreaterEntity.class,
 			TrackedDataHandlerRegistry.BOOLEAN);
@@ -46,8 +72,12 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if (event.isMoving()) {
+		if (!(limbDistance > -0.10F && limbDistance < 0.10F) && !this.dataTracker.get(SHOOTING)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
+			return PlayState.CONTINUE;
+		}
+		if (this.isAttacking() && !(this.dead || this.getHealth() < 0.01 || this.isDead())) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("attacking", true));
 			return PlayState.CONTINUE;
 		}
 		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
@@ -65,9 +95,9 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		return this.factory;
 	}
 
-	public static boolean spawning(EntityType<TechnodemonGreaterEntity> p_223337_0_, World p_223337_1_,
-			SpawnReason reason, BlockPos p_223337_3_, Random p_223337_4_) {
-		return p_223337_1_.getDifficulty() != Difficulty.PEACEFUL;
+	public static boolean canSpawn(EntityType<? extends HWGEntity> type, WorldAccess world, SpawnReason spawnReason,
+			BlockPos pos, Random random) {
+		return world.getDifficulty() != Difficulty.PEACEFUL;
 	}
 
 	@Override
@@ -75,6 +105,8 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
 		this.goalSelector.add(8, new LookAroundGoal(this));
 		this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.8D));
+		this.targetSelector.add(2, new RevengeGoal(this).setGroupRevenge());
+		this.targetSelector.add(2, new FollowTargetGoal<>(this, PlayerEntity.class, true));
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -87,14 +119,17 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		this.dataTracker.set(SHOOTING, shooting);
 	}
 
+	@Override
 	protected void initDataTracker() {
 		super.initDataTracker();
 		this.dataTracker.startTracking(SHOOTING, false);
+		this.dataTracker.startTracking(VARIANT, 0);
 	}
 
 	@Override
 	public void readCustomDataFromTag(CompoundTag tag) {
 		super.readCustomDataFromTag(tag);
+		this.updateAttackType();
 		this.setVariant(tag.getInt("Variant"));
 	}
 
@@ -104,6 +139,66 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		tag.putInt("Variant", this.getVariant());
 	}
 
+	public void equipStack(EquipmentSlot slot, ItemStack stack) {
+		super.equipStack(slot, stack);
+		if (!this.world.isClient) {
+			this.updateAttackType();
+		}
+
+	}
+
+	public void updateAttackType() {
+		if (this.world != null && !this.world.isClient) {
+			this.goalSelector.remove(this.meleeAttackGoal);
+			this.goalSelector.remove(this.bowAttackGoal);
+			ItemStack itemStack = this.getStackInHand(ProjectileUtil.getHandPossiblyHolding(this,
+					this.getEquippedStack(EquipmentSlot.MAINHAND).getItem()));
+			if (itemStack.getItem() == this.getEquippedStack(EquipmentSlot.MAINHAND).getItem()) {
+				int i = 20;
+				if (this.world.getDifficulty() != Difficulty.HARD) {
+					i = 40;
+				}
+
+				this.bowAttackGoal.setAttackInterval(i);
+				this.goalSelector.add(4, this.bowAttackGoal);
+			} else {
+				this.goalSelector.add(4, this.meleeAttackGoal);
+			}
+
+		}
+	}
+
+	public void attack(LivingEntity target, float pullProgress) {
+		ItemStack itemStack = this.getArrowType(this.getStackInHand(
+				ProjectileUtil.getHandPossiblyHolding(this, this.getEquippedStack(EquipmentSlot.MAINHAND).getItem())));
+		BulletEntity BulletEntity = this.createArrowProjectile(itemStack, pullProgress);
+		double d = target.getX() - this.getX();
+		double e = target.getBodyY(0.3333333333333333D) - BulletEntity.getY();
+		double f = target.getZ() - this.getZ();
+		double g = (double) MathHelper.sqrt(d * d + f * f);
+		BulletEntity.setVelocity(d, e + g * 0.05F, f, 1.6F, 0.0F);
+		// this.playSound(ModSoundEvents.CHAINGUN_SHOOT, 1.0F, 1.0F /
+		// (this.getRandom().nextFloat() * 0.4F + 0.8F));
+		this.world.spawnEntity(BulletEntity);
+	}
+
+	protected BulletEntity createArrowProjectile(ItemStack arrow, float damageModifier) {
+		return TechnodemonGreaterEntity.createArrowProjectile(this, arrow, damageModifier);
+	}
+
+	public boolean canUseRangedWeapon(Item weapon) {
+		return weapon == this.getEquippedStack(EquipmentSlot.MAINHAND).getItem();
+	}
+
+	public static BulletEntity createArrowProjectile(LivingEntity entity, ItemStack stack, float damageModifier) {
+		BulletAmmo arrowItem = (BulletAmmo) ((BulletAmmo) (stack.getItem() instanceof BulletAmmo ? stack.getItem()
+				: HWGItems.BULLETS));
+		BulletEntity persistentProjectileEntity = arrowItem.createArrow(entity.world, stack, entity);
+		persistentProjectileEntity.applyEnchantmentEffects(entity, damageModifier);
+
+		return persistentProjectileEntity;
+	}
+
 	public int getVariant() {
 		return MathHelper.clamp((Integer) this.dataTracker.get(VARIANT), 1, 2);
 	}
@@ -111,7 +206,8 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_MAX_HEALTH, 100D)
-				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+				.add(EntityAttributes.GENERIC_ARMOR, 5).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
+				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	protected boolean shouldDrown() {
@@ -124,13 +220,14 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	protected float getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions) {
-		return 2.25F;
+		return 3.45F;
 	}
 
 	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
 			EntityData entityData, CompoundTag entityTag) {
-		this.setVariant(this.random.nextInt(5));
+		this.setVariant(this.random.nextInt());
+		this.updateAttackType();
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
 	}
 

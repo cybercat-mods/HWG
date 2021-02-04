@@ -46,25 +46,25 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class TechnodemonEntity extends HWGEntity implements IAnimatable {
+public class SpyEntity extends HWGEntity implements IAnimatable {
 
-	private final RangedAttackGoal<TechnodemonEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 20, 15.0F);
+	private final RangedAttackGoal<SpyEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 20, 15.0F);
 	private final MeleeAttackGoal meleeAttackGoal = new MeleeAttackGoal(this, 1.2D, false) {
 		public void stop() {
 			super.stop();
-			TechnodemonEntity.this.setAttacking(false);
+			SpyEntity.this.setAttacking(false);
 		}
 
 		public void start() {
 			super.start();
-			TechnodemonEntity.this.setAttacking(true);
+			SpyEntity.this.setAttacking(true);
 		}
 	};
 
-	private static final TrackedData<Boolean> SHOOTING = DataTracker.registerData(TechnodemonEntity.class,
+	private static final TrackedData<Boolean> SHOOTING = DataTracker.registerData(SpyEntity.class,
 			TrackedDataHandlerRegistry.BOOLEAN);
 
-	public TechnodemonEntity(EntityType<TechnodemonEntity> entityType, World worldIn) {
+	public SpyEntity(EntityType<SpyEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
 	}
 
@@ -85,17 +85,12 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController<TechnodemonEntity>(this, "controller", 0, this::predicate));
+		data.addAnimationController(new AnimationController<SpyEntity>(this, "controller", 0, this::predicate));
 	}
 
 	@Override
 	public AnimationFactory getFactory() {
 		return this.factory;
-	}
-
-	public static boolean canSpawn(EntityType<? extends HWGEntity> type, WorldAccess world, SpawnReason spawnReason,
-			BlockPos pos, Random random) {
-		return world.getDifficulty() != Difficulty.PEACEFUL;
 	}
 
 	@Override
@@ -129,6 +124,12 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		super.readCustomDataFromTag(tag);
 		this.updateAttackType();
 		this.setVariant(tag.getInt("Variant"));
+	}
+
+	@Override
+	public void writeCustomDataToTag(CompoundTag tag) {
+		super.writeCustomDataToTag(tag);
+		tag.putInt("Variant", this.getVariant());
 	}
 
 	public void equipStack(EquipmentSlot slot, ItemStack stack) {
@@ -175,7 +176,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	}
 
 	protected BulletEntity createArrowProjectile(ItemStack arrow, float damageModifier) {
-		return TechnodemonEntity.createArrowProjectile(this, arrow, damageModifier);
+		return SpyEntity.createArrowProjectile(this, arrow, damageModifier);
 	}
 
 	public boolean canUseRangedWeapon(Item weapon) {
@@ -191,21 +192,15 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		return persistentProjectileEntity;
 	}
 
-	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
-		tag.putInt("Variant", this.getVariant());
-	}
-
 	public int getVariant() {
-		return MathHelper.clamp((Integer) this.dataTracker.get(VARIANT), 1, 4);
+		return MathHelper.clamp((Integer) this.dataTracker.get(VARIANT), 1, 3);
 	}
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_ARMOR, 4)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, 48D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
-				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_MAX_HEALTH, 20D)
+				.add(EntityAttributes.GENERIC_ARMOR, 3).add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D)
+				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	protected boolean shouldDrown() {
@@ -216,17 +211,29 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		return false;
 	}
 
+	public static boolean canSpawn(EntityType<? extends HWGEntity> type, WorldAccess world, SpawnReason spawnReason,
+			BlockPos pos, Random random) {
+		return world.getDifficulty() != Difficulty.PEACEFUL;
+	}
+
 	@Override
 	protected float getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions) {
-		return 2.25F;
+		return 1.85F;
 	}
 
 	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
 			EntityData entityData, CompoundTag entityTag) {
-		this.setVariant(this.random.nextInt(5));
+		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
+		this.setVariant(generateVariants(world.getRandom()));
 		this.updateAttackType();
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
+	}
+
+	private ItemStack makeInitialWeapon() {
+		return (double) this.random.nextFloat() <= 0.5D ? new ItemStack(HWGItems.SPISTOL)
+				: (double) this.random.nextFloat() == 0.75D ? new ItemStack(HWGItems.SPISTOL)
+						: new ItemStack(HWGItems.SPISTOL);
 	}
 
 	public void setVariant(int variant) {
@@ -236,6 +243,10 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	@Override
 	public int getVariants() {
 		return 4;
+	}
+
+	public static int generateVariants(Random random) {
+		return random.nextInt(500) == 0 ? 3 : random.nextInt(100) < 5 ? 2 : 1;
 	}
 
 }

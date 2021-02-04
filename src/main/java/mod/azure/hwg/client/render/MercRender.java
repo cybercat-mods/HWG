@@ -1,7 +1,7 @@
 package mod.azure.hwg.client.render;
 
-import mod.azure.hwg.client.models.TechnodemonLesserModel;
-import mod.azure.hwg.entity.TechnodemonEntity;
+import mod.azure.hwg.client.models.MercModel;
+import mod.azure.hwg.entity.MercEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -16,26 +16,26 @@ import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
 
-public class TechnodemonLesserRender extends GeoEntityRenderer<TechnodemonEntity> {
+public class MercRender extends GeoEntityRenderer<MercEntity> {
 
 	private ItemStack itemStack;
 	private VertexConsumerProvider rtb;
 	private Identifier whTexture;
 
-	public TechnodemonLesserRender(EntityRenderDispatcher renderManagerIn) {
-		super(renderManagerIn, new TechnodemonLesserModel());
+	public MercRender(EntityRenderDispatcher renderManagerIn) {
+		super(renderManagerIn, new MercModel());
 		this.shadowRadius = 0.7F;
 	}
 
 	@Override
-	public RenderLayer getRenderType(TechnodemonEntity animatable, float partialTicks, MatrixStack stack,
+	public RenderLayer getRenderType(MercEntity animatable, float partialTicks, MatrixStack stack,
 			VertexConsumerProvider renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
 			Identifier textureLocation) {
 		return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
 	}
 
 	@Override
-	public void renderEarly(TechnodemonEntity animatable, MatrixStack stackIn, float ticks,
+	public void renderEarly(MercEntity animatable, MatrixStack stackIn, float ticks,
 			VertexConsumerProvider renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
 			int packedOverlayIn, float red, float green, float blue, float partialTicks) {
 		this.itemStack = animatable.getEquippedStack(EquipmentSlot.MAINHAND);
