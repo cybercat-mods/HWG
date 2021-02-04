@@ -22,7 +22,7 @@ public class ProjectilesEntityRegister {
 	public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList();
 
 	public static EntityType<BulletEntity> BULLETS = projectile(BulletEntity::new, "bullets");
-	public static EntityType<FlameFiring> FIRING = projectile(FlameFiring::new, "flame_firing");
+	public static EntityType<FlameFiring> FIRING = projectile1(FlameFiring::new, "flame_firing");
 
 	private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id) {
 		return projectile(factory, id, true);
@@ -33,6 +33,29 @@ public class ProjectilesEntityRegister {
 
 		EntityType<T> type = FabricEntityTypeBuilder.<T>create(SpawnGroup.MISC, factory)
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
+				.trackRangeBlocks(90).trackedUpdateRate(4).build();
+
+		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
+
+		ENTITY_TYPES.add(type);
+
+		if (itemRender) {
+			ENTITY_THAT_USE_ITEM_RENDERS.add(type);
+		}
+
+		return type;
+	}
+
+
+	private static <T extends Entity> EntityType<T> projectile1(EntityType.EntityFactory<T> factory, String id) {
+		return projectile1(factory, id, true);
+	}
+
+	private static <T extends Entity> EntityType<T> projectile1(EntityType.EntityFactory<T> factory, String id,
+			boolean itemRender) {
+
+		EntityType<T> type = FabricEntityTypeBuilder.<T>create(SpawnGroup.MISC, factory)
+				.dimensions(new EntityDimensions(1.5F, 1.5F, true)).disableSummon().spawnableFarFromPlayer()
 				.trackRangeBlocks(90).trackedUpdateRate(4).build();
 
 		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);

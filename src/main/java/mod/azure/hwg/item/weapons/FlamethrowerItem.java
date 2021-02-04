@@ -7,7 +7,6 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.Clientnit;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
 import mod.azure.hwg.util.HWGItems;
-import mod.azure.hwg.util.ProjectilesEntityRegister;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
@@ -24,9 +23,6 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -48,6 +44,7 @@ public class FlamethrowerItem extends Item implements IAnimatable {
 	}
 
 	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
 		return PlayState.CONTINUE;
 	}
 
@@ -73,40 +70,39 @@ public class FlamethrowerItem extends Item implements IAnimatable {
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int remainingUseTicks) {
+	public void usageTick(World worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
 		if (entityLiving instanceof PlayerEntity) {
 			PlayerEntity playerentity = (PlayerEntity) entityLiving;
 			if (stack.getDamage() < (stack.getMaxDamage() - 1)) {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 
-//					double e1 = Math.max(entityLiving.getY(), playerentity.getY()) + 1.0D;
-//					float f2 = (float) MathHelper.atan2(entityLiving.getZ() - playerentity.getZ(),
-//							playerentity.getX() - playerentity.getX());
-//					double d = Math.min(entityLiving.getY(), playerentity.getY());
-//					int j;
-//					for (j = 0; j < 16; ++j) {
-//						double l1 = 1.25D * (double) (j + 1);
-//						int m = 1 * j;
-						FlameFiring lost_soul = ProjectilesEntityRegister.FIRING.create(worldIn);
-						lost_soul.updatePosition(entityLiving.getX(), entityLiving.getY(), entityLiving.getZ());
-						Vec3d vec3d = lost_soul.getVelocity();
-						lost_soul.setVelocity(vec3d.multiply((double) 0.99F));
-						worldIn.spawnEntity(lost_soul);
-//					}
+					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
+					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,
+							0.25F * 3.0F, 2.0F);
+					abstractarrowentity.isOnFire();
+					abstractarrowentity.age = 30;
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
+					worldIn.spawnEntity(abstractarrowentity);
+
 				}
 				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-						SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F,
+						SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS, 1.0F,
 						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-			}
-			AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack, controllerName);
-			if (controller.getAnimationState() == AnimationState.Stopped) {
-				controller.markNeedsReload();
-				controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
+				AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack,
+						controllerName);
+				if (controller.getAnimationState() == AnimationState.Stopped) {
+					controller.markNeedsReload();
+					controller.setAnimation(new AnimationBuilder().addAnimation("firing", true));
+				}
 			}
 		}
+	}
+
+	public FlameFiring createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
+		FlameFiring arrowentity = new FlameFiring(worldIn, shooter);
+		return arrowentity;
 	}
 
 	@Override
@@ -141,14 +137,6 @@ public class FlamethrowerItem extends Item implements IAnimatable {
 				}
 			}
 		}
-	}
-
-	public FlameFiring spawnFlames(LivingEntity shooter, double x, double z, double maxY, double y, float yaw,
-			int warmup) {
-		BlockPos blockPos = new BlockPos(x, y, z);
-		double d = -0.75D;
-		FlameFiring fang = new FlameFiring(shooter.world, x, (double) blockPos.getY() + d, z, yaw, warmup, shooter);
-		return fang;
 	}
 
 	@Override
