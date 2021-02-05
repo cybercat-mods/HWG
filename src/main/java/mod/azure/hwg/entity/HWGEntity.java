@@ -36,11 +36,17 @@ public abstract class HWGEntity extends PathAwareEntity implements Angerable, Ra
 
 	protected HWGEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
 		super(type, worldIn);
+		this.getNavigation().setCanSwim(true);
 	}
 
 	@Override
 	public Packet<?> createSpawnPacket() {
 		return EntityPacket.createPacket(this);
+	}
+
+	@Override
+	protected boolean isDisallowedInPeaceful() {
+		return true;
 	}
 
 	@Override

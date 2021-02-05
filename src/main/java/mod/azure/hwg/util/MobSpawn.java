@@ -13,7 +13,6 @@ public class MobSpawn {
 				BiomeSelectors.foundInOverworld()
 						.and(context -> !context.getBiome().getSpawnSettings()
 								.getSpawnEntry(HWGMobs.MERC.getSpawnGroup()).isEmpty()
-								&& context.getBiome().getCategory() != Biome.Category.OCEAN
 								&& (context.getBiome().getCategory() == Biome.Category.FOREST
 										|| context.getBiome().getCategory() == Biome.Category.TAIGA
 										|| context.getBiome().getCategory() == Biome.Category.DESERT
@@ -26,7 +25,6 @@ public class MobSpawn {
 				BiomeSelectors.foundInOverworld()
 						.and(context -> !context.getBiome().getSpawnSettings()
 								.getSpawnEntry(HWGMobs.SPY.getSpawnGroup()).isEmpty()
-								&& context.getBiome().getCategory() != Biome.Category.OCEAN
 								&& context.getBiome().getCategory() == Biome.Category.TAIGA
 								|| context.getBiome().getCategory() == Biome.Category.MESA
 								|| context.getBiome().getCategory() == Biome.Category.JUNGLE),

@@ -20,6 +20,7 @@ import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.RevengeGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -71,7 +72,8 @@ public class SpyEntity extends HWGEntity implements IAnimatable {
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if (!(limbDistance > -0.10F && limbDistance < 0.10F) && !this.dataTracker.get(SHOOTING)) {
+		if ((!(limbDistance > -0.10F && limbDistance < 0.10F) || this.isSwimming())
+				&& !this.dataTracker.get(SHOOTING)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
 			return PlayState.CONTINUE;
 		}
@@ -97,6 +99,7 @@ public class SpyEntity extends HWGEntity implements IAnimatable {
 	protected void initGoals() {
 		this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
 		this.goalSelector.add(8, new LookAroundGoal(this));
+		this.goalSelector.add(9, new SwimGoal(this));
 		this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.8D));
 		this.targetSelector.add(2, new RevengeGoal(this).setGroupRevenge());
 		this.targetSelector.add(2, new FollowTargetGoal<>(this, PlayerEntity.class, true));
@@ -228,6 +231,11 @@ public class SpyEntity extends HWGEntity implements IAnimatable {
 		this.setVariant(generateVariants(world.getRandom()));
 		this.updateAttackType();
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
+	}
+
+	@Override
+	public int getLimitPerChunk() {
+		return 1;
 	}
 
 	private ItemStack makeInitialWeapon() {
