@@ -20,6 +20,7 @@ import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.RevengeGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -38,6 +39,7 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.Category;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -72,7 +74,8 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if (!(limbDistance > -0.10F && limbDistance < 0.10F) && !this.dataTracker.get(SHOOTING)) {
+		if ((!(limbDistance > -0.10F && limbDistance < 0.10F) || this.isSwimming())
+				&& !this.dataTracker.get(SHOOTING)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
 			return PlayState.CONTINUE;
 		}
@@ -100,9 +103,16 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	}
 
 	@Override
+	public void checkDespawn() {
+		// TODO Auto-generated method stub
+		super.checkDespawn();
+	}
+
+	@Override
 	protected void initGoals() {
 		this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0F));
 		this.goalSelector.add(8, new LookAroundGoal(this));
+		this.goalSelector.add(9, new SwimGoal(this));
 		this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.8D));
 		this.targetSelector.add(2, new RevengeGoal(this).setGroupRevenge());
 		this.targetSelector.add(2, new FollowTargetGoal<>(this, PlayerEntity.class, true));
@@ -227,10 +237,43 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 			EntityData entityData, CompoundTag entityTag) {
 		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		this.updateAttackType();
-		this.setVariant((Category.DESERT != null || Category.MESA != null) ? 1
-				: (Category.FOREST != null || Category.JUNGLE != null) ? 2 : Category.ICY != null ? 3 : 4);
-
+		switch (world.getBiome(getBlockPos()).getCategory()) {
+		case DESERT:
+			this.setVariant(1);
+			break;
+		case MESA:
+			this.setVariant(1);
+			break;
+		case FOREST:
+			this.setVariant(2);
+			break;
+		case JUNGLE:
+			this.setVariant(2);
+			break;
+		case ICY:
+			this.setVariant(3);
+			break;
+		case TAIGA:
+			this.setVariant(4);
+			break;
+		case PLAINS:
+			this.setVariant(4);
+			break;
+		default:
+			this.setVariant(random.nextInt(getVariants() - 1) + 1);
+			break;
+		}
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
+	}
+
+	@Override
+	public int getLimitPerChunk() {
+		return 5;
+	}
+
+	public static int generateVariants(Biome random) {
+		return (Category.DESERT != null && Category.MESA != null) ? 1
+				: (Category.TAIGA != null && Category.PLAINS != null) ? 2 : Category.ICY != null ? 3 : 4;
 	}
 
 	private ItemStack makeInitialWeapon() {

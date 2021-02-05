@@ -20,10 +20,7 @@ public class MercModel extends AnimatedGeoModel<MercEntity> {
 
 	@Override
 	public Identifier getTextureLocation(MercEntity object) {
-		return object.getVariant() == 1 ? new Identifier(HWGMod.MODID, "textures/entity/merc_desert.png")
-				: object.getVariant() == 2 ? new Identifier(HWGMod.MODID, "textures/entity/merc_forest.png")
-						: object.getVariant() == 3 ? new Identifier(HWGMod.MODID, "textures/entity/merc_snow.png")
-								: new Identifier(HWGMod.MODID, "textures/entity/merc_taiga.png");
+		return new Identifier(HWGMod.MODID, "textures/entity/merc_" + object.getVariant() + ".png");
 	}
 
 	@Override
