@@ -1,0 +1,42 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "hwg:blocks/fuel_tank",
+		"particle": "hwg:blocks/fuel_tank"
+	},
+	"elements": [
+		{
+			"name": "main",
+			"from": [5.5, 0, 5.5],
+			"to": [10.5, 13, 10.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+			"faces": {
+				"north": {"uv": [0, 3, 5, 16], "texture": "#0"},
+				"east": {"uv": [5, 3, 10, 16], "texture": "#0"},
+				"south": {"uv": [5, 3, 10, 16], "texture": "#0"},
+				"west": {"uv": [5, 3, 10, 16], "texture": "#0"},
+				"up": {"uv": [11, 0, 16, 5], "texture": "#0"},
+				"down": {"uv": [11, 6, 16, 11], "texture": "#0"}
+			}
+		},
+		{
+			"name": "top",
+			"from": [6.5, 13, 6.5],
+			"to": [9.5, 16, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 13, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 3], "texture": "#0"},
+				"east": {"uv": [0, 0, 3, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 3, 3], "texture": "#0"},
+				"west": {"uv": [0, 0, 3, 3], "texture": "#0"},
+				"up": {"uv": [4, 0, 7, 3], "texture": "#0"},
+				"down": {"uv": [4, 0, 7, 3], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"gui": {
+			"rotation": [0, -180, 0]
+		}
+	}
+}

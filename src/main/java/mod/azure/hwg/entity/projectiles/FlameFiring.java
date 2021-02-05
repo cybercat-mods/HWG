@@ -125,7 +125,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 			this.prevYaw = this.yaw;
 			this.prevPitch = this.pitch;
 		}
-		if (this.age >= 40) {
+		if (this.age >= 50) {
 			this.remove();
 		}
 		if (this.inAir && !bl) {
@@ -221,6 +221,9 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 				if (y <= 1.0D) {
 					if (entity.isAlive()) {
 						entity.damage(DamageSource.magic(this, this), 3);
+						if (!(entity instanceof FlameFiring && this.getOwner() instanceof PlayerEntity)) {
+							entity.setFireTicks(90);
+						}
 					}
 				}
 			}
@@ -250,7 +253,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 
 	@Override
 	protected SoundEvent getHitSound() {
-		return SoundEvents.ITEM_ARMOR_EQUIP_IRON;
+		return SoundEvents.BLOCK_FIRE_AMBIENT;
 	}
 
 	@Override

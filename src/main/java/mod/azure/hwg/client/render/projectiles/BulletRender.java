@@ -28,4 +28,13 @@ public class BulletRender extends GeoProjectilesRenderer<BulletEntity> {
 		return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
 	}
 
+	@Override
+	public void renderEarly(BulletEntity animatable, MatrixStack stackIn, float ticks,
+			VertexConsumerProvider renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
+			int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn,
+				red, green, blue, partialTicks);
+		stackIn.scale(0.5F, 0.5F, 0.5F);
+	}
+
 }

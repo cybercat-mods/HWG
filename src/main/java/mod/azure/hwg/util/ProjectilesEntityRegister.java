@@ -46,7 +46,6 @@ public class ProjectilesEntityRegister {
 		return type;
 	}
 
-
 	private static <T extends Entity> EntityType<T> projectile1(EntityType.EntityFactory<T> factory, String id) {
 		return projectile1(factory, id, true);
 	}
@@ -55,8 +54,8 @@ public class ProjectilesEntityRegister {
 			boolean itemRender) {
 
 		EntityType<T> type = FabricEntityTypeBuilder.<T>create(SpawnGroup.MISC, factory)
-				.dimensions(new EntityDimensions(1.5F, 1.5F, true)).disableSummon().spawnableFarFromPlayer()
-				.trackRangeBlocks(90).trackedUpdateRate(4).build();
+				.dimensions(new EntityDimensions(1.5F, 1.5F, false)).disableSummon().spawnableFarFromPlayer()
+				.fireImmune().trackRangeBlocks(90).trackedUpdateRate(4).build();
 
 		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
 

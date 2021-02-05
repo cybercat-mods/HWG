@@ -1,5 +1,6 @@
 package mod.azure.hwg.client;
 
+import mod.azure.hwg.client.render.FuelTankRender;
 import mod.azure.hwg.client.render.MercRender;
 import mod.azure.hwg.client.render.SpyRender;
 import mod.azure.hwg.client.render.TechnodemonGreaterRender;
@@ -30,6 +31,9 @@ public class RenderRegistry {
 		});
 		EntityRendererRegistry.INSTANCE.register(HWGMobs.SPY, (dispatcher, context) -> {
 			return new SpyRender(dispatcher);
+		});
+		EntityRendererRegistry.INSTANCE.register(HWGMobs.FUELTANK, (dispatcher, context) -> {
+			return new FuelTankRender(dispatcher);
 		});
 	}
 

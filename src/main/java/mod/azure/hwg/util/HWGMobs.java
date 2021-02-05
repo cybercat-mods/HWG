@@ -5,7 +5,9 @@ import mod.azure.hwg.entity.MercEntity;
 import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
+import mod.azure.hwg.entity.projectiles.FuelTankEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -37,4 +39,10 @@ public class HWGMobs {
 			FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, SpyEntity::new)
 					.dimensions(EntityDimensions.fixed(0.9F, 2.15F)).trackRangeBlocks(90)
 					.trackedUpdateRate(4).build());
+
+	public static final EntityType<Entity> FUELTANK = Registry.register(Registry.ENTITY_TYPE,
+			new Identifier(HWGMod.MODID, "fuel_tank"),
+			FabricEntityTypeBuilder.create(SpawnGroup.MISC, FuelTankEntity::new)
+					.dimensions(EntityDimensions.fixed(0.98F, 0.98F)).trackRangeBlocks(90).trackedUpdateRate(4)
+					.build());
 }
