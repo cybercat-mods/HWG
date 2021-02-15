@@ -146,7 +146,7 @@ public class FlamethrowerItem extends Item implements IAnimatable {
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof FlamethrowerItem) {
 			while (user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(HWGItems.FUEL_TANK) > 0) {
-				removeAmmo(HWGMod.FUEL_TANK.asItem(), user);
+				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-501, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
 			}
@@ -154,14 +154,14 @@ public class FlamethrowerItem extends Item implements IAnimatable {
 	}
 
 	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		if (!playerEntity.isCreative()) {
+		//if (!playerEntity.isCreative()) {
 			for (ItemStack item : playerEntity.inventory.main) {
 				if (item.getItem() == HWGItems.FUEL_TANK) {
 					item.decrement(1);
 					break;
 				}
 			}
-		}
+		//}
 	}
 
 	@Override

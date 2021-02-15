@@ -23,6 +23,7 @@ public class Clientnit implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		ModelProviderinit.init();
 		RenderRegistry.init();
 //		ScreenRegistry.<GunTableDescription, GunTableScreen>register(HWGMod.SCREEN_HANDLER_TYPE, (gui, inventory, title) -> new GunTableScreen(gui, inventory.player, title));
 		GeoItemRenderer.registerItemRenderer(HWGItems.PISTOL, new PistolRender());

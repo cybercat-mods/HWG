@@ -25,7 +25,7 @@ public class TechnodemonLesserModel extends AnimatedGeoModel<TechnodemonEntity> 
 
 	@Override
 	public Identifier getAnimationFileLocation(TechnodemonEntity object) {
-		return new Identifier(HWGMod.MODID, "animations/technodemon_lesser_" + object.getVariant() + ".animation.json");
+		return new Identifier(HWGMod.MODID, "animations/technodemon_lesser_1.animation.json");
 	}
 
 	@Override

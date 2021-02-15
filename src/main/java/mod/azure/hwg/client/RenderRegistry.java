@@ -7,6 +7,7 @@ import mod.azure.hwg.client.render.TechnodemonGreaterRender;
 import mod.azure.hwg.client.render.TechnodemonLesserRender;
 import mod.azure.hwg.client.render.projectiles.BulletRender;
 import mod.azure.hwg.client.render.projectiles.FlameFiringRender;
+import mod.azure.hwg.client.render.projectiles.RocketRender;
 import mod.azure.hwg.util.HWGMobs;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
@@ -19,6 +20,9 @@ public class RenderRegistry {
 		});
 		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FIRING, (dispatcher, context) -> {
 			return new FlameFiringRender(dispatcher);
+		});
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.ROCKETS, (dispatcher, context) -> {
+			return new RocketRender(dispatcher);
 		});
 		EntityRendererRegistry.INSTANCE.register(HWGMobs.TECHNOLESSER, (dispatcher, context) -> {
 			return new TechnodemonLesserRender(dispatcher);

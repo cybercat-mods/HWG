@@ -5,6 +5,7 @@ import mod.azure.hwg.blocks.GunBlockEntity;
 import mod.azure.hwg.blocks.GunTableBlock;
 import mod.azure.hwg.item.weapons.FlamethrowerItem;
 import mod.azure.hwg.item.weapons.PistolItem;
+import mod.azure.hwg.item.weapons.RocketLauncher;
 import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.HWGMobs;
@@ -46,6 +47,7 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier PISTOL = new Identifier(MODID, "pistol");
 	public static final Identifier SPISTOL = new Identifier(MODID, "spistol");
 	public static final Identifier FLAMETHOWER = new Identifier(MODID, "flamethrower");
+	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
 
 	@Override
 	public void onInitialize() {
@@ -83,6 +85,13 @@ public class HWGMod implements ModInitializer {
 				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
 					if (player.getMainHandStack().getItem() instanceof FlamethrowerItem) {
 						((FlamethrowerItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+					}
+					;
+				});
+		ServerPlayNetworking.registerGlobalReceiver(ROCKETLAUNCHER,
+				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+					if (player.getMainHandStack().getItem() instanceof RocketLauncher) {
+						((RocketLauncher) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
 					}
 					;
 				});

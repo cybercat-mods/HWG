@@ -122,14 +122,14 @@ public class SPistolItem extends Item implements IAnimatable {
 	}
 
 	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		if (!playerEntity.isCreative()) {
+		//if (!playerEntity.isCreative()) {
 			for (ItemStack item : playerEntity.inventory.main) {
 				if (item.getItem() == HWGItems.BULLETS) {
 					item.decrement(1);
 					break;
 				}
 			}
-		}
+		//}
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {

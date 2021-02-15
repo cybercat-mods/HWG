@@ -48,6 +48,11 @@ public abstract class HWGEntity extends PathAwareEntity implements Angerable, Ra
 	protected boolean isDisallowedInPeaceful() {
 		return true;
 	}
+	
+	@Override
+	public void setUuid(UUID uuid) {
+		super.setUuid(UUID.randomUUID());
+	}
 
 	@Override
 	public EntityGroup getGroup() {

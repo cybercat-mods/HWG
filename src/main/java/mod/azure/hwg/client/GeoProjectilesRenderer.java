@@ -47,7 +47,7 @@ public class GeoProjectilesRenderer<T extends Entity & IAnimatable> extends Enti
 		GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityIn));
 		matrixStackIn.push();
 		matrixStackIn.multiply(Vector3f.POSITIVE_Y
-				.getDegreesQuaternion(MathHelper.lerp(partialTicks, entityIn.prevYaw, entityIn.yaw)));
+				.getDegreesQuaternion(MathHelper.lerp(partialTicks, entityIn.prevYaw, entityIn.yaw) - 90.0F));
 		matrixStackIn.multiply(Vector3f.POSITIVE_Z
 				.getDegreesQuaternion(MathHelper.lerp(partialTicks, entityIn.prevPitch, entityIn.pitch)));
 		MinecraftClient.getInstance().getTextureManager().bindTexture(getTexture(entityIn));
