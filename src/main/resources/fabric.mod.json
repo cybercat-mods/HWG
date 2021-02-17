@@ -22,7 +22,7 @@
       "mod.azure.hwg.HWGMod"
     ],
 		"client": [
-			"mod.azure.hwg.client.Clientnit"
+			"mod.azure.hwg.client.ClientInit"
 		]
   },
   "mixins": [

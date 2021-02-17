@@ -1,5 +1,7 @@
 package mod.azure.hwg.entity;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import mod.azure.hwg.entity.goal.RangedAttackGoal;
@@ -30,6 +32,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
@@ -74,8 +77,7 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if ((!(limbDistance > -0.10F && limbDistance < 0.10F) || this.isSwimming())
-				&& !this.dataTracker.get(SHOOTING)) {
+		if (event.isMoving() && !this.isSwimming() && !this.dataTracker.get(SHOOTING)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
 			return PlayState.CONTINUE;
 		}
@@ -186,8 +188,6 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 		double f = target.getZ() - this.getZ();
 		double g = (double) MathHelper.sqrt(d * d + f * f);
 		BulletEntity.setVelocity(d, e + g * 0.05F, f, 1.6F, 0.0F);
-		// this.playSound(ModSoundEvents.CHAINGUN_SHOOT, 1.0F, 1.0F /
-		// (this.getRandom().nextFloat() * 0.4F + 0.8F));
 		this.world.spawnEntity(BulletEntity);
 	}
 
@@ -266,6 +266,15 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
 	}
 
+	private ItemStack makeInitialWeapon() {
+		Random rand = new Random();
+		List<ItemConvertible> givenList = Arrays.asList(HWGItems.PISTOL, HWGItems.LUGER, HWGItems.AK47,
+				HWGItems.SHOTGUN, HWGItems.SMG);
+		int randomIndex = rand.nextInt(givenList.size());
+		ItemConvertible randomElement = givenList.get(randomIndex);
+		return new ItemStack(randomElement);
+	}
+
 	@Override
 	public int getLimitPerChunk() {
 		return 5;
@@ -274,11 +283,6 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	public static int generateVariants(Biome random) {
 		return (Category.DESERT != null && Category.MESA != null) ? 1
 				: (Category.TAIGA != null && Category.PLAINS != null) ? 2 : Category.ICY != null ? 3 : 4;
-	}
-
-	private ItemStack makeInitialWeapon() {
-		return (double) this.random.nextFloat() < 0.5D ? new ItemStack(HWGItems.PISTOL)
-				: new ItemStack(HWGItems.PISTOL);
 	}
 
 	public void setVariant(int variant) {

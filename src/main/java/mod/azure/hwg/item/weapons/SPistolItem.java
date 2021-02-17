@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.client.Clientnit;
+import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -78,6 +78,8 @@ public class SPistolItem extends Item implements IAnimatable {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
 					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,
 							1.0F * 3.0F, 1.0F);
+					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
+							entityLiving.getZ(), 0, 0);
 
 					abstractarrowentity.setDamage(0.6);
 					abstractarrowentity.age = 25;
@@ -102,7 +104,7 @@ public class SPistolItem extends Item implements IAnimatable {
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (world.isClient) {
 			if (((PlayerEntity) entity).getMainHandStack().getItem() instanceof SPistolItem) {
-				if (Clientnit.reload.isPressed() && selected) {
+				if (ClientInit.reload.isPressed() && selected) {
 					PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.SPISTOL, passedData);

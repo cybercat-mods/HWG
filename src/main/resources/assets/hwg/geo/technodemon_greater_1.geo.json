@@ -186,7 +186,7 @@
 					]
 				},
 				{
-					"name": "lFootClaw01",
+					"name": "lFootClaw2",
 					"parent": "rFoot",
 					"pivot": [-3.9, 2.9, 3.9],
 					"rotation": [13, 16, 0],
@@ -195,7 +195,7 @@
 					]
 				},
 				{
-					"name": "lFootClaw02",
+					"name": "lFootClaw3",
 					"parent": "rFoot",
 					"pivot": [-2.6, 2.9, 3.9],
 					"rotation": [13, 0, 0],
@@ -204,7 +204,7 @@
 					]
 				},
 				{
-					"name": "lFootClaw03",
+					"name": "lFootClaw4",
 					"parent": "rFoot",
 					"pivot": [-1.3, 2.9, 3.9],
 					"rotation": [13, -16, 0],
@@ -298,15 +298,6 @@
 					"rotation": [7, 0, -10],
 					"cubes": [
 						{"origin": [-0.2, 18.7, 0.7], "size": [1, 2, 1], "uv": [82, 0], "mirror": true}
-					]
-				},
-				{
-					"name": "rTube02B",
-					"parent": "rTube02B",
-					"pivot": [-0.2, 24.1, 1.2],
-					"rotation": [0, 0, -8],
-					"cubes": [
-						{"origin": [-0.7, 20.3, 0.7], "size": [1, 4, 1], "uv": [82, 0], "mirror": true}
 					]
 				},
 				{
@@ -538,6 +529,14 @@
 					"rotation": [0, -33, 0],
 					"cubes": [
 						{"origin": [-9.9, 42, -2.7], "size": [2, 3, 3], "uv": [105, 11], "mirror": true}
+					]
+				},
+				{
+					"name": "rightHand",
+					"parent": "bipedRightArm",
+					"pivot": [-5, 28.5, 0.3],
+					"cubes": [
+						{"origin": [-6.69056, 25.41515, 0.39393], "size": [1, 1, 1], "uv": [0, 0]}
 					]
 				},
 				{

@@ -16,7 +16,7 @@ import net.minecraft.client.util.InputUtil;
 import software.bernie.geckolib3.renderer.geo.GeoItemRenderer;
 
 @SuppressWarnings("deprecation")
-public class Clientnit implements ClientModInitializer {
+public class ClientInit implements ClientModInitializer {
 
 	public static KeyBinding reload = new KeyBinding("key.hwg.reload", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R,
 			"category.hwg.binds");

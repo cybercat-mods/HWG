@@ -31,12 +31,12 @@ public class TechnodemonLesserRender extends GeoEntityRenderer<TechnodemonEntity
 	@Override
 	public void renderRecursively(GeoBone bone, MatrixStack stack, VertexConsumer bufferIn, int packedLightIn,
 			int packedOverlayIn, float red, float green, float blue, float alpha) {
-		if (bone.getName().equals("rArmRuff")) {
+		if (bone.getName().equals("rightHand")) {
 			stack.push();
-			stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-75));
+			stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-90));
 			stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(0));
 			stack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(0));
-			stack.translate(0.4D, 0.3D, 0.6D);
+			stack.translate(0.34D, 0.1D, 0.9D);
 			stack.scale(1.0f, 1.0f, 1.0f);
 			MinecraftClient.getInstance().getItemRenderer().renderItem(mainHand, Mode.THIRD_PERSON_RIGHT_HAND,
 					packedLightIn, packedOverlayIn, stack, this.rtb);

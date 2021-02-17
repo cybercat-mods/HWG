@@ -31,13 +31,13 @@ public class HWGMobs {
 	public static final EntityType<MercEntity> MERC = Registry.register(Registry.ENTITY_TYPE,
 			new Identifier(HWGMod.MODID, "merc"),
 			FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, MercEntity::new)
-					.dimensions(EntityDimensions.fixed(1.3F, 2.5F)).trackRangeBlocks(90)
+					.dimensions(EntityDimensions.fixed(1.1F, 2.1F)).trackRangeBlocks(90)
 					.trackedUpdateRate(4).build());
 	
 	public static final EntityType<SpyEntity> SPY = Registry.register(Registry.ENTITY_TYPE,
 			new Identifier(HWGMod.MODID, "spy"),
 			FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, SpyEntity::new)
-					.dimensions(EntityDimensions.fixed(1.3F, 2.5F)).trackRangeBlocks(90)
+					.dimensions(EntityDimensions.fixed(1.1F, 2.1F)).trackRangeBlocks(90)
 					.trackedUpdateRate(4).build());
 
 	public static final EntityType<Entity> FUELTANK = Registry.register(Registry.ENTITY_TYPE,

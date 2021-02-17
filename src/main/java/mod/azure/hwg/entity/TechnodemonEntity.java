@@ -1,5 +1,7 @@
 package mod.azure.hwg.entity;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import mod.azure.hwg.entity.goal.RangedAttackGoal;
@@ -30,6 +32,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.math.BlockPos;
@@ -72,8 +75,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if ((!(limbDistance > -0.10F && limbDistance < 0.10F) || this.isSwimming())
-				&& !this.dataTracker.get(SHOOTING)) {
+		if ((event.isMoving() || !this.isSwimming()) && !this.dataTracker.get(SHOOTING)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
 			return PlayState.CONTINUE;
 		}
@@ -172,8 +174,6 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		double f = target.getZ() - this.getZ();
 		double g = (double) MathHelper.sqrt(d * d + f * f);
 		BulletEntity.setVelocity(d, e + g * 0.05F, f, 1.6F, 0.0F);
-		// this.playSound(ModSoundEvents.CHAINGUN_SHOOT, 1.0F, 1.0F /
-		// (this.getRandom().nextFloat() * 0.4F + 0.8F));
 		this.world.spawnEntity(BulletEntity);
 	}
 
@@ -228,8 +228,17 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
 			EntityData entityData, CompoundTag entityTag) {
 		this.setVariant(this.random.nextInt(5));
+		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		this.updateAttackType();
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
+	}
+
+	private ItemStack makeInitialWeapon() {
+		Random rand = new Random();
+		List<ItemConvertible> givenList = Arrays.asList(HWGItems.HELLHORSE, HWGItems.FLAMETHROWER, HWGItems.BRIMSTONE);
+		int randomIndex = rand.nextInt(givenList.size());
+		ItemConvertible randomElement = givenList.get(randomIndex);
+		return new ItemStack(randomElement);
 	}
 
 	@Override

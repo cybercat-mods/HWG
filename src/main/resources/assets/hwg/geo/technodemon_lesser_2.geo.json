@@ -89,6 +89,14 @@
 					]
 				},
 				{
+					"name": "rightHand",
+					"parent": "bipedRightArm",
+					"pivot": [-5, 28.5, 0.3],
+					"cubes": [
+						{"origin": [-5.79691, 16.46012, 0.3], "size": [1, 1, 1], "uv": [0, 0]}
+					]
+				},
+				{
 					"name": "stomach",
 					"parent": "body",
 					"pivot": [0, 24.5, 0.3],

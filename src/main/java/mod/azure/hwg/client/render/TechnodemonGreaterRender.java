@@ -31,7 +31,7 @@ public class TechnodemonGreaterRender extends GeoEntityRenderer<TechnodemonGreat
 	@Override
 	public void renderRecursively(GeoBone bone, MatrixStack stack, VertexConsumer bufferIn, int packedLightIn,
 			int packedOverlayIn, float red, float green, float blue, float alpha) {
-		if (bone.getName().equals("rArmRuff")) {
+		if (bone.getName().equals("rightHand")) {
 			stack.push();
 			stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-75));
 			stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(0));

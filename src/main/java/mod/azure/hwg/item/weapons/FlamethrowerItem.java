@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.client.Clientnit;
+import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
 import mod.azure.hwg.util.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -134,7 +134,7 @@ public class FlamethrowerItem extends Item implements IAnimatable {
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (world.isClient) {
 			if (((PlayerEntity) entity).getMainHandStack().getItem() instanceof FlamethrowerItem) {
-				if (Clientnit.reload.isPressed() && selected) {
+				if (ClientInit.reload.isPressed() && selected) {
 					PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.FLAMETHOWER, passedData);
