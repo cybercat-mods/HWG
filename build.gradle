@@ -132,3 +132,38 @@ publishing {
 	repositories {
 	}
 }
+
+if (file('key.properties').exists()) {
+    curseforge {
+
+    	def curseProp = new Properties()
+    	File secretPropsFile = file("key.properties")
+    	curseProp.load(secretPropsFile.newInputStream())
+
+    	project {
+        	apiKey = curseProp.getProperty('curseKey')
+        	id = "448106"
+        	releaseType = "release"
+        	changelogType = 'text'
+        	changelog = file('CHANGELOG.txt')
+        	addGameVersion("1.16.4")
+        	addGameVersion("1.16.5")
+        	addGameVersion("Fabric")
+        	addGameVersion("Java 8")
+
+        	relations {
+            	requiredDependency 'fabric-api'  
+            	requiredDependency 'geckolib-fabric'  
+        	}
+        	mainArtifact(remapJar)
+
+        	afterEvaluate {
+            	uploadTask.dependsOn("remapJar")
+        	}
+    	}
+    	options {
+    		//debug = true
+        	forgeGradleIntegration = false
+    	}
+    }
+}
