@@ -2,6 +2,7 @@ package mod.azure.hwg.client.render;
 
 import mod.azure.hwg.client.models.TechnodemonGreaterModel;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
+import mod.azure.hwg.item.weapons.Minigun;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -33,10 +34,12 @@ public class TechnodemonGreaterRender extends GeoEntityRenderer<TechnodemonGreat
 			int packedOverlayIn, float red, float green, float blue, float alpha) {
 		if (bone.getName().equals("rightHand")) {
 			stack.push();
-			stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-75));
-			stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(0));
-			stack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(0));
-			stack.translate(0.4D, 0.3D, 0.6D);
+			stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -15 : -90));
+			stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -35 : 0));
+			stack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? 15 : 0));
+			stack.translate(mainHand.getItem() instanceof Minigun ? 0.91D : 0.42D,
+					mainHand.getItem() instanceof Minigun ? 1.49D : 0.12D,
+					mainHand.getItem() instanceof Minigun ? 0.1D : 1.5D);
 			stack.scale(1.0f, 1.0f, 1.0f);
 			MinecraftClient.getInstance().getItemRenderer().renderItem(mainHand, Mode.THIRD_PERSON_RIGHT_HAND,
 					packedLightIn, packedOverlayIn, stack, this.rtb);
