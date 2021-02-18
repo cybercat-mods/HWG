@@ -12,22 +12,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class GunTableBlock extends Block implements BlockEntityProvider {
+public class GunTableBlock extends Block  {//implements BlockEntityProvider {
 
 	public GunTableBlock(Settings settings) {
 		super(settings);
 	}
 
-	@Override
-	public BlockEntity createBlockEntity(BlockView world) {
-		return new GunBlockEntity();
-	}
-	
-	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
-			BlockHitResult hit) {
-		player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
-		return ActionResult.SUCCESS;
-	}
+//	@Override
+//	public BlockEntity createBlockEntity(BlockView world) {
+//		return new GunBlockEntity();
+//	}
+//	
+//	@Override
+//	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+//			BlockHitResult hit) {
+//		player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
+//		return ActionResult.SUCCESS;
+//	}
 
 }

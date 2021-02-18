@@ -3,6 +3,7 @@ package mod.azure.hwg.util;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.HWGSpawnEgg;
 import mod.azure.hwg.item.ammo.BulletAmmo;
+import mod.azure.hwg.item.ammo.FlareItem;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
 import mod.azure.hwg.item.ammo.GrenadeFragItem;
 import mod.azure.hwg.item.ammo.GrenadeNapalmItem;
@@ -29,9 +30,9 @@ import net.minecraft.util.registry.Registry;
 
 public class HWGItems {
 
+	public static FlareItem FLARE = item(new FlareItem(), "flare");
 	public static Minigun MINIGUN = item(new Minigun(), "minigun");
 	public static PistolItem LUGER = item(new PistolItem(3.5), "luger");
-	public static BulletAmmo FLARE = item(new BulletAmmo(1.2F), "flare");
 	public static PistolItem PISTOL = item(new PistolItem(2.5), "pistol");
 	public static BalrogItem BALROG = item(new BalrogItem(), "balrog_gun");
 	public static BulletAmmo ROCKET = item(new BulletAmmo(1.2F), "rocket");
@@ -53,9 +54,9 @@ public class HWGItems {
 	public static BulletAmmo SHOTGUN_SHELL = item(new BulletAmmo(1.2F), "shotgun_shell");
 	public static AssasultItem TOMMYGUN = item(new AssasultItem(2.5, 51, 5), "tommy_gun");
 	public static GrenadeSmokeItem G_SMOKE = item(new GrenadeSmokeItem(), "grenade_smoke");
-	public static RocketLauncher ROCKETLAUNCHER = item(new RocketLauncher(), "rocketlauncher");
 	public static FlamethrowerItem FLAMETHROWER = item(new FlamethrowerItem(), "flamethrower");
 	public static GrenadeNapalmItem G_NAPALM = item(new GrenadeNapalmItem(), "grenade_napalm");
+	public static RocketLauncher ROCKETLAUNCHER = item(new RocketLauncher(), "rocketlauncher");
 	public static HWGSpawnEgg SPY_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.SPY), "spy_spawn_egg");
 	public static HWGSpawnEgg MERC_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.MERC), "merc_spawn_egg");
 	public static GrenadeLauncherItem G_LAUNCHER = item(new GrenadeLauncherItem(), "grenade_launcher");
@@ -63,7 +64,7 @@ public class HWGItems {
 	public static HWGSpawnEgg LESSER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOLESSER), "lesser_spawn_egg");
 	public static HWGSpawnEgg GREATER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOGREATER), "greater_spawn_egg");
 	public static BlockItem FUEL_TANK = item(new BlockItem(HWGMod.FUEL_TANK, new Item.Settings().group(HWGMod.WeaponItemGroup)), "fuel_tank");
-	//public static BlockItem GUN_TABLE = item(new BlockItem(HWGMod.GUN_TABLE, new Item.Settings().group(HWGMod.WeaponItemGroup)), "gun_table");
+	public static BlockItem GUN_TABLE = item(new BlockItem(HWGMod.GUN_TABLE, new Item.Settings().group(HWGMod.WeaponItemGroup)), "gun_table");
 
 	static <T extends Item> T item(T c, String id) {
 		Registry.register(Registry.ITEM, new Identifier(HWGMod.MODID, id), c);

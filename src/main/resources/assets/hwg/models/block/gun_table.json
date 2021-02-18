@@ -162,9 +162,9 @@
 		},
 		{
 			"name": "blueprint",
-			"from": [7, 16, 5],
-			"to": [15, 16, 11],
-			"rotation": {"angle": 45, "axis": "y", "origin": [11, 16, 8]},
+			"from": [7, 16.1, 5],
+			"to": [15, 16.1, 11],
+			"rotation": {"angle": 45, "axis": "y", "origin": [11, 16.1, 8]},
 			"faces": {
 				"north": {"uv": [0, 0, 8, 0], "texture": "#1"},
 				"east": {"uv": [0, 0, 6, 0], "texture": "#1"},
@@ -175,6 +175,40 @@
 			}
 		}
 	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 125, 0],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 125, 0],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"ground": {
+			"translation": [0, 1.75, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [25, -132, 0],
+			"translation": [0, -3, 0],
+			"scale": [0.45, 0.45, 0.45]
+		},
+		"head": {
+			"scale": [0, 0, 0]
+		},
+		"fixed": {
+			"translation": [0, -2.75, -4],
+			"scale": [0.55, 0.55, 0.55]
+		}
+	},
 	"groups": [
 		{
 			"name": "gun_table",

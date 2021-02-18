@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "###",
+        "___",
+        "IGI"
+    ],
+    "key": {
+        "#": {
+            "tag": "minecraft:planks"
+        },
+        "_": {
+            "item": "minecraft:stone_slab"
+        },
+        "I": {
+            "item": "minecraft:iron_bars"
+        },
+        "G": {
+            "item": "minecraft:gunpowder"
+        }
+    },
+    "result": {
+        "item": "hwg:gun_table",
+        "count": 1
+    }
+}

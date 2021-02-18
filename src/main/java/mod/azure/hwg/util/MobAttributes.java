@@ -9,10 +9,10 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 public class MobAttributes {
 
 	public static void init() {
+		FabricDefaultAttributeRegistry.register(HWGMobs.SPY, SpyEntity.createMobAttributes());
+		FabricDefaultAttributeRegistry.register(HWGMobs.MERC, MercEntity.createMobAttributes());
 		FabricDefaultAttributeRegistry.register(HWGMobs.TECHNOLESSER, TechnodemonEntity.createMobAttributes());
 		FabricDefaultAttributeRegistry.register(HWGMobs.TECHNOGREATER, TechnodemonGreaterEntity.createMobAttributes());
-		FabricDefaultAttributeRegistry.register(HWGMobs.MERC, MercEntity.createMobAttributes());
-		FabricDefaultAttributeRegistry.register(HWGMobs.SPY, SpyEntity.createMobAttributes());
 	}
 
 }

@@ -14,6 +14,8 @@ import mod.azure.hwg.item.weapons.RocketLauncher;
 import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
+import mod.azure.hwg.util.FlareRecipe;
+import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.HWGLoot;
 import mod.azure.hwg.util.HWGMobs;
@@ -34,6 +36,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.ConstantLootTableRange;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Hand;
@@ -44,37 +47,41 @@ import software.bernie.geckolib3.GeckoLib;
 
 public class HWGMod implements ModInitializer {
 
-	public static HWGItems ITEMS;
-	public static ProjectilesEntityRegister PROJECTILES;
 	public static HWGMobs MOBS;
-	public static ScreenHandlerType<ScreenHandler> SCREEN_HANDLER_TYPE;
-	public static BlockEntityType<GunBlockEntity> GUN_TABLE_ENTITY;
-	public static final Block FUEL_TANK = new FuelTankBlock();
-	public static final GunTableBlock GUN_TABLE = new GunTableBlock(
-			FabricBlockSettings.of(Material.METAL).strength(4.0f));
+	public static HWGItems ITEMS;
 	public static final String MODID = "hwg";
-	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons"))
-			.icon(() -> new ItemStack(HWGItems.PISTOL)).build();
-	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
-	public static final Identifier PISTOL = new Identifier(MODID, "pistol");
-	public static final Identifier SPISTOL = new Identifier(MODID, "spistol");
-	public static final Identifier FLAMETHOWER = new Identifier(MODID, "flamethrower");
-	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
-	public static final Identifier MINIGUN = new Identifier(MODID, "minigun");
-	public static final Identifier BRIMSTONE = new Identifier(MODID, "brimstone");
-	public static final Identifier SHOTGUN = new Identifier(MODID, "shotgun");
+	public static ProjectilesEntityRegister PROJECTILES;
+	public static final Block FUEL_TANK = new FuelTankBlock();
+	public static BlockEntityType<GunBlockEntity> GUN_TABLE_ENTITY;
+	public static ScreenHandlerType<ScreenHandler> SCREEN_HANDLER_TYPE;
 	public static final Identifier ASSASULT = new Identifier(MODID, "smg");
-	public static final Identifier SNIPER = new Identifier(MODID, "sniper");
-	public static final Identifier MEANIE = new Identifier(MODID, "meanie");
 	public static final Identifier BALROG = new Identifier(MODID, "balrog");
+	public static final Identifier MEANIE = new Identifier(MODID, "meanie");
+	public static final Identifier PISTOL = new Identifier(MODID, "pistol");
+	public static final Identifier SNIPER = new Identifier(MODID, "sniper");
+	public static final Identifier MINIGUN = new Identifier(MODID, "minigun");
+	public static final Identifier SHOTGUN = new Identifier(MODID, "shotgun");
+	public static final Identifier SPISTOL = new Identifier(MODID, "spistol");
+	public static final Identifier GUNSMITH = new Identifier(MODID, "gun_smith");
+	public static final Identifier BRIMSTONE = new Identifier(MODID, "brimstone");
+	public static final Identifier FLARES = new Identifier(MODID, "crafting_flares");
+	public static final Identifier FLAMETHOWER = new Identifier(MODID, "flamethrower");
+	public static final Identifier GUNSMITH_POI = new Identifier(MODID, "gun_smith_poi");
+	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
+	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
+	public static final GunTableBlock GUN_TABLE = new GunTableBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f).nonOpaque());
+	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.PISTOL)).build();
+	public static final SpecialRecipeSerializer<FlareRecipe> FLARE_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, FLARES, new SpecialRecipeSerializer<>(FlareRecipe::new));
 
 	@Override
 	public void onInitialize() {
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
+		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();
 		MOBS = new HWGMobs();
 		PROJECTILES = new ProjectilesEntityRegister();
 		GeckoLib.initialize();
+		GunSmithProfession.init();
 		MobSpawn.addSpawnEntries();
 //		SCREEN_HANDLER_TYPE = ScreenHandlerRegistry.registerSimple(GUN_TABLE_GUI, (syncId, inventory) -> new GunTableDescription(syncId, inventory, ScreenHandlerContext.EMPTY));
 //        Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
@@ -89,8 +96,7 @@ public class HWGMod implements ModInitializer {
 					|| HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id)
 					|| HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
 				FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
-						.rolls(ConstantLootTableRange.create(1))
-						.withEntry(ItemEntry.builder(HWGItems.MEANIE1).build())
+						.rolls(ConstantLootTableRange.create(1)).withEntry(ItemEntry.builder(HWGItems.MEANIE1).build())
 						.withEntry(ItemEntry.builder(HWGItems.MEANIE2).build());
 				supplier.pool(poolBuilder);
 			}
