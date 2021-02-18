@@ -20,7 +20,7 @@ public class MobSpawn {
 										|| context.getBiome().getCategory() == Biome.Category.JUNGLE
 										|| context.getBiome().getCategory() == Biome.Category.PLAINS
 										|| context.getBiome().getCategory() == Biome.Category.ICY)),
-				SpawnGroup.MONSTER, HWGMobs.MERC, 10, 2, 5);
+				SpawnGroup.MONSTER, HWGMobs.MERC, 5, 1, 2);
 		BiomeModifications.addSpawn(
 				BiomeSelectors.foundInOverworld()
 						.and(context -> !context.getBiome().getSpawnSettings()
@@ -28,7 +28,7 @@ public class MobSpawn {
 								&& context.getBiome().getCategory() == Biome.Category.TAIGA
 								|| context.getBiome().getCategory() == Biome.Category.MESA
 								|| context.getBiome().getCategory() == Biome.Category.JUNGLE),
-				SpawnGroup.MONSTER, HWGMobs.SPY, 10, 2, 5);
+				SpawnGroup.MONSTER, HWGMobs.SPY, 5, 1, 2);
 		BiomeModifications.addSpawn(
 				BiomeSelectors.foundInTheNether()
 						.and(context -> !context.getBiome().getSpawnSettings()

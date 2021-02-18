@@ -277,7 +277,7 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	public int getLimitPerChunk() {
-		return 5;
+		return 3;
 	}
 
 	public static int generateVariants(Biome random) {
