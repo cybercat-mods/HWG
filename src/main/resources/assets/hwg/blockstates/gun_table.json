@@ -1,7 +1,19 @@
 {
 	"variants": {
-		"": {
+		"facing=north": {
+			"model": "hwg:block/gun_table",
+			"y": 180
+		},
+		"facing=south": {
 			"model": "hwg:block/gun_table"
+		},
+		"facing=west": {
+			"model": "hwg:block/gun_table",
+			"y": 90
+		},
+		"facing=east": {
+			"model": "hwg:block/gun_table",
+			"y": 270
 		}
 	}
 }
