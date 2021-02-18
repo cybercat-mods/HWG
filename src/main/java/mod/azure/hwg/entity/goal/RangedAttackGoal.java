@@ -112,11 +112,9 @@ public class RangedAttackGoal<T extends HWGEntity & RangedAttackMob> extends Goa
 					this.actor.clearActiveItem();
 				} else if (bl) {
 					int i = this.actor.getItemUseTime();
-					if (i >= 20) {
-						this.actor.clearActiveItem();
-						((RangedAttackMob) this.actor).attack(livingEntity, PistolItem.getPullProgress(i));
-						this.cooldown = this.attackInterval;
-					}
+					this.actor.clearActiveItem();
+					((RangedAttackMob) this.actor).attack(livingEntity, PistolItem.getPullProgress(i));
+					this.cooldown = this.attackInterval;
 				}
 			} else if (--this.cooldown <= 0 && this.targetSeeingTicker >= -60) {
 				this.actor.setCurrentHand(ProjectileUtil.getHandPossiblyHolding(this.actor,

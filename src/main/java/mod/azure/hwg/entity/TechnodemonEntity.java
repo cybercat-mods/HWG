@@ -6,7 +6,12 @@ import java.util.Random;
 
 import mod.azure.hwg.entity.goal.RangedAttackGoal;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
+import mod.azure.hwg.entity.projectiles.FireballEntity;
+import mod.azure.hwg.entity.projectiles.FlameFiring;
 import mod.azure.hwg.item.ammo.BulletAmmo;
+import mod.azure.hwg.item.weapons.BrimstoneItem;
+import mod.azure.hwg.item.weapons.FlamethrowerItem;
+import mod.azure.hwg.item.weapons.HellhorseRevolverItem;
 import mod.azure.hwg.util.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -165,18 +170,6 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		}
 	}
 
-	public void attack(LivingEntity target, float pullProgress) {
-		ItemStack itemStack = this.getArrowType(this.getStackInHand(
-				ProjectileUtil.getHandPossiblyHolding(this, this.getEquippedStack(EquipmentSlot.MAINHAND).getItem())));
-		BulletEntity BulletEntity = this.createArrowProjectile(itemStack, pullProgress);
-		double d = target.getX() - this.getX();
-		double e = target.getBodyY(0.3333333333333333D) - BulletEntity.getY();
-		double f = target.getZ() - this.getZ();
-		double g = (double) MathHelper.sqrt(d * d + f * f);
-		BulletEntity.setVelocity(d, e + g * 0.05F, f, 1.6F, 0.0F);
-		this.world.spawnEntity(BulletEntity);
-	}
-
 	protected BulletEntity createArrowProjectile(ItemStack arrow, float damageModifier) {
 		return TechnodemonEntity.createArrowProjectile(this, arrow, damageModifier);
 	}
@@ -239,6 +232,88 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		int randomIndex = rand.nextInt(givenList.size());
 		ItemConvertible randomElement = givenList.get(randomIndex);
 		return new ItemStack(randomElement);
+	}
+
+	public void attack(LivingEntity target, float pullProgress) {
+		ItemStack itemStack = this.getArrowType(this.getStackInHand(
+				ProjectileUtil.getHandPossiblyHolding(this, this.getEquippedStack(EquipmentSlot.MAINHAND).getItem())));
+		if (this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof HellhorseRevolverItem) {
+			BulletEntity projectile = this.createArrowProjectile(itemStack, pullProgress);
+			double d = target.getX() - this.getX();
+			double e = target.getBodyY(0.3333333333333333D) - projectile.getY();
+			double f = target.getZ() - this.getZ();
+			double g = (double) MathHelper.sqrt(d * d + f * f);
+			projectile.setVelocity(d, e + g * 0.05F, f, 1.6F, 0.0F);
+			this.world.spawnEntity(projectile);
+		}
+		if (this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof FlamethrowerItem) {
+
+			FlameFiring abstractarrowentity = createFlame(world, itemStack, this);
+			abstractarrowentity.setProperties(this, this.pitch, this.yaw, 0.0F, 0.25F * 3.0F, 2.0F);
+			abstractarrowentity.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity.age = 30;
+			world.spawnEntity(abstractarrowentity);
+
+			FlameFiring abstractarrowentity1 = createFlame(world, itemStack, this);
+			abstractarrowentity1.setProperties(this, this.pitch, this.yaw + 10, 0.0F, 0.25F * 3.0F, 2.0F);
+			abstractarrowentity1.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity1.age = 30;
+			world.spawnEntity(abstractarrowentity1);
+
+			FlameFiring abstractarrowentity3 = createFlame(world, itemStack, this);
+			abstractarrowentity3.setProperties(this, this.pitch, this.yaw + 5, 0.0F, 0.25F * 3.0F, 2.0F);
+			abstractarrowentity3.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity3.age = 30;
+			world.spawnEntity(abstractarrowentity3);
+
+			FlameFiring abstractarrowentity2 = createFlame(world, itemStack, this);
+			abstractarrowentity2.setProperties(this, this.pitch, this.yaw - 10, 0.0F, 0.25F * 3.0F, 2.0F);
+			abstractarrowentity2.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity2.age = 30;
+			world.spawnEntity(abstractarrowentity2);
+
+			FlameFiring abstractarrowentity4 = createFlame(world, itemStack, this);
+			abstractarrowentity4.setProperties(this, this.pitch, this.yaw - 5, 0.0F, 0.25F * 3.0F, 2.0F);
+			abstractarrowentity4.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity4.age = 30;
+			world.spawnEntity(abstractarrowentity4);
+		}
+		if (this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof BrimstoneItem) {
+			FireballEntity abstractarrowentity = createArrow(world, itemStack, this);
+			abstractarrowentity.setProperties(this, this.pitch, this.yaw, 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity.setFireTicks(100);
+			abstractarrowentity.setDamage(6.5);
+			abstractarrowentity.setPunch(1);
+
+			FireballEntity abstractarrowentity1 = createArrow(world, itemStack, this);
+			abstractarrowentity1.setProperties(this, this.pitch, this.yaw + 5, 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity1.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity1.setFireTicks(100);
+			abstractarrowentity1.setDamage(6.5);
+			abstractarrowentity1.setPunch(1);
+
+			FireballEntity abstractarrowentity2 = createArrow(world, itemStack, this);
+			abstractarrowentity2.setProperties(this, this.pitch, this.yaw - 5, 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity2.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity2.setFireTicks(100);
+			abstractarrowentity2.setDamage(6.5);
+			abstractarrowentity2.setPunch(1);
+
+			world.spawnEntity(abstractarrowentity);
+			world.spawnEntity(abstractarrowentity1);
+			world.spawnEntity(abstractarrowentity2);
+		}
+	}
+
+	public FlameFiring createFlame(World worldIn, ItemStack stack, LivingEntity shooter) {
+		FlameFiring arrowentity = new FlameFiring(worldIn, shooter);
+		return arrowentity;
+	}
+
+	public FireballEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
+		FireballEntity arrowentity = new FireballEntity(worldIn, shooter);
+		return arrowentity;
 	}
 
 	@Override

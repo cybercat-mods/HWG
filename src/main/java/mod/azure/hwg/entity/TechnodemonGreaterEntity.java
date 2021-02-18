@@ -5,8 +5,13 @@ import java.util.List;
 import java.util.Random;
 
 import mod.azure.hwg.entity.goal.RangedAttackGoal;
+import mod.azure.hwg.entity.projectiles.BlazeRodEntity;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
+import mod.azure.hwg.entity.projectiles.FireballEntity;
 import mod.azure.hwg.item.ammo.BulletAmmo;
+import mod.azure.hwg.item.weapons.BalrogItem;
+import mod.azure.hwg.item.weapons.BrimstoneItem;
+import mod.azure.hwg.item.weapons.Minigun;
 import mod.azure.hwg.util.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,7 +57,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 
-	private final RangedAttackGoal<TechnodemonGreaterEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 20,
+	private final RangedAttackGoal<TechnodemonGreaterEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 1,
 			15.0F);
 	private final MeleeAttackGoal meleeAttackGoal = new MeleeAttackGoal(this, 1.2D, false) {
 		public void stop() {
@@ -173,18 +178,6 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		}
 	}
 
-	public void attack(LivingEntity target, float pullProgress) {
-		ItemStack itemStack = this.getArrowType(this.getStackInHand(
-				ProjectileUtil.getHandPossiblyHolding(this, this.getEquippedStack(EquipmentSlot.MAINHAND).getItem())));
-		BulletEntity BulletEntity = this.createArrowProjectile(itemStack, pullProgress);
-		double d = target.getX() - this.getX();
-		double e = target.getBodyY(0.3333333333333333D) - BulletEntity.getY();
-		double f = target.getZ() - this.getZ();
-		double g = (double) MathHelper.sqrt(d * d + f * f);
-		BulletEntity.setVelocity(d, e + g * 0.05F, f, 1.6F, 0.0F);
-		this.world.spawnEntity(BulletEntity);
-	}
-
 	protected BulletEntity createArrowProjectile(ItemStack arrow, float damageModifier) {
 		return TechnodemonGreaterEntity.createArrowProjectile(this, arrow, damageModifier);
 	}
@@ -241,6 +234,99 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		int randomIndex = rand.nextInt(givenList.size());
 		ItemConvertible randomElement = givenList.get(randomIndex);
 		return new ItemStack(randomElement);
+	}
+
+	public void attack(LivingEntity target, float pullProgress) {
+		ItemStack itemStack = this.getArrowType(this.getStackInHand(
+				ProjectileUtil.getHandPossiblyHolding(this, this.getEquippedStack(EquipmentSlot.MAINHAND).getItem())));
+		if (this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof Minigun) {
+			BulletEntity BulletEntity = this.createArrowProjectile(itemStack, pullProgress);
+			double d = target.getX() - this.getX();
+			double e = target.getBodyY(0.3333333333333333D) - BulletEntity.getY();
+			double f = target.getZ() - this.getZ();
+			double g = (double) MathHelper.sqrt(d * d + f * f);
+			BulletEntity.setVelocity(d, e + g * 0.05F, f, 1.6F, 0.0F);
+			this.world.spawnEntity(BulletEntity);
+		}
+		if (this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof BalrogItem) {
+
+			BlazeRodEntity abstractarrowentity = createBlaze(world, itemStack, this);
+			abstractarrowentity.setProperties(this, this.pitch, this.yaw, 0.0F, 1.0F * 3.0F, 1.0F);
+			abstractarrowentity.refreshPositionAndAngles(this.getX(), this.getBodyY(0.85), this.getZ(), 0, 0);
+			abstractarrowentity.setDamage(1.25);
+			abstractarrowentity.hasNoGravity();
+			double r = random.nextDouble();
+			if (r < 0.1)
+				abstractarrowentity.isOnFire();
+
+			BlazeRodEntity abstractarrowentity1 = createBlaze(world, itemStack, this);
+			abstractarrowentity1.setProperties(this, this.pitch + 2, this.yaw, 0.0F, 1.0F * 3.0F, 1.0F);
+			abstractarrowentity1.refreshPositionAndAngles(this.getX(), this.getBodyY(0.85), this.getZ(), 0, 0);
+			abstractarrowentity1.setDamage(1.25);
+			abstractarrowentity1.hasNoGravity();
+			double a = random.nextDouble();
+			if (a < 0.1)
+				abstractarrowentity1.isOnFire();
+
+			BlazeRodEntity abstractarrowentity2 = createBlaze(world, itemStack, this);
+			abstractarrowentity2.setProperties(this, this.pitch, this.yaw + 2, 0.0F, 1.0F * 3.0F, 1.0F);
+			abstractarrowentity2.refreshPositionAndAngles(this.getX(), this.getBodyY(0.85), this.getZ(), 0, 0);
+			abstractarrowentity2.setDamage(1.25);
+			abstractarrowentity2.hasNoGravity();
+			double b = random.nextDouble();
+			if (b < 0.1)
+				abstractarrowentity2.isOnFire();
+
+			BlazeRodEntity abstractarrowentity3 = createBlaze(world, itemStack, this);
+			abstractarrowentity3.setProperties(this, this.pitch, this.yaw - 2, 0.0F, 1.0F * 3.0F, 1.0F);
+			abstractarrowentity3.refreshPositionAndAngles(this.getX(), this.getBodyY(0.85), this.getZ(), 0, 0);
+			abstractarrowentity3.setDamage(1.25);
+			abstractarrowentity3.hasNoGravity();
+			double c = random.nextDouble();
+			if (c < 0.1)
+				abstractarrowentity3.isOnFire();
+
+			world.spawnEntity(abstractarrowentity);
+			world.spawnEntity(abstractarrowentity1);
+			world.spawnEntity(abstractarrowentity2);
+			world.spawnEntity(abstractarrowentity3);
+		}
+		if (this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof BrimstoneItem) {
+			FireballEntity abstractarrowentity = createArrow(world, itemStack, this);
+			abstractarrowentity.setProperties(this, this.pitch, this.yaw, 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity.setFireTicks(100);
+			abstractarrowentity.setDamage(6.5);
+			abstractarrowentity.setPunch(1);
+
+			FireballEntity abstractarrowentity1 = createArrow(world, itemStack, this);
+			abstractarrowentity1.setProperties(this, this.pitch, this.yaw + 5, 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity1.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity1.setFireTicks(100);
+			abstractarrowentity1.setDamage(6.5);
+			abstractarrowentity1.setPunch(1);
+
+			FireballEntity abstractarrowentity2 = createArrow(world, itemStack, this);
+			abstractarrowentity2.setProperties(this, this.pitch, this.yaw - 5, 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity2.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
+			abstractarrowentity2.setFireTicks(100);
+			abstractarrowentity2.setDamage(6.5);
+			abstractarrowentity2.setPunch(1);
+
+			world.spawnEntity(abstractarrowentity);
+			world.spawnEntity(abstractarrowentity1);
+			world.spawnEntity(abstractarrowentity2);
+		}
+	}
+
+	public FireballEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
+		FireballEntity arrowentity = new FireballEntity(worldIn, shooter);
+		return arrowentity;
+	}
+
+	public BlazeRodEntity createBlaze(World worldIn, ItemStack stack, LivingEntity shooter) {
+		BlazeRodEntity arrowentity = new BlazeRodEntity(worldIn, shooter);
+		return arrowentity;
 	}
 
 	@Override
