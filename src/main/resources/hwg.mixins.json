@@ -1,14 +1,14 @@
 {
-  "required": true,
-  "minVersion": "0.8",
-  "package": "mod.azure.hwg.mixin",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
+	"required": true,
+	"minVersion": "0.8",
+	"package": "mod.azure.hwg.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
 		"SpawnRestrictionMixin"
-  ],
-  "client": [
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

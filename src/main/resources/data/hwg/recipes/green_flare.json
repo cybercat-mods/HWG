@@ -1,0 +1,21 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+            "item": "minecraft:firework_rocket"
+        },
+        {
+            "item": "minecraft:iron_nugget"
+        },
+        {
+            "item": "minecraft:gunpowder"
+        },
+        {
+            "item": "minecraft:green_dye"
+        }
+    ],
+    "result": {
+        "item": "hwg:green_flare",
+        "count": 3
+    }
+}

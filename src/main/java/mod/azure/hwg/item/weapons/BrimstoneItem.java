@@ -101,6 +101,8 @@ public class BrimstoneItem extends Item {
 					PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.BRIMSTONE, passedData);
+					world.playSound((PlayerEntity) null, entity.getX(), entity.getY(), entity.getZ(),
+							SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, 1.5F);
 				}
 			}
 		}

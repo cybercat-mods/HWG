@@ -84,6 +84,7 @@ public class RocketEntity extends PersistentProjectileEntity implements IAnimata
 	public void age() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
+			this.explode();
 			this.remove();
 		}
 	}
@@ -119,6 +120,7 @@ public class RocketEntity extends PersistentProjectileEntity implements IAnimata
 			this.prevPitch = this.pitch;
 		}
 		if (this.age >= 80) {
+			this.explode();
 			this.remove();
 		}
 		if (this.inAir && !bl) {

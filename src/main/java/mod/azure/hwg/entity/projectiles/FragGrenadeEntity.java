@@ -192,26 +192,15 @@ public class FragGrenadeEntity extends PersistentProjectileEntity implements IAn
 			float m = 0.99F;
 
 			this.setVelocity(vec3d.multiply((double) m));
-			if (!this.hasNoGravity() && !bl) {
-				Vec3d vec3d5 = this.getVelocity();
-				this.setVelocity(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
-			}
+			Vec3d vec3d5 = this.getVelocity();
+			this.setVelocity(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
 			this.updatePosition(h, j, k);
 			this.checkBlockCollision();
 		}
 	}
 
 	public void initFromStack(ItemStack stack) {
-		if (stack.getItem() == HWGItems.ROCKET) {
-		}
-	}
-
-	@Override
-	public boolean hasNoGravity() {
-		if (this.isSubmergedInWater()) {
-			return false;
-		} else {
-			return true;
+		if (stack.getItem() == HWGItems.G_FRAG) {
 		}
 	}
 
@@ -253,7 +242,7 @@ public class FragGrenadeEntity extends PersistentProjectileEntity implements IAn
 
 	@Override
 	public ItemStack asItemStack() {
-		return new ItemStack(HWGItems.ROCKET);
+		return new ItemStack(HWGItems.G_FRAG);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package mod.azure.hwg.entity;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import mod.azure.hwg.entity.goal.RangedAttackGoal;
 import mod.azure.hwg.entity.projectiles.BlazeRodEntity;
@@ -224,10 +225,11 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 			EntityData entityData, CompoundTag entityTag) {
 		this.setVariant(this.random.nextInt());
 		this.updateAttackType();
+		this.setUuid(UUID.randomUUID());
 		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
 	}
-
+	
 	private ItemStack makeInitialWeapon() {
 		Random rand = new Random();
 		List<ItemConvertible> givenList = Arrays.asList(HWGItems.MINIGUN, HWGItems.BRIMSTONE, HWGItems.BALROG);

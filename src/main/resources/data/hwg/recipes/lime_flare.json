@@ -1,0 +1,21 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+        {
+            "item": "minecraft:firework_rocket"
+        },
+        {
+            "item": "minecraft:iron_nugget"
+        },
+        {
+            "item": "minecraft:gunpowder"
+        },
+        {
+            "item": "minecraft:lime_dye"
+        }
+    ],
+    "result": {
+        "item": "hwg:lime_flare",
+        "count": 3
+    }
+}

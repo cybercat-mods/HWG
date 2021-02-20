@@ -109,6 +109,7 @@ public class NapalmGrenadeEntity extends PersistentProjectileEntity implements I
 	public void age() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
+			this.explode();
 			this.remove();
 		}
 	}
@@ -144,6 +145,7 @@ public class NapalmGrenadeEntity extends PersistentProjectileEntity implements I
 			this.prevPitch = this.pitch;
 		}
 		if (this.age >= 80) {
+			this.explode();
 			this.remove();
 		}
 		if (this.inAir && !bl) {
@@ -200,26 +202,15 @@ public class NapalmGrenadeEntity extends PersistentProjectileEntity implements I
 			float m = 0.99F;
 
 			this.setVelocity(vec3d.multiply((double) m));
-			if (!this.hasNoGravity() && !bl) {
-				Vec3d vec3d5 = this.getVelocity();
-				this.setVelocity(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
-			}
+			Vec3d vec3d5 = this.getVelocity();
+			this.setVelocity(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
 			this.updatePosition(h, j, k);
 			this.checkBlockCollision();
 		}
 	}
 
 	public void initFromStack(ItemStack stack) {
-		if (stack.getItem() == HWGItems.ROCKET) {
-		}
-	}
-
-	@Override
-	public boolean hasNoGravity() {
-		if (this.isSubmergedInWater()) {
-			return false;
-		} else {
-			return true;
+		if (stack.getItem() == HWGItems.G_NAPALM) {
 		}
 	}
 
@@ -287,7 +278,7 @@ public class NapalmGrenadeEntity extends PersistentProjectileEntity implements I
 
 	@Override
 	public ItemStack asItemStack() {
-		return new ItemStack(HWGItems.ROCKET);
+		return new ItemStack(HWGItems.G_NAPALM);
 	}
 
 	@Override

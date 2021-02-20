@@ -149,6 +149,8 @@ public class BalrogItem extends Item {
 				PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 				passedData.writeBoolean(true);
 				ClientPlayNetworking.send(HWGMod.BALROG, passedData);
+				world.playSound((PlayerEntity) null, entity.getX(), entity.getY(), entity.getZ(),
+						SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, 1.5F);
 			}
 		}
 		if (!(entity instanceof HWGEntity) && selected) {

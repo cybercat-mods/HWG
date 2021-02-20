@@ -14,11 +14,11 @@ import mod.azure.hwg.item.weapons.RocketLauncher;
 import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
-import mod.azure.hwg.util.FlareRecipe;
 import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.HWGLoot;
 import mod.azure.hwg.util.HWGMobs;
+import mod.azure.hwg.util.HWGParticles;
 import mod.azure.hwg.util.MobAttributes;
 import mod.azure.hwg.util.MobSpawn;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
@@ -36,7 +36,6 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.ConstantLootTableRange;
 import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Hand;
@@ -49,6 +48,7 @@ public class HWGMod implements ModInitializer {
 
 	public static HWGMobs MOBS;
 	public static HWGItems ITEMS;
+	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
 	public static ProjectilesEntityRegister PROJECTILES;
 	public static final Block FUEL_TANK = new FuelTankBlock();
@@ -71,14 +71,14 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
 	public static final GunTableBlock GUN_TABLE = new GunTableBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f).nonOpaque());
 	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.PISTOL)).build();
-	public static final SpecialRecipeSerializer<FlareRecipe> FLARE_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, FLARES, new SpecialRecipeSerializer<>(FlareRecipe::new));
-
+	
 	@Override
 	public void onInitialize() {
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();
 		MOBS = new HWGMobs();
+		PARTICLES = new HWGParticles();
 		PROJECTILES = new ProjectilesEntityRegister();
 		GeckoLib.initialize();
 		GunSmithProfession.init();

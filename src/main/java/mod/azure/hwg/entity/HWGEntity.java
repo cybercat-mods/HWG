@@ -50,11 +50,6 @@ public abstract class HWGEntity extends PathAwareEntity implements Angerable, Ra
 	}
 
 	@Override
-	public void setUuid(UUID uuid) {
-		UUID.randomUUID();
-	}
-
-	@Override
 	public EntityGroup getGroup() {
 		return EntityGroup.UNDEAD;
 	}

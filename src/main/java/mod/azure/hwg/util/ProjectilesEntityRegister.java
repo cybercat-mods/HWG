@@ -16,6 +16,22 @@ import mod.azure.hwg.entity.projectiles.RocketEntity;
 import mod.azure.hwg.entity.projectiles.ShellEntity;
 import mod.azure.hwg.entity.projectiles.SmokeGrenadeEntity;
 import mod.azure.hwg.entity.projectiles.StunGrenadeEntity;
+import mod.azure.hwg.entity.projectiles.flare.BlackFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.BlueFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.BrownFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.CyanFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.GrayFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.GreenFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.LightblueFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.LightgrayFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.LimeFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.MagentaFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.OrangeFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.PinkFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.PurpleFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.RedFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.WhiteFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.YellowFlareEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -38,6 +54,22 @@ public class ProjectilesEntityRegister {
 	public static EntityType<MBulletEntity> MBULLETS = projectile(MBulletEntity::new, "mbullets");
 	public static EntityType<BlazeRodEntity> BLAZEROD = projectile(BlazeRodEntity::new, "blazerod");
 	public static EntityType<FireballEntity> FIREBALL = projectile(FireballEntity::new, "fireball");
+	public static EntityType<BlackFlareEntity> BLACK_FLARE = projectile(BlackFlareEntity::new, "black_flare");
+	public static EntityType<BlueFlareEntity> BLUE_FLARE = projectile(BlueFlareEntity::new, "blue_flare");
+	public static EntityType<BrownFlareEntity> BROWN_FLARE = projectile(BrownFlareEntity::new, "brown_flare");
+	public static EntityType<CyanFlareEntity> CYAN_FLARE = projectile(CyanFlareEntity::new, "cyan_flare");
+	public static EntityType<GrayFlareEntity> GRAY_FLARE = projectile(GrayFlareEntity::new, "gray_flare");
+	public static EntityType<GreenFlareEntity> GREEN_FLARE = projectile(GreenFlareEntity::new, "green_flare");
+	public static EntityType<LightblueFlareEntity> LIGHTBLUE_FLARE = projectile(LightblueFlareEntity::new, "lightblue_flare");
+	public static EntityType<LightgrayFlareEntity> LIGHTGRAY_FLARE = projectile(LightgrayFlareEntity::new, "lightgray_flare");
+	public static EntityType<LimeFlareEntity> LIME_FLARE = projectile(LimeFlareEntity::new, "lime_flare");
+	public static EntityType<MagentaFlareEntity> MAGENTA_FLARE = projectile(MagentaFlareEntity::new, "magenta_flare");
+	public static EntityType<OrangeFlareEntity> ORANGE_FLARE = projectile(OrangeFlareEntity::new, "orange_flare");
+	public static EntityType<PinkFlareEntity> PINK_FLARE = projectile(PinkFlareEntity::new, "pink_flare");
+	public static EntityType<PurpleFlareEntity> PURPLE_FLARE = projectile(PurpleFlareEntity::new, "purple_flare");
+	public static EntityType<RedFlareEntity> RED_FLARE = projectile(RedFlareEntity::new, "red_flare");
+	public static EntityType<WhiteFlareEntity> WHITE_FLARE = projectile(WhiteFlareEntity::new, "white_flare");
+	public static EntityType<YellowFlareEntity> YELLOW_FLARE = projectile(YellowFlareEntity::new, "yellow_flare");
 	public static EntityType<EMPGrenadeEntity> EMP_GRENADE = projectile(EMPGrenadeEntity::new, "emp_grenade");
 	public static EntityType<FragGrenadeEntity> FRAG_GRENADE = projectile(FragGrenadeEntity::new, "frag_grenade");
 	public static EntityType<StunGrenadeEntity> STUN_GRENADE = projectile(StunGrenadeEntity::new, "stun_grenade");
@@ -53,7 +85,7 @@ public class ProjectilesEntityRegister {
 
 		EntityType<T> type = FabricEntityTypeBuilder.<T>create(SpawnGroup.MISC, factory)
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
-				.trackRangeBlocks(90).trackedUpdateRate(4).build();
+				.trackRangeBlocks(90).trackedUpdateRate(40).build();
 
 		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
 
@@ -75,7 +107,7 @@ public class ProjectilesEntityRegister {
 
 		EntityType<T> type = FabricEntityTypeBuilder.<T>create(SpawnGroup.MISC, factory)
 				.dimensions(new EntityDimensions(1.5F, 1.5F, false)).disableSummon().spawnableFarFromPlayer()
-				.fireImmune().trackRangeBlocks(90).trackedUpdateRate(4).build();
+				.fireImmune().trackRangeBlocks(90).trackedUpdateRate(40).build();
 
 		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
 

@@ -108,6 +108,8 @@ public class SPistolItem extends Item implements IAnimatable {
 					PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.SPISTOL, passedData);
+					world.playSound((PlayerEntity) null, entity.getX(), entity.getY(), entity.getZ(),
+							SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.PLAYERS, 3.0F, 1.5F);
 				}
 			}
 		}

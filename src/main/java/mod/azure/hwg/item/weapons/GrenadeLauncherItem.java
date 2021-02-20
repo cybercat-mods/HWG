@@ -329,49 +329,9 @@ public class GrenadeLauncherItem extends RangedWeaponItem {
 		if (isCharged(stack) && !list.isEmpty()) {
 			ItemStack itemStack = (ItemStack) list.get(0);
 			tooltip.add((new TranslatableText("Ammo")).append(" ").append(itemStack.toHoverableText()));
-			if (context.isAdvanced() && itemStack.getItem() == HWGItems.G_EMP) {
+			if (context.isAdvanced() && itemStack.getItem() == GRENADES) {
 				List<Text> list2 = Lists.newArrayList();
 				HWGItems.G_EMP.appendTooltip(itemStack, world, list2, context);
-				if (!list2.isEmpty()) {
-					for (int i = 0; i < list2.size(); ++i) {
-						list2.set(i, (new LiteralText("  ")).append((Text) list2.get(i)).formatted(Formatting.GRAY));
-					}
-					tooltip.addAll(list2);
-				}
-			}
-			if (context.isAdvanced() && itemStack.getItem() == HWGItems.G_FRAG) {
-				List<Text> list2 = Lists.newArrayList();
-				HWGItems.G_FRAG.appendTooltip(itemStack, world, list2, context);
-				if (!list2.isEmpty()) {
-					for (int i = 0; i < list2.size(); ++i) {
-						list2.set(i, (new LiteralText("  ")).append((Text) list2.get(i)).formatted(Formatting.GRAY));
-					}
-					tooltip.addAll(list2);
-				}
-			}
-			if (context.isAdvanced() && itemStack.getItem() == HWGItems.G_NAPALM) {
-				List<Text> list2 = Lists.newArrayList();
-				HWGItems.G_NAPALM.appendTooltip(itemStack, world, list2, context);
-				if (!list2.isEmpty()) {
-					for (int i = 0; i < list2.size(); ++i) {
-						list2.set(i, (new LiteralText("  ")).append((Text) list2.get(i)).formatted(Formatting.GRAY));
-					}
-					tooltip.addAll(list2);
-				}
-			}
-			if (context.isAdvanced() && itemStack.getItem() == HWGItems.G_SMOKE) {
-				List<Text> list2 = Lists.newArrayList();
-				HWGItems.G_SMOKE.appendTooltip(itemStack, world, list2, context);
-				if (!list2.isEmpty()) {
-					for (int i = 0; i < list2.size(); ++i) {
-						list2.set(i, (new LiteralText("  ")).append((Text) list2.get(i)).formatted(Formatting.GRAY));
-					}
-					tooltip.addAll(list2);
-				}
-			}
-			if (context.isAdvanced() && itemStack.getItem() == HWGItems.G_STUN) {
-				List<Text> list2 = Lists.newArrayList();
-				HWGItems.G_STUN.appendTooltip(itemStack, world, list2, context);
 				if (!list2.isEmpty()) {
 					for (int i = 0; i < list2.size(); ++i) {
 						list2.set(i, (new LiteralText("  ")).append((Text) list2.get(i)).formatted(Formatting.GRAY));

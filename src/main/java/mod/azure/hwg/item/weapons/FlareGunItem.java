@@ -9,7 +9,22 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.entity.projectiles.CustomFireworkEntity;
+import mod.azure.hwg.entity.projectiles.flare.BlackFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.BlueFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.BrownFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.CyanFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.GrayFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.GreenFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.LightblueFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.LightgrayFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.LimeFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.MagentaFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.OrangeFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.PinkFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.PurpleFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.RedFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.WhiteFlareEntity;
+import mod.azure.hwg.entity.projectiles.flare.YellowFlareEntity;
 import mod.azure.hwg.item.ammo.FlareItem;
 import mod.azure.hwg.util.HWGItems;
 import net.fabricmc.api.EnvType;
@@ -21,13 +36,17 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -44,9 +63,41 @@ public class FlareGunItem extends RangedWeaponItem {
 	private boolean charged = false;
 	private boolean loaded = false;
 
-	public static final Predicate<ItemStack> FLARE = (stack) -> {
-		return stack.getItem() == HWGItems.FLARE;
+	public static final Predicate<ItemStack> BLACK_FLARE = (stack) -> {
+		return stack.getItem() == HWGItems.BLACK_FLARE;
 	};
+
+	public static final Predicate<ItemStack> FLARE = BLACK_FLARE.or((stack) -> {
+		return stack.getItem() == HWGItems.BLUE_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.BROWN_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.CYAN_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.GRAY_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.GREEN_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.LIGHTBLUE_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.LIGHTGRAY_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.LIME_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.MAGENTA_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.ORANGE_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.PINK_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.PURPLE_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.RED_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.WHITE_FLARE;
+	}).or((stack) -> {
+		return stack.getItem() == HWGItems.YELLOW_FLARE;
+	});
 
 	public FlareGunItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(31));
@@ -71,8 +122,71 @@ public class FlareGunItem extends RangedWeaponItem {
 			float soundPitch, boolean creative, float speed, float divergence, float simulated) {
 		if (!world.isClient) {
 			Object projectileEntity2;
-			projectileEntity2 = new CustomFireworkEntity(world, projectile, shooter, shooter.getX(),
-					shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			boolean bl = projectile.getItem() == HWGItems.BLACK_FLARE;
+			boolean b2 = projectile.getItem() == HWGItems.BLUE_FLARE;
+			boolean b3 = projectile.getItem() == HWGItems.BROWN_FLARE;
+			boolean b4 = projectile.getItem() == HWGItems.CYAN_FLARE;
+			boolean b5 = projectile.getItem() == HWGItems.GRAY_FLARE;
+			boolean b6 = projectile.getItem() == HWGItems.GREEN_FLARE;
+			boolean b7 = projectile.getItem() == HWGItems.LIGHTBLUE_FLARE;
+			boolean b8 = projectile.getItem() == HWGItems.LIGHTGRAY_FLARE;
+			boolean b9 = projectile.getItem() == HWGItems.LIME_FLARE;
+			boolean b10 = projectile.getItem() == HWGItems.MAGENTA_FLARE;
+			boolean b11 = projectile.getItem() == HWGItems.ORANGE_FLARE;
+			boolean b12 = projectile.getItem() == HWGItems.PINK_FLARE;
+			boolean b13 = projectile.getItem() == HWGItems.PURPLE_FLARE;
+			boolean b14 = projectile.getItem() == HWGItems.RED_FLARE;
+			boolean b15 = projectile.getItem() == HWGItems.YELLOW_FLARE;
+			if (bl) {
+				projectileEntity2 = new BlackFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b2) {
+				projectileEntity2 = new BlueFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b3) {
+				projectileEntity2 = new BrownFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b4) {
+				projectileEntity2 = new CyanFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b5) {
+				projectileEntity2 = new GrayFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b6) {
+				projectileEntity2 = new GreenFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b7) {
+				projectileEntity2 = new LightblueFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b8) {
+				projectileEntity2 = new LightgrayFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b9) {
+				projectileEntity2 = new LimeFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b10) {
+				projectileEntity2 = new MagentaFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b11) {
+				projectileEntity2 = new OrangeFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b12) {
+				projectileEntity2 = new PinkFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b13) {
+				projectileEntity2 = new PurpleFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b14) {
+				projectileEntity2 = new RedFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else if (b15) {
+				projectileEntity2 = new YellowFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			} else {
+				projectileEntity2 = new WhiteFlareEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			}
+
 			Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
 			Quaternion quaternion = new Quaternion(new Vector3f(vec3d), simulated, true);
 			Vec3d vec3d2 = shooter.getRotationVec(1.0F);
@@ -80,7 +194,7 @@ public class FlareGunItem extends RangedWeaponItem {
 			vector3f.rotate(quaternion);
 			((ProjectileEntity) projectileEntity2).setVelocity((double) vector3f.getX(), (double) vector3f.getY(),
 					(double) vector3f.getZ(), speed, divergence);
-
+			((PersistentProjectileEntity) projectileEntity2).pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 			world.spawnEntity((Entity) projectileEntity2);
 		}
 	}
@@ -99,7 +213,7 @@ public class FlareGunItem extends RangedWeaponItem {
 		ItemStack itemStack = user.getStackInHand(hand);
 		if (isCharged(itemStack) && itemStack.getDamage() < (itemStack.getMaxDamage() - 1)
 				&& !user.getItemCooldownManager().isCoolingDown(this)) {
-			shootAll(world, user, hand, itemStack, 1.6F, 1.0F);
+			shootAll(world, user, hand, itemStack, 2.6F, 1.0F);
 			user.getItemCooldownManager().set(this, 25);
 			setCharged(itemStack, false);
 			return TypedActionResult.consume(itemStack);
@@ -118,6 +232,8 @@ public class FlareGunItem extends RangedWeaponItem {
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (!isCharged(stack) && loadProjectiles(user, stack)) {
 			setCharged(stack, true);
+			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+					SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.PLAYERS, 1.0F, 1.5F);
 		}
 	}
 
@@ -134,7 +250,7 @@ public class FlareGunItem extends RangedWeaponItem {
 			}
 
 			if (itemStack.isEmpty() && bl) {
-				itemStack = new ItemStack(HWGItems.FLARE);
+				itemStack = new ItemStack((ItemConvertible) FLARE);
 				itemStack2 = itemStack.copy();
 			}
 
@@ -229,15 +345,7 @@ public class FlareGunItem extends RangedWeaponItem {
 		for (int i = 0; i < list.size(); ++i) {
 			ItemStack itemStack = (ItemStack) list.get(i);
 			boolean bl = entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.creativeMode;
-			if (!itemStack.isEmpty()) {
-				if (i == 0) {
-					shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 0.0F);
-				} else if (i == 1) {
-					shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, -10.0F);
-				} else if (i == 2) {
-					shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 10.0F);
-				}
-			}
+			shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 0.0F);
 		}
 		postShoot(world, entity, stack);
 	}
@@ -289,7 +397,7 @@ public class FlareGunItem extends RangedWeaponItem {
 		if (isCharged(stack) && !list.isEmpty()) {
 			ItemStack itemStack = (ItemStack) list.get(0);
 			tooltip.add((new TranslatableText("Ammo")).append(" ").append(itemStack.toHoverableText()));
-			if (context.isAdvanced() && itemStack.getItem() == HWGItems.FLARE) {
+			if (context.isAdvanced() && itemStack.getItem() == FLARE) {
 				List<Text> list2 = Lists.newArrayList();
 				HWGItems.G_EMP.appendTooltip(itemStack, world, list2, context);
 				if (!list2.isEmpty()) {
