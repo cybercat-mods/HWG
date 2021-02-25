@@ -2,6 +2,8 @@ package mod.azure.hwg.client;
 
 import org.lwjgl.glfw.GLFW;
 
+import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.client.gui.GunTableScreen;
 import mod.azure.hwg.client.render.weapons.FlamethrowerRender;
 import mod.azure.hwg.client.render.weapons.PistolRender;
 import mod.azure.hwg.client.render.weapons.SPistolRender;
@@ -14,6 +16,7 @@ import mod.azure.hwg.util.packet.EntityPacketOnClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.options.KeyBinding;
@@ -32,7 +35,7 @@ public class ClientInit implements ClientModInitializer {
 	public void onInitializeClient() {
 		ModelProviderinit.init();
 		RenderRegistry.init();
-//		ScreenRegistry.<GunTableDescription, GunTableScreen>register(HWGMod.SCREEN_HANDLER_TYPE, (gui, inventory, title) -> new GunTableScreen(gui, inventory.player, title));
+        ScreenRegistry.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
 		GeoItemRenderer.registerItemRenderer(HWGItems.PISTOL, new PistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SPISTOL, new SPistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.FLAMETHROWER, new FlamethrowerRender());
@@ -62,5 +65,6 @@ public class ClientInit implements ClientModInitializer {
 	public static void requestParticleTexture( Identifier id ) {
 	    ClientSpriteRegistryCallback.event(SpriteAtlasTexture.PARTICLE_ATLAS_TEXTURE).register(((texture, registry) -> registry.register( id )));
 	}
+
 
 }

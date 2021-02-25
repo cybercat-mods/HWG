@@ -1,7 +1,7 @@
 package mod.azure.hwg.blocks;
 
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.gui.GunTableDescription;
+import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,15 +11,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Nameable;
 import net.minecraft.util.collection.DefaultedList;
 
-public class GunBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory, Nameable {
+public class GunBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
 	
-	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(2, ItemStack.EMPTY);
+	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(6, ItemStack.EMPTY);
 	
 	public GunBlockEntity() {
 		super(HWGMod.GUN_TABLE_ENTITY);
@@ -49,12 +47,6 @@ public class GunBlockEntity extends BlockEntity implements ImplementedInventory,
 
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory inventory, PlayerEntity player) {
-		return new GunTableDescription(syncId, inventory, ScreenHandlerContext.create(world, pos));
+        return new GunTableScreenHandler(syncId, inventory);
 	}
-
-	@Override
-	public Text getName() {
-		return new TranslatableText(getCachedState().getBlock().getTranslationKey());
-	}
-	
 }

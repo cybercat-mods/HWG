@@ -32,3 +32,4 @@ bin/
 
 run/
 .github/workflows/build.yml
+build.bat

@@ -1,42 +1,38 @@
 {
-  "schemaVersion": 1,
-  "id": "hwg",
-  "version": "${version}",
-
-  "name": "Happiness is a Warm Gun",
-  "description": "This is an example description! Tell everyone what your mod is about!",
-  "authors": [
-    "AzureDoom, cybercat5555"
-  ],
-  "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
-  },
-
-  "license": "CC BY-NC-ND 4.0",
-  "icon": "assets/modid/icon.png",
-
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "mod.azure.hwg.HWGMod"
-    ],
+	"schemaVersion": 1,
+	"id": "hwg",
+	"version": "${version}",
+	"name": "Happiness is a Warm Gun",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"AzureDoom, cybercat5555"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC BY-NC-ND 4.0",
+	"icon": "assets/modid/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"mod.azure.hwg.HWGMod"
+		],
 		"client": [
 			"mod.azure.hwg.client.ClientInit"
 		]
-  },
-  "mixins": [
-    "hwg.mixins.json"
-  ],
-
-  "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": "*",
-    "minecraft": "1.16.x",
-	"geckolib3": ">=3.0.22"
-  },
-  "suggests": {
-    "another-mod": "*"
-  },
+	},
+	"mixins": [
+		"hwg.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.7.4",
+		"fabric": "*",
+		"minecraft": "1.16.x",
+		"geckolib3": ">=3.0.22"
+	},
+	"suggests": {
+		"another-mod": "*"
+	},
 	"accessWidener": "hwg.accesswidener"
 }
