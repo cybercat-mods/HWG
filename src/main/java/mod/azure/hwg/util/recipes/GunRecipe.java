@@ -1,6 +1,7 @@
-package mod.azure.hwg.util;
+package mod.azure.hwg.util.recipes;
 
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.util.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.inventory.CraftingInventory;

@@ -1,4 +1,4 @@
-package mod.azure.hwg.util;
+package mod.azure.hwg.util.recipes;
 
 import mod.azure.hwg.client.gui.GunTableInventory;
 import net.minecraft.recipe.Recipe;

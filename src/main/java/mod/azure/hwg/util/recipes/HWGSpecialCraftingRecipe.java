@@ -1,4 +1,4 @@
-package mod.azure.hwg.util;
+package mod.azure.hwg.util.recipes;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;

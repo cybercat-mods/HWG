@@ -90,7 +90,7 @@ public class GunTableInventory implements Inventory {
 	}
 
 	public void markDirty() {
-		
+
 	}
 
 	public void updateRecipes() {
