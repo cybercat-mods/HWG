@@ -22,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOfferList;
 
-public class GunTableScreen extends HandledScreen<ScreenHandler> {
+public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 	private static final Identifier TEXTURE = new Identifier(HWGMod.MODID, "textures/gui/gun_table_gui.png");
 	//private static final Identifier TEXTURE = new Identifier("textures/gui/container/villager2.png");
 
@@ -31,12 +31,6 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 	private int indexStartOffset;
 	private boolean scrolling;
 
-	public GunTableScreen(ScreenHandler handler, PlayerInventory inventory, Text title) {
-		super(handler, inventory, title);
-		this.backgroundWidth = 276;
-		this.playerInventoryTitleX = 107;
-	}
-
 	public GunTableScreen(GunTableScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
 		this.backgroundWidth = 276;
@@ -44,8 +38,8 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 	}
 
 	private void syncRecipeIndex() {
-		((GunTableScreenHandler) this.handler).setRecipeIndex(this.selectedIndex);
-		((GunTableScreenHandler) this.handler).switchTo(this.selectedIndex);
+		this.handler.setRecipeIndex(this.selectedIndex);
+		this.handler.switchTo(this.selectedIndex);
 		this.client.getNetworkHandler().sendPacket(new SelectMerchantTradeC2SPacket(this.selectedIndex));
 	}
 
@@ -56,10 +50,10 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 		int k = j + 16 + 2;
 
 		for (int l = 0; l < 7; ++l) {
-			this.offers[l] = (GunTableScreen.WidgetButtonPage) this
-					.addButton(new GunTableScreen.WidgetButtonPage(i + 5, k, l, (button) -> {
-						if (button instanceof GunTableScreen.WidgetButtonPage) {
-							this.selectedIndex = ((GunTableScreen.WidgetButtonPage) button).getIndex()
+			this.offers[l] = this
+					.addButton(new WidgetButtonPage(i + 5, k, l, (button) -> {
+						if (button instanceof WidgetButtonPage) {
+							this.selectedIndex = ((WidgetButtonPage) button).getIndex()
 									+ this.indexStartOffset;
 							this.syncRecipeIndex();
 						}
@@ -72,7 +66,7 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
 		this.textRenderer.draw(matrices, this.title,
-				(float) (49 + this.backgroundWidth / 2 - this.textRenderer.getWidth((StringVisitable) this.title) / 2),
+				(float) (49 + this.backgroundWidth / 2 - this.textRenderer.getWidth(this.title) / 2),
 				6.0F, 4210752);
 	}
 
@@ -106,7 +100,7 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
-		TradeOfferList tradeOfferList = ((GunTableScreenHandler) this.handler).getRecipes();
+		TradeOfferList tradeOfferList = this.handler.getRecipes();
 		if (!tradeOfferList.isEmpty()) {
 			int i = (this.width - this.backgroundWidth) / 2;
 			int j = (this.height - this.backgroundHeight) / 2;
@@ -149,7 +143,7 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 				}
 
 				int o = this.selectedIndex;
-				tradeOffer = (TradeOffer) tradeOfferList.get(o);
+				tradeOffer = tradeOfferList.get(o);
 
 				GunTableScreen.WidgetButtonPage[] var19 = this.offers;
 				int var20 = var19.length;
@@ -160,7 +154,7 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 						widgetButtonPage.renderToolTip(matrices, mouseX, mouseY);
 					}
 
-					widgetButtonPage.visible = widgetButtonPage.index < ((GunTableScreenHandler) this.handler)
+					widgetButtonPage.visible = widgetButtonPage.index < this.handler
 							.getRecipes().size();
 				}
 
@@ -207,7 +201,7 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 	}
 
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-		int i = ((GunTableScreenHandler) this.handler).getRecipes().size();
+		int i = this.handler.getRecipes().size();
 		if (this.canScroll(i)) {
 			int j = i - 7;
 			this.indexStartOffset = (int) ((double) this.indexStartOffset - amount);
@@ -218,7 +212,7 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 	}
 
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-		int i = ((GunTableScreenHandler) this.handler).getRecipes().size();
+		int i = this.handler.getRecipes().size();
 		if (this.scrolling) {
 			int j = this.y + 18;
 			int k = j + 139;
@@ -236,7 +230,7 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 		this.scrolling = false;
 		int i = (this.width - this.backgroundWidth) / 2;
 		int j = (this.height - this.backgroundHeight) / 2;
-		if (this.canScroll(((GunTableScreenHandler) this.handler).getRecipes().size()) && mouseX > (double) (i + 94)
+		if (this.canScroll(this.handler.getRecipes().size()) && mouseX > (double) (i + 94)
 				&& mouseX < (double) (i + 94 + 6) && mouseY > (double) (j + 18)
 				&& mouseY <= (double) (j + 18 + 139 + 1)) {
 			this.scrolling = true;
@@ -260,22 +254,22 @@ public class GunTableScreen extends HandledScreen<ScreenHandler> {
 		}
 
 		public void renderToolTip(MatrixStack matrices, int mouseX, int mouseY) {
-			if (this.hovered && ((GunTableScreenHandler) GunTableScreen.this.handler).getRecipes().size() > this.index
+			if (this.hovered && GunTableScreen.this.handler.getRecipes().size() > this.index
 					+ GunTableScreen.this.indexStartOffset) {
 				ItemStack itemStack3;
 				if (mouseX < this.x + 20) {
-					itemStack3 = ((TradeOffer) ((GunTableScreenHandler) GunTableScreen.this.handler).getRecipes()
-							.get(this.index + GunTableScreen.this.indexStartOffset)).getAdjustedFirstBuyItem();
+					itemStack3 = GunTableScreen.this.handler.getRecipes()
+							.get(this.index + GunTableScreen.this.indexStartOffset).getAdjustedFirstBuyItem();
 					GunTableScreen.this.renderTooltip(matrices, itemStack3, mouseX, mouseY);
 				} else if (mouseX < this.x + 50 && mouseX > this.x + 30) {
-					itemStack3 = ((TradeOffer) ((GunTableScreenHandler) GunTableScreen.this.handler).getRecipes()
-							.get(this.index + GunTableScreen.this.indexStartOffset)).getSecondBuyItem();
+					itemStack3 = GunTableScreen.this.handler.getRecipes()
+							.get(this.index + GunTableScreen.this.indexStartOffset).getSecondBuyItem();
 					if (!itemStack3.isEmpty()) {
 						GunTableScreen.this.renderTooltip(matrices, itemStack3, mouseX, mouseY);
 					}
 				} else if (mouseX > this.x + 65) {
-					itemStack3 = ((TradeOffer) ((GunTableScreenHandler) GunTableScreen.this.handler).getRecipes()
-							.get(this.index + GunTableScreen.this.indexStartOffset)).getMutableSellItem();
+					itemStack3 = GunTableScreen.this.handler.getRecipes()
+							.get(this.index + GunTableScreen.this.indexStartOffset).getMutableSellItem();
 					GunTableScreen.this.renderTooltip(matrices, itemStack3, mouseX, mouseY);
 				}
 			}
