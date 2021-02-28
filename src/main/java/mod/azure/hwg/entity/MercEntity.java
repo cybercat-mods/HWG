@@ -42,6 +42,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.LightType;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -105,7 +106,13 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 
 	public static boolean canSpawn(EntityType<? extends HWGEntity> type, WorldAccess world, SpawnReason spawnReason,
 			BlockPos pos, Random random) {
-		return world.getDifficulty() != Difficulty.PEACEFUL;
+		return world.getLightLevel(LightType.BLOCK, pos) > 8 && world.getDifficulty() != Difficulty.PEACEFUL ? false
+				: canSpawnIgnoreLightLevel(type, world, spawnReason, pos, random);
+	}
+
+	public static boolean canSpawnIgnoreLightLevel(EntityType<? extends HWGEntity> type, WorldAccess world,
+			SpawnReason spawnReason, BlockPos pos, Random random) {
+		return world.getDifficulty() != Difficulty.PEACEFUL && canMobSpawn(type, world, spawnReason, pos, random);
 	}
 
 	@Override
@@ -217,9 +224,10 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_MAX_HEALTH, config.merc_health)
-				.add(EntityAttributes.GENERIC_ARMOR, 3).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
-				.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D)
+				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.merc_health).add(EntityAttributes.GENERIC_ARMOR, 3)
+				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D)
+				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	protected boolean shouldDrown() {
