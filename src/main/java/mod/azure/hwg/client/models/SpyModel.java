@@ -35,8 +35,8 @@ public class SpyModel extends AnimatedGeoModel<SpyEntity> {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 		IBone head = this.getAnimationProcessor().getBone("head");
 
-      IBone Left = this.getAnimationProcessor().getBone("BipedLeftLeg");
-      IBone Right = this.getAnimationProcessor().getBone("BipedRightLeg");
+		IBone Left = this.getAnimationProcessor().getBone("BipedLeftLeg");
+		IBone Right = this.getAnimationProcessor().getBone("BipedRightLeg");
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 		if (head != null) {
@@ -44,7 +44,8 @@ public class SpyModel extends AnimatedGeoModel<SpyEntity> {
 			head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 		}
 		if (Left != null) {
-			Left.setRotationX(MathHelper.cos(entity.limbAngle * 0.6662F + 3.1415927F) * 1.4F * entity.limbDistance * 0.5F);
+			Left.setRotationX(
+					MathHelper.cos(entity.limbAngle * 0.6662F + 3.1415927F) * 1.4F * entity.lastLimbDistance * 0.5F);
 		}
 		if (Right != null) {
 			Right.setRotationX(MathHelper.cos(entity.limbAngle * 0.6662F) * 1.4F * entity.limbDistance * 0.5F);

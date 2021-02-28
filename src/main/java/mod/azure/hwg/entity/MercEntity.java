@@ -31,6 +31,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
@@ -223,8 +224,8 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	}
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D)
+		return MobEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
+				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35D)
 				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.merc_health).add(EntityAttributes.GENERIC_ARMOR, 3)
 				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D)
 				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
