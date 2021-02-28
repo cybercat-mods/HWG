@@ -59,7 +59,7 @@ public class GrenadeProjectilesRenderer<T extends Entity & IAnimatable> extends 
 		float lastLimbDistance = 0.0F;
 		float limbSwing = 0.0F;
 		EntityModelData entityModelData = new EntityModelData();
-		AnimationEvent predicate = new AnimationEvent(entityIn, limbSwing, lastLimbDistance, partialTicks,
+		AnimationEvent<T> predicate = new AnimationEvent<T>(entityIn, limbSwing, lastLimbDistance, partialTicks,
 				!(lastLimbDistance > -0.15F && lastLimbDistance < 0.15F), Collections.singletonList(entityModelData));
 		if (modelProvider instanceof IAnimatableModel) {
 			((IAnimatableModel<T>) modelProvider).setLivingAnimations(entityIn, this.getUniqueID(entityIn), predicate);

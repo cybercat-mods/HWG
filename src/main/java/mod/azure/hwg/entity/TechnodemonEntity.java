@@ -83,7 +83,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if ((event.isMoving() || !this.isSwimming()) && !this.dataTracker.get(SHOOTING)) {
+		if (event.isMoving() && !this.isSwimming() && !this.dataTracker.get(SHOOTING)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
 			return PlayState.CONTINUE;
 		}
