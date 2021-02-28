@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"mod.azure.hwg.client.ClientInit"
+		],
+		"modmenu": [
+			"mod.azure.hwg.config.ModMenuHWG"
 		]
 	},
 	"mixins": [

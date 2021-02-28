@@ -110,7 +110,6 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	public void checkDespawn() {
-		// TODO Auto-generated method stub
 		super.checkDespawn();
 	}
 
@@ -218,7 +217,7 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_MAX_HEALTH, 20D)
+				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_MAX_HEALTH, config.merc_health)
 				.add(EntityAttributes.GENERIC_ARMOR, 3).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
 				.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}

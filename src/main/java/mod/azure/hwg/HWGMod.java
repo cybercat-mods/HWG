@@ -1,9 +1,12 @@
 package mod.azure.hwg;
 
+import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.sargunvohra.mcmods.autoconfig1u.serializer.Toml4jConfigSerializer;
 import mod.azure.hwg.blocks.FuelTankBlock;
 import mod.azure.hwg.blocks.GunBlockEntity;
 import mod.azure.hwg.blocks.GunTableBlock;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.item.weapons.AssasultItem;
 import mod.azure.hwg.item.weapons.BalrogItem;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
@@ -15,7 +18,6 @@ import mod.azure.hwg.item.weapons.RocketLauncher;
 import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
-import mod.azure.hwg.util.GunRecipe;
 import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.HWGLoot;
@@ -24,6 +26,7 @@ import mod.azure.hwg.util.HWGParticles;
 import mod.azure.hwg.util.MobAttributes;
 import mod.azure.hwg.util.MobSpawn;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
+import mod.azure.hwg.util.recipes.GunRecipe;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
@@ -51,6 +54,7 @@ public class HWGMod implements ModInitializer {
 
 	public static HWGMobs MOBS;
 	public static HWGItems ITEMS;
+	public static HWGConfig config;
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
 	public static ProjectilesEntityRegister PROJECTILES;
@@ -72,12 +76,14 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
 	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
 	public static final GunTableBlock GUN_TABLE = new GunTableBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f).nonOpaque());
-	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.PISTOL)).build();
 	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE = ScreenHandlerRegistry.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
+	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.PISTOL)).build();
 	public static final SpecialRecipeSerializer<GunRecipe> GUNS_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, GUNS, new SpecialRecipeSerializer<>(GunRecipe::new));
 	
 	@Override
 	public void onInitialize() {
+		AutoConfig.register(HWGConfig.class, Toml4jConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();

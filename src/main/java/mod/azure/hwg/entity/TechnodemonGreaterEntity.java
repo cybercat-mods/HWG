@@ -205,9 +205,9 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_MAX_HEALTH, 100D)
-				.add(EntityAttributes.GENERIC_ARMOR, 5).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
-				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D)
+				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.greater_health).add(EntityAttributes.GENERIC_ARMOR, 5)
+				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	protected boolean shouldDrown() {
@@ -232,7 +232,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
 	}
-	
+
 	private ItemStack makeInitialWeapon() {
 		Random rand = new Random();
 		List<ItemConvertible> givenList = Arrays.asList(HWGItems.MINIGUN, HWGItems.BRIMSTONE, HWGItems.BALROG);

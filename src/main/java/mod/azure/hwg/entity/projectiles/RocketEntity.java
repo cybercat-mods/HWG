@@ -1,5 +1,7 @@
 package mod.azure.hwg.entity.projectiles;
 
+import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.config.HWGConfig.Weapons;
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
 import mod.azure.hwg.util.packet.EntityPacket;
@@ -20,7 +22,6 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
@@ -36,6 +37,8 @@ public class RocketEntity extends PersistentProjectileEntity implements IAnimata
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
+
+	private static Weapons config = HWGMod.config.weapons;
 
 	public RocketEntity(EntityType<? extends RocketEntity> entityType, World world) {
 		super(entityType, world);
@@ -232,11 +235,8 @@ public class RocketEntity extends PersistentProjectileEntity implements IAnimata
 	}
 
 	protected void explode() {
-		Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)
-				? Explosion.DestructionType.DESTROY
-				: Explosion.DestructionType.NONE;
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 2.0F, false,
-				destructionType);
+				config.rocket_breaks ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
 	}
 
 	@Override
