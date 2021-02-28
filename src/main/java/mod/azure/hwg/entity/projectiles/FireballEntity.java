@@ -3,6 +3,7 @@ package mod.azure.hwg.entity.projectiles;
 import java.util.List;
 
 import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.HWGParticles;
 import mod.azure.hwg.util.ProjectilesEntityRegister;
 import mod.azure.hwg.util.packet.EntityPacket;
 import net.fabricmc.api.EnvType;
@@ -192,7 +193,8 @@ public class FireballEntity extends PersistentProjectileEntity {
 					double f2 = this.getZ()
 							+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
 					this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
-					this.world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, d2, e2, f2, 0, 0, 0);
+					this.world.addParticle(HWGParticles.BRIM_ORANGE, true, d2, e2, f2, 0, 0, 0);
+					this.world.addParticle(HWGParticles.BRIM_RED, true, d2, e2, f2, 0, 0, 0);
 				}
 			}
 

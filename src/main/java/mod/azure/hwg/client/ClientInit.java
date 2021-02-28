@@ -7,6 +7,7 @@ import mod.azure.hwg.client.gui.GunTableScreen;
 import mod.azure.hwg.client.render.weapons.FlamethrowerRender;
 import mod.azure.hwg.client.render.weapons.PistolRender;
 import mod.azure.hwg.client.render.weapons.SPistolRender;
+import mod.azure.hwg.particle.BrimParticle;
 import mod.azure.hwg.particle.FlareParticle;
 import mod.azure.hwg.particle.WFlareParticle;
 import mod.azure.hwg.util.HWGItems;
@@ -60,6 +61,9 @@ public class ClientInit implements ClientModInitializer {
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.WHITE_FLARE, WFlareParticle.WhiteSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.YELLOW_FLARE, FlareParticle.YellowSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.GRAY_FLARE, FlareParticle.GraySmokeFactory::new);
+		
+		ParticleFactoryRegistry.getInstance().register(HWGParticles.BRIM_ORANGE, BrimParticle.OrangeSmokeFactory::new);
+		ParticleFactoryRegistry.getInstance().register(HWGParticles.BRIM_RED, BrimParticle.RedSmokeFactory::new);
 	}
 	
 	public static void requestParticleTexture( Identifier id ) {
