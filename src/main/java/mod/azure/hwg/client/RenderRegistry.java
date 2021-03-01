@@ -1,6 +1,5 @@
 package mod.azure.hwg.client;
 
-import mod.azure.hwg.client.render.FuelTankRender;
 import mod.azure.hwg.client.render.MercRender;
 import mod.azure.hwg.client.render.SpyRender;
 import mod.azure.hwg.client.render.TechnodemonGreaterRender;
@@ -33,8 +32,9 @@ import mod.azure.hwg.client.render.projectiles.flare.PurpleFlareRender;
 import mod.azure.hwg.client.render.projectiles.flare.RedFlareRender;
 import mod.azure.hwg.client.render.projectiles.flare.WhiteFlareRender;
 import mod.azure.hwg.client.render.projectiles.flare.YellowFlareRender;
-import mod.azure.hwg.util.HWGMobs;
-import mod.azure.hwg.util.ProjectilesEntityRegister;
+import mod.azure.hwg.client.render.weapons.FuelTankRender;
+import mod.azure.hwg.util.registry.HWGMobs;
+import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 
 public class RenderRegistry {

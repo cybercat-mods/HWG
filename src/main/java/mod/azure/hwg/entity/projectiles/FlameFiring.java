@@ -2,9 +2,9 @@ package mod.azure.hwg.entity.projectiles;
 
 import java.util.List;
 
-import mod.azure.hwg.util.HWGItems;
-import mod.azure.hwg.util.ProjectilesEntityRegister;
 import mod.azure.hwg.util.packet.EntityPacket;
+import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.AbstractFireBlock;

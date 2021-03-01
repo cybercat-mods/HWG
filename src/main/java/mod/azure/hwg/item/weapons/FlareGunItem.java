@@ -26,7 +26,7 @@ import mod.azure.hwg.entity.projectiles.flare.RedFlareEntity;
 import mod.azure.hwg.entity.projectiles.flare.WhiteFlareEntity;
 import mod.azure.hwg.entity.projectiles.flare.YellowFlareEntity;
 import mod.azure.hwg.item.ammo.FlareItem;
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;

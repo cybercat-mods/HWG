@@ -12,7 +12,7 @@ import mod.azure.hwg.item.ammo.BulletAmmo;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
 import mod.azure.hwg.item.weapons.FlamethrowerItem;
 import mod.azure.hwg.item.weapons.HellhorseRevolverItem;
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;

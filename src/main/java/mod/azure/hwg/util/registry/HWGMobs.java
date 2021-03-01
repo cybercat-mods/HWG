@@ -1,4 +1,4 @@
-package mod.azure.hwg.util;
+package mod.azure.hwg.util.registry;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.MercEntity;

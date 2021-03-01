@@ -13,7 +13,7 @@ import mod.azure.hwg.item.ammo.BulletAmmo;
 import mod.azure.hwg.item.weapons.BalrogItem;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
 import mod.azure.hwg.item.weapons.Minigun;
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;

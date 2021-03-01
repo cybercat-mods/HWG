@@ -1,4 +1,4 @@
-package mod.azure.hwg.client.render;
+package mod.azure.hwg.client.render.weapons;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.FuelTankEntity;

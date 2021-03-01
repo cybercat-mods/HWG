@@ -1,4 +1,4 @@
-package mod.azure.hwg.util;
+package mod.azure.hwg.util.registry;
 
 import mod.azure.hwg.HWGMod;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
