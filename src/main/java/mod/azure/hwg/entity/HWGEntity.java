@@ -10,7 +10,6 @@ import mod.azure.hwg.util.packet.EntityPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.Durations;
@@ -40,6 +39,7 @@ public abstract class HWGEntity extends PathAwareEntity implements Angerable, Ra
 	protected HWGEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.getNavigation().setCanSwim(true);
+		this.ignoreCameraFrustum = true;
 	}
 
 	@Override
@@ -50,11 +50,6 @@ public abstract class HWGEntity extends PathAwareEntity implements Angerable, Ra
 	@Override
 	protected boolean isDisallowedInPeaceful() {
 		return true;
-	}
-
-	@Override
-	public EntityGroup getGroup() {
-		return EntityGroup.UNDEAD;
 	}
 
 	@Override
