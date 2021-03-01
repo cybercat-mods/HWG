@@ -1,0 +1,30 @@
+{
+	"type": "hwg:gun_table",
+	"pattern": "abcde",
+	"key": {
+		"a": {
+			"item": "minecraft:gunpowder",
+			"count": 2
+		},
+		"b": {
+			"item": "minecraft:iron_nugget",
+			"count": 5
+		},
+		"c": {
+			"item": "minecraft:redstone",
+			"count": 1
+		},
+		"d": {
+			"item": "minecraft:glowstone_dust",
+			"count": 1
+		},
+		"e": {
+			"item": "minecraft:stick",
+			"count": 1
+		}
+	},
+	"result": {
+		"item": "hwg:grenade_emp",
+		"count": 2
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"type": "hwg:gun_table",
+	"pattern": "ab",
+	"key": {
+		"a": {
+			"item": "hwg:pistol",
+			"count": 1
+		},
+		"b": {
+			"item": "minecraft:iron_ingot",
+			"count": 2
+		}
+	},
+	"result": {
+		"item": "hwg:spistol"
+	}
+}

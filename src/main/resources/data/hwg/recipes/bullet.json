@@ -1,0 +1,22 @@
+{
+	"type": "hwg:gun_table",
+	"pattern": "abc",
+	"key": {
+		"a": {
+			"item": "minecraft:iron_nugget",
+			"count": 2
+		},
+		"b": {
+			"item": "minecraft:gold_nugget",
+			"count": 4
+		},
+		"c": {
+			"item": "minecraft:gunpowder",
+			"count": 2
+		}
+	},
+	"result": {
+		"item": "hwg:bullets",
+		"count": 10
+	}
+}

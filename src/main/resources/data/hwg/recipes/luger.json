@@ -1,0 +1,21 @@
+{
+	"type": "hwg:gun_table",
+	"pattern": "abc",
+	"key": {
+		"a": {
+			"item": "minecraft:iron_ingot",
+			"count": 6
+		},
+		"b": {
+			"item": "minecraft:lever",
+			"count": 1
+		},
+		"c": {
+			"item": "minecraft:black_terracotta",
+			"count": 2
+		}
+	},
+	"result": {
+		"item": "hwg:luger"
+	}
+}

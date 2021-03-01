@@ -1,0 +1,22 @@
+{
+	"type": "hwg:gun_table",
+	"pattern": "abc",
+	"key": {
+		"a": {
+			"item": "minecraft:iron_ingot",
+			"count": 1
+		},
+		"b": {
+			"item": "minecraft:gold_ingot",
+			"count": 2
+		},
+		"c": {
+			"item": "minecraft:diamond",
+			"count": 1
+		}
+	},
+	"result": {
+		"item": "hwg:sniper_round",
+		"count": 8
+	}
+}
