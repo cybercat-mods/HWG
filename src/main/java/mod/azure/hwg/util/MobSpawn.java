@@ -2,6 +2,7 @@ package mod.azure.hwg.util;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.config.HWGConfig.Spawning;
+import mod.azure.hwg.util.registry.HWGMobs;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.minecraft.entity.SpawnGroup;

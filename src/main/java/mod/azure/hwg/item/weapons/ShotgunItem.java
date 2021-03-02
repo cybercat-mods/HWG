@@ -6,7 +6,7 @@ import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.ShellEntity;
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
@@ -24,38 +24,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class ShotgunItem extends Item implements IAnimatable {
-
-	public AnimationFactory factory = new AnimationFactory(this);
-	private String controllerName = "controller";
+public class ShotgunItem extends Item {
 
 	public ShotgunItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(3));
-	}
-
-	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		return PlayState.CONTINUE;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
-	}
-
-	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
 	}
 
 	@Override
@@ -76,7 +49,7 @@ public class ShotgunItem extends Item implements IAnimatable {
 				playerentity.getItemCooldownManager().set(this, 10);
 				if (!worldIn.isClient) {
 					ShellEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.5F,
+					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 1, 0.5F,
 							0.5F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -84,18 +57,21 @@ public class ShotgunItem extends Item implements IAnimatable {
 					abstractarrowentity.setDamage(2.9);
 					abstractarrowentity.age = 25;
 
+					ShellEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
+					abstractarrowentity1.setProperties(playerentity, playerentity.pitch, playerentity.yaw - 1, 0.5F,
+							0.5F * 3.0F, 1.0F);
+					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
+							entityLiving.getZ(), 0, 0);
+
+					abstractarrowentity1.setDamage(2.9);
+					abstractarrowentity1.age = 25;
+
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);
+					worldIn.spawnEntity(abstractarrowentity1);
 				}
 				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-						SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1.0F,
-						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-				AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack,
-						controllerName);
-				if (controller.getAnimationState() == AnimationState.Stopped) {
-					controller.markNeedsReload();
-					controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
-				}
+						SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.0F, 1.3F);
 			}
 		}
 	}
@@ -124,14 +100,14 @@ public class ShotgunItem extends Item implements IAnimatable {
 	}
 
 	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		//if (!playerEntity.isCreative()) {
-			for (ItemStack item : playerEntity.inventory.main) {
-				if (item.getItem() == HWGItems.SHOTGUN_SHELL) {
-					item.decrement(1);
-					break;
-				}
+		// if (!playerEntity.isCreative()) {
+		for (ItemStack item : playerEntity.inventory.main) {
+			if (item.getItem() == HWGItems.SHOTGUN_SHELL) {
+				item.decrement(1);
+				break;
 			}
-		//}
+		}
+		// }
 	}
 
 	public ShellEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {

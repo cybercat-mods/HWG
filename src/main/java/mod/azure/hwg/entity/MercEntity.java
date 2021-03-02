@@ -7,12 +7,13 @@ import java.util.Random;
 import mod.azure.hwg.entity.goal.RangedAttackGoal;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.item.ammo.BulletAmmo;
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -31,6 +32,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
@@ -42,6 +44,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.LightType;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -105,7 +108,13 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 
 	public static boolean canSpawn(EntityType<? extends HWGEntity> type, WorldAccess world, SpawnReason spawnReason,
 			BlockPos pos, Random random) {
-		return world.getDifficulty() != Difficulty.PEACEFUL;
+		return world.getLightLevel(LightType.BLOCK, pos) > 8 && world.getDifficulty() != Difficulty.PEACEFUL ? false
+				: canSpawnIgnoreLightLevel(type, world, spawnReason, pos, random);
+	}
+
+	public static boolean canSpawnIgnoreLightLevel(EntityType<? extends HWGEntity> type, WorldAccess world,
+			SpawnReason spawnReason, BlockPos pos, Random random) {
+		return world.getDifficulty() != Difficulty.PEACEFUL && canMobSpawn(type, world, spawnReason, pos, random);
 	}
 
 	@Override
@@ -216,10 +225,11 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	}
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
-				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_MAX_HEALTH, config.merc_health)
-				.add(EntityAttributes.GENERIC_ARMOR, 3).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
-				.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+		return MobEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
+				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35D)
+				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.merc_health).add(EntityAttributes.GENERIC_ARMOR, 3)
+				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D)
+				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	protected boolean shouldDrown() {
@@ -319,6 +329,11 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState state) {
 		this.playSound(this.getStepSound(), 0.15F, 1.0F);
+	}
+
+	@Override
+	public EntityGroup getGroup() {
+		return EntityGroup.ILLAGER;
 	}
 
 }

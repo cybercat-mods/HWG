@@ -1,0 +1,7 @@
+{
+	"name": "HWG Guide",
+	"landing_text": "This is the handbook to the HWG mod.",
+	"version": 1,
+	"show_progress": false,
+	"model": "patchouli:book_red"
+}

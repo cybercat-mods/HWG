@@ -1,6 +1,6 @@
 package mod.azure.hwg.client;
 
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;

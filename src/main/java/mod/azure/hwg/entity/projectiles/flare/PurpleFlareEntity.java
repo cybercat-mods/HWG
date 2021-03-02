@@ -2,10 +2,10 @@ package mod.azure.hwg.entity.projectiles.flare;
 
 import org.jetbrains.annotations.Nullable;
 
-import mod.azure.hwg.util.HWGItems;
-import mod.azure.hwg.util.HWGParticles;
-import mod.azure.hwg.util.ProjectilesEntityRegister;
 import mod.azure.hwg.util.packet.EntityPacket;
+import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.hwg.util.registry.HWGParticles;
+import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;

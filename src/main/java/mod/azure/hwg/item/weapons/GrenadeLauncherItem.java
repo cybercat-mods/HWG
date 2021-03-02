@@ -15,7 +15,7 @@ import mod.azure.hwg.entity.projectiles.NapalmGrenadeEntity;
 import mod.azure.hwg.entity.projectiles.SmokeGrenadeEntity;
 import mod.azure.hwg.entity.projectiles.StunGrenadeEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;

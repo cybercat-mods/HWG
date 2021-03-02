@@ -7,7 +7,7 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;

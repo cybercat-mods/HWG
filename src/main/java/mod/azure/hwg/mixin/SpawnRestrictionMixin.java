@@ -7,7 +7,7 @@ import mod.azure.hwg.entity.MercEntity;
 import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
-import mod.azure.hwg.util.HWGMobs;
+import mod.azure.hwg.util.registry.HWGMobs;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.mob.MobEntity;

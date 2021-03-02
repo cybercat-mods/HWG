@@ -1,4 +1,4 @@
-package mod.azure.hwg.util;
+package mod.azure.hwg.util.registry;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.HWGSpawnEgg;
@@ -78,10 +78,8 @@ public class HWGItems {
 	public static HellhorseRevolverItem HELLHORSE = item(new HellhorseRevolverItem(), "hellhorse_revolver");
 	public static HWGSpawnEgg LESSER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOLESSER), "lesser_spawn_egg");
 	public static HWGSpawnEgg GREATER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOGREATER), "greater_spawn_egg");
-	public static BlockItem FUEL_TANK = item(
-			new BlockItem(HWGMod.FUEL_TANK, new Item.Settings().group(HWGMod.WeaponItemGroup)), "fuel_tank");
-	public static BlockItem GUN_TABLE = item(
-			new BlockItem(HWGMod.GUN_TABLE, new Item.Settings().group(HWGMod.WeaponItemGroup)), "gun_table");
+	public static BlockItem FUEL_TANK = item(new BlockItem(HWGMod.FUEL_TANK, new Item.Settings().group(HWGMod.WeaponItemGroup)), "fuel_tank");
+	public static BlockItem GUN_TABLE = item(new BlockItem(HWGMod.GUN_TABLE, new Item.Settings().group(HWGMod.WeaponItemGroup)), "gun_table");
 
 	static <T extends Item> T item(T c, String id) {
 		Registry.register(Registry.ITEM, new Identifier(HWGMod.MODID, id), c);

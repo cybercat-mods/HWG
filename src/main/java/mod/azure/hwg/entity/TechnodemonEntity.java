@@ -12,12 +12,13 @@ import mod.azure.hwg.item.ammo.BulletAmmo;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
 import mod.azure.hwg.item.weapons.FlamethrowerItem;
 import mod.azure.hwg.item.weapons.HellhorseRevolverItem;
-import mod.azure.hwg.util.HWGItems;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -83,7 +84,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if ((event.isMoving() || !this.isSwimming()) && !this.dataTracker.get(SHOOTING)) {
+		if (event.isMoving() && !this.isSwimming() && !this.dataTracker.get(SHOOTING)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
 			return PlayState.CONTINUE;
 		}
@@ -340,6 +341,11 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	@Override
 	protected void playStepSound(BlockPos pos, BlockState state) {
 		this.playSound(this.getStepSound(), 0.15F, 1.0F);
+	}
+
+	@Override
+	public EntityGroup getGroup() {
+		return EntityGroup.UNDEAD;
 	}
 
 }
