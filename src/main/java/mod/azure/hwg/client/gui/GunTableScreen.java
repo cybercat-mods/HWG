@@ -45,23 +45,18 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 		super.init();
 		int i = (this.width - this.backgroundWidth) / 2;
 		int j = (this.height - this.backgroundHeight) / 2;
-		int k = j + 16 + 2;
-
-		System.out.println(MinecraftClient.getInstance().world.getRecipeManager().listAllOfType(GunTableRecipe.GUN_TABLE).size());
+		int k = j + 18;
 
 		for (int l = 0; l < 7; ++l) {
 			this.offers[l] = this
 					.addButton(new WidgetButtonPage(i + 5, k, l, (button) -> {
 						if (button instanceof WidgetButtonPage) {
-							this.selectedIndex = ((WidgetButtonPage) button).getIndex()
-									+ this.indexStartOffset;
+							this.selectedIndex = ((WidgetButtonPage) button).getIndex() + this.indexStartOffset;
 							this.syncRecipeIndex();
 						}
-
 					}));
 			k += 20;
 		}
-
 	}
 
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
@@ -113,21 +108,23 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 			int m = 0;
 
 			for (GunTableRecipe gunTableRecipe : tradeOfferList)
-					if (!this.canScroll(tradeOfferList.size())
-							|| (m >= this.indexStartOffset && m < 7 + this.indexStartOffset)) {
-						ItemStack output = gunTableRecipe.getOutput();
-						this.itemRenderer.zOffset = 100.0F;
-						int n = yPos + 2;
-						this.renderIngredients(matrices, gunTableRecipe,xPos, n);
+				if (this.canScroll(tradeOfferList.size())
+						&& (m < this.indexStartOffset || m >= 7 + this.indexStartOffset)) {
+							++m;
+						} else {
+					ItemStack output = gunTableRecipe.getOutput();
+					this.itemRenderer.zOffset = 100.0F;
+					int n = yPos + 2;
+					this.renderIngredients(matrices, gunTableRecipe,xPos, n);
 
-						this.renderArrow(matrices, gunTableRecipe, i, n);
-						this.itemRenderer.renderInGui(output, i + 5 + 68, n);
-						this.itemRenderer.renderGuiItemOverlay(this.textRenderer, output, i + 5 + 68, n);
-						this.itemRenderer.zOffset = 0.0F;
-						yPos += 20;
-					}
+					this.renderArrow(matrices, gunTableRecipe, i, n);
+					this.itemRenderer.renderInGui(output, i + 5 + 68, n);
+					this.itemRenderer.renderGuiItemOverlay(this.textRenderer, output, i + 5 + 68, n);
+					this.itemRenderer.zOffset = 0.0F;
+					yPos += 20;
 					++m;
 				}
+		}
 
 				for (WidgetButtonPage widgetButtonPage : this.offers) {
 					if (widgetButtonPage.isHovered()) {
@@ -177,7 +174,6 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 			this.indexStartOffset = (int) ((double) this.indexStartOffset - amount);
 			this.indexStartOffset = MathHelper.clamp(this.indexStartOffset, 0, j);
 		}
-
 		return true;
 	}
 

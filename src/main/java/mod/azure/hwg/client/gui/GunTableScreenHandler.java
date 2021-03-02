@@ -15,6 +15,8 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,7 +127,9 @@ public class GunTableScreenHandler extends ScreenHandler {
 	}
 
 	public List<GunTableRecipe> getRecipes() {
-		return playerInventory.player.world.getRecipeManager().listAllOfType(GunTableRecipe.GUN_TABLE);
+		List<GunTableRecipe> list = new ArrayList<>(playerInventory.player.world.getRecipeManager().listAllOfType(GunTableRecipe.GUN_TABLE));
+		list.sort(null);
+		return list;
 	}
 
 	public void setRecipeIndex(int index) {
@@ -151,8 +155,10 @@ public class GunTableScreenHandler extends ScreenHandler {
 				Ingredient ingredient = gunTableRecipe.getIngredientForSlot(i);
 				if (!ingredient.isEmpty()) {
 					ItemStack[] possibleItems = ((IngredientAccess) (Object) ingredient).getMatchingStacks();
-					ItemStack first = new ItemStack(possibleItems[0].getItem(),gunTableRecipe.countRequired(i));
-					autofill(i,first);
+					if (possibleItems != null) {
+						ItemStack first = new ItemStack(possibleItems[0].getItem(), gunTableRecipe.countRequired(i));
+						autofill(i, first);
+					}
 				}
 			}
 		}

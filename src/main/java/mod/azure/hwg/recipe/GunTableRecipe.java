@@ -8,21 +8,23 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.gui.GunTableInventory;
-import mod.azure.hwg.mixin.IngredientAccess;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class GunTableRecipe implements Recipe<GunTableInventory> {
+public class GunTableRecipe implements Recipe<GunTableInventory>,Comparable<GunTableRecipe> {
 
     public static final RecipeType<GunTableRecipe> GUN_TABLE = RecipeType.register(new Identifier(HWGMod.MODID,"gun_table").toString());
 
@@ -86,6 +88,13 @@ public class GunTableRecipe implements Recipe<GunTableInventory> {
     @Override
     public RecipeType<?> getType() {
         return GUN_TABLE;
+    }
+
+    @Override
+    public int compareTo(@NotNull GunTableRecipe o) {
+        Item outputThis = getOutput().getItem();
+        Item outputOther = o.getOutput().getItem();
+        return Registry.ITEM.getId(outputThis).compareTo(Registry.ITEM.getId(outputOther));
     }
 
     public static class Serializer implements RecipeSerializer<GunTableRecipe> {
