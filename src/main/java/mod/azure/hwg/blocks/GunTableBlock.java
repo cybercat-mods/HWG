@@ -1,10 +1,6 @@
 package mod.azure.hwg.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
@@ -23,44 +19,27 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class GunTableBlock extends BlockWithEntity {
-
-	public static final DirectionProperty direction = HorizontalFacingBlock.FACING;
+public class GunTableBlock extends HorizontalFacingBlock implements BlockEntityProvider {
 
 	public GunTableBlock(Settings settings) {
 		super(settings);
-		this.setDefaultState(this.stateManager.getDefaultState().with(direction, Direction.NORTH));
+		this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
 	}
 
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return this.getDefaultState().with(direction, ctx.getPlayerFacing());
-	}
-
-	@Override
-	public BlockState rotate(BlockState state, BlockRotation rot) {
-		return state.with(direction, rot.rotate(state.get(direction)));
-	}
-
-	@Override
-	public BlockState mirror(BlockState state, BlockMirror mirrorIn) {
-		return state.rotate(mirrorIn.getRotation(state.get(direction)));
+		return this.getDefaultState().with(FACING, ctx.getPlayerFacing());
 	}
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(direction);
+		builder.add(FACING);
 	}
 
 	@Override
 	public BlockEntity createBlockEntity(BlockView world) {
 		return new GunBlockEntity();
 	}
-
-    @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
 
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
@@ -72,6 +51,11 @@ public class GunTableBlock extends BlockWithEntity {
 			}
 		}
 		return ActionResult.SUCCESS;
+	}
+
+	@Override
+	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+		return (NamedScreenHandlerFactory)world.getBlockEntity(pos);
 	}
 
 	@Override

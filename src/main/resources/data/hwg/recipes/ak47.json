@@ -1,3 +1,13 @@
 {
-  "type": "hwg:crafting_guns"
+  "type": "hwg:gun_table",
+  "pattern": "aaaaa",
+  "key": {
+    "a": {
+      "item": "minecraft:string",
+      "count" : 2
+    }
+  },
+  "result": {
+    "item": "minecraft:white_wool"
+  }
 }

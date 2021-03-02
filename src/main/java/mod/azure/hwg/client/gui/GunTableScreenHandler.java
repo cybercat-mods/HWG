@@ -1,35 +1,46 @@
 package mod.azure.hwg.client.gui;
 
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.mixin.IngredientAccess;
+import mod.azure.hwg.recipe.GunTableRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.village.Merchant;
-import net.minecraft.village.SimpleMerchant;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradeOfferList;
+import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Optional;
 
 public class GunTableScreenHandler extends ScreenHandler {
-	private final Merchant inventory;
-	private final GunTableInventory merchantInventory;
+	private final PlayerInventory playerInventory;
+	private final GunTableInventory gunTableInventory;
+	private final ScreenHandlerContext context;
+	private int recipeIndex;
 
+	//client
 	public GunTableScreenHandler(int syncId, PlayerInventory playerInventory) {
-		this(syncId, playerInventory, new SimpleMerchant(playerInventory.player));
+		this(syncId, playerInventory,ScreenHandlerContext.EMPTY);
 	}
 
-	public GunTableScreenHandler(int syncId, PlayerInventory playerInventory, Merchant inventory) {
+	//server
+	public GunTableScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
 		super(HWGMod.SCREEN_HANDLER_TYPE, syncId);
-		this.inventory = inventory;
-		this.merchantInventory = new GunTableInventory(inventory);
-		this.addSlot(new Slot(this.merchantInventory, 0, 136, 13));
-		this.addSlot(new Slot(this.merchantInventory, 1, 156, 33));
-		this.addSlot(new Slot(this.merchantInventory, 2, 116, 33));
-		this.addSlot(new Slot(this.merchantInventory, 3, 123, 56));
-		this.addSlot(new Slot(this.merchantInventory, 4, 149, 56));
-		this.addSlot(new GunTableOutputSlot(playerInventory.player, inventory, this.merchantInventory, 5, 219, 38));
+		this.playerInventory = playerInventory;
+		this.gunTableInventory = new GunTableInventory(this);
+		this.context = context;
+		this.addSlot(new Slot(this.gunTableInventory, 0, 136, 13));
+		this.addSlot(new Slot(this.gunTableInventory, 1, 156, 33));
+		this.addSlot(new Slot(this.gunTableInventory, 2, 116, 33));
+		this.addSlot(new Slot(this.gunTableInventory, 3, 123, 56));
+		this.addSlot(new Slot(this.gunTableInventory, 4, 149, 56));
+		this.addSlot(new GunTableOutputSlot(playerInventory.player, this.gunTableInventory, 5, 219, 38));
 
 		int k;
 		for (k = 0; k < 3; ++k) {
@@ -44,9 +55,30 @@ public class GunTableScreenHandler extends ScreenHandler {
 
 	}
 
+	protected static void updateResult(int syncId, World world, PlayerEntity player, GunTableInventory craftingInventory) {
+		if (!world.isClient) {
+			ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)player;
+			ItemStack itemStack = ItemStack.EMPTY;
+			Optional<GunTableRecipe> optional = world.getServer().getRecipeManager().getFirstMatch(GunTableRecipe.GUN_TABLE, craftingInventory, world);
+			if (optional.isPresent()) {
+				GunTableRecipe craftingRecipe = optional.get();
+				itemStack = craftingRecipe.craft(craftingInventory);
+			}
+
+			craftingInventory.setStack(5, itemStack);
+			serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, 5, itemStack));
+		}
+	}
+
+	public void onContentChanged(Inventory inventory) {
+		this.context.run((world, blockPos) -> {
+			updateResult(this.syncId, world, this.playerInventory.player, this.gunTableInventory);
+		});
+	}
+
 	@Override
 	public boolean canUse(PlayerEntity player) {
-		return this.inventory.getCurrentCustomer() == player;
+		return canUse(context,player,HWGMod.GUN_TABLE);
 	}
 
 	public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
@@ -55,7 +87,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 
 	public ItemStack transferSlot(PlayerEntity player, int index) {
 		ItemStack itemStack = ItemStack.EMPTY;
-		Slot slot = (Slot) this.slots.get(index);
+		Slot slot = this.slots.get(index);
 		if (slot != null && slot.hasStack()) {
 			ItemStack itemStack2 = slot.getStack();
 			itemStack = itemStack2.copy();
@@ -92,64 +124,60 @@ public class GunTableScreenHandler extends ScreenHandler {
 		return itemStack;
 	}
 
-	public TradeOfferList getRecipes() {
-		return this.inventory.getOffers();
+	public List<GunTableRecipe> getRecipes() {
+		return playerInventory.player.world.getRecipeManager().listAllOfType(GunTableRecipe.GUN_TABLE);
 	}
 
 	public void setRecipeIndex(int index) {
-		this.merchantInventory.setRecipeIndex(index);
+		recipeIndex = index;
 	}
 
 	public void switchTo(int recipeIndex) {
+		//index out of bounds
 		if (this.getRecipes().size() > recipeIndex) {
-			ItemStack itemStack = this.merchantInventory.getStack(0);
-			if (!itemStack.isEmpty()) {
-				if (!this.insertItem(itemStack, 3, 39, true)) {
-					return;
+			GunTableRecipe gunTableRecipe = getRecipes().get(recipeIndex);
+			for (int i = 0; i < 5;i++) {
+				ItemStack slotStack = gunTableInventory.getStack(i);
+				if (!slotStack.isEmpty()) {
+					//if all positions can't be filled, transfer nothing
+					if (!this.insertItem(slotStack, 6, 39, false)) {
+						return;
+					}
+					gunTableInventory.setStack(i, slotStack);
 				}
-
-				this.merchantInventory.setStack(0, itemStack);
 			}
 
-			ItemStack itemStack2 = this.merchantInventory.getStack(1);
-			if (!itemStack2.isEmpty()) {
-				if (!this.insertItem(itemStack2, 3, 39, true)) {
-					return;
+			for (int i = 0; i < 5;i++) {
+				Ingredient ingredient = gunTableRecipe.getIngredientForSlot(i);
+				if (!ingredient.isEmpty()) {
+					ItemStack[] possibleItems = ((IngredientAccess) (Object) ingredient).getMatchingStacks();
+					ItemStack first = new ItemStack(possibleItems[0].getItem(),gunTableRecipe.countRequired(i));
+					autofill(i,first);
 				}
-
-				this.merchantInventory.setStack(1, itemStack2);
 			}
-
-			if (this.merchantInventory.getStack(0).isEmpty() && this.merchantInventory.getStack(1).isEmpty()) {
-				ItemStack itemStack3 = ((TradeOffer) this.getRecipes().get(recipeIndex)).getAdjustedFirstBuyItem();
-				this.autofill(0, itemStack3);
-				ItemStack itemStack4 = ((TradeOffer) this.getRecipes().get(recipeIndex)).getSecondBuyItem();
-				this.autofill(1, itemStack4);
-			}
-
 		}
 	}
 
 	private void autofill(int slot, ItemStack stack) {
 		if (!stack.isEmpty()) {
-			for (int i = 3; i < 39; ++i) {
-				ItemStack itemStack = ((Slot) this.slots.get(i)).getStack();
-				if (!itemStack.isEmpty() && this.equals(stack, itemStack)) {
-					ItemStack itemStack2 = this.merchantInventory.getStack(slot);
-					int j = itemStack2.isEmpty() ? 0 : itemStack2.getCount();
-					int k = Math.min(stack.getMaxCount() - j, itemStack.getCount());
-					ItemStack itemStack3 = itemStack.copy();
-					int l = j + k;
-					itemStack.decrement(k);
-					itemStack3.setCount(l);
-					this.merchantInventory.setStack(slot, itemStack3);
+			int ingCount = stack.getCount();
+			for (int index = 6; index < 39; ++index) {
+				ItemStack slotStack = this.slots.get(index).getStack();
+				if (!slotStack.isEmpty() && this.equals(stack, slotStack)) {
+					ItemStack invStack = this.gunTableInventory.getStack(slot);
+					int invStackCount = invStack.isEmpty() ? 0 : invStack.getCount();
+					int countToMove = Math.min(ingCount - invStackCount, slotStack.getCount());
+					ItemStack slotStackCopy = slotStack.copy();
+					int l = invStackCount + countToMove;
+					slotStack.decrement(countToMove);
+					slotStackCopy.setCount(l);
+					this.gunTableInventory.setStack(slot, slotStackCopy);
 					if (l >= stack.getMaxCount()) {
 						break;
 					}
 				}
 			}
 		}
-
 	}
 
 	private boolean equals(ItemStack itemStack, ItemStack otherItemStack) {
@@ -158,23 +186,20 @@ public class GunTableScreenHandler extends ScreenHandler {
 
 	public void close(PlayerEntity player) {
 		super.close(player);
-		this.inventory.setCurrentCustomer((PlayerEntity) null);
-		if (!this.inventory.getMerchantWorld().isClient) {
+		if (!this.playerInventory.player.world.isClient) {
 			if (player.isAlive()
 					&& (!(player instanceof ServerPlayerEntity) || !((ServerPlayerEntity) player).isDisconnected())) {
-				player.inventory.offerOrDrop(player.world, this.merchantInventory.removeStack(0));
-				player.inventory.offerOrDrop(player.world, this.merchantInventory.removeStack(1));
-				player.inventory.offerOrDrop(player.world, this.merchantInventory.removeStack(2));
-				player.inventory.offerOrDrop(player.world, this.merchantInventory.removeStack(3));
-				player.inventory.offerOrDrop(player.world, this.merchantInventory.removeStack(4));
-				player.inventory.offerOrDrop(player.world, this.merchantInventory.removeStack(5));
+				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(0));
+				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(1));
+				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(2));
+				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(3));
+				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(4));
 			} else {
-				ItemStack itemStack0 = this.merchantInventory.removeStack(0);
-				ItemStack itemStack1 = this.merchantInventory.removeStack(1);
-				ItemStack itemStack2 = this.merchantInventory.removeStack(2);
-				ItemStack itemStack3 = this.merchantInventory.removeStack(3);
-				ItemStack itemStack4 = this.merchantInventory.removeStack(4);
-				ItemStack itemStack5 = this.merchantInventory.removeStack(5);
+				ItemStack itemStack0 = this.gunTableInventory.removeStack(0);
+				ItemStack itemStack1 = this.gunTableInventory.removeStack(1);
+				ItemStack itemStack2 = this.gunTableInventory.removeStack(2);
+				ItemStack itemStack3 = this.gunTableInventory.removeStack(3);
+				ItemStack itemStack4 = this.gunTableInventory.removeStack(4);
 				if (!itemStack0.isEmpty()) {
 					player.dropItem(itemStack0, false);
 				}
@@ -194,12 +219,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 				if (!itemStack4.isEmpty()) {
 					player.dropItem(itemStack4, false);
 				}
-
-				if (!itemStack5.isEmpty()) {
-					player.dropItem(itemStack5, false);
-				}
 			}
-
 		}
 	}
 }

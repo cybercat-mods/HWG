@@ -18,6 +18,8 @@ import mod.azure.hwg.item.weapons.RocketLauncher;
 import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
+import mod.azure.hwg.network.PacketHandler;
+import mod.azure.hwg.recipe.GunTableRecipe;
 import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.HWGItems;
 import mod.azure.hwg.util.HWGLoot;
@@ -42,6 +44,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.ConstantLootTableRange;
 import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Hand;
@@ -79,7 +82,10 @@ public class HWGMod implements ModInitializer {
 	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE = ScreenHandlerRegistry.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
 	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.PISTOL)).build();
 	public static final SpecialRecipeSerializer<GunRecipe> GUNS_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, GUNS, new SpecialRecipeSerializer<>(GunRecipe::new));
-	
+
+	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER,new Identifier(MODID,"gun_table"),new GunTableRecipe.Serializer());
+
+
 	@Override
 	public void onInitialize() {
 		AutoConfig.register(HWGConfig.class, Toml4jConfigSerializer::new);
@@ -109,82 +115,6 @@ public class HWGMod implements ModInitializer {
 				supplier.pool(poolBuilder);
 			}
 		});
-		ServerPlayNetworking.registerGlobalReceiver(PISTOL,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof PistolItem) {
-						((PistolItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(SPISTOL,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof SPistolItem) {
-						((SPistolItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(FLAMETHOWER,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof FlamethrowerItem) {
-						((FlamethrowerItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(ROCKETLAUNCHER,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof RocketLauncher) {
-						((RocketLauncher) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(MINIGUN,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof Minigun) {
-						((Minigun) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(BRIMSTONE,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof BrimstoneItem) {
-						((BrimstoneItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(SHOTGUN,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof ShotgunItem) {
-						((ShotgunItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(ASSASULT,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof AssasultItem) {
-						((AssasultItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(SNIPER,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof SniperItem) {
-						((SniperItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(BALROG,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof BalrogItem) {
-						((BalrogItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
-		ServerPlayNetworking.registerGlobalReceiver(MEANIE,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof Meanietem) {
-						((Meanietem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-					;
-				});
+		PacketHandler.registerMessages();
 	}
 }
