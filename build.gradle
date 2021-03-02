@@ -37,6 +37,8 @@ dependencies {
 	modImplementation "de.siphalor:nbtcrafting-1.16:2+"
 	include "de.siphalor:nbtcrafting-1.16:2+"	
     modImplementation "com.terraformersmc:modmenu:1.16.8"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:5.10.184"
+    modRuntime "me.shedaniel:RoughlyEnoughItems:5.10.184"
 }
 
 repositories {
