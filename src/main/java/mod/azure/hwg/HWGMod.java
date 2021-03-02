@@ -1,23 +1,12 @@
 package mod.azure.hwg;
 
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.Toml4jConfigSerializer;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import mod.azure.hwg.blocks.FuelTankBlock;
 import mod.azure.hwg.blocks.GunBlockEntity;
 import mod.azure.hwg.blocks.GunTableBlock;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import mod.azure.hwg.config.HWGConfig;
-import mod.azure.hwg.item.weapons.AssasultItem;
-import mod.azure.hwg.item.weapons.BalrogItem;
-import mod.azure.hwg.item.weapons.BrimstoneItem;
-import mod.azure.hwg.item.weapons.FlamethrowerItem;
-import mod.azure.hwg.item.weapons.Meanietem;
-import mod.azure.hwg.item.weapons.Minigun;
-import mod.azure.hwg.item.weapons.PistolItem;
-import mod.azure.hwg.item.weapons.RocketLauncher;
-import mod.azure.hwg.item.weapons.SPistolItem;
-import mod.azure.hwg.item.weapons.ShotgunItem;
-import mod.azure.hwg.item.weapons.SniperItem;
 import mod.azure.hwg.network.PacketHandler;
 import mod.azure.hwg.recipe.GunTableRecipe;
 import mod.azure.hwg.util.GunSmithProfession;
@@ -34,7 +23,6 @@ import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.Block;
@@ -47,7 +35,6 @@ import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -82,7 +69,6 @@ public class HWGMod implements ModInitializer {
 	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE = ScreenHandlerRegistry.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
 	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.PISTOL)).build();
 	public static final SpecialRecipeSerializer<GunRecipe> GUNS_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, GUNS, new SpecialRecipeSerializer<>(GunRecipe::new));
-
 	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER,new Identifier(MODID,"gun_table"),new GunTableRecipe.Serializer());
 
 

@@ -31,21 +31,12 @@ dependencies {
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cardinal_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cardinal_version}"
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-chunk:${cardinal_version}"
-    modApi("me.shedaniel.cloth:config-2:4.8.1"){
-      exclude module: 'fabric-api'
-    }
-    modImplementation include("io.github.cottonmc:LibGui:3.3.2+1.16.4")
-    include "me.shedaniel.cloth:config-2:4.8.1"
-    modImplementation("me.sargunvohra.mcmods:autoconfig1u:3.3.1") {
-      exclude module: 'fabric-api'
-    }
-    include "me.sargunvohra.mcmods:autoconfig1u:3.3.1"
+    modApi "me.shedaniel.cloth:cloth-config-fabric:4.11.14"
+    include "me.shedaniel.cloth:cloth-config-fabric:4.11.14"
     modImplementation "vazkii.patchouli:Patchouli:1.16.4-50-FABRIC"	
 	modImplementation "de.siphalor:nbtcrafting-1.16:2+"
 	include "de.siphalor:nbtcrafting-1.16:2+"	
-    modImplementation("io.github.prospector:modmenu:1.14.6+build.31") {
-      exclude module: 'fabric-api'
-    }
+    modImplementation "com.terraformersmc:modmenu:1.16.8"
 }
 
 repositories {
@@ -74,6 +65,8 @@ repositories {
         name "Siphalor's Maven"
         url "https://maven.siphalor.de"
     }
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url = 'https://maven.terraformersmc.com/' }
     maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
     maven { url 'https://maven.blamejared.com' }
     maven { url  = 'https://plugins.gradle.org/m2/' }

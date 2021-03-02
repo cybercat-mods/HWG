@@ -1,9 +1,9 @@
 package mod.azure.hwg.config;
 
-import io.github.prospector.modmenu.api.ConfigScreenFactory;
-import io.github.prospector.modmenu.api.ModMenuApi;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import mod.azure.hwg.HWGMod;
+
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -14,10 +14,5 @@ public class ModMenuHWG implements ModMenuApi {
 		return parent -> {
 			return AutoConfig.getConfigScreen(HWGConfig.class, parent).get();
 		};
-	}
-
-	@Override
-	public String getModId() {
-		return HWGMod.MODID;
 	}
 }
