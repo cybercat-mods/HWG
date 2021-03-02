@@ -1,5 +1,9 @@
 package mod.azure.hwg.client.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.mixin.IngredientAccess;
 import mod.azure.hwg.recipe.GunTableRecipe;
@@ -15,53 +19,51 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 public class GunTableScreenHandler extends ScreenHandler {
 	private final PlayerInventory playerInventory;
 	private final GunTableInventory gunTableInventory;
 	private final ScreenHandlerContext context;
+	@SuppressWarnings("unused")
 	private int recipeIndex;
 
-	//client
+	// client
 	public GunTableScreenHandler(int syncId, PlayerInventory playerInventory) {
-		this(syncId, playerInventory,ScreenHandlerContext.EMPTY);
+		this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
 	}
 
-	//server
+	// server
 	public GunTableScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
 		super(HWGMod.SCREEN_HANDLER_TYPE, syncId);
 		this.playerInventory = playerInventory;
 		this.gunTableInventory = new GunTableInventory(this);
 		this.context = context;
-		this.addSlot(new Slot(this.gunTableInventory, 0, 136, 13));
-		this.addSlot(new Slot(this.gunTableInventory, 1, 156, 33));
-		this.addSlot(new Slot(this.gunTableInventory, 2, 116, 33));
-		this.addSlot(new Slot(this.gunTableInventory, 3, 123, 56));
-		this.addSlot(new Slot(this.gunTableInventory, 4, 149, 56));
-		this.addSlot(new GunTableOutputSlot(playerInventory.player, this.gunTableInventory, 5, 219, 38));
+		this.addSlot(new Slot(this.gunTableInventory, 0, 155, 13));
+		this.addSlot(new Slot(this.gunTableInventory, 1, 175, 33));
+		this.addSlot(new Slot(this.gunTableInventory, 2, 135, 33));
+		this.addSlot(new Slot(this.gunTableInventory, 3, 142, 56));
+		this.addSlot(new Slot(this.gunTableInventory, 4, 168, 56));
+		this.addSlot(new GunTableOutputSlot(playerInventory.player, this.gunTableInventory, 5, 238, 38));
 
 		int k;
 		for (k = 0; k < 3; ++k) {
 			for (int j = 0; j < 9; ++j) {
-				this.addSlot(new Slot(playerInventory, j + k * 9 + 9, 108 + j * 18, 84 + k * 18));
+				this.addSlot(new Slot(playerInventory, j + k * 9 + 9, 127 + j * 18, 84 + k * 18));
 			}
 		}
 
 		for (k = 0; k < 9; ++k) {
-			this.addSlot(new Slot(playerInventory, k, 108 + k * 18, 142));
+			this.addSlot(new Slot(playerInventory, k, 127 + k * 18, 142));
 		}
 
 	}
 
-	protected static void updateResult(int syncId, World world, PlayerEntity player, GunTableInventory craftingInventory) {
+	protected static void updateResult(int syncId, World world, PlayerEntity player,
+			GunTableInventory craftingInventory) {
 		if (!world.isClient) {
-			ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)player;
+			ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity) player;
 			ItemStack itemStack = ItemStack.EMPTY;
-			Optional<GunTableRecipe> optional = world.getServer().getRecipeManager().getFirstMatch(GunTableRecipe.GUN_TABLE, craftingInventory, world);
+			Optional<GunTableRecipe> optional = world.getServer().getRecipeManager()
+					.getFirstMatch(GunTableRecipe.GUN_TABLE, craftingInventory, world);
 			if (optional.isPresent()) {
 				GunTableRecipe craftingRecipe = optional.get();
 				itemStack = craftingRecipe.craft(craftingInventory);
@@ -80,7 +82,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
-		return canUse(context,player,HWGMod.GUN_TABLE);
+		return canUse(context, player, HWGMod.GUN_TABLE);
 	}
 
 	public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
@@ -127,7 +129,8 @@ public class GunTableScreenHandler extends ScreenHandler {
 	}
 
 	public List<GunTableRecipe> getRecipes() {
-		List<GunTableRecipe> list = new ArrayList<>(playerInventory.player.world.getRecipeManager().listAllOfType(GunTableRecipe.GUN_TABLE));
+		List<GunTableRecipe> list = new ArrayList<>(
+				playerInventory.player.world.getRecipeManager().listAllOfType(GunTableRecipe.GUN_TABLE));
 		list.sort(null);
 		return list;
 	}
@@ -137,13 +140,13 @@ public class GunTableScreenHandler extends ScreenHandler {
 	}
 
 	public void switchTo(int recipeIndex) {
-		//index out of bounds
+		// index out of bounds
 		if (this.getRecipes().size() > recipeIndex) {
 			GunTableRecipe gunTableRecipe = getRecipes().get(recipeIndex);
-			for (int i = 0; i < 5;i++) {
+			for (int i = 0; i < 5; i++) {
 				ItemStack slotStack = gunTableInventory.getStack(i);
 				if (!slotStack.isEmpty()) {
-					//if all positions can't be filled, transfer nothing
+					// if all positions can't be filled, transfer nothing
 					if (!this.insertItem(slotStack, 6, 39, false)) {
 						return;
 					}
@@ -151,7 +154,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 				}
 			}
 
-			for (int i = 0; i < 5;i++) {
+			for (int i = 0; i < 5; i++) {
 				Ingredient ingredient = gunTableRecipe.getIngredientForSlot(i);
 				if (!ingredient.isEmpty()) {
 					ItemStack[] possibleItems = ((IngredientAccess) (Object) ingredient).getMatchingStacks();
@@ -167,7 +170,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 	private void autofill(int slot, ItemStack stack) {
 		if (!stack.isEmpty()) {
 			int ingCount = stack.getCount();
-			for (int index = 6; index < 39; ++index) {
+			for (int index = 6; index < 42; ++index) {
 				ItemStack slotStack = this.slots.get(index).getStack();
 				if (!slotStack.isEmpty() && this.equals(stack, slotStack)) {
 					ItemStack invStack = this.gunTableInventory.getStack(slot);

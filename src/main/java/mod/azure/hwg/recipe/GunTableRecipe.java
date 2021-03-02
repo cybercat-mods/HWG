@@ -99,7 +99,8 @@ public class GunTableRecipe implements Recipe<GunTableInventory>,Comparable<GunT
 
     public static class Serializer implements RecipeSerializer<GunTableRecipe> {
 
-        public GunTableRecipe read(Identifier identifier, JsonObject jsonObject) {
+        @SuppressWarnings("unchecked")
+		public GunTableRecipe read(Identifier identifier, JsonObject jsonObject) {
 
             String pattern = JsonHelper.getString(jsonObject, "pattern");
             Map<String,Pair<Ingredient,Integer>> map = getComponents(JsonHelper.getObject(jsonObject, "key"));
@@ -141,7 +142,8 @@ public class GunTableRecipe implements Recipe<GunTableInventory>,Comparable<GunT
             }
         }
 
-        public GunTableRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
+        @SuppressWarnings("unchecked")
+		public GunTableRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
             Pair<Ingredient,Integer>[] pairs = new Pair[5];
             for(int j = 0; j < 5; ++j) {
                 Ingredient ingredient = Ingredient.fromPacket(packetByteBuf);

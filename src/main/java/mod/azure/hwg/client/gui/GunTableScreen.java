@@ -9,7 +9,6 @@ import mod.azure.hwg.network.C2SMessageSelectCraft;
 import mod.azure.hwg.recipe.GunTableRecipe;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
@@ -22,7 +21,6 @@ import net.minecraft.util.math.MathHelper;
 
 public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 	private static final Identifier TEXTURE = new Identifier(HWGMod.MODID, "textures/gui/gun_table_gui.png");
-	//private static final Identifier TEXTURE = new Identifier("textures/gui/container/villager2.png");
 
 	private int selectedIndex;
 	private final GunTableScreen.WidgetButtonPage[] offers = new GunTableScreen.WidgetButtonPage[7];
@@ -31,7 +29,7 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 
 	public GunTableScreen(GunTableScreenHandler handler, PlayerInventory inventory, Text title) {
 		super(handler, inventory, title);
-		this.backgroundWidth = 276;
+		this.backgroundWidth = 300;
 		this.playerInventoryTitleX = 107;
 	}
 
@@ -49,7 +47,7 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 
 		for (int l = 0; l < 7; ++l) {
 			this.offers[l] = this
-					.addButton(new WidgetButtonPage(i + 5, k, l, (button) -> {
+					.addButton(new WidgetButtonPage(i, k, l, (button) -> {
 						if (button instanceof WidgetButtonPage) {
 							this.selectedIndex = ((WidgetButtonPage) button).getIndex() + this.indexStartOffset;
 							this.syncRecipeIndex();
@@ -68,7 +66,7 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 	protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.client.getTextureManager().bindTexture(TEXTURE);
-		int i = (this.width - this.backgroundWidth) / 2;
+		int i = ((this.width - this.backgroundWidth) / 2) - 5;
 		int j = (this.height - this.backgroundHeight) / 2;
 		drawTexture(matrices, i, j, this.getZOffset(), 0.0F, 0.0F, this.backgroundWidth, this.backgroundHeight, 256,
 				512);
@@ -85,9 +83,9 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 				m = 113;
 			}
 
-			drawTexture(matrices, x + 94, y + 18 + m, this.getZOffset(), 0.0F, 199.0F, 6, 27, 256, 512);
+			drawTexture(matrices, x + 113, y + 18 + m, this.getZOffset(), 0.0F, 199.0F, 6, 27, 256, 512);
 		} else {
-			drawTexture(matrices, x + 94, y + 18, this.getZOffset(), 6.0F, 199.0F, 6, 27, 256, 512);
+			drawTexture(matrices, x + 113, y + 18, this.getZOffset(), 6.0F, 199.0F, 6, 27, 256, 512);
 		}
 
 	}
@@ -100,7 +98,7 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 			int i = (this.width - this.backgroundWidth) / 2;
 			int j = (this.height - this.backgroundHeight) / 2;
 			int yPos = j + 17;
-			int xPos = i + 5;
+			int xPos = i + 3;
 			RenderSystem.pushMatrix();
 			RenderSystem.enableRescaleNormal();
 			this.client.getTextureManager().bindTexture(TEXTURE);
@@ -117,9 +115,9 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 					int n = yPos + 2;
 					this.renderIngredients(matrices, gunTableRecipe,xPos, n);
 
-					this.renderArrow(matrices, gunTableRecipe, i, n);
-					this.itemRenderer.renderInGui(output, i + 5 + 68, n);
-					this.itemRenderer.renderGuiItemOverlay(this.textRenderer, output, i + 5 + 68, n);
+					this.renderArrow(matrices, gunTableRecipe, i + 22, n);
+					this.itemRenderer.renderInGui(output, i + 24 + 68, n);
+					this.itemRenderer.renderGuiItemOverlay(this.textRenderer, output, i + 24 + 68, n);
 					this.itemRenderer.zOffset = 0.0F;
 					yPos += 20;
 					++m;
@@ -157,7 +155,7 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 				if (!stack.isEmpty()) {
 					this.itemRenderer.renderInGui(stack, x, y);
 					this.itemRenderer.renderGuiItemOverlay(this.textRenderer, stack, x, y);
-					x += 10;
+					x += 16;
 				}
 			}
 		}
@@ -210,7 +208,7 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 		final int index;
 
 		public WidgetButtonPage(int x, int y, int index, ButtonWidget.PressAction onPress) {
-			super(x, y, 89, 20, LiteralText.EMPTY, onPress);
+			super(x, y, 112, 20, LiteralText.EMPTY, onPress);
 			this.index = index;
 			this.visible = false;
 		}

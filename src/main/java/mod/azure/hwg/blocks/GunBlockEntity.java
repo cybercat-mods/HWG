@@ -15,7 +15,6 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.village.SimpleMerchant;
 
 public class GunBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
 
