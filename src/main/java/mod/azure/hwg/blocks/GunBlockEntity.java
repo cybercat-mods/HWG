@@ -11,9 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.village.SimpleMerchant;
 
 public class GunBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
 
@@ -47,6 +49,6 @@ public class GunBlockEntity extends BlockEntity implements ImplementedInventory,
 
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory inventory, PlayerEntity player) {
-		return new GunTableScreenHandler(syncId, inventory);
+		return new GunTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world,pos));
 	}
 }
