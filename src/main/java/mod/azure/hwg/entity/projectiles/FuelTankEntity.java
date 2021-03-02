@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.annotation.Nullable;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.annotation.Nullable;
 import mod.azure.hwg.util.registry.HWGMobs;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
