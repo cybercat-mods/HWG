@@ -24,37 +24,16 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class IncineratorUnitItem extends Item implements IAnimatable {
-
-	public AnimationFactory factory = new AnimationFactory(this);
-	private String controllerName = "controller";
+public class IncineratorUnitItem extends HWGGunBase {
 
 	public IncineratorUnitItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(251));
 	}
 
-	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
-		return PlayState.CONTINUE;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
-	}
-
-	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
 	}
 
 	@Override
@@ -156,14 +135,14 @@ public class IncineratorUnitItem extends Item implements IAnimatable {
 	}
 
 	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		//if (!playerEntity.isCreative()) {
-			for (ItemStack item : playerEntity.inventory.main) {
-				if (item.getItem() == HWGItems.FUEL_TANK) {
-					item.decrement(1);
-					break;
-				}
+		// if (!playerEntity.isCreative()) {
+		for (ItemStack item : playerEntity.inventory.main) {
+			if (item.getItem() == HWGItems.FUEL_TANK) {
+				item.decrement(1);
+				break;
 			}
-		//}
+		}
+		// }
 	}
 
 	@Override

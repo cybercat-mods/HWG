@@ -27,7 +27,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class SniperItem extends Item {
+public class SniperItem extends HWGGunBase {
 	public SniperItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(2));
 	}
@@ -40,6 +40,11 @@ public class SniperItem extends Item {
 	@Override
 	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
 		return super.canRepair(stack, ingredient);
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
 	}
 
 	@Override

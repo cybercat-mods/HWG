@@ -25,7 +25,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class RocketLauncher extends Item {
+public class RocketLauncher extends HWGGunBase {
 
 	public RocketLauncher() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(2));
@@ -80,6 +80,11 @@ public class RocketLauncher extends Item {
 	@Override
 	public int getMaxUseTime(ItemStack stack) {
 		return 72000;
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
 	}
 
 	@Override

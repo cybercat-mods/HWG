@@ -25,7 +25,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class ShotgunItem extends Item {
+public class ShotgunItem extends HWGGunBase {
 
 	public ShotgunItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(3));
@@ -74,6 +74,11 @@ public class ShotgunItem extends Item {
 						SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.0F, 1.3F);
 			}
 		}
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
 	}
 
 	@Override

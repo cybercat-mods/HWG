@@ -25,7 +25,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class HellhorseRevolverItem extends Item {
+public class HellhorseRevolverItem extends HWGGunBase {
 
 	public HellhorseRevolverItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(7));
@@ -39,6 +39,11 @@ public class HellhorseRevolverItem extends Item {
 	@Override
 	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
 		return super.canRepair(stack, ingredient);
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
 	}
 
 	@Override

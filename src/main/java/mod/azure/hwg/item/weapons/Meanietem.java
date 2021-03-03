@@ -25,7 +25,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class Meanietem extends Item {
+public class Meanietem extends HWGGunBase {
 
 	public Meanietem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(7));
@@ -39,6 +39,11 @@ public class Meanietem extends Item {
 	@Override
 	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
 		return super.canRepair(stack, ingredient);
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
 	}
 
 	@Override

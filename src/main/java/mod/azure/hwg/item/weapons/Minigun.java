@@ -28,7 +28,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class Minigun extends Item {
+public class Minigun extends HWGGunBase {
 
 	public Minigun() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(101));
@@ -36,6 +36,11 @@ public class Minigun extends Item {
 
 	@Override
 	public boolean hasGlint(ItemStack stack) {
+		return false;
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
 		return false;
 	}
 

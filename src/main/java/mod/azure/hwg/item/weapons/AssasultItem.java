@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class AssasultItem extends Item {
+public class AssasultItem extends HWGGunBase {
 	public double damage;
 	public int maxammo;
 	public int cooldown;
@@ -41,10 +42,25 @@ public class AssasultItem extends Item {
 	public boolean hasGlint(ItemStack stack) {
 		return false;
 	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
+	}
 
 	@Override
 	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-		return super.canRepair(stack, ingredient);
+		return false;
+	}
+	
+	@Override
+	public boolean isDamageable() {
+		return false;
+	}
+	
+	@Override
+	public boolean damage(DamageSource source) {
+		return false;
 	}
 
 	@Override

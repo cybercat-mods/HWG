@@ -24,9 +24,6 @@
 		],
 		"modmenu": [
 			"mod.azure.hwg.config.ModMenuHWG"
-		],
-		"rei_plugins": [
-			"mod.azure.hwg.rei.HWGREIPlugin"
 		]
 	},
 	"mixins": [

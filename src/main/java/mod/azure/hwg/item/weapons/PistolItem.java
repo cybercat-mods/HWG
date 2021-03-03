@@ -34,7 +34,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class PistolItem extends Item implements IAnimatable {
+public class PistolItem extends HWGGunBase implements IAnimatable {
 
 	public AnimationFactory factory = new AnimationFactory(this);
 	private String controllerName = "controller";
@@ -62,6 +62,11 @@ public class PistolItem extends Item implements IAnimatable {
 
 	@Override
 	public boolean hasGlint(ItemStack stack) {
+		return false;
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
 		return false;
 	}
 

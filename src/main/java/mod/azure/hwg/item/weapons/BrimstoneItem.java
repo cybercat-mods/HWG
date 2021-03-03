@@ -25,13 +25,18 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class BrimstoneItem extends Item {
+public class BrimstoneItem extends HWGGunBase {
 	public BrimstoneItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(186));
 	}
 
 	@Override
 	public boolean hasGlint(ItemStack stack) {
+		return false;
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
 		return false;
 	}
 

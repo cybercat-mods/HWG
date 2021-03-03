@@ -28,7 +28,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
-public class BalrogItem extends Item {
+public class BalrogItem extends HWGGunBase {
 
 	public BalrogItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(5));
@@ -36,6 +36,11 @@ public class BalrogItem extends Item {
 
 	@Override
 	public boolean hasGlint(ItemStack stack) {
+		return false;
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
 		return false;
 	}
 

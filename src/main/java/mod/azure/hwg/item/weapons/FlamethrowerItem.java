@@ -32,7 +32,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class FlamethrowerItem extends Item implements IAnimatable {
+public class FlamethrowerItem extends HWGGunBase implements IAnimatable {
 
 	public AnimationFactory factory = new AnimationFactory(this);
 	private String controllerName = "controller";
@@ -44,6 +44,11 @@ public class FlamethrowerItem extends Item implements IAnimatable {
 	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
 		return PlayState.CONTINUE;
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

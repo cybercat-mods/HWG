@@ -41,7 +41,6 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -58,7 +57,7 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class FlareGunItem extends RangedWeaponItem {
+public class FlareGunItem extends HWGGunLoadedBase {
 
 	private boolean charged = false;
 	private boolean loaded = false;
@@ -66,6 +65,11 @@ public class FlareGunItem extends RangedWeaponItem {
 	public static final Predicate<ItemStack> BLACK_FLARE = (stack) -> {
 		return stack.getItem() == HWGItems.BLACK_FLARE;
 	};
+
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
+	}
 
 	public static final Predicate<ItemStack> FLARE = BLACK_FLARE.or((stack) -> {
 		return stack.getItem() == HWGItems.BLUE_FLARE;
@@ -232,8 +236,8 @@ public class FlareGunItem extends RangedWeaponItem {
 	public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
 		if (!isCharged(stack) && loadProjectiles(user, stack)) {
 			setCharged(stack, true);
-			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
-					SoundEvents.BLOCK_CHAIN_BREAK, SoundCategory.PLAYERS, 1.0F, 1.5F);
+			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_CHAIN_BREAK,
+					SoundCategory.PLAYERS, 1.0F, 1.5F);
 		}
 	}
 

@@ -29,7 +29,6 @@ import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -46,7 +45,7 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class GrenadeLauncherItem extends RangedWeaponItem {
+public class GrenadeLauncherItem extends HWGGunLoadedBase {
 
 	private boolean charged = false;
 	private boolean loaded = false;
@@ -66,6 +65,11 @@ public class GrenadeLauncherItem extends RangedWeaponItem {
 
 	public GrenadeLauncherItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(31));
+	}
+	
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
+		return false;
 	}
 
 	@Override
