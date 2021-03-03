@@ -1,6 +1,5 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "rocket_launcher_loaded",
 	"texture_size": [32, 32],
 	"textures": {
 		"0": "hwg:items/rocket_launcher",

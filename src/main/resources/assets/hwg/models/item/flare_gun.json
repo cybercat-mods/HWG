@@ -1,6 +1,5 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "flare_gun",
 	"textures": {
 		"0": "hwg:items/flare_gun",
 		"particle": "hwg:items/flare_gun"

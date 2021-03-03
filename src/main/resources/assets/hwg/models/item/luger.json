@@ -1,6 +1,5 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "luger",
 	"textures": {
 		"0": "hwg:items/luger",
 		"particle": "hwg:items/luger"
