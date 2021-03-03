@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+	"hwg:tommy_gun",
+	"hwg:shotgun",
+	"hwg:grenade_launcher",
+	"hwg:ak47",
+	"hwg:luger",
+	"hwg:pistol",
+	"hwg:spistol",
+	"hwg:rocketlauncher",
+	"hwg:flamethrower",
+	"hwg:sniper_rifle",
+	"hwg:brimstone_gun",
+	"hwg:balrog_gun",
+	"hwg:flare_gun",
+	"hwg:minigun",
+	"hwg:smg",
+	"hwg:hellhorse_revolver",
+	"hwg:meanie_gun_1",
+	"hwg:meanie_gun_2",
+	"hwg:golden_gun"
+  ]
+}
