@@ -11,6 +11,7 @@ import groovy.json.JsonOutput
 plugins {
 	id 'fabric-loom' version '0.5-SNAPSHOT'
 	id 'maven-publish'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -150,7 +151,6 @@ if (file('key.properties').exists()) {
         	releaseType = "release"
         	changelogType = 'text'
         	changelog = file('CHANGELOG.txt')
-        	addGameVersion("1.16.4")
         	addGameVersion("1.16.5")
         	addGameVersion("Fabric")
         	addGameVersion("Java 8")

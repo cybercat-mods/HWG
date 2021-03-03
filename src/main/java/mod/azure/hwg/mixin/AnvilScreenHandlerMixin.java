@@ -23,6 +23,12 @@ import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.text.LiteralText;
 
+/**
+ * 
+ * Credit to RuinedEquipment
+ * https://github.com/Pepperoni-Jabroni/RuinedEquipment/blob/main/src/main/java/pepjebs/ruined_equipment/mixin/AnvilScreenHandlerMixin.java
+ *
+ */
 @Mixin(value = AnvilScreenHandler.class)
 public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
@@ -54,14 +60,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			ItemStack repaired = ItemStack.EMPTY;
 			int maxLevel = 4;
 			if (rightStack.getItem() == vanillaItem) {
-				// Check right stack for corresponding vanilla item
 				int targetDamage = rightStack.getDamage() - (int) (REPAIR_MODIFIER * rightStack.getMaxDamage());
 				repaired = HWGEquipmentUtils.generateRepairedItemForAnvilByDamage(leftStack,
 						Math.min(targetDamage, vanillaMaxDamage));
 				maxLevel = 2;
 				this.repairItemUsage = 0;
 			}
-			// Set the output
 			if (!repaired.isEmpty()) {
 				int levelCost = HWGEquipmentUtils.generateRepairLevelCost(repaired, maxLevel);
 				if (this.newItemName.compareTo(leftStack.getName().getString()) != 0) {
@@ -84,14 +88,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 			ItemStack repaired = ItemStack.EMPTY;
 			int maxLevel = 4;
 			if (rightStack.getItem() == vanillaItem) {
-				// Check right stack for corresponding vanilla item
 				int targetDamage = rightStack.getDamage() - (int) (REPAIR_MODIFIER * rightStack.getMaxDamage());
 				repaired = HWGEquipmentUtils.generateRepairedItemForAnvilByDamage(leftStack,
 						Math.min(targetDamage, vanillaMaxDamage));
 				maxLevel = 2;
 				this.repairItemUsage = 0;
 			}
-			// Set the output
 			if (!repaired.isEmpty()) {
 				int levelCost = HWGEquipmentUtils.generateRepairLevelCost(repaired, maxLevel);
 				if (this.newItemName.compareTo(leftStack.getName().getString()) != 0) {
