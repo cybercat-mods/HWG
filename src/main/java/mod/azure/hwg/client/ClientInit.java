@@ -7,6 +7,7 @@ import mod.azure.hwg.client.gui.GunTableScreen;
 import mod.azure.hwg.client.render.weapons.FlamethrowerRender;
 import mod.azure.hwg.client.render.weapons.PistolRender;
 import mod.azure.hwg.client.render.weapons.SPistolRender;
+import mod.azure.hwg.client.render.weapons.ShotgunRender;
 import mod.azure.hwg.particle.BrimParticle;
 import mod.azure.hwg.particle.FlareParticle;
 import mod.azure.hwg.particle.WFlareParticle;
@@ -40,6 +41,7 @@ public class ClientInit implements ClientModInitializer {
 		GeoItemRenderer.registerItemRenderer(HWGItems.PISTOL, new PistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SPISTOL, new SPistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.FLAMETHROWER, new FlamethrowerRender());
+		GeoItemRenderer.registerItemRenderer(HWGItems.SHOTGUN, new ShotgunRender());
 		ClientSidePacketRegistry.INSTANCE.register(EntityPacket.ID, (ctx, buf) -> {
 			EntityPacketOnClient.onPacket(ctx, buf);
 		});
