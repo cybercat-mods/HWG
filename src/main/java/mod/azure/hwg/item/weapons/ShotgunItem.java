@@ -24,11 +24,38 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.AnimationState;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class ShotgunItem extends HWGGunBase {
+public class ShotgunItem extends HWGGunBase implements IAnimatable  {
+
+	public AnimationFactory factory = new AnimationFactory(this);
+	private String controllerName = "controller";
 
 	public ShotgunItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(3));
+	}
+
+	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		return PlayState.CONTINUE;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
 	}
 
 	@Override
@@ -46,7 +73,7 @@ public class ShotgunItem extends HWGGunBase {
 		if (entityLiving instanceof PlayerEntity) {
 			PlayerEntity playerentity = (PlayerEntity) entityLiving;
 			if (stack.getDamage() < (stack.getMaxDamage() - 1)) {
-				playerentity.getItemCooldownManager().set(this, 10);
+				playerentity.getItemCooldownManager().set(this, 18);
 				if (!worldIn.isClient) {
 					ShellEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
 					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 1, 0.5F,
@@ -72,6 +99,11 @@ public class ShotgunItem extends HWGGunBase {
 				}
 				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
 						SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.0F, 1.3F);
+				AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack, controllerName);
+				if (controller.getAnimationState() == AnimationState.Stopped) {
+					controller.markNeedsReload();
+					controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
+				}
 			}
 		}
 	}
