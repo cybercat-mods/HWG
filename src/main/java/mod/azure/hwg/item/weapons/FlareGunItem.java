@@ -198,6 +198,7 @@ public class FlareGunItem extends HWGGunLoadedBase {
 			vector3f.rotate(quaternion);
 			((ProjectileEntity) projectileEntity2).setVelocity((double) vector3f.getX(), (double) vector3f.getY(),
 					(double) vector3f.getZ(), speed, divergence);
+			((PersistentProjectileEntity) projectileEntity2).setDamage(0.3D);
 			((PersistentProjectileEntity) projectileEntity2).pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 			world.spawnEntity((Entity) projectileEntity2);
 		}
