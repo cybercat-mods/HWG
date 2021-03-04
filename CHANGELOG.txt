@@ -1,3 +1,5 @@
-v.1.0.0
+v.1.0.1
 
-- First Release!
+- New Shotgun animation!
+- Fixed Shotgun reloading.
+- Fixed Flare damage.
