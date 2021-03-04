@@ -120,7 +120,7 @@ public class ShotgunItem extends HWGGunBase implements IAnimatable  {
 				if (ClientInit.reload.isPressed() && selected) {
 					PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
-					ClientPlayNetworking.send(HWGMod.SPISTOL, passedData);
+					ClientPlayNetworking.send(HWGMod.SHOTGUN, passedData);
 				}
 			}
 		}
