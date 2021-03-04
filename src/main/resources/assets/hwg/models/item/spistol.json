@@ -28,16 +28,16 @@
     },
     "firstperson_righthand": {
       "translation": [
-        -0.75,
-        -1,
-        -1.75
+        5,
+        -5,
+        -10
       ]
     },
     "firstperson_lefthand": {
       "translation": [
-        -0.75,
-        -1,
-        -1.75
+        5,
+        -5,
+        -10
       ]
     },
     "gui": {
