@@ -1,6 +1,6 @@
 v.1.0.2
 
-- New AK-47, SMG, Sniper Rifle, Tommy Gun animations!
+- New AK-47, Hellhorse Revolver, SMG, Sniper Rifle, Tommy Gun animations!
 - Rebalanced Assasult weapons and Minigun fire rates.
 - Fixed IFrame with Assasult and Minigun damage.
 - Fixed Server Crashes.
