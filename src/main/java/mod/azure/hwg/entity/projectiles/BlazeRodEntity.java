@@ -202,13 +202,13 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 			List<Entity> list = this.world.getOtherEntities(this,
 					new Box((double) k2, (double) t, (double) v, (double) l2, (double) u, (double) w));
 			for (int x = 0; x < list.size(); ++x) {
-					double d2 = this.getX()
-							+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth();
+				if (this.world.isClient) {
+					double d2 = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth();
 					double e2 = this.getY() + 0.05D + this.random.nextDouble();
-					double f2 = this.getZ()
-							+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth();
+					double f2 = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth();
 					this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
 					this.world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, d2, e2, f2, 0, 0, 0);
+				}
 			}
 		}
 	}

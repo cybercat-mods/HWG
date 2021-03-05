@@ -322,7 +322,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	public int getLimitPerChunk() {
-		return 2;
+		return 1;
 	}
 
 	public void setVariant(int variant) {

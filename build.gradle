@@ -27,7 +27,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation 'software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.22:dev'
-	modImplementation 'curse.maven:TDI-245733:3144149'
+	//modImplementation 'curse.maven:TDI-245733:3144149'
 	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cardinal_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cardinal_version}"
     modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cardinal_version}"
@@ -38,11 +38,23 @@ dependencies {
 	modImplementation "de.siphalor:nbtcrafting-1.16:2+"
 	include "de.siphalor:nbtcrafting-1.16:2+"	
     modImplementation "com.terraformersmc:modmenu:1.16.8"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:5.10.184"
-    modRuntime "me.shedaniel:RoughlyEnoughItems:5.10.184"
+    
+	modImplementation 'curse.maven:BW-394915:3226787'
+	modImplementation 'curse.maven:TC-341284:3100959'
+	modImplementation 'curse.maven:Nourish-389718:3181134'
+    modImplementation "top.theillusivec4.somnus:somnus-fabric:${project.somnus_version}"
+    modImplementation "curse.maven:Pehkui-319596:3223971"
+    modImplementation "io.github.ladysnake:Impersonate:${impersonate_version}"
+    modImplementation "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
+    modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:${project.terraform_wood_api_version}"
+    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 }
 
 repositories {
+    maven {
+        name = "reach"
+        url = "https://maven.jamieswhiteshirt.com/libs-release"
+    }
 	maven {
 		url = "https://maven.theillusivec4.top/"
 	}

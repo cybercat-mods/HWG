@@ -26,10 +26,38 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.AnimationState;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class SniperItem extends HWGGunBase {
+public class SniperItem extends HWGGunBase implements IAnimatable {
+
+	public AnimationFactory factory = new AnimationFactory(this);
+	private String controllerName = "controller";
+
 	public SniperItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(2));
+	}
+
+	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		return PlayState.CONTINUE;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
 	}
 
 	@Override
@@ -41,7 +69,7 @@ public class SniperItem extends HWGGunBase {
 	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
 		return super.canRepair(stack, ingredient);
 	}
-	
+
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
 		return false;
@@ -68,6 +96,12 @@ public class SniperItem extends HWGGunBase {
 				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
 						SoundEvents.ITEM_ARMOR_EQUIP_IRON, SoundCategory.PLAYERS, 1.0F,
 						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+				AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack,
+						controllerName);
+				if (controller.getAnimationState() == AnimationState.Stopped) {
+					controller.markNeedsReload();
+					controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
+				}
 			}
 		}
 	}
@@ -100,14 +134,12 @@ public class SniperItem extends HWGGunBase {
 	}
 
 	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		// if (!playerEntity.isCreative()) {
 		for (ItemStack item : playerEntity.inventory.main) {
 			if (item.getItem() == HWGItems.SNIPER_ROUND) {
 				item.decrement(1);
 				break;
 			}
 		}
-		// }
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {

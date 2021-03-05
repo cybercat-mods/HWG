@@ -202,19 +202,20 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 				Entity entity = (Entity) list.get(x);
 				double y = (double) (MathHelper.sqrt(entity.squaredDistanceTo(vec3d2)) / q);
 				if (y <= 1.0D) {
-					double d2 = this.getX()
-							+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
-					double e2 = this.getY() + 0.05D + this.random.nextDouble();
-					double f2 = this.getZ()
-							+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
-					this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
-					this.world.addParticle(ParticleTypes.SMOKE, true, d2, e2, f2, 0, 0, 0);
+					if (this.world.isClient) {
+						double d2 = this.getX()
+								+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
+						double e2 = this.getY() + 0.05D + this.random.nextDouble();
+						double f2 = this.getZ()
+								+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
+						this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
+						this.world.addParticle(ParticleTypes.SMOKE, true, d2, e2, f2, 0, 0, 0);
+					}
 				}
 			}
 
-			final Vec3d facing = Vec3d.fromPolar(this.getRotationClient()).normalize();
 			List<Entity> list1 = this.world.getOtherEntities(this,
-					new Box(this.getBlockPos().up()).expand(1D, 5D, 1D).offset(facing.multiply(1D)));
+					new Box(this.getBlockPos().up()).expand(1D, 5D, 1D));
 			for (int x = 0; x < list1.size(); ++x) {
 				Entity entity = (Entity) list1.get(x);
 				double y = (double) (MathHelper.sqrt(entity.distanceTo(this)));

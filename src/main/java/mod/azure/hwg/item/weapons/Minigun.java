@@ -50,7 +50,7 @@ public class Minigun extends HWGGunBase {
 			PlayerEntity playerentity = (PlayerEntity) entityLiving;
 			if (stack.getDamage() < (stack.getMaxDamage() - 1)
 					&& !playerentity.getItemCooldownManager().isCoolingDown(this)) {
-				playerentity.getItemCooldownManager().set(this, 4);
+				playerentity.getItemCooldownManager().set(this, 0);
 				if (!worldIn.isClient) {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
 					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,

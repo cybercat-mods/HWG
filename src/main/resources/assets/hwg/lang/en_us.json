@@ -1,5 +1,6 @@
 {
 	"item.hwg.pistol": "Pistol",
+	"item.hwg.silvergun": "Silver Pistol",
 	"item.hwg.spistol": "Silenced Pistol",
 	"item.hwg.flamethrower": "Flamethrower",
 	"item.hwg.rocketlauncher": "Rocket Launcher",
@@ -7,6 +8,7 @@
 	"item.hwg.sniper_rifle": "Sniper Rifle",
 	"item.hwg.golden_gun": "Golden Gun",
 	"item.hwg.hellhorse_revolver": "Hellhorse Revolver",
+	"item.hwg.shellhorse_revolver": "Silver Hellhorse Revolver",
 	"item.hwg.minigun": "Minigun",
 	"item.hwg.luger": "Luger",
 	"item.hwg.ak47": "AK-47",
@@ -25,6 +27,7 @@
 	"item.hwg.grenade_stun": "Grenade (Stun)",
 	"item.hwg.nostromo_flamethrower": "Incinerator Unit",
 	"item.hwg.bullets": "Bullet",
+	"item.hwg.silver_bullet": "Silver Bullet",
 	"item.hwg.black_flare": "Flare (Black)",
 	"item.hwg.blue_flare": "Flare (Blue)",
 	"item.hwg.brown_flare": "Flare (Brown)",

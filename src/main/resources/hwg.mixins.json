@@ -6,7 +6,8 @@
 	"mixins": [
 		"IngredientAccess",
 		"SpawnRestrictionMixin",
-		"AnvilScreenHandlerMixin"
+		"AnvilScreenHandlerMixin",
+		"SniperMixin"
 	],
 	"client": [
 	],

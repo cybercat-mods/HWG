@@ -1,5 +1,10 @@
-v.1.0.1
+v.1.0.2
 
-- New Shotgun animation!
-- Fixed Shotgun reloading.
-- Fixed Flare damage.
+- New AK-47, SMG, Sniper Rifle, Tommy Gun animations!
+- Rebalanced Assasult weapons and Minigun fire rates.
+- Fixed IFrame with Assasult and Minigun damage.
+- Fixed Server Crashes.
+- Fixed /kill @e[type= hwg:merc].
+- Added Scope overlay when using the Sniper Rifle. 
+- Added a Silver Gun and Silver Hellhorse Revolver with Silver Bullets that only appear when Bewitchment is installed! 
+	Silver Bullets do extra damage to Bewitchment demons mobs.

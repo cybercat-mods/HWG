@@ -191,7 +191,7 @@ public class ShellEntity extends PersistentProjectileEntity implements IAnimatab
 	}
 
 	public void initFromStack(ItemStack stack) {
-		if (stack.getItem() == HWGItems.BULLETS) {
+		if (stack.getItem() == HWGItems.SHOTGUN_SHELL) {
 		}
 	}
 
@@ -235,7 +235,7 @@ public class ShellEntity extends PersistentProjectileEntity implements IAnimatab
 
 	@Override
 	public ItemStack asItemStack() {
-		return new ItemStack(HWGItems.BULLETS);
+		return new ItemStack(HWGItems.SHOTGUN_SHELL);
 	}
 
 	@Override
