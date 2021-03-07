@@ -1,6 +1,7 @@
 package mod.azure.hwg.item.weapons;
 
 import java.util.List;
+import java.util.SplittableRandom;
 
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
@@ -89,9 +90,10 @@ public class SilverRevolverItem extends HWGGunBase implements IAnimatable {
 					abstractarrowentity.setDamage(2.5);
 					abstractarrowentity.age = 30;
 
-					double r = RANDOM.nextDouble();
-					if (r < 0.1)
-						abstractarrowentity.isOnFire();
+					SplittableRandom random = new SplittableRandom();
+					boolean r = random.nextInt(1, 101) <= 20;
+					if (r)
+						abstractarrowentity.setOnFireFor(100);
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);
@@ -178,7 +180,7 @@ public class SilverRevolverItem extends HWGGunBase implements IAnimatable {
 
 	@Override
 	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BLOCK;
+		return UseAction.BOW;
 	}
 
 	public static float getPullProgress(int useTicks) {

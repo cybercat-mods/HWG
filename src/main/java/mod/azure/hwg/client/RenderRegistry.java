@@ -9,10 +9,15 @@ import mod.azure.hwg.client.render.projectiles.BulletRender;
 import mod.azure.hwg.client.render.projectiles.FireballRender;
 import mod.azure.hwg.client.render.projectiles.FlameFiringRender;
 import mod.azure.hwg.client.render.projectiles.GEMPRender;
+import mod.azure.hwg.client.render.projectiles.GEMPSRender;
 import mod.azure.hwg.client.render.projectiles.GFragRender;
+import mod.azure.hwg.client.render.projectiles.GFragSRender;
 import mod.azure.hwg.client.render.projectiles.GNapalmRender;
+import mod.azure.hwg.client.render.projectiles.GNapalmSRender;
 import mod.azure.hwg.client.render.projectiles.GSmokeRender;
+import mod.azure.hwg.client.render.projectiles.GSmokeSRender;
 import mod.azure.hwg.client.render.projectiles.GStunRender;
+import mod.azure.hwg.client.render.projectiles.GStunSRender;
 import mod.azure.hwg.client.render.projectiles.MBulletRender;
 import mod.azure.hwg.client.render.projectiles.RocketRender;
 import mod.azure.hwg.client.render.projectiles.ShellRender;
@@ -138,6 +143,21 @@ public class RenderRegistry {
 		});
 		EntityRendererRegistry.INSTANCE.register(HWGMobs.FUELTANK, (dispatcher, context) -> {
 			return new FuelTankRender(dispatcher);
+		});
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.SMOKE_GRENADE_S, (dispatcher, context) -> {
+			return new GSmokeSRender(dispatcher);
+		});
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.STUN_GRENADE_S, (dispatcher, context) -> {
+			return new GStunSRender(dispatcher);
+		});
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.NAPALM_GRENADE_S, (dispatcher, context) -> {
+			return new GNapalmSRender(dispatcher);
+		});
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.EMP_GRENADE_S, (dispatcher, context) -> {
+			return new GEMPSRender(dispatcher);
+		});
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FRAG_GRENADE_S, (dispatcher, context) -> {
+			return new GFragSRender(dispatcher);
 		});
 	}
 

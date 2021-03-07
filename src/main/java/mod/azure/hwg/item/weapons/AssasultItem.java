@@ -194,7 +194,7 @@ public class AssasultItem extends HWGGunBase implements IAnimatable {
 
 	@Override
 	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BLOCK;
+		return UseAction.BOW;
 	}
 
 	public static float getPullProgress(int useTicks) {

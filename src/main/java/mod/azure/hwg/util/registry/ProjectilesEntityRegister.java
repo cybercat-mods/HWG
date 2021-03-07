@@ -32,6 +32,11 @@ import mod.azure.hwg.entity.projectiles.flare.PurpleFlareEntity;
 import mod.azure.hwg.entity.projectiles.flare.RedFlareEntity;
 import mod.azure.hwg.entity.projectiles.flare.WhiteFlareEntity;
 import mod.azure.hwg.entity.projectiles.flare.YellowFlareEntity;
+import mod.azure.hwg.entity.projectiles.launcher.EMPGEntity;
+import mod.azure.hwg.entity.projectiles.launcher.FragGEntity;
+import mod.azure.hwg.entity.projectiles.launcher.NapalmGEntity;
+import mod.azure.hwg.entity.projectiles.launcher.SmokeGEntity;
+import mod.azure.hwg.entity.projectiles.launcher.StunGEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
@@ -75,6 +80,11 @@ public class ProjectilesEntityRegister {
 	public static EntityType<StunGrenadeEntity> STUN_GRENADE = projectile(StunGrenadeEntity::new, "stun_grenade");
 	public static EntityType<SmokeGrenadeEntity> SMOKE_GRENADE = projectile(SmokeGrenadeEntity::new, "smoke_grenade");
 	public static EntityType<NapalmGrenadeEntity> NAPALM_GRENADE = projectile(NapalmGrenadeEntity::new, "napalm_grenade");
+	public static EntityType<EMPGEntity> EMP_GRENADE_S = projectile(EMPGEntity::new, "emp_grenade_s");
+	public static EntityType<FragGEntity> FRAG_GRENADE_S = projectile(FragGEntity::new, "frag_grenade_s");
+	public static EntityType<StunGEntity> STUN_GRENADE_S = projectile(StunGEntity::new, "stun_grenade_s");
+	public static EntityType<SmokeGEntity> SMOKE_GRENADE_S = projectile(SmokeGEntity::new, "smoke_grenade_s");
+	public static EntityType<NapalmGEntity> NAPALM_GRENADE_S = projectile(NapalmGEntity::new, "napalm_grenade_s");
 
 	private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id) {
 		return projectile(factory, id, true);

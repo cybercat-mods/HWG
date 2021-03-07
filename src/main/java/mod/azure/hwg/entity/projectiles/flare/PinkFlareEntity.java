@@ -69,8 +69,8 @@ public class PinkFlareEntity extends PersistentProjectileEntity {
 
 		++this.life;
 		if (this.world.isClient) {
-			this.world.addParticle(HWGParticles.PINK_FLARE, true, this.getX(), this.getY() - 0.3D, this.getZ(),
-					this.random.nextGaussian() * 0.05D, -this.getVelocity().y * 0.5D,
+			this.world.addParticle(HWGParticles.PINK_FLARE,true, this.getX(), this.getY() - 0.3D, this.getZ(),
+					this.random.nextGaussian() * 0.05D, -this.getVelocity().y * 0.07D,
 					this.random.nextGaussian() * 0.05D);
 		}
 

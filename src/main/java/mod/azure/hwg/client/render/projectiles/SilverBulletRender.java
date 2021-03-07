@@ -34,7 +34,8 @@ public class SilverBulletRender extends GeoProjectilesRenderer<SilverBulletEntit
 			int packedOverlayIn, float red, float green, float blue, float partialTicks) {
 		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn,
 				red, green, blue, partialTicks);
-		stackIn.scale(0.5F, 0.5F, 0.5F);
+		stackIn.scale(animatable.age > 2 ? 0.5F : 0.0F, animatable.age > 2 ? 0.5F : 0.0F,
+				animatable.age > 2 ? 0.5F : 0.0F);
 	}
 
 }

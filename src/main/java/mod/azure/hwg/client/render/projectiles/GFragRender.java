@@ -1,6 +1,6 @@
 package mod.azure.hwg.client.render.projectiles;
 
-import mod.azure.hwg.client.GrenadeProjectilesRenderer;
+import mod.azure.hwg.client.GeoProjectilesRenderer;
 import mod.azure.hwg.client.models.projectiles.GFragModel;
 import mod.azure.hwg.entity.projectiles.FragGrenadeEntity;
 import net.minecraft.client.render.RenderLayer;
@@ -11,7 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
-public class GFragRender extends GrenadeProjectilesRenderer<FragGrenadeEntity> {
+public class GFragRender extends GeoProjectilesRenderer<FragGrenadeEntity> {
 
 	public GFragRender(EntityRenderDispatcher renderManagerIn) {
 		super(renderManagerIn, new GFragModel());

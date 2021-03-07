@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.entity.projectiles.EMPGrenadeEntity;
-import mod.azure.hwg.entity.projectiles.FragGrenadeEntity;
-import mod.azure.hwg.entity.projectiles.NapalmGrenadeEntity;
-import mod.azure.hwg.entity.projectiles.SmokeGrenadeEntity;
-import mod.azure.hwg.entity.projectiles.StunGrenadeEntity;
+import mod.azure.hwg.entity.projectiles.launcher.EMPGEntity;
+import mod.azure.hwg.entity.projectiles.launcher.FragGEntity;
+import mod.azure.hwg.entity.projectiles.launcher.NapalmGEntity;
+import mod.azure.hwg.entity.projectiles.launcher.SmokeGEntity;
+import mod.azure.hwg.entity.projectiles.launcher.StunGEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
@@ -66,7 +66,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 	public GrenadeLauncherItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(31));
 	}
-	
+
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
 		return false;
@@ -96,15 +96,20 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 			boolean b4 = projectile.getItem() == HWGItems.G_STUN;
 			Object projectileEntity2;
 			if (bl) {
-				projectileEntity2 = new EMPGrenadeEntity(world, shooter);
+				projectileEntity2 = new EMPGEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
 			} else if (b2) {
-				projectileEntity2 = new FragGrenadeEntity(world, shooter);
+				projectileEntity2 = new FragGEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
 			} else if (b3) {
-				projectileEntity2 = new NapalmGrenadeEntity(world, shooter);
+				projectileEntity2 = new NapalmGEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
 			} else if (b4) {
-				projectileEntity2 = new StunGrenadeEntity(world, shooter);
+				projectileEntity2 = new StunGEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
 			} else {
-				projectileEntity2 = new SmokeGrenadeEntity(world, shooter);
+				projectileEntity2 = new SmokeGEntity(world, projectile, shooter, shooter.getX(),
+						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
 			}
 			Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
 			Quaternion quaternion = new Quaternion(new Vector3f(vec3d), simulated, true);
@@ -113,10 +118,6 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 			vector3f.rotate(quaternion);
 			((PersistentProjectileEntity) projectileEntity2).setVelocity((double) vector3f.getX(),
 					(double) vector3f.getY(), (double) vector3f.getZ(), speed, divergence);
-			((PersistentProjectileEntity) projectileEntity2).setProperties(shooter, shooter.pitch, shooter.yaw, 0.0F,
-					1.5F, 1.0F);
-			((PersistentProjectileEntity) projectileEntity2).refreshPositionAndAngles(shooter.getX(),
-					shooter.getBodyY(0.5), shooter.getZ(), 0, 0);
 
 			stack.damage(1, shooter, p -> p.sendToolBreakStatus(shooter.getActiveHand()));
 			world.spawnEntity((Entity) projectileEntity2);
@@ -324,7 +325,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 
 	public static int getPullTime(ItemStack stack) {
 		int i = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
-		return i == 0 ? 25 : 25 - 5 * i;
+		return 25 - 5 * i;
 	}
 
 	@Environment(EnvType.CLIENT)

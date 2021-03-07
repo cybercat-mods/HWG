@@ -77,6 +77,11 @@ public class GeoProjectilesRenderer<T extends Entity & IAnimatable> extends Enti
 	public static int getPackedOverlay(Entity livingEntityIn, float uIn) {
 		return OverlayTexture.getUv(OverlayTexture.getU(uIn), false);
 	}
+	
+	@Override
+	public Integer getUniqueID(T animatable) {
+		return animatable.getEntityId();
+	}
 
 	@Override
 	public GeoModelProvider<T> getGeoModelProvider() {

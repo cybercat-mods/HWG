@@ -3,12 +3,15 @@ package mod.azure.hwg.entity.projectiles;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.BWCompatItems;
 import moriyashiine.bewitchment.api.BewitchmentAPI;
+import moriyashiine.bewitchment.common.entity.living.VampireEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -35,7 +38,6 @@ public class SilverBulletEntity extends PersistentProjectileEntity implements IA
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
-	private LivingEntity shooter;
 
 	public SilverBulletEntity(EntityType<? extends SilverBulletEntity> entityType, World world) {
 		super(entityType, world);
@@ -44,7 +46,6 @@ public class SilverBulletEntity extends PersistentProjectileEntity implements IA
 
 	public SilverBulletEntity(World world, LivingEntity owner) {
 		super(BWCompatItems.SILVERBULLETS, owner, world);
-		this.shooter = owner;
 	}
 
 	protected SilverBulletEntity(EntityType<? extends SilverBulletEntity> type, double x, double y, double z,
@@ -86,8 +87,9 @@ public class SilverBulletEntity extends PersistentProjectileEntity implements IA
 	@Override
 	protected void onHit(LivingEntity living) {
 		super.onHit(living);
-		if (living.getGroup() == BewitchmentAPI.DEMON) {
-			living.damage(DamageSource.player((PlayerEntity) this.shooter), 6);
+		if (living.getGroup() == BewitchmentAPI.DEMON || living instanceof VampireEntity) {
+			living.damage(DamageSource.magic(this, this), 13);
+			living.applyStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 600, 2));
 		}
 	}
 

@@ -64,7 +64,7 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier GUNSMITH = new Identifier(MODID, "gun_smith");
 	public static final Identifier BRIMSTONE = new Identifier(MODID, "brimstone");
 	public static final Identifier SILVERGUN = new Identifier(MODID, "silvergun");
-	public static final Identifier SILVERHELL = new Identifier(MODID, "silvergun");
+	public static final Identifier SILVERHELL = new Identifier(MODID, "silverhell");
 	public static final Identifier FLAMETHOWER = new Identifier(MODID, "flamethrower");
 	public static final Identifier GUNSMITH_POI = new Identifier(MODID, "gun_smith_poi");
 	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");

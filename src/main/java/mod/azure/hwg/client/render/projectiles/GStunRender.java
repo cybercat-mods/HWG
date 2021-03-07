@@ -1,6 +1,6 @@
 package mod.azure.hwg.client.render.projectiles;
 
-import mod.azure.hwg.client.GrenadeProjectilesRenderer;
+import mod.azure.hwg.client.GeoProjectilesRenderer;
 import mod.azure.hwg.client.models.projectiles.GStunModel;
 import mod.azure.hwg.entity.projectiles.StunGrenadeEntity;
 import net.minecraft.client.render.RenderLayer;
@@ -11,7 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
-public class GStunRender extends GrenadeProjectilesRenderer<StunGrenadeEntity> {
+public class GStunRender extends GeoProjectilesRenderer<StunGrenadeEntity> {
 
 	public GStunRender(EntityRenderDispatcher renderManagerIn) {
 		super(renderManagerIn, new GStunModel());

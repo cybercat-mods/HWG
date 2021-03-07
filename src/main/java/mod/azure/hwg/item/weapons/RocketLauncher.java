@@ -89,7 +89,7 @@ public class RocketLauncher extends HWGGunBase {
 
 	@Override
 	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.NONE;
+		return UseAction.BOW;
 	}
 
 	@Override

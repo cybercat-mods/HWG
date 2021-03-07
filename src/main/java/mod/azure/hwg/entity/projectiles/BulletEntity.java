@@ -60,7 +60,7 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		return PlayState.STOP;
+		return PlayState.CONTINUE;
 	}
 
 	@Override
