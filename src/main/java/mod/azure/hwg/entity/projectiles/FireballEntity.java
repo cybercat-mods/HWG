@@ -38,6 +38,7 @@ public class FireballEntity extends PersistentProjectileEntity {
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
+	private LivingEntity shooter;
 
 	public FireballEntity(EntityType<? extends FireballEntity> entityType, World world) {
 		super(entityType, world);
@@ -46,6 +47,7 @@ public class FireballEntity extends PersistentProjectileEntity {
 
 	public FireballEntity(World world, LivingEntity owner) {
 		super(ProjectilesEntityRegister.FIREBALL, owner, world);
+		this.shooter = owner;
 	}
 
 	protected FireballEntity(EntityType<? extends FireballEntity> type, double x, double y, double z, World world) {
@@ -200,14 +202,13 @@ public class FireballEntity extends PersistentProjectileEntity {
 				}
 			}
 
-			List<Entity> list1 = this.world.getOtherEntities(this,
-					new Box(this.getBlockPos().up()).expand(1D, 5D, 1D));
+			List<Entity> list1 = this.world.getOtherEntities(this, new Box(this.getBlockPos().up()).expand(1D, 5D, 1D));
 			for (int x = 0; x < list1.size(); ++x) {
 				Entity entity = (Entity) list1.get(x);
 				double y = (double) (MathHelper.sqrt(entity.distanceTo(this)));
 				if (y <= 1.0D) {
 					if (entity.isAlive()) {
-						entity.damage(DamageSource.magic(this, this), 3);
+						entity.damage(DamageSource.magic(this, this.shooter), 3);
 						if (!(entity instanceof FireballEntity && this.getOwner() instanceof PlayerEntity)) {
 							entity.setFireTicks(90);
 						}

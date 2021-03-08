@@ -1,13 +1,3 @@
-v.1.0.4
+v.1.0.6
 
-- Fixed Gun Table not dropping when broke. 
-- Slowed down Flare smoke.
-- Grenades shot out of the Grenade launcher no longer spin.
-- Grenades shot from the launcher have a new arch.
-- Projectiles now appear out in front of the player instead of their face like vanilla arrows.
-- Silver bullets now apply poisoning on silver weak mobs. 
-- Assasult guns, Brimstone, Pistols, Shotgun, and Sniper now use bow holding.
-- Hellhorse revolvers now randomly shoot flamed bullets. It's a 20% chance.
-
-TBD:
-- Silver bullets don't kill vampires just yet.
+- Fixed BW crash due to them being so hardcored on ownership of projectiles.

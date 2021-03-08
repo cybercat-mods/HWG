@@ -43,6 +43,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
+	private LivingEntity shooter;
 
 	public FlameFiring(EntityType<? extends FlameFiring> entityType, World world) {
 		super(entityType, world);
@@ -51,6 +52,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 
 	public FlameFiring(World world, LivingEntity owner) {
 		super(ProjectilesEntityRegister.FIRING, owner, world);
+		this.shooter = owner;
 	}
 
 	protected FlameFiring(EntityType<? extends FlameFiring> type, double x, double y, double z, World world) {
@@ -221,7 +223,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 				double y = (double) (MathHelper.sqrt(entity.distanceTo(this)));
 				if (y <= 1.0D) {
 					if (entity.isAlive()) {
-						entity.damage(DamageSource.magic(this, this), 3);
+						entity.damage(DamageSource.magic(this, this.shooter), 3);
 						if (!(entity instanceof FlameFiring && this.getOwner() instanceof PlayerEntity)) {
 							entity.setFireTicks(90);
 						}

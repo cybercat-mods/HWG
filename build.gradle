@@ -39,7 +39,7 @@ dependencies {
 	include "de.siphalor:nbtcrafting-1.16:2+"	
     modImplementation "com.terraformersmc:modmenu:1.16.8"
     
-	modImplementation 'curse.maven:BW-394915:3226787'
+	modImplementation 'curse.maven:BW-394915:3228835'
 	modImplementation 'curse.maven:TC-341284:3100959'
 	modImplementation 'curse.maven:Nourish-389718:3181134'
     modImplementation "top.theillusivec4.somnus:somnus-fabric:${project.somnus_version}"

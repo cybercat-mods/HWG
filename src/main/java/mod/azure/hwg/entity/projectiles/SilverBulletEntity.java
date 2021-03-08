@@ -4,14 +4,13 @@ import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.BWCompatItems;
 import moriyashiine.bewitchment.api.BewitchmentAPI;
 import moriyashiine.bewitchment.common.entity.living.VampireEntity;
+import moriyashiine.bewitchment.common.entity.projectile.SilverArrowEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
@@ -33,11 +32,12 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class SilverBulletEntity extends PersistentProjectileEntity implements IAnimatable {
+public class SilverBulletEntity extends SilverArrowEntity implements IAnimatable {
 
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
+	private LivingEntity shooter;
 
 	public SilverBulletEntity(EntityType<? extends SilverBulletEntity> entityType, World world) {
 		super(entityType, world);
@@ -46,6 +46,7 @@ public class SilverBulletEntity extends PersistentProjectileEntity implements IA
 
 	public SilverBulletEntity(World world, LivingEntity owner) {
 		super(BWCompatItems.SILVERBULLETS, owner, world);
+		this.shooter = owner;
 	}
 
 	protected SilverBulletEntity(EntityType<? extends SilverBulletEntity> type, double x, double y, double z,
@@ -88,8 +89,7 @@ public class SilverBulletEntity extends PersistentProjectileEntity implements IA
 	protected void onHit(LivingEntity living) {
 		super.onHit(living);
 		if (living.getGroup() == BewitchmentAPI.DEMON || living instanceof VampireEntity) {
-			living.damage(DamageSource.magic(this, this), 13);
-			living.applyStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 600, 2));
+			living.damage(DamageSource.player((PlayerEntity) this.shooter), 13);
 		}
 	}
 
