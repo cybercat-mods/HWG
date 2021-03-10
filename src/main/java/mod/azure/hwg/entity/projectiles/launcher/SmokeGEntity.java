@@ -1,7 +1,5 @@
 package mod.azure.hwg.entity.projectiles.launcher;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
 
 import mod.azure.hwg.util.packet.EntityPacket;
@@ -25,8 +23,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -117,8 +113,9 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 		AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(),
 				this.getZ());
 		areaeffectcloudentity.setParticleType(ParticleTypes.LARGE_SMOKE);
-		areaeffectcloudentity.setRadius(2.0F);
-		areaeffectcloudentity.setDuration(30);
+		areaeffectcloudentity.setRadius(5.0F);
+		areaeffectcloudentity.setDuration(120);
+		areaeffectcloudentity.addEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200, 1));
 		areaeffectcloudentity.updatePosition(this.getX(), this.getEyeY(), this.getZ());
 		this.world.spawnEntity(areaeffectcloudentity);
 		super.remove();
@@ -128,7 +125,6 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	public void age() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
-			this.explode();
 			this.remove();
 		}
 	}
@@ -155,7 +151,6 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	public void tick() {
 		super.tick();
 		if (this.age >= 80) {
-			this.explode();
 			this.remove();
 		}
 
@@ -188,7 +183,6 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
-			this.explode();
 			this.remove();
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
@@ -198,29 +192,7 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	protected void onEntityHit(EntityHitResult entityHitResult) {
 		super.onEntityHit(entityHitResult);
 		if (!this.world.isClient) {
-			this.explode();
 			this.remove();
-		}
-	}
-
-	protected void explode() {
-		int k = MathHelper.floor(this.getX() - 2 - 1.0D);
-		int l = MathHelper.floor(this.getX() + 2 + 1.0D);
-		int t = MathHelper.floor(this.getY() - 2 - 1.0D);
-		int u = MathHelper.floor(this.getY() + 2 + 1.0D);
-		int v = MathHelper.floor(this.getZ() - 2 - 1.0D);
-		int w = MathHelper.floor(this.getZ() + 2 + 1.0D);
-		List<Entity> list = this.world.getOtherEntities(this,
-				new Box((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
-		Vec3d vec3d = new Vec3d(this.getX(), this.getY(), this.getZ());
-		for (int x = 0; x < list.size(); ++x) {
-			Entity entity = (Entity) list.get(x);
-			double y = (double) (MathHelper.sqrt(entity.squaredDistanceTo(vec3d)) / 2);
-			if (entity instanceof LivingEntity) {
-				if (y <= 1.0D) {
-					((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200, 1));
-				}
-			}
 		}
 	}
 
