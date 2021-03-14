@@ -17,15 +17,20 @@ public class GrenadeNapalmItem extends Item {
 
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
-		if (!world.isClient) {
-			NapalmGrenadeEntity snowballEntity = new NapalmGrenadeEntity(world, user);
-			snowballEntity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 1.0F);
-			world.spawnEntity(snowballEntity);
+		if (!user.getItemCooldownManager().isCoolingDown(this)) {
+			user.getItemCooldownManager().set(this, 25);
+			if (!world.isClient) {
+				NapalmGrenadeEntity snowballEntity = new NapalmGrenadeEntity(world, user);
+				snowballEntity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 1.0F);
+				world.spawnEntity(snowballEntity);
+			}
+			if (!user.abilities.creativeMode) {
+				itemStack.decrement(1);
+			}
+			return TypedActionResult.success(itemStack, world.isClient());
+		} else {
+			return TypedActionResult.fail(itemStack);
 		}
-		if (!user.abilities.creativeMode) {
-			itemStack.decrement(1);
-		}
-		return TypedActionResult.success(itemStack, world.isClient());
 	}
 
 }
