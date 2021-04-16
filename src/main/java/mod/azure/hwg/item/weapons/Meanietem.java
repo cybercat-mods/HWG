@@ -1,13 +1,10 @@
 package mod.azure.hwg.item.weapons;
 
-import java.util.List;
-
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.MBulletEntity;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,9 +14,6 @@ import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -29,21 +23,6 @@ public class Meanietem extends HWGGunBase {
 
 	public Meanietem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(7));
-	}
-
-	@Override
-	public boolean hasGlint(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-		return super.canRepair(stack, ingredient);
-	}
-	
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
 	}
 
 	@Override
@@ -95,25 +74,9 @@ public class Meanietem extends HWGGunBase {
 		}
 	}
 
-	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		for (ItemStack item : playerEntity.inventory.main) {
-			if (item.getItem() == Items.REDSTONE) {
-				item.decrement(1);
-				break;
-			}
-		}
-	}
-
 	public MBulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
 		MBulletEntity arrowentity = new MBulletEntity(worldIn, shooter);
 		return arrowentity;
-	}
-
-	@Override
-	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(new TranslatableText(
-				"Ammo: " + (stack.getMaxDamage() - stack.getDamage() - 1) + " / " + (stack.getMaxDamage() - 1))
-						.formatted(Formatting.ITALIC));
 	}
 
 	@Override
@@ -131,11 +94,6 @@ public class Meanietem extends HWGGunBase {
 		}
 
 		return f;
-	}
-
-	@Override
-	public int getMaxUseTime(ItemStack stack) {
-		return 72000;
 	}
 
 	@Override

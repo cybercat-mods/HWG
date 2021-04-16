@@ -1,14 +1,11 @@
 package mod.azure.hwg.item.weapons;
 
-import java.util.List;
-
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.SilverBulletEntity;
 import mod.azure.hwg.util.registry.BWCompatItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,9 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -56,21 +50,6 @@ public class SilverGunItem extends HWGGunBase implements IAnimatable {
 	@Override
 	public AnimationFactory getFactory() {
 		return this.factory;
-	}
-
-	@Override
-	public boolean hasGlint(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-		return super.canRepair(stack, ingredient);
 	}
 
 	@Override
@@ -129,25 +108,9 @@ public class SilverGunItem extends HWGGunBase implements IAnimatable {
 		}
 	}
 
-	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		for (ItemStack item : playerEntity.inventory.main) {
-			if (item.getItem() == BWCompatItems.SILVERBULLET) {
-				item.decrement(1);
-				break;
-			}
-		}
-	}
-
 	public SilverBulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
 		SilverBulletEntity arrowentity = new SilverBulletEntity(worldIn, shooter);
 		return arrowentity;
-	}
-
-	@Override
-	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(new TranslatableText(
-				"Ammo: " + (stack.getMaxDamage() - stack.getDamage() - 1) + " / " + (stack.getMaxDamage() - 1))
-						.formatted(Formatting.ITALIC));
 	}
 
 	public static float getArrowVelocity(int charge) {
@@ -165,11 +128,6 @@ public class SilverGunItem extends HWGGunBase implements IAnimatable {
 		ItemStack itemStack = user.getStackInHand(hand);
 		user.setCurrentHand(hand);
 		return TypedActionResult.consume(itemStack);
-	}
-
-	@Override
-	public int getMaxUseTime(ItemStack stack) {
-		return 72000;
 	}
 
 	@Override

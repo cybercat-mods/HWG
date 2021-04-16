@@ -1,14 +1,11 @@
 package mod.azure.hwg.item.weapons;
 
-import java.util.List;
-
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.ShellEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,9 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -34,7 +28,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class ShotgunItem extends HWGGunBase implements IAnimatable  {
+public class ShotgunItem extends HWGGunBase implements IAnimatable {
 
 	public AnimationFactory factory = new AnimationFactory(this);
 	private String controllerName = "controller";
@@ -56,16 +50,6 @@ public class ShotgunItem extends HWGGunBase implements IAnimatable  {
 	@Override
 	public AnimationFactory getFactory() {
 		return this.factory;
-	}
-
-	@Override
-	public boolean hasGlint(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-		return super.canRepair(stack, ingredient);
 	}
 
 	@Override
@@ -99,18 +83,14 @@ public class ShotgunItem extends HWGGunBase implements IAnimatable  {
 				}
 				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
 						SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.0F, 1.3F);
-				AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack, controllerName);
+				AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack,
+						controllerName);
 				if (controller.getAnimationState() == AnimationState.Stopped) {
 					controller.markNeedsReload();
 					controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
 				}
 			}
 		}
-	}
-	
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
 	}
 
 	@Override
@@ -136,27 +116,9 @@ public class ShotgunItem extends HWGGunBase implements IAnimatable  {
 		}
 	}
 
-	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		// if (!playerEntity.isCreative()) {
-		for (ItemStack item : playerEntity.inventory.main) {
-			if (item.getItem() == HWGItems.SHOTGUN_SHELL) {
-				item.decrement(1);
-				break;
-			}
-		}
-		// }
-	}
-
 	public ShellEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
 		ShellEntity arrowentity = new ShellEntity(worldIn, shooter);
 		return arrowentity;
-	}
-
-	@Override
-	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(new TranslatableText(
-				"Ammo: " + (stack.getMaxDamage() - stack.getDamage() - 1) + " / " + (stack.getMaxDamage() - 1))
-						.formatted(Formatting.ITALIC));
 	}
 
 	@Override
@@ -174,11 +136,6 @@ public class ShotgunItem extends HWGGunBase implements IAnimatable  {
 		}
 
 		return f;
-	}
-
-	@Override
-	public int getMaxUseTime(ItemStack stack) {
-		return 72000;
 	}
 
 	@Override

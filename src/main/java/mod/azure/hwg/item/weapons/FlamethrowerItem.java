@@ -45,11 +45,6 @@ public class FlamethrowerItem extends HWGGunBase implements IAnimatable {
 		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
 		return PlayState.CONTINUE;
 	}
-	
-	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
-	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -60,16 +55,6 @@ public class FlamethrowerItem extends HWGGunBase implements IAnimatable {
 	@Override
 	public AnimationFactory getFactory() {
 		return this.factory;
-	}
-
-	@Override
-	public boolean hasGlint(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-		return super.canRepair(stack, ingredient);
 	}
 
 	@Override
@@ -160,17 +145,6 @@ public class FlamethrowerItem extends HWGGunBase implements IAnimatable {
 		}
 	}
 
-	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		//if (!playerEntity.isCreative()) {
-			for (ItemStack item : playerEntity.inventory.main) {
-				if (item.getItem() == HWGItems.FUEL_TANK) {
-					item.decrement(1);
-					break;
-				}
-			}
-		//}
-	}
-
 	@Override
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
 		tooltip.add(new TranslatableText(
@@ -193,11 +167,6 @@ public class FlamethrowerItem extends HWGGunBase implements IAnimatable {
 		ItemStack itemStack = user.getStackInHand(hand);
 		user.setCurrentHand(hand);
 		return TypedActionResult.consume(itemStack);
-	}
-
-	@Override
-	public int getMaxUseTime(ItemStack stack) {
-		return 72000;
 	}
 
 	@Override

@@ -32,21 +32,6 @@ public class IncineratorUnitItem extends HWGGunBase {
 	}
 
 	@Override
-	public boolean isEnchantable(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public boolean hasGlint(ItemStack stack) {
-		return false;
-	}
-
-	@Override
-	public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-		return super.canRepair(stack, ingredient);
-	}
-
-	@Override
 	public void usageTick(World worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
 		if (entityLiving instanceof PlayerEntity) {
 			PlayerEntity playerentity = (PlayerEntity) entityLiving;
@@ -132,17 +117,6 @@ public class IncineratorUnitItem extends HWGGunBase {
 				user.getStackInHand(hand).setCooldown(3);
 			}
 		}
-	}
-
-	private void removeAmmo(Item ammo, PlayerEntity playerEntity) {
-		// if (!playerEntity.isCreative()) {
-		for (ItemStack item : playerEntity.inventory.main) {
-			if (item.getItem() == HWGItems.FUEL_TANK) {
-				item.decrement(1);
-				break;
-			}
-		}
-		// }
 	}
 
 	@Override
