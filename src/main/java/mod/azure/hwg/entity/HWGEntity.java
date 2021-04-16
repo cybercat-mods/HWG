@@ -18,7 +18,8 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.Angerable;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.Monster;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Packet;
 import net.minecraft.util.math.IntRange;
@@ -26,7 +27,7 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 
-public abstract class HWGEntity extends PathAwareEntity implements Angerable, RangedAttackMob {
+public abstract class HWGEntity extends HostileEntity implements Angerable, RangedAttackMob, Monster {
 
 	private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(HWGEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
@@ -36,7 +37,7 @@ public abstract class HWGEntity extends PathAwareEntity implements Angerable, Ra
 	private UUID targetUuid;
 	public static MobStats config = HWGMod.config.stats;
 
-	protected HWGEntity(EntityType<? extends PathAwareEntity> type, World worldIn) {
+	protected HWGEntity(EntityType<? extends HostileEntity> type, World worldIn) {
 		super(type, worldIn);
 		this.getNavigation().setCanSwim(true);
 		this.ignoreCameraFrustum = true;

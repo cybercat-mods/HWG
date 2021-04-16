@@ -31,6 +31,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
@@ -223,9 +224,10 @@ public class SpyEntity extends HWGEntity implements IAnimatable {
 				: canSpawnIgnoreLightLevel(type, world, spawnReason, pos, random);
 	}
 
-	public static boolean canSpawnIgnoreLightLevel(EntityType<? extends HWGEntity> type, WorldAccess world,
+	public static boolean canSpawnIgnoreLightLevel(EntityType<? extends HWGEntity> type, ServerWorldAccess world,
 			SpawnReason spawnReason, BlockPos pos, Random random) {
-		return world.getDifficulty() != Difficulty.PEACEFUL && canMobSpawn(type, world, spawnReason, pos, random);
+		return world.getDifficulty() != Difficulty.PEACEFUL
+				&& HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random);
 	}
 
 	@Override
