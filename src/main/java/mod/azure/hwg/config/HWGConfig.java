@@ -26,11 +26,11 @@ public class HWGConfig implements ConfigData {
 		public int spy_min_group = 1;
 		public int spy_max_group = 2;
 
-		public int lesser_spawn_weight = 10;
+		public int lesser_spawn_weight = 5;
 		public int lesser_min_group = 1;
 		public int lesser_max_group = 2;
 
-		public int greater_spawn_weight = 10;
+		public int greater_spawn_weight = 5;
 		public int greater_min_group = 1;
 		public int greater_max_group = 2;
 	}
