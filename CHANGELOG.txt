@@ -1,3 +1,5 @@
-v.1.0.9
+v.1.0.10
 
-- Grenades now have a cool down.
+- Lowered default weight of techno demons spawn weight.
+- Fixed the mobs not respecting BWs Glowing Brambles.
+- Fixed weapons not being able to use ammo in the off hand for reloading weapons beside the Grenade Launcher or Flare Gun, which always worked.
