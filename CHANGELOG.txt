@@ -1,5 +1,4 @@
-v.1.0.10
+v.1.0.11
 
-- Lowered default weight of techno demons spawn weight.
-- Fixed the mobs not respecting BWs Glowing Brambles.
-- Fixed weapons not being able to use ammo in the off hand for reloading weapons beside the Grenade Launcher or Flare Gun, which always worked.
+- Weapon firing animations now syncing properly in mulitplayer.
+- Required Geckolib version is bumped to 3.0.32.

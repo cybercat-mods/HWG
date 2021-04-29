@@ -45,20 +45,25 @@ public class GunSmithProfession {
 						new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.LUGER, 5, 16, 20) },
 				3,
 				new TradeOffers.Factory[] {
-						new GunSmithProfession.BuyForItemsFactory(Items.EMERALD, 2, 1, HWGItems.SHOTGUN_SHELL, 16, 16, 30),
+						new GunSmithProfession.BuyForItemsFactory(Items.EMERALD, 2, 1, HWGItems.SHOTGUN_SHELL, 16, 16,
+								30),
 						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.SMG, 1, 16, 30),
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3,  HWGItems.TOMMYGUN, 1, 16, 30) },
+						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.TOMMYGUN, 1, 16, 30) },
 				4,
 				new TradeOffers.Factory[] {
-						new GunSmithProfession.BuyForItemsFactory(HWGItems.FUEL_TANK, 1, 4, HWGItems.FLAMETHROWER, 1, 16, 40),
+						new GunSmithProfession.BuyForItemsFactory(HWGItems.FUEL_TANK, 1, 4, HWGItems.FLAMETHROWER, 1,
+								16, 40),
 						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 6, 4, HWGItems.SHOTGUN, 1, 16, 40),
-						new GunSmithProfession.BuyForItemsFactory(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS, 48, 16, 50) },
+						new GunSmithProfession.BuyForItemsFactory(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS, 48, 16,
+								50) },
 				5,
 				new TradeOffers.Factory[] {
 						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.ROCKETLAUNCHER, 1,
 								16, 60),
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER, 1, 16, 60),
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.SNIPER, 1, 16, 60)  })));
+						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER, 1, 16,
+								60),
+						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.SNIPER, 1, 16,
+								60) })));
 	}
 
 	public static Int2ObjectMap<TradeOffers.Factory[]> copyToFastUtilMap(

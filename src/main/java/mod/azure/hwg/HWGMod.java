@@ -71,7 +71,7 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
 	public static final GunTableBlock GUN_TABLE = new GunTableBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f).nonOpaque());
 	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE = ScreenHandlerRegistry.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
-	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.PISTOL)).build();
+	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.AK47)).build();
 	public static final SpecialRecipeSerializer<GunRecipe> GUNS_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, GUNS, new SpecialRecipeSerializer<>(GunRecipe::new));
 	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER,new Identifier(MODID,"gun_table"),new GunTableRecipe.Serializer());
 

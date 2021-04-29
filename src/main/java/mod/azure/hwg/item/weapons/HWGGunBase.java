@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 public class HWGGunBase extends Item {
@@ -59,6 +61,13 @@ public class HWGGunBase extends Item {
 	@Override
 	public int getMaxUseTime(ItemStack stack) {
 		return 72000;
+	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		ItemStack itemStack = user.getStackInHand(hand);
+		user.setCurrentHand(hand);
+		return TypedActionResult.consume(itemStack);
 	}
 
 }

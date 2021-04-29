@@ -6,52 +6,29 @@ import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class PistolItem extends HWGGunBase implements IAnimatable {
+public class PistolItem extends AnimatedItem {
 
-	public AnimationFactory factory = new AnimationFactory(this);
-	private String controllerName = "controller";
 	public double damage;
 
 	public PistolItem(Double damage) {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(7));
 		this.damage = damage;
-	}
-
-	private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		return PlayState.CONTINUE;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
-	}
-
-	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
 	}
 
 	@Override
@@ -77,10 +54,12 @@ public class PistolItem extends HWGGunBase implements IAnimatable {
 						SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.PLAYERS, 1.0F,
 						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 			}
-			AnimationController<?> controller = GeckoLibUtil.getControllerForStack(this.factory, stack, controllerName);
-			if (controller.getAnimationState() == AnimationState.Stopped) {
-				controller.markNeedsReload();
-				controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
+			if (!worldIn.isClient) {
+				final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
+				GeckoLibNetwork.syncAnimation(playerentity, this, id, ANIM_OPEN);
+				for (PlayerEntity otherPlayer : PlayerLookup.tracking(playerentity)) {
+					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
+				}
 			}
 		}
 	}
@@ -123,13 +102,6 @@ public class PistolItem extends HWGGunBase implements IAnimatable {
 		}
 
 		return f;
-	}
-
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		ItemStack itemStack = user.getStackInHand(hand);
-		user.setCurrentHand(hand);
-		return TypedActionResult.consume(itemStack);
 	}
 
 	@Override

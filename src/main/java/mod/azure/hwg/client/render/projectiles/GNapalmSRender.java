@@ -1,6 +1,5 @@
 package mod.azure.hwg.client.render.projectiles;
 
-import mod.azure.hwg.client.GeoProjectilesRenderer;
 import mod.azure.hwg.client.models.projectiles.GNapalmSModel;
 import mod.azure.hwg.entity.projectiles.launcher.NapalmGEntity;
 import net.minecraft.client.render.RenderLayer;
@@ -10,6 +9,7 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import software.bernie.geckolib3.renderer.geo.GeoProjectilesRenderer;
 
 public class GNapalmSRender extends GeoProjectilesRenderer<NapalmGEntity> {
 

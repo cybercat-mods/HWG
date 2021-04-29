@@ -7,7 +7,9 @@ import mod.azure.hwg.client.gui.GunTableScreen;
 import mod.azure.hwg.client.render.projectiles.SilverBulletRender;
 import mod.azure.hwg.client.render.weapons.AKRender;
 import mod.azure.hwg.client.render.weapons.FlamethrowerRender;
+import mod.azure.hwg.client.render.weapons.GPistolRender;
 import mod.azure.hwg.client.render.weapons.HellRender;
+import mod.azure.hwg.client.render.weapons.LugerRender;
 import mod.azure.hwg.client.render.weapons.PistolRender;
 import mod.azure.hwg.client.render.weapons.SHellRender;
 import mod.azure.hwg.client.render.weapons.SMGRender;
@@ -50,6 +52,8 @@ public class ClientInit implements ClientModInitializer {
 		RenderRegistry.init();
 		ScreenRegistry.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
 		GeoItemRenderer.registerItemRenderer(HWGItems.PISTOL, new PistolRender());
+		GeoItemRenderer.registerItemRenderer(HWGItems.GOLDEN_GUN, new GPistolRender());
+		GeoItemRenderer.registerItemRenderer(HWGItems.LUGER, new LugerRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SPISTOL, new SPistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.FLAMETHROWER, new FlamethrowerRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SHOTGUN, new ShotgunRender());
