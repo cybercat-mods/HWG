@@ -61,6 +61,8 @@
 	"item.hwg.greater_spawn_egg": "Greater Technodemon Spawn Egg",
 	"item.hwg.merc_spawn_egg": "Merc Spawn Egg",
 	"item.hwg.spy_spawn_egg": "Spy Spawn Egg",
+	"key.hwg.reload": "Weapon Reload",
+	"category.hwg.binds": "HWG",
 	"text.autoconfig.hwg.title": "Happiness is a Warm Gun Config",
 	"text.autoconfig.hwg.option.spawn": "Spawn Settings",
 	"text.autoconfig.hwg.option.spawn.merc_spawn_weight": "Merc Spawn Weight",
