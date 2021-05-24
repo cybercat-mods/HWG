@@ -103,7 +103,7 @@ public class Assasult2Item extends AnimatedItem {
 				if (ClientInit.reload.isPressed() && selected) {
 					PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
-					ClientPlayNetworking.send(HWGMod.ASSASULT, passedData);
+					ClientPlayNetworking.send(HWGMod.ASSASULT2, passedData);
 				}
 			}
 		}

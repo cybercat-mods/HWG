@@ -57,6 +57,8 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier MEANIE = new Identifier(MODID, "meanie");
 	public static final Identifier PISTOL = new Identifier(MODID, "pistol");
 	public static final Identifier SNIPER = new Identifier(MODID, "sniper");
+	public static final Identifier ASSASULT1 = new Identifier(MODID, "smg1");
+	public static final Identifier ASSASULT2 = new Identifier(MODID, "smg2");
 	public static final Identifier MINIGUN = new Identifier(MODID, "minigun");
 	public static final Identifier SHOTGUN = new Identifier(MODID, "shotgun");
 	public static final Identifier SPISTOL = new Identifier(MODID, "spistol");

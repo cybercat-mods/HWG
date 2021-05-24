@@ -1,6 +1,8 @@
 package mod.azure.hwg.network;
 
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.item.weapons.Assasult1Item;
+import mod.azure.hwg.item.weapons.Assasult2Item;
 import mod.azure.hwg.item.weapons.AssasultItem;
 import mod.azure.hwg.item.weapons.BalrogItem;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
@@ -78,6 +80,18 @@ public class PacketHandler {
 				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
 					if (player.getMainHandStack().getItem() instanceof AssasultItem) {
 						((AssasultItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+					}
+				});
+		ServerPlayNetworking.registerGlobalReceiver(HWGMod.ASSASULT1,
+				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+					if (player.getMainHandStack().getItem() instanceof Assasult1Item) {
+						((Assasult1Item) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+					}
+				});
+		ServerPlayNetworking.registerGlobalReceiver(HWGMod.ASSASULT2,
+				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+					if (player.getMainHandStack().getItem() instanceof Assasult2Item) {
+						((Assasult2Item) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
 					}
 				});
 		ServerPlayNetworking.registerGlobalReceiver(HWGMod.SNIPER,
