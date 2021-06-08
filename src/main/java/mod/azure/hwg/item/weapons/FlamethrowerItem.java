@@ -43,7 +43,7 @@ public class FlamethrowerItem extends AnimatedItem {
 				if (!worldIn.isClient) {
 
 					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							0.25F * 3.0F, 2.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -51,7 +51,7 @@ public class FlamethrowerItem extends AnimatedItem {
 					worldIn.spawnEntity(abstractarrowentity);
 
 					FlameFiring abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 10, 0.0F,
+					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 10, 0.0F,
 							0.25F * 3.0F, 2.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -59,7 +59,7 @@ public class FlamethrowerItem extends AnimatedItem {
 					worldIn.spawnEntity(abstractarrowentity1);
 
 					FlameFiring abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 5, 0.0F,
+					abstractarrowentity3.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5, 0.0F,
 							0.25F * 3.0F, 2.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -67,7 +67,7 @@ public class FlamethrowerItem extends AnimatedItem {
 					worldIn.spawnEntity(abstractarrowentity3);
 
 					FlameFiring abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setProperties(playerentity, playerentity.pitch, playerentity.yaw - 10, 0.0F,
+					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 10, 0.0F,
 							0.25F * 3.0F, 2.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -75,7 +75,7 @@ public class FlamethrowerItem extends AnimatedItem {
 					worldIn.spawnEntity(abstractarrowentity2);
 
 					FlameFiring abstractarrowentity4 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity4.setProperties(playerentity, playerentity.pitch, playerentity.yaw - 5, 0.0F,
+					abstractarrowentity4.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5, 0.0F,
 							0.25F * 3.0F, 2.0F);
 					abstractarrowentity4.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -85,7 +85,7 @@ public class FlamethrowerItem extends AnimatedItem {
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS,
-							1.0F, 1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+							1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
 				if (!worldIn.isClient) {
 					final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
@@ -120,7 +120,7 @@ public class FlamethrowerItem extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof FlamethrowerItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(HWGItems.FUEL_TANK) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-501, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);

@@ -15,24 +15,19 @@ import mod.azure.hwg.util.MobSpawn;
 import mod.azure.hwg.util.recipes.GunRecipe;
 import mod.azure.hwg.util.registry.BWCompatItems;
 import mod.azure.hwg.util.registry.HWGItems;
-import mod.azure.hwg.util.registry.HWGLoot;
 import mod.azure.hwg.util.registry.HWGMobs;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.ConstantLootTableRange;
-import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.screen.ScreenHandlerType;
@@ -71,12 +66,16 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier GUNSMITH_POI = new Identifier(MODID, "gun_smith_poi");
 	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
 	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
-	public static final GunTableBlock GUN_TABLE = new GunTableBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f).nonOpaque());
-	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE = ScreenHandlerRegistry.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
-	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons")).icon(() -> new ItemStack(HWGItems.AK47)).build();
-	public static final SpecialRecipeSerializer<GunRecipe> GUNS_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, GUNS, new SpecialRecipeSerializer<>(GunRecipe::new));
-	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER,new Identifier(MODID,"gun_table"),new GunTableRecipe.Serializer());
-
+	public static final GunTableBlock GUN_TABLE = new GunTableBlock(
+			FabricBlockSettings.of(Material.METAL).strength(4.0f).nonOpaque());
+	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE = ScreenHandlerRegistry
+			.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
+	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons"))
+			.icon(() -> new ItemStack(HWGItems.AK47)).build();
+	public static final SpecialRecipeSerializer<GunRecipe> GUNS_RECIPE_SERIALIZER = Registry
+			.register(Registry.RECIPE_SERIALIZER, GUNS, new SpecialRecipeSerializer<>(GunRecipe::new));
+	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry
+			.register(Registry.RECIPE_SERIALIZER, new Identifier(MODID, "gun_table"), new GunTableRecipe.Serializer());
 
 	@Override
 	public void onInitialize() {
@@ -85,37 +84,37 @@ public class HWGMod implements ModInitializer {
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();
-		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
-			BWITEMS = new BWCompatItems();
-			LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
-				if (HWGLoot.BASTION_BRIDGE.equals(id) || HWGLoot.BASTION_HOGLIN_STABLE.equals(id)
-						|| HWGLoot.BASTION_OTHER.equals(id) || HWGLoot.BASTION_TREASURE.equals(id)
-						|| HWGLoot.NETHER_BRIDGE.equals(id) || HWGLoot.RUINED_PORTAL.equals(id)) {
-					FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
-							.rolls(ConstantLootTableRange.create(1)).withEntry(ItemEntry.builder(BWCompatItems.SILVERHELLHORSE).build());
-					supplier.pool(poolBuilder);
-				}
-			});
-		}
+//		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
+//			BWITEMS = new BWCompatItems();
+//			LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
+//				if (HWGLoot.BASTION_BRIDGE.equals(id) || HWGLoot.BASTION_HOGLIN_STABLE.equals(id)
+//						|| HWGLoot.BASTION_OTHER.equals(id) || HWGLoot.BASTION_TREASURE.equals(id)
+//						|| HWGLoot.NETHER_BRIDGE.equals(id) || HWGLoot.RUINED_PORTAL.equals(id)) {
+//					FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
+//							.rolls(ConstantLootTableRange.create(1)).withEntry(ItemEntry.builder(BWCompatItems.SILVERHELLHORSE).build());
+//					supplier.pool(poolBuilder);
+//				}
+//			});
+//		}
 		MOBS = new HWGMobs();
 		PARTICLES = new HWGParticles();
 		PROJECTILES = new ProjectilesEntityRegister();
 		GeckoLib.initialize();
 		GunSmithProfession.init();
 		MobSpawn.addSpawnEntries();
-		GUN_TABLE_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, "hwg:guntable",
-				BlockEntityType.Builder.create(GunBlockEntity::new, GUN_TABLE).build(null));
+		GUN_TABLE_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, MODID + ":guntable",
+				FabricBlockEntityTypeBuilder.create(GunBlockEntity::new, GUN_TABLE).build(null));
 		MobAttributes.init();
-		LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
-			if (HWGLoot.B_TREASURE.equals(id) || HWGLoot.JUNGLE.equals(id) || HWGLoot.U_BIG.equals(id)
-					|| HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id)
-					|| HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
-				FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
-						.rolls(ConstantLootTableRange.create(1)).withEntry(ItemEntry.builder(HWGItems.MEANIE1).build())
-						.withEntry(ItemEntry.builder(HWGItems.MEANIE2).build());
-				supplier.pool(poolBuilder);
-			}
-		});
+//		LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
+//			if (HWGLoot.B_TREASURE.equals(id) || HWGLoot.JUNGLE.equals(id) || HWGLoot.U_BIG.equals(id)
+//					|| HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id)
+//					|| HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
+//				FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
+//						.rolls(ConstantLootTableRange.create(1)).withEntry(ItemEntry.builder(HWGItems.MEANIE1).build())
+//						.withEntry(ItemEntry.builder(HWGItems.MEANIE2).build());
+//				supplier.pool(poolBuilder);
+//			}
+//		});
 		PacketHandler.registerMessages();
 	}
 }

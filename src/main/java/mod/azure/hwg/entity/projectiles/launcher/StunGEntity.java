@@ -18,7 +18,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
@@ -112,7 +112,7 @@ public class StunGEntity extends PersistentProjectileEntity implements IAnimatab
 	}
 
 	@Override
-	public void remove() {
+	public void remove(RemovalReason reason) {
 		AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(),
 				this.getZ());
 		areaeffectcloudentity.setParticleType(ParticleTypes.FLASH);
@@ -120,7 +120,7 @@ public class StunGEntity extends PersistentProjectileEntity implements IAnimatab
 		areaeffectcloudentity.setDuration(2);
 		areaeffectcloudentity.updatePosition(this.getX(), this.getEyeY(), this.getZ());
 		this.world.spawnEntity(areaeffectcloudentity);
-		super.remove();
+		super.remove(reason);
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class StunGEntity extends PersistentProjectileEntity implements IAnimatab
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -139,14 +139,14 @@ public class StunGEntity extends PersistentProjectileEntity implements IAnimatab
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
 	}
 
@@ -155,7 +155,7 @@ public class StunGEntity extends PersistentProjectileEntity implements IAnimatab
 		super.tick();
 		if (this.age >= 80) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 
 		setNoGravity(false);
@@ -188,7 +188,7 @@ public class StunGEntity extends PersistentProjectileEntity implements IAnimatab
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
 	}
@@ -198,7 +198,7 @@ public class StunGEntity extends PersistentProjectileEntity implements IAnimatab
 		super.onEntityHit(entityHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -214,7 +214,7 @@ public class StunGEntity extends PersistentProjectileEntity implements IAnimatab
 		Vec3d vec3d = new Vec3d(this.getX(), this.getY(), this.getZ());
 		for (int x = 0; x < list.size(); ++x) {
 			Entity entity = (Entity) list.get(x);
-			double y = (double) (MathHelper.sqrt(entity.squaredDistanceTo(vec3d)) / 2);
+			double y = (MathHelper.sqrt((float) entity.squaredDistanceTo(vec3d)) / 8);
 			if (entity instanceof LivingEntity) {
 				if (y <= 1.0D) {
 					((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200, 1));

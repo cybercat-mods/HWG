@@ -59,7 +59,7 @@ public class WhiteFlareEntity extends PersistentProjectileEntity {
 	public void tick() {
 		super.tick();
 		if (this.age >= 800) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		if (this.life == 0 && !this.isSilent()) {
 			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(),
@@ -108,7 +108,7 @@ public class WhiteFlareEntity extends PersistentProjectileEntity {
 	protected void onEntityHit(EntityHitResult entityHitResult) {
 		super.onEntityHit(entityHitResult);
 		if (!this.world.isClient) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
 	}

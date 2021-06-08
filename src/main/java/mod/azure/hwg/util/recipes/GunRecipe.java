@@ -8,8 +8,8 @@ import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
@@ -56,8 +56,8 @@ public class GunRecipe extends SpecialCraftingRecipe {
 
 	public ItemStack craft(CraftingInventory craftingInventory) {
 		ItemStack itemStack = new ItemStack(HWGItems.AK47, 3);
-		CompoundTag compoundTag = itemStack.getOrCreateSubTag("Fireworks");
-		ListTag listTag = new ListTag();
+		NbtCompound compoundTag = itemStack.getOrCreateSubTag("Fireworks");
+		NbtList listTag = new NbtList();
 		int i = 0;
 
 		for (int j = 0; j < craftingInventory.size(); ++j) {
@@ -66,7 +66,7 @@ public class GunRecipe extends SpecialCraftingRecipe {
 				if (GUNPOWDER.test(itemStack2)) {
 					++i;
 				} else if (FIREWORK_STAR.test(itemStack2)) {
-					CompoundTag compoundTag2 = itemStack2.getSubTag("Explosion");
+					NbtCompound compoundTag2 = itemStack2.getSubTag("Explosion");
 					if (compoundTag2 != null) {
 						listTag.add(compoundTag2);
 					}

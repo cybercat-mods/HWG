@@ -111,7 +111,7 @@ public class GunTableRecipe implements Recipe<GunTableInventory>,Comparable<GunT
             } else if (pairList.size() > 5) {
                 throw new JsonParseException("Too many ingredients for gun table recipe");
             } else {
-                ItemStack itemStack = ShapedRecipe.getItemStack(JsonHelper.getObject(jsonObject, "result"));
+                ItemStack itemStack = ShapedRecipe.outputFromJson(JsonHelper.getObject(jsonObject, "result"));
                 return new GunTableRecipe(identifier, pairList.toArray(new Pair[0]), itemStack);
             }
         }

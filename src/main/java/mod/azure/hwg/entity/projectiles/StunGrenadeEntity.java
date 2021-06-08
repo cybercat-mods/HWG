@@ -16,7 +16,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
@@ -90,7 +90,7 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 	}
 
 	@Override
-	public void remove() {
+	public void remove(RemovalReason reason) {
 		AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(),
 				this.getZ());
 		areaeffectcloudentity.setParticleType(ParticleTypes.FLASH);
@@ -98,7 +98,7 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 		areaeffectcloudentity.setDuration(2);
 		areaeffectcloudentity.updatePosition(this.getX(), this.getEyeY(), this.getZ());
 		this.world.spawnEntity(areaeffectcloudentity);
-		super.remove();
+		super.remove(reason);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -117,14 +117,14 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
 	}
 
@@ -134,15 +134,15 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 		boolean bl = this.isNoClip();
 		Vec3d vec3d = this.getVelocity();
 		if (this.prevPitch == 0.0F && this.prevYaw == 0.0F) {
-			float f = MathHelper.sqrt(squaredHorizontalLength(vec3d));
-			this.yaw = (float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875D);
-			this.pitch = (float) (MathHelper.atan2(vec3d.y, (double) f) * 57.2957763671875D);
-			this.prevYaw = this.yaw;
-			this.prevPitch = this.pitch;
+			double f = vec3d.horizontalLength();
+			this.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875D));
+			this.setPitch((float) (MathHelper.atan2(vec3d.y, f) * 57.2957763671875D));
+			this.prevYaw = this.getYaw();
+			this.prevPitch = this.getPitch();
 		}
 		if (this.age >= 80) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		if (this.inAir && !bl) {
 			this.age();
@@ -156,7 +156,7 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 			if (((HitResult) hitResult).getType() != HitResult.Type.MISS) {
 				vector3d3 = ((HitResult) hitResult).getPos();
 			}
-			while (!this.removed) {
+			while (!this.isRemoved()) {
 				EntityHitResult entityHitResult = this.getEntityCollision(vec3d3, vector3d3);
 				if (entityHitResult != null) {
 					hitResult = entityHitResult;
@@ -186,15 +186,15 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 			double h = this.getX() + d;
 			double j = this.getY() + e;
 			double k = this.getZ() + g;
-			float l = MathHelper.sqrt(squaredHorizontalLength(vec3d));
+			double l = vec3d.horizontalLength();
 			if (bl) {
-				this.yaw = (float) (MathHelper.atan2(-d, -g) * 57.2957763671875D);
+				this.setYaw((float) (MathHelper.atan2(-e, -g) * 57.2957763671875D));
 			} else {
-				this.yaw = (float) (MathHelper.atan2(d, g) * 57.2957763671875D);
+				this.setYaw((float) (MathHelper.atan2(e, g) * 57.2957763671875D));
 			}
-			this.pitch = (float) (MathHelper.atan2(e, (double) l) * 57.2957763671875D);
-			this.pitch = updateRotation(this.prevPitch, this.pitch);
-			this.yaw = updateRotation(this.prevYaw, this.yaw);
+			this.setPitch((float) (MathHelper.atan2(e, l) * 57.2957763671875D));
+			this.setPitch(updateRotation(this.prevPitch, this.getPitch()));
+			this.setYaw(updateRotation(this.prevYaw, this.getYaw()));
 			float m = 0.99F;
 
 			this.setVelocity(vec3d.multiply((double) m));
@@ -227,7 +227,7 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
 	}
@@ -237,7 +237,7 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 		super.onEntityHit(entityHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -253,7 +253,7 @@ public class StunGrenadeEntity extends PersistentProjectileEntity implements IAn
 		Vec3d vec3d = new Vec3d(this.getX(), this.getY(), this.getZ());
 		for (int x = 0; x < list.size(); ++x) {
 			Entity entity = (Entity) list.get(x);
-			double y = (double) (MathHelper.sqrt(entity.squaredDistanceTo(vec3d)) / 2);
+			double y = (MathHelper.sqrt((float) entity.squaredDistanceTo(vec3d)) / 8);
 			if (entity instanceof LivingEntity) {
 				if (y <= 1.0D) {
 					((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200, 1));

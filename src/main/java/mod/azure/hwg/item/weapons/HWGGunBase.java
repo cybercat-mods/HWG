@@ -21,12 +21,12 @@ public class HWGGunBase extends Item {
 
 	public void removeAmmo(Item ammo, PlayerEntity playerEntity) {
 		if (!playerEntity.isCreative()) {
-			for (ItemStack item : playerEntity.inventory.offHand) {
+			for (ItemStack item : playerEntity.getInventory().offHand) {
 				if (item.getItem() == ammo) {
 					item.decrement(1);
 					break;
 				}
-				for (ItemStack item1 : playerEntity.inventory.main) {
+				for (ItemStack item1 : playerEntity.getInventory().main) {
 					if (item1.getItem() == ammo) {
 						item1.decrement(1);
 						break;

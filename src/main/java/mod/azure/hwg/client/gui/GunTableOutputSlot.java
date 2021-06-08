@@ -42,12 +42,12 @@ public class GunTableOutputSlot extends Slot {
 		this.amount = 0;
 	}
 
-	public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
+	public void onTakeItem(PlayerEntity player, ItemStack stack) {
 		this.onCrafted(stack);
 		Optional<GunTableRecipe> optionalGunTableRecipe = player.world.getRecipeManager().getFirstMatch(GunTableRecipe.GUN_TABLE,gunTableInventory,player.world);
 		if (optionalGunTableRecipe.isPresent()) {
 			GunTableRecipe gunTableRecipe = optionalGunTableRecipe.get();
-			DefaultedList<ItemStack> defaultedList = gunTableRecipe.getRemainingStacks(gunTableInventory);
+			DefaultedList<ItemStack> defaultedList = gunTableRecipe.getRemainder(gunTableInventory);
 
 			for (int i = 0; i < defaultedList.size(); ++i) {
 				ItemStack itemStack = this.gunTableInventory.getStack(i);
@@ -63,12 +63,12 @@ public class GunTableOutputSlot extends Slot {
 					} else if (ItemStack.areItemsEqualIgnoreDamage(itemStack, itemStack2) && ItemStack.areTagsEqual(itemStack, itemStack2)) {
 						itemStack2.increment(itemStack.getCount());
 						this.gunTableInventory.setStack(i, itemStack2);
-					} else if (!this.player.inventory.insertStack(itemStack2)) {
+					} else if (!this.player.getInventory().insertStack(itemStack2)) {
 						this.player.dropItem(itemStack2, false);
 					}
 				}
 			}
 		}
-		return stack;
+		this.markDirty();
 	}
 }

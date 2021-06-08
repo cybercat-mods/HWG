@@ -14,8 +14,6 @@ import mod.azure.hwg.item.weapons.PistolItem;
 import mod.azure.hwg.item.weapons.RocketLauncher;
 import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
-import mod.azure.hwg.item.weapons.SilverGunItem;
-import mod.azure.hwg.item.weapons.SilverRevolverItem;
 import mod.azure.hwg.item.weapons.SniperItem;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Hand;
@@ -34,12 +32,12 @@ public class PacketHandler {
 						((PistolItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
 					}
 				});
-		ServerPlayNetworking.registerGlobalReceiver(HWGMod.SILVERGUN,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof SilverGunItem) {
-						((SilverGunItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-				});
+//		ServerPlayNetworking.registerGlobalReceiver(HWGMod.SILVERGUN,
+//				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+//					if (player.getMainHandStack().getItem() instanceof SilverGunItem) {
+//						((SilverGunItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+//					}
+//				});
 		ServerPlayNetworking.registerGlobalReceiver(HWGMod.SPISTOL,
 				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
 					if (player.getMainHandStack().getItem() instanceof SPistolItem) {
@@ -118,11 +116,11 @@ public class PacketHandler {
 						((HellhorseRevolverItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
 					}
 				});
-		ServerPlayNetworking.registerGlobalReceiver(HWGMod.SILVERHELL,
-				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof SilverRevolverItem) {
-						((SilverRevolverItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
-					}
-				});
+//		ServerPlayNetworking.registerGlobalReceiver(HWGMod.SILVERHELL,
+//				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+//					if (player.getMainHandStack().getItem() instanceof SilverRevolverItem) {
+//						((SilverRevolverItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+//					}
+//				});
 	}
 }

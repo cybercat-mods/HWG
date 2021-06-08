@@ -99,7 +99,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 				if (!this.insertItem(itemStack2, 3, 39, true)) {
 					return ItemStack.EMPTY;
 				}
-				slot.onStackChanged(itemStack2, itemStack);
+				slot.onQuickTransfer(itemStack2, itemStack);
 			} else if (index != 0 && index != 1) {
 				if (index >= 3 && index < 30) {
 					if (!this.insertItem(itemStack2, 30, 39, false)) {
@@ -198,11 +198,11 @@ public class GunTableScreenHandler extends ScreenHandler {
 		if (!this.playerInventory.player.world.isClient) {
 			if (player.isAlive()
 					&& (!(player instanceof ServerPlayerEntity) || !((ServerPlayerEntity) player).isDisconnected())) {
-				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(0));
-				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(1));
-				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(2));
-				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(3));
-				player.inventory.offerOrDrop(player.world, this.gunTableInventory.removeStack(4));
+				player.getInventory().offerOrDrop(this.gunTableInventory.removeStack(0));
+				player.getInventory().offerOrDrop(this.gunTableInventory.removeStack(1));
+				player.getInventory().offerOrDrop(this.gunTableInventory.removeStack(2));
+				player.getInventory().offerOrDrop(this.gunTableInventory.removeStack(3));
+				player.getInventory().offerOrDrop(this.gunTableInventory.removeStack(4));
 			} else {
 				ItemStack itemStack0 = this.gunTableInventory.removeStack(0);
 				ItemStack itemStack1 = this.gunTableInventory.removeStack(1);

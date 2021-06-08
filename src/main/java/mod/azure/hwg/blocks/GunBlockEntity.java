@@ -8,32 +8,33 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 
 public class GunBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
 
 	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(6, ItemStack.EMPTY);
 
-	public GunBlockEntity() {
-		super(HWGMod.GUN_TABLE_ENTITY);
+	public GunBlockEntity(BlockPos pos, BlockState state) {
+		super(HWGMod.GUN_TABLE_ENTITY, pos, state);
 	}
 
 	@Override
-	public CompoundTag toTag(CompoundTag tag) {
-		Inventories.toTag(tag, items);
-		return super.toTag(tag);
+	public void readNbt(NbtCompound nbt) {
+		super.readNbt(nbt);
+		Inventories.readNbt(nbt, items);
 	}
 
 	@Override
-	public void fromTag(BlockState state, CompoundTag tag) {
-		super.fromTag(state, tag);
-		Inventories.fromTag(tag, items);
+	public NbtCompound writeNbt(NbtCompound nbt) {
+		Inventories.writeNbt(nbt, items);
+		return super.writeNbt(nbt);
 	}
 
 	@Override
@@ -48,6 +49,6 @@ public class GunBlockEntity extends BlockEntity implements ImplementedInventory,
 
 	@Override
 	public ScreenHandler createMenu(int syncId, PlayerInventory inventory, PlayerEntity player) {
-		return new GunTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world,pos));
+		return new GunTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos));
 	}
 }

@@ -21,10 +21,10 @@ public class GrenadeStunItem extends Item {
 			user.getItemCooldownManager().set(this, 25);
 			if (!world.isClient) {
 				StunGrenadeEntity snowballEntity = new StunGrenadeEntity(world, user);
-				snowballEntity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 1.0F);
+				snowballEntity.setProperties(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
 				world.spawnEntity(snowballEntity);
 			}
-			if (!user.abilities.creativeMode) {
+			if (!user.getAbilities().creativeMode) {
 				itemStack.decrement(1);
 			}
 			return TypedActionResult.success(itemStack, world.isClient());

@@ -6,15 +6,15 @@ import mod.azure.hwg.entity.projectiles.ShellEntity;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import software.bernie.geckolib3.renderer.geo.GeoProjectilesRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 
 public class ShellRender extends GeoProjectilesRenderer<ShellEntity> {
 
-	public ShellRender(EntityRenderDispatcher renderManagerIn) {
+	public ShellRender(EntityRendererFactory.Context renderManagerIn) {
 		super(renderManagerIn, new ShellModel());
 	}
 

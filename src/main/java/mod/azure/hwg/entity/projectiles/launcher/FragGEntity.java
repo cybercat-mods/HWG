@@ -14,7 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
@@ -107,7 +107,7 @@ public class FragGEntity extends PersistentProjectileEntity implements IAnimatab
 	}
 
 	@Override
-	public void remove() {
+	public void remove(RemovalReason reason) {
 		AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(),
 				this.getZ());
 		areaeffectcloudentity.setParticleType(ParticleTypes.EXPLOSION);
@@ -115,14 +115,14 @@ public class FragGEntity extends PersistentProjectileEntity implements IAnimatab
 		areaeffectcloudentity.setDuration(2);
 		areaeffectcloudentity.updatePosition(this.getX(), this.getEyeY(), this.getZ());
 		this.world.spawnEntity(areaeffectcloudentity);
-		super.remove();
+		super.remove(reason);
 	}
 
 	@Override
 	public void age() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -133,14 +133,14 @@ public class FragGEntity extends PersistentProjectileEntity implements IAnimatab
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
 	}
 
@@ -149,7 +149,7 @@ public class FragGEntity extends PersistentProjectileEntity implements IAnimatab
 		super.tick();
 		if (this.age >= 80) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 
 		setNoGravity(false);
@@ -182,7 +182,7 @@ public class FragGEntity extends PersistentProjectileEntity implements IAnimatab
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
 	}
@@ -192,7 +192,7 @@ public class FragGEntity extends PersistentProjectileEntity implements IAnimatab
 		super.onEntityHit(entityHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 

@@ -2,8 +2,8 @@ package mod.azure.hwg.client.models;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.TechnodemonEntity;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -38,10 +38,10 @@ public class TechnodemonLesserModel extends AnimatedGeoModel<TechnodemonEntity> 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 		if (head != null) {
 			if (head != null) {
-				head.setRotationX(
-						Vector3f.POSITIVE_X.getRadialQuaternion((extraData.headPitch - 5) * ((float) Math.PI / 180F)).getX());
+				head.setRotationX(Vec3f.POSITIVE_X
+						.getRadialQuaternion((extraData.headPitch - 5) * ((float) Math.PI / 180F)).getX());
 				head.setRotationY(
-						Vector3f.POSITIVE_Y.getRadialQuaternion(extraData.netHeadYaw * ((float) Math.PI / 340F)).getY());
+						Vec3f.POSITIVE_Y.getRadialQuaternion(extraData.netHeadYaw * ((float) Math.PI / 340F)).getY());
 			}
 		}
 	}

@@ -10,7 +10,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -51,7 +51,7 @@ public class HWGEquipmentUtils {
             int targetDamage){
 
         ItemStack repaired = new ItemStack(HWGItems.getItemMap().get(leftStack.getItem()));
-        CompoundTag tag = leftStack.getOrCreateTag();
+        NbtCompound tag = leftStack.getOrCreateTag();
         String encodedEnch = tag.getString(TAG);
         if (!encodedEnch.isEmpty()) tag.remove(TAG);
         Map<Enchantment, Integer> enchantMap = HWGEquipmentUtils.processEncodedEnchantments(encodedEnch);
@@ -85,28 +85,28 @@ public class HWGEquipmentUtils {
             if (isVanillaItemStackBreaking(breakingStack, itemMap.getValue())) {
                 // Directly copy over breaking Item's NBT, removing specific fields
                 ItemStack ruinedStack = new ItemStack(itemMap.getKey());
-                CompoundTag breakingNBT = breakingStack.getOrCreateTag();
+                NbtCompound breakingNBT = breakingStack.getOrCreateTag();
                 if (breakingNBT.contains("Damage")) breakingNBT.remove("Damage");
                 if (breakingNBT.contains("RepairCost")) breakingNBT.remove("RepairCost");
                 // Set enchantment NBT data
-                CompoundTag enchantTag = getTagForEnchantments(breakingStack, ruinedStack);
+                NbtCompound enchantTag = getTagForEnchantments(breakingStack, ruinedStack);
                 if (enchantTag != null) breakingNBT.copyFrom(enchantTag);
                 if (breakingNBT.contains("Enchantments")) breakingNBT.remove("Enchantments");
                 ruinedStack.setTag(breakingNBT);
-                 serverPlayer.inventory.offerOrDrop(serverPlayer.world, ruinedStack);
+				serverPlayer.getInventory().offerOrDrop(ruinedStack);
             }
         }
     }
 
-    public static CompoundTag getTagForEnchantments(ItemStack breakingStack, ItemStack ruinedStack) {
+    public static NbtCompound getTagForEnchantments(ItemStack breakingStack, ItemStack ruinedStack) {
         Set<String> enchantmentStrings = new HashSet<>();
         for (Map.Entry<Enchantment, Integer> ench : EnchantmentHelper.get(breakingStack).entrySet()) {
             String enchantString = Registry.ENCHANTMENT.getId(ench.getKey())+">"+ench.getValue();
             enchantmentStrings.add(enchantString);
         }
         if (!enchantmentStrings.isEmpty()) {
-            CompoundTag tag = ruinedStack.getTag();
-            if (tag == null) tag = new CompoundTag();
+        	NbtCompound tag = ruinedStack.getTag();
+            if (tag == null) tag = new NbtCompound();
             tag.putString(TAG, String.join(",", enchantmentStrings));
             return tag;
         }

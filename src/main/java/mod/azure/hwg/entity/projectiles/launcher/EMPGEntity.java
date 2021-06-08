@@ -19,7 +19,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
@@ -76,8 +76,7 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 		this(world, x, y, z, stack);
 	}
 
-	public EMPGEntity(World world, ItemStack stack, Entity entity, double x, double y, double z,
-			boolean shotAtAngle) {
+	public EMPGEntity(World world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
 		this(world, stack, x, y, z, shotAtAngle);
 		this.setOwner(entity);
 	}
@@ -114,7 +113,7 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 	}
 
 	@Override
-	public void remove() {
+	public void remove(RemovalReason reason) {
 		AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(),
 				this.getZ());
 		areaeffectcloudentity.setParticleType(ParticleTypes.END_ROD);
@@ -122,13 +121,13 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 		areaeffectcloudentity.setDuration(2);
 		areaeffectcloudentity.updatePosition(this.getX(), this.getEyeY(), this.getZ());
 		this.world.spawnEntity(areaeffectcloudentity);
-		super.remove();
+		super.remove(reason);
 	}
 
 	@Override
-	public void dealDamage(LivingEntity attacker, Entity target) {
+	public void applyDamageEffects(LivingEntity attacker, Entity target) {
 		if (target instanceof TechnodemonEntity || target instanceof TechnodemonGreaterEntity)
-			super.dealDamage(attacker, target);
+			super.applyDamageEffects(attacker, target);
 	}
 
 	@Override
@@ -142,7 +141,7 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -153,14 +152,14 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
 	}
 
@@ -169,7 +168,7 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 		super.tick();
 		if (this.age >= 80) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 
 		setNoGravity(false);
@@ -203,7 +202,7 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
 	}
@@ -213,7 +212,7 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 		super.onEntityHit(entityHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -229,7 +228,7 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 		Vec3d vec3d = new Vec3d(this.getX(), this.getY(), this.getZ());
 		for (int x = 0; x < list.size(); ++x) {
 			Entity entity = (Entity) list.get(x);
-			double y = (double) (MathHelper.sqrt(entity.squaredDistanceTo(vec3d)) / 8);
+			double y = (MathHelper.sqrt((float) entity.squaredDistanceTo(vec3d)) / 8);
 			if (entity instanceof TechnodemonEntity || entity instanceof TechnodemonGreaterEntity) {
 				if (y <= 1.0D) {
 					entity.damage(DamageSource.magic(this, this), 10);

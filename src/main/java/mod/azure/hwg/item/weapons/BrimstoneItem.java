@@ -38,7 +38,7 @@ public class BrimstoneItem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					FireballEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							0.25F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -47,7 +47,7 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity.setPunch(1);
 
 					FireballEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 5, 0.0F,
+					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5, 0.0F,
 							0.25F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -56,7 +56,7 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity1.setPunch(1);
 
 					FireballEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setProperties(playerentity, playerentity.pitch, playerentity.yaw - 5, 0.0F,
+					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5, 0.0F,
 							0.25F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -73,7 +73,7 @@ public class BrimstoneItem extends HWGGunBase {
 				}
 				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
 						SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS, 1.0F,
-						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+						1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 			}
 		}
 	}
@@ -100,7 +100,7 @@ public class BrimstoneItem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof BrimstoneItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(HWGItems.FUEL_TANK) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-186, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);

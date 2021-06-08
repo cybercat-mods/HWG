@@ -36,46 +36,46 @@ public class BalrogItem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 25);
 				if (!worldIn.isClient) {
 					BlazeRodEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.setDamage(1.25);
 					abstractarrowentity.hasNoGravity();
-					double r = RANDOM.nextDouble();
+					double r = worldIn.random.nextDouble();
 					if (r < 0.1)
 						abstractarrowentity.isOnFire();
 
 					BlazeRodEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.pitch + 2, playerentity.yaw, 0.0F,
+					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch() + 2, playerentity.getYaw(), 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity1.setDamage(1.25);
 					abstractarrowentity1.hasNoGravity();
-					double a = RANDOM.nextDouble();
+					double a = worldIn.random.nextDouble();
 					if (a < 0.1)
 						abstractarrowentity1.isOnFire();
 
 					BlazeRodEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 2, 0.0F,
+					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 2, 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity2.setDamage(1.25);
 					abstractarrowentity2.hasNoGravity();
-					double b = RANDOM.nextDouble();
+					double b = worldIn.random.nextDouble();
 					if (b < 0.1)
 						abstractarrowentity2.isOnFire();
 
 					BlazeRodEntity abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.setProperties(playerentity, playerentity.pitch, playerentity.yaw - 2, 0.0F,
+					abstractarrowentity3.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 2, 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity3.setDamage(1.25);
 					abstractarrowentity3.hasNoGravity();
-					double c = RANDOM.nextDouble();
+					double c = worldIn.random.nextDouble();
 					if (c < 0.1)
 						abstractarrowentity3.isOnFire();
 
@@ -87,7 +87,7 @@ public class BalrogItem extends HWGGunBase {
 				}
 				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
 						SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.PLAYERS, 1.0F,
-						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+						1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 			}
 		}
 	}
@@ -111,7 +111,7 @@ public class BalrogItem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof BalrogItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(Items.BLAZE_ROD) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(Items.BLAZE_ROD) > 0) {
 				removeAmmo(Items.BLAZE_ROD, user);
 				user.getStackInHand(hand).damage(-50, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);

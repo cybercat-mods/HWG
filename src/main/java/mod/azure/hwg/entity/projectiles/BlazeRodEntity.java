@@ -13,7 +13,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
@@ -95,7 +95,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 	public void age() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 40) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -106,14 +106,14 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
 	}
 
@@ -123,14 +123,14 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 		boolean bl = this.isNoClip();
 		Vec3d vec3d = this.getVelocity();
 		if (this.prevPitch == 0.0F && this.prevYaw == 0.0F) {
-			float f = MathHelper.sqrt(squaredHorizontalLength(vec3d));
-			this.yaw = (float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875D);
-			this.pitch = (float) (MathHelper.atan2(vec3d.y, (double) f) * 57.2957763671875D);
-			this.prevYaw = this.yaw;
-			this.prevPitch = this.pitch;
+			double f = vec3d.horizontalLength();
+			this.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875D));
+			this.setPitch((float) (MathHelper.atan2(vec3d.y, f) * 57.2957763671875D));
+			this.prevYaw = this.getYaw();
+			this.prevPitch = this.getPitch();
 		}
 		if (this.age >= 40) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		if (this.inAir && !bl) {
 			this.age();
@@ -144,7 +144,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 			if (((HitResult) hitResult).getType() != HitResult.Type.MISS) {
 				vector3d3 = ((HitResult) hitResult).getPos();
 			}
-			while (!this.removed) {
+			while (!this.isRemoved()) {
 				EntityHitResult entityHitResult = this.getEntityCollision(vec3d3, vector3d3);
 				if (entityHitResult != null) {
 					hitResult = entityHitResult;
@@ -174,15 +174,15 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 			double h = this.getX() + d;
 			double j = this.getY() + e;
 			double k = this.getZ() + g;
-			float l = MathHelper.sqrt(squaredHorizontalLength(vec3d));
+			double l = vec3d.horizontalLength();
 			if (bl) {
-				this.yaw = (float) (MathHelper.atan2(-d, -g) * 57.2957763671875D);
+				this.setYaw((float) (MathHelper.atan2(-e, -g) * 57.2957763671875D));
 			} else {
-				this.yaw = (float) (MathHelper.atan2(d, g) * 57.2957763671875D);
+				this.setYaw((float) (MathHelper.atan2(e, g) * 57.2957763671875D));
 			}
-			this.pitch = (float) (MathHelper.atan2(e, (double) l) * 57.2957763671875D);
-			this.pitch = updateRotation(this.prevPitch, this.pitch);
-			this.yaw = updateRotation(this.prevYaw, this.yaw);
+			this.setPitch((float) (MathHelper.atan2(e, l) * 57.2957763671875D));
+			this.setPitch(updateRotation(this.prevPitch, this.getPitch()));
+			this.setYaw(updateRotation(this.prevYaw, this.getYaw()));
 			float m = 0.99F;
 
 			this.setVelocity(vec3d.multiply((double) m));
@@ -244,7 +244,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
 			this.explode();
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
 	}
@@ -253,7 +253,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 	protected void onEntityHit(EntityHitResult entityHitResult) {
 		super.onEntityHit(entityHitResult);
 		if (!this.world.isClient) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
 	}

@@ -4,18 +4,15 @@ import org.lwjgl.glfw.GLFW;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.gui.GunTableScreen;
-import mod.azure.hwg.client.render.projectiles.SilverBulletRender;
 import mod.azure.hwg.client.render.weapons.AKRender;
 import mod.azure.hwg.client.render.weapons.FlamethrowerRender;
 import mod.azure.hwg.client.render.weapons.GPistolRender;
 import mod.azure.hwg.client.render.weapons.HellRender;
 import mod.azure.hwg.client.render.weapons.LugerRender;
 import mod.azure.hwg.client.render.weapons.PistolRender;
-import mod.azure.hwg.client.render.weapons.SHellRender;
 import mod.azure.hwg.client.render.weapons.SMGRender;
 import mod.azure.hwg.client.render.weapons.SPistolRender;
 import mod.azure.hwg.client.render.weapons.ShotgunRender;
-import mod.azure.hwg.client.render.weapons.SilverGunRender;
 import mod.azure.hwg.client.render.weapons.SniperRender;
 import mod.azure.hwg.client.render.weapons.TommyGunRender;
 import mod.azure.hwg.particle.BrimParticle;
@@ -23,22 +20,19 @@ import mod.azure.hwg.particle.FlareParticle;
 import mod.azure.hwg.particle.WFlareParticle;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.packet.EntityPacketOnClient;
-import mod.azure.hwg.util.registry.BWCompatItems;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.renderer.geo.GeoItemRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 @SuppressWarnings("deprecation")
 public class ClientInit implements ClientModInitializer {
@@ -62,13 +56,13 @@ public class ClientInit implements ClientModInitializer {
 		GeoItemRenderer.registerItemRenderer(HWGItems.TOMMYGUN, new TommyGunRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SNIPER, new SniperRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.HELLHORSE, new HellRender());
-		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
-			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERGUN, new SilverGunRender());
-			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERHELLHORSE, new SHellRender());
-			EntityRendererRegistry.INSTANCE.register(BWCompatItems.SILVERBULLETS, (dispatcher, context) -> {
-				return new SilverBulletRender(dispatcher);
-			});
-		}
+//		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
+//			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERGUN, new SilverGunRender());
+//			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERHELLHORSE, new SHellRender());
+//			EntityRendererRegistry.INSTANCE.register(BWCompatItems.SILVERBULLETS, (dispatcher, context) -> {
+//				return new SilverBulletRender(dispatcher);
+//			});
+//		}
 		ClientSidePacketRegistry.INSTANCE.register(EntityPacket.ID, (ctx, buf) -> {
 			EntityPacketOnClient.onPacket(ctx, buf);
 		});

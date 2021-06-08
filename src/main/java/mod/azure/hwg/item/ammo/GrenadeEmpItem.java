@@ -21,11 +21,11 @@ public class GrenadeEmpItem extends Item {
 			user.getItemCooldownManager().set(this, 25);
 			if (!world.isClient) {
 				EMPGrenadeEntity snowballEntity = new EMPGrenadeEntity(world, user);
-				snowballEntity.setProperties(user, user.pitch, user.yaw, 0.0F, 1.5F, 1.0F);
+				snowballEntity.setProperties(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
 				snowballEntity.setDamage(0);
 				world.spawnEntity(snowballEntity);
 			}
-			if (!user.abilities.creativeMode) {
+			if (!user.getAbilities().creativeMode) {
 				itemStack.decrement(1);
 			}
 			return TypedActionResult.success(itemStack, world.isClient());

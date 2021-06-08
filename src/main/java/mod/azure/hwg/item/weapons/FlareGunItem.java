@@ -30,7 +30,6 @@ import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -42,8 +41,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
@@ -55,12 +54,14 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
 public class FlareGunItem extends HWGGunLoadedBase {
 
 	private boolean charged = false;
 	private boolean loaded = false;
+	protected static final Random RANDOM = new Random();
 
 	public static final Predicate<ItemStack> BLACK_FLARE = (stack) -> {
 		return stack.getItem() == HWGItems.BLACK_FLARE;
@@ -192,9 +193,9 @@ public class FlareGunItem extends HWGGunLoadedBase {
 			}
 
 			Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
-			Quaternion quaternion = new Quaternion(new Vector3f(vec3d), simulated, true);
+			Quaternion quaternion = new Quaternion(new Vec3f(vec3d), simulated, true);
 			Vec3d vec3d2 = shooter.getRotationVec(1.0F);
-			Vector3f vector3f = new Vector3f(vec3d2);
+			Vec3f vector3f = new Vec3f(vec3d2);
 			vector3f.rotate(quaternion);
 			((ProjectileEntity) projectileEntity2).setVelocity((double) vector3f.getX(), (double) vector3f.getY(),
 					(double) vector3f.getZ(), speed, divergence);
@@ -246,7 +247,7 @@ public class FlareGunItem extends HWGGunLoadedBase {
 	private static boolean loadProjectiles(LivingEntity shooter, ItemStack projectile) {
 		int i = EnchantmentHelper.getLevel(Enchantments.MULTISHOT, projectile);
 		int j = i == 0 ? 1 : 3;
-		boolean bl = shooter instanceof PlayerEntity && ((PlayerEntity) shooter).abilities.creativeMode;
+		boolean bl = shooter instanceof PlayerEntity && ((PlayerEntity) shooter).getAbilities().creativeMode;
 		ItemStack itemStack = shooter.getArrowType(projectile);
 		ItemStack itemStack2 = itemStack.copy();
 
@@ -277,7 +278,7 @@ public class FlareGunItem extends HWGGunLoadedBase {
 			if (!bl && !creative && !simulated) {
 				itemStack2 = projectile.split(1);
 				if (projectile.isEmpty() && shooter instanceof PlayerEntity) {
-					((PlayerEntity) shooter).inventory.removeOne(projectile);
+					((PlayerEntity) shooter).getInventory().removeOne(projectile);
 				}
 			} else {
 				itemStack2 = projectile.copy();
@@ -289,39 +290,39 @@ public class FlareGunItem extends HWGGunLoadedBase {
 	}
 
 	public static boolean isCharged(ItemStack stack) {
-		CompoundTag compoundTag = stack.getTag();
-		return compoundTag != null && compoundTag.getBoolean("Charged");
+		NbtCompound NbtCompound = stack.getTag();
+		return NbtCompound != null && NbtCompound.getBoolean("Charged");
 	}
 
 	public static void setCharged(ItemStack stack, boolean charged) {
-		CompoundTag compoundTag = stack.getOrCreateTag();
-		compoundTag.putBoolean("Charged", charged);
+		NbtCompound NbtCompound = stack.getOrCreateTag();
+		NbtCompound.putBoolean("Charged", charged);
 	}
 
 	private static void putProjectile(ItemStack crossbow, ItemStack projectile) {
-		CompoundTag compoundTag = crossbow.getOrCreateTag();
-		ListTag listTag2;
-		if (compoundTag.contains("ChargedProjectiles", 9)) {
-			listTag2 = compoundTag.getList("ChargedProjectiles", 10);
+		NbtCompound NbtCompound = crossbow.getOrCreateTag();
+		NbtList NbtList2;
+		if (NbtCompound.contains("ChargedProjectiles", 9)) {
+			NbtList2 = NbtCompound.getList("ChargedProjectiles", 10);
 		} else {
-			listTag2 = new ListTag();
+			NbtList2 = new NbtList();
 		}
 
-		CompoundTag compoundTag2 = new CompoundTag();
-		projectile.toTag(compoundTag2);
-		listTag2.add(compoundTag2);
-		compoundTag.put("ChargedProjectiles", listTag2);
+		NbtCompound NbtCompound2 = new NbtCompound();
+		projectile.writeNbt(NbtCompound2);
+		NbtList2.add(NbtCompound2);
+		NbtCompound.put("ChargedProjectiles", NbtList2);
 	}
 
 	private static List<ItemStack> getProjectiles(ItemStack crossbow) {
 		List<ItemStack> list = Lists.newArrayList();
-		CompoundTag compoundTag = crossbow.getTag();
-		if (compoundTag != null && compoundTag.contains("ChargedProjectiles", 9)) {
-			ListTag listTag = compoundTag.getList("ChargedProjectiles", 10);
-			if (listTag != null) {
-				for (int i = 0; i < listTag.size(); ++i) {
-					CompoundTag compoundTag2 = listTag.getCompound(i);
-					list.add(ItemStack.fromTag(compoundTag2));
+		NbtCompound NbtCompound = crossbow.getTag();
+		if (NbtCompound != null && NbtCompound.contains("ChargedProjectiles", 9)) {
+			NbtList NbtList = NbtCompound.getList("ChargedProjectiles", 10);
+			if (NbtList != null) {
+				for (int i = 0; i < NbtList.size(); ++i) {
+					NbtCompound NbtCompound2 = NbtList.getCompound(i);
+					list.add(ItemStack.fromNbt(NbtCompound2));
 				}
 			}
 		}
@@ -329,11 +330,11 @@ public class FlareGunItem extends HWGGunLoadedBase {
 	}
 
 	private static void clearProjectiles(ItemStack crossbow) {
-		CompoundTag compoundTag = crossbow.getTag();
-		if (compoundTag != null) {
-			ListTag listTag = compoundTag.getList("ChargedProjectiles", 9);
-			listTag.clear();
-			compoundTag.put("ChargedProjectiles", listTag);
+		NbtCompound NbtCompound = crossbow.getTag();
+		if (NbtCompound != null) {
+			NbtList NbtList = NbtCompound.getList("ChargedProjectiles", 9);
+			NbtList.clear();
+			NbtCompound.put("ChargedProjectiles", NbtList);
 		}
 	}
 
@@ -346,11 +347,11 @@ public class FlareGunItem extends HWGGunLoadedBase {
 	public static void shootAll(World world, LivingEntity entity, Hand hand, ItemStack stack, float speed,
 			float divergence) {
 		List<ItemStack> list = getProjectiles(stack);
-		float[] fs = getSoundPitches(entity.getRandom());
+		float[] fs = getSoundPitches(entity.world.random);
 
 		for (int i = 0; i < list.size(); ++i) {
 			ItemStack itemStack = (ItemStack) list.get(i);
-			boolean bl = entity instanceof PlayerEntity && ((PlayerEntity) entity).abilities.creativeMode;
+			boolean bl = entity instanceof PlayerEntity && ((PlayerEntity) entity).getAbilities().creativeMode;
 			shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 0.0F);
 		}
 		postShoot(world, entity, stack);

@@ -38,7 +38,7 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -147,16 +147,16 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
-		this.updateAttackType();
-		this.setVariant(tag.getInt("Variant"));
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
+		tag.putInt("Variant", this.getVariant());
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
-		tag.putInt("Variant", this.getVariant());
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
+		this.updateAttackType();
+		this.setVariant(tag.getInt("Variant"));
 	}
 
 	public void equipStack(EquipmentSlot slot, ItemStack stack) {
@@ -195,7 +195,7 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 		double d = target.getX() - this.getX();
 		double e = target.getBodyY(0.3333333333333333D) - BulletEntity.getY();
 		double f = target.getZ() - this.getZ();
-		double g = (double) MathHelper.sqrt(d * d + f * f);
+		float g = MathHelper.sqrt((float) (d * d + f * f));
 		BulletEntity.setVelocity(d, e + g * 0.05F, f, 1.6F, 0.0F);
 		this.world.spawnEntity(BulletEntity);
 	}
@@ -244,7 +244,7 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
-			EntityData entityData, CompoundTag entityTag) {
+			EntityData entityData, NbtCompound entityTag) {
 		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		this.updateAttackType();
 		switch (world.getBiome(getBlockPos()).getCategory()) {

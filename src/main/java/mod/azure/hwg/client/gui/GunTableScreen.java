@@ -11,6 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -46,26 +47,25 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 		int k = j + 18;
 
 		for (int l = 0; l < 7; ++l) {
-			this.offers[l] = this
-					.addButton(new WidgetButtonPage(i, k, l, (button) -> {
-						if (button instanceof WidgetButtonPage) {
-							this.selectedIndex = ((WidgetButtonPage) button).getIndex() + this.indexStartOffset;
-							this.syncRecipeIndex();
-						}
-					}));
+			this.offers[l] = this.addDrawableChild(new WidgetButtonPage(i, k, l, (button) -> {
+				if (button instanceof WidgetButtonPage) {
+					this.selectedIndex = ((WidgetButtonPage) button).getIndex() + this.indexStartOffset;
+					this.syncRecipeIndex();
+				}
+			}));
 			k += 20;
 		}
 	}
 
 	protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
 		this.textRenderer.draw(matrices, this.title,
-				(float) (49 + this.backgroundWidth / 2 - this.textRenderer.getWidth(this.title) / 2),
-				6.0F, 4210752);
+				(float) (49 + this.backgroundWidth / 2 - this.textRenderer.getWidth(this.title) / 2), 6.0F, 4210752);
 	}
 
 	protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.client.getTextureManager().bindTexture(TEXTURE);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		int i = ((this.width - this.backgroundWidth) / 2) - 5;
 		int j = (this.height - this.backgroundHeight) / 2;
 		drawTexture(matrices, i, j, this.getZOffset(), 0.0F, 0.0F, this.backgroundWidth, this.backgroundHeight, 256,
@@ -99,59 +99,60 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 			int j = (this.height - this.backgroundHeight) / 2;
 			int yPos = j + 17;
 			int xPos = i + 3;
-			RenderSystem.pushMatrix();
-			RenderSystem.enableRescaleNormal();
-			this.client.getTextureManager().bindTexture(TEXTURE);
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderTexture(0, TEXTURE);
 			this.renderScrollbar(matrices, i, j, tradeOfferList);
 			int m = 0;
 
-			for (GunTableRecipe gunTableRecipe : tradeOfferList)
-				if (this.canScroll(tradeOfferList.size())
-						&& (m < this.indexStartOffset || m >= 7 + this.indexStartOffset)) {
-							++m;
-						} else {
-					ItemStack output = gunTableRecipe.getOutput();
-					this.itemRenderer.zOffset = 100.0F;
-					int n = yPos + 2;
-					this.renderIngredients(matrices, gunTableRecipe,xPos, n);
+			while (true) {
+				for (GunTableRecipe gunTableRecipe : tradeOfferList)
+					if (this.canScroll(tradeOfferList.size())
+							&& (m < this.indexStartOffset || m >= 7 + this.indexStartOffset)) {
+						++m;
+					} else {
+						ItemStack output = gunTableRecipe.getOutput();
+						this.itemRenderer.zOffset = 100.0F;
+						int n = yPos + 2;
+						this.renderIngredients(matrices, gunTableRecipe, xPos, n);
 
-					this.renderArrow(matrices, gunTableRecipe, i + 22, n);
-					this.itemRenderer.renderInGui(output, i + 24 + 68, n);
-					this.itemRenderer.renderGuiItemOverlay(this.textRenderer, output, i + 24 + 68, n);
-					this.itemRenderer.zOffset = 0.0F;
-					yPos += 20;
-					++m;
-				}
-		}
+						this.renderArrow(matrices, gunTableRecipe, i + 22, n);
+						this.itemRenderer.renderInGui(output, i + 24 + 68, n);
+						this.itemRenderer.renderGuiItemOverlay(this.textRenderer, output, i + 24 + 68, n);
+						this.itemRenderer.zOffset = 0.0F;
+						yPos += 20;
+						++m;
+					}
 
 				for (WidgetButtonPage widgetButtonPage : this.offers) {
 					if (widgetButtonPage.isHovered()) {
 						widgetButtonPage.renderToolTip(matrices, mouseX, mouseY);
 					}
 
-					widgetButtonPage.visible = widgetButtonPage.index < this.handler
-							.getRecipes().size();
+					widgetButtonPage.visible = widgetButtonPage.index < this.handler.getRecipes().size();
 				}
 
-				RenderSystem.popMatrix();
 				RenderSystem.enableDepthTest();
+				break;
+			}
+		}
 
 		this.drawMouseoverTooltip(matrices, mouseX, mouseY);
 	}
 
 	private void renderArrow(MatrixStack matrices, GunTableRecipe tradeOffer, int x, int y) {
 		RenderSystem.enableBlend();
-		this.client.getTextureManager().bindTexture(TEXTURE);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, TEXTURE);
 		drawTexture(matrices, x + 5 + 35 + 20, y + 3, this.getZOffset(), 15.0F, 171.0F, 10, 9, 256, 512);
 
 	}
 
 	private void renderIngredients(MatrixStack matrices, GunTableRecipe gunTableRecipe, int x, int y) {
-		for (int i = 0; i < 5;i++) {
+		for (int i = 0; i < 5; i++) {
 			ItemStack[] displayStacks = gunTableRecipe.getIngredientForSlot(i).getMatchingStacksClient();
 			if (displayStacks.length > 0) {
-				//probably slow, but subclassing ingredient is hard in fabric
-				ItemStack stack = new ItemStack(displayStacks[0].getItem(),gunTableRecipe.countRequired(i));
+				// probably slow, but subclassing ingredient is hard in fabric
+				ItemStack stack = new ItemStack(displayStacks[0].getItem(), gunTableRecipe.countRequired(i));
 				if (!stack.isEmpty()) {
 					this.itemRenderer.renderInGui(stack, x, y);
 					this.itemRenderer.renderGuiItemOverlay(this.textRenderer, stack, x, y);

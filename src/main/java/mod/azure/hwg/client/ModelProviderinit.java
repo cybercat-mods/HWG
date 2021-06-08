@@ -9,11 +9,12 @@ public class ModelProviderinit {
 
 	public static void init() {
 		FabricModelPredicateProviderRegistry.register(HWGItems.ROCKETLAUNCHER, new Identifier("broken"),
-				(itemStack, clientWorld, livingEntity) -> {
+				(itemStack, clientWorld, livingEntity, seed) -> {
 					return isUsable(itemStack) ? 0.0F : 1.0F;
 				});
 	}
 
+	@SuppressWarnings("unused")
 	private static boolean isUsable(ItemStack stack) {
 		return stack.getDamage() < stack.getMaxDamage() - 1;
 	}

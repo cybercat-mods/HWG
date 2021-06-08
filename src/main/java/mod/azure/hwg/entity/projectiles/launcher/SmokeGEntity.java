@@ -16,7 +16,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
@@ -109,7 +109,7 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	}
 
 	@Override
-	public void remove() {
+	public void remove(RemovalReason reason) {
 		AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(),
 				this.getZ());
 		areaeffectcloudentity.setParticleType(ParticleTypes.LARGE_SMOKE);
@@ -118,14 +118,14 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 		areaeffectcloudentity.addEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200, 1));
 		areaeffectcloudentity.updatePosition(this.getX(), this.getEyeY(), this.getZ());
 		this.world.spawnEntity(areaeffectcloudentity);
-		super.remove();
+		super.remove(reason);
 	}
 
 	@Override
 	public void age() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
@@ -136,14 +136,14 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
 	}
 
@@ -151,7 +151,7 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	public void tick() {
 		super.tick();
 		if (this.age >= 80) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 
 		setNoGravity(false);
@@ -183,7 +183,7 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
 	}
@@ -192,7 +192,7 @@ public class SmokeGEntity extends PersistentProjectileEntity implements IAnimata
 	protected void onEntityHit(EntityHitResult entityHitResult) {
 		super.onEntityHit(entityHitResult);
 		if (!this.world.isClient) {
-			this.remove();
+			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 

@@ -7,17 +7,17 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformation.Mode;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class TechnodemonGreaterRender extends GeoEntityRenderer<TechnodemonGreaterEntity> {
 
-	public TechnodemonGreaterRender(EntityRenderDispatcher renderManagerIn) {
+	public TechnodemonGreaterRender(EntityRendererFactory.Context renderManagerIn) {
 		super(renderManagerIn, new TechnodemonGreaterModel());
 		this.shadowRadius = 0.7F;
 	}
@@ -34,15 +34,15 @@ public class TechnodemonGreaterRender extends GeoEntityRenderer<TechnodemonGreat
 			int packedOverlayIn, float red, float green, float blue, float alpha) {
 		if (bone.getName().equals("rightHand")) {
 			stack.push();
-			stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -15 : -90));
-			stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -35 : 0));
-			stack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? 15 : 0));
+			stack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -15 : -90));
+			stack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -35 : 0));
+			stack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? 15 : 0));
 			stack.translate(mainHand.getItem() instanceof Minigun ? 0.91D : 0.42D,
 					mainHand.getItem() instanceof Minigun ? 1.49D : 0.12D,
 					mainHand.getItem() instanceof Minigun ? 0.1D : 1.5D);
 			stack.scale(1.0f, 1.0f, 1.0f);
 			MinecraftClient.getInstance().getItemRenderer().renderItem(mainHand, Mode.THIRD_PERSON_RIGHT_HAND,
-					packedLightIn, packedOverlayIn, stack, this.rtb);
+					packedLightIn, packedOverlayIn, stack, this.rtb, 0);
 			stack.pop();
 			bufferIn = rtb.getBuffer(RenderLayer.getEntityTranslucent(whTexture));
 		}

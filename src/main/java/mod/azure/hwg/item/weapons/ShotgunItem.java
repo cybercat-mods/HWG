@@ -36,7 +36,7 @@ public class ShotgunItem extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 18);
 				if (!worldIn.isClient) {
 					ShellEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 1, 0.5F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 1, 0.5F,
 							0.5F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -45,7 +45,7 @@ public class ShotgunItem extends AnimatedItem {
 					abstractarrowentity.age = 25;
 
 					ShellEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.pitch, playerentity.yaw - 1, 0.5F,
+					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 1, 0.5F,
 							0.5F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -85,7 +85,7 @@ public class ShotgunItem extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof ShotgunItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(HWGItems.SHOTGUN_SHELL) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(HWGItems.SHOTGUN_SHELL) > 0) {
 				removeAmmo(HWGItems.SHOTGUN_SHELL, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);

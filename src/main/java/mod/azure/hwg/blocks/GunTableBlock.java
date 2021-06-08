@@ -40,8 +40,8 @@ public class GunTableBlock extends HorizontalFacingBlock implements BlockEntityP
 	}
 
 	@Override
-	public BlockEntity createBlockEntity(BlockView world) {
-		return new GunBlockEntity();
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		return new GunBlockEntity(pos, state);
 	}
 
 	@Override

@@ -45,120 +45,104 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 public class RenderRegistry {
 
 	public static void init() {
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BULLETS, (dispatcher, context) -> {
-			return new BulletRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BLACK_FLARE, (dispatcher, context) -> {
-			return new BlackFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BLUE_FLARE, (dispatcher, context) -> {
-			return new BlueFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BROWN_FLARE, (dispatcher, context) -> {
-			return new BrownFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.CYAN_FLARE, (dispatcher, context) -> {
-			return new CyanFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.GRAY_FLARE, (dispatcher, context) -> {
-			return new GrayFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.GREEN_FLARE, (dispatcher, context) -> {
-			return new GreenFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.LIGHTBLUE_FLARE, (dispatcher, context) -> {
-			return new LightblueFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.LIGHTGRAY_FLARE, (dispatcher, context) -> {
-			return new LightgrayRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.LIME_FLARE, (dispatcher, context) -> {
-			return new LimeFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.MAGENTA_FLARE, (dispatcher, context) -> {
-			return new MagentaRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.ORANGE_FLARE, (dispatcher, context) -> {
-			return new OrangeFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.PINK_FLARE, (dispatcher, context) -> {
-			return new PinkFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.PURPLE_FLARE, (dispatcher, context) -> {
-			return new PurpleFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.RED_FLARE, (dispatcher, context) -> {
-			return new RedFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.WHITE_FLARE, (dispatcher, context) -> {
-			return new WhiteFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.YELLOW_FLARE, (dispatcher, context) -> {
-			return new YellowFlareRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.MBULLETS, (dispatcher, context) -> {
-			return new MBulletRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BLAZEROD, (dispatcher, context) -> {
-			return new BlazeRodRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.SMOKE_GRENADE, (dispatcher, context) -> {
-			return new GSmokeRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.STUN_GRENADE, (dispatcher, context) -> {
-			return new GStunRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.NAPALM_GRENADE, (dispatcher, context) -> {
-			return new GNapalmRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.EMP_GRENADE, (dispatcher, context) -> {
-			return new GEMPRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FRAG_GRENADE, (dispatcher, context) -> {
-			return new GFragRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.SHELL, (dispatcher, context) -> {
-			return new ShellRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FIREBALL, (dispatcher, context) -> {
-			return new FireballRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FIRING, (dispatcher, context) -> {
-			return new FlameFiringRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.ROCKETS, (dispatcher, context) -> {
-			return new RocketRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(HWGMobs.TECHNOLESSER, (dispatcher, context) -> {
-			return new TechnodemonLesserRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(HWGMobs.TECHNOGREATER, (dispatcher, context) -> {
-			return new TechnodemonGreaterRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(HWGMobs.MERC, (dispatcher, context) -> {
-			return new MercRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(HWGMobs.SPY, (dispatcher, context) -> {
-			return new SpyRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(HWGMobs.FUELTANK, (dispatcher, context) -> {
-			return new FuelTankRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.SMOKE_GRENADE_S, (dispatcher, context) -> {
-			return new GSmokeSRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.STUN_GRENADE_S, (dispatcher, context) -> {
-			return new GStunSRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.NAPALM_GRENADE_S, (dispatcher, context) -> {
-			return new GNapalmSRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.EMP_GRENADE_S, (dispatcher, context) -> {
-			return new GEMPSRender(dispatcher);
-		});
-		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FRAG_GRENADE_S, (dispatcher, context) -> {
-			return new GFragSRender(dispatcher);
-		});
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BULLETS, (ctx) -> new BulletRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BLACK_FLARE,
+				(ctx) -> new BlackFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BLUE_FLARE,
+				(ctx) -> new BlueFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BROWN_FLARE,
+				(ctx) -> new BrownFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.CYAN_FLARE,
+				(ctx) -> new CyanFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.GRAY_FLARE,
+				(ctx) -> new GrayFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.GREEN_FLARE,
+				(ctx) -> new GreenFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.LIGHTBLUE_FLARE,
+				(ctx) -> new LightblueFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.LIGHTGRAY_FLARE,
+				(ctx) -> new LightgrayRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.LIME_FLARE,
+				(ctx) -> new LimeFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.MAGENTA_FLARE,
+				(ctx) -> new MagentaRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.ORANGE_FLARE,
+				(ctx) -> new OrangeFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.PINK_FLARE,
+				(ctx) -> new PinkFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.PURPLE_FLARE,
+				(ctx) -> new PurpleFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.RED_FLARE, (ctx) -> new RedFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.WHITE_FLARE,
+				(ctx) -> new WhiteFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.YELLOW_FLARE,
+				(ctx) -> new YellowFlareRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.MBULLETS, (ctx) -> new MBulletRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.BLAZEROD, (ctx) -> new BlazeRodRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.SMOKE_GRENADE,
+				(ctx) -> new GSmokeRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.STUN_GRENADE, (ctx) -> new GStunRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.NAPALM_GRENADE,
+				(ctx) -> new GNapalmRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.EMP_GRENADE, (ctx) -> new GEMPRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FRAG_GRENADE, (ctx) -> new GFragRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.SHELL, (ctx) -> new ShellRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FIREBALL, (ctx) -> new FireballRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FIRING, (ctx) -> new FlameFiringRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.ROCKETS, (ctx) -> new RocketRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(HWGMobs.TECHNOLESSER, (ctx) -> new TechnodemonLesserRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(HWGMobs.TECHNOGREATER, (ctx) -> new TechnodemonGreaterRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(HWGMobs.MERC, (ctx) -> new MercRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(HWGMobs.SPY, (ctx) -> new SpyRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(HWGMobs.FUELTANK, (ctx) -> new FuelTankRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.SMOKE_GRENADE_S,
+				(ctx) -> new GSmokeSRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.STUN_GRENADE_S,
+				(ctx) -> new GStunSRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.NAPALM_GRENADE_S,
+				(ctx) -> new GNapalmSRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.EMP_GRENADE_S,
+				(ctx) -> new GEMPSRender(ctx));
+
+		EntityRendererRegistry.INSTANCE.register(ProjectilesEntityRegister.FRAG_GRENADE_S,
+				(ctx) -> new GFragSRender(ctx));
+
 	}
 
 }
