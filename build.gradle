@@ -39,29 +39,19 @@ dependencies {
     	exclude(group: "com.terraformersmc.modmenu")
     }
     //modImplementation "vazkii.patchouli:Patchouli:1.16.4-50-FABRIC"	
-	modCompileOnly("de.siphalor:nbtcrafting-1.17:2.0.15+mc1.17-rc1") {
+	modCompileOnly("de.siphalor:nbtcrafting-1.17:2.0.16+mc1.17") {
     	exclude(group: "com.terraformersmc.modmenu")
         exclude(group: "io.github.prospector")
         exclude(group: "me.shedaniel")
         exclude(group: "net.fabricmc")
     }
-	include("de.siphalor:nbtcrafting-1.17:2.0.15+mc1.17-rc1+") {
+	include("de.siphalor:nbtcrafting-1.17:2.0.16+mc1.17") {
     	exclude(group: "com.terraformersmc.modmenu")
         exclude(group: "io.github.prospector")
         exclude(group: "me.shedaniel")
         exclude(group: "net.fabricmc")
     }	
     modCompileOnly "com.terraformersmc:modmenu:2.0.0-beta.5"
-    
-	//modImplementation 'curse.maven:BW-394915:3228835'
-	//modImplementation 'curse.maven:TC-341284:3100959'
-	//modImplementation 'curse.maven:Nourish-389718:3181134'
-    //modImplementation "top.theillusivec4.somnus:somnus-fabric:${project.somnus_version}"
-    //modImplementation "curse.maven:Pehkui-319596:3223971"
-    //modImplementation "io.github.ladysnake:Impersonate:${impersonate_version}"
-    //modImplementation "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
-    //modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:${project.terraform_wood_api_version}"
-    //modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 }
 
 repositories {
