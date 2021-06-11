@@ -1,20 +1,19 @@
 package mod.azure.hwg.client.gui;
 
-import mod.azure.hwg.recipe.GunTableRecipe;
+import java.util.Optional;
+
+import mod.azure.hwg.util.recipes.GunTableRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.collection.DefaultedList;
-
-import java.util.Optional;
 
 public class GunTableOutputSlot extends Slot {
 	private final GunTableInventory gunTableInventory;
 	private final PlayerEntity player;
 	private int amount;
 
-	public GunTableOutputSlot(PlayerEntity player, GunTableInventory gunTableInventory, int index,
-														int x, int y) {
+	public GunTableOutputSlot(PlayerEntity player, GunTableInventory gunTableInventory, int index, int x, int y) {
 		super(gunTableInventory, index, x, y);
 		this.player = player;
 		this.gunTableInventory = gunTableInventory;
@@ -44,7 +43,8 @@ public class GunTableOutputSlot extends Slot {
 
 	public void onTakeItem(PlayerEntity player, ItemStack stack) {
 		this.onCrafted(stack);
-		Optional<GunTableRecipe> optionalGunTableRecipe = player.world.getRecipeManager().getFirstMatch(GunTableRecipe.GUN_TABLE,gunTableInventory,player.world);
+		Optional<GunTableRecipe> optionalGunTableRecipe = player.world.getRecipeManager()
+				.getFirstMatch(GunTableRecipe.GUN_TABLE, gunTableInventory, player.world);
 		if (optionalGunTableRecipe.isPresent()) {
 			GunTableRecipe gunTableRecipe = optionalGunTableRecipe.get();
 			DefaultedList<ItemStack> defaultedList = gunTableRecipe.getRemainder(gunTableInventory);
@@ -60,7 +60,8 @@ public class GunTableOutputSlot extends Slot {
 				if (!itemStack2.isEmpty()) {
 					if (itemStack.isEmpty()) {
 						this.gunTableInventory.setStack(i, itemStack2);
-					} else if (ItemStack.areItemsEqualIgnoreDamage(itemStack, itemStack2) && ItemStack.areTagsEqual(itemStack, itemStack2)) {
+					} else if (ItemStack.areItemsEqualIgnoreDamage(itemStack, itemStack2)
+							&& ItemStack.areTagsEqual(itemStack, itemStack2)) {
 						itemStack2.increment(itemStack.getCount());
 						this.gunTableInventory.setStack(i, itemStack2);
 					} else if (!this.player.getInventory().insertStack(itemStack2)) {

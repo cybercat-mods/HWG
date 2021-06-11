@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.mixin.IngredientAccess;
-import mod.azure.hwg.recipe.GunTableRecipe;
+import mod.azure.hwg.util.recipes.GunTableRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;

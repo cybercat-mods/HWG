@@ -6,7 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.network.C2SMessageSelectCraft;
-import mod.azure.hwg.recipe.GunTableRecipe;
+import mod.azure.hwg.util.recipes.GunTableRecipe;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

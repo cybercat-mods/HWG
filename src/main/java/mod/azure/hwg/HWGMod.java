@@ -8,11 +8,10 @@ import mod.azure.hwg.blocks.GunTableBlock;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.network.PacketHandler;
-import mod.azure.hwg.recipe.GunTableRecipe;
 import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.MobAttributes;
 import mod.azure.hwg.util.MobSpawn;
-import mod.azure.hwg.util.recipes.GunRecipe;
+import mod.azure.hwg.util.recipes.GunTableRecipe;
 import mod.azure.hwg.util.registry.BWCompatItems;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGMobs;
@@ -29,7 +28,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -72,8 +70,6 @@ public class HWGMod implements ModInitializer {
 			.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
 	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons"))
 			.icon(() -> new ItemStack(HWGItems.AK47)).build();
-	public static final SpecialRecipeSerializer<GunRecipe> GUNS_RECIPE_SERIALIZER = Registry
-			.register(Registry.RECIPE_SERIALIZER, GUNS, new SpecialRecipeSerializer<>(GunRecipe::new));
 	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry
 			.register(Registry.RECIPE_SERIALIZER, new Identifier(MODID, "gun_table"), new GunTableRecipe.Serializer());
 
