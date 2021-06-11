@@ -1,4 +1,4 @@
-package mod.azure.hwg.recipe;
+package mod.azure.hwg.util.recipes;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
