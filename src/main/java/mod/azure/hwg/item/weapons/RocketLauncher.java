@@ -16,7 +16,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class RocketLauncher extends HWGGunBase {
@@ -59,11 +58,6 @@ public class RocketLauncher extends HWGGunBase {
 		}
 
 		return f;
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BOW;
 	}
 
 	@Override

@@ -52,7 +52,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -203,11 +202,6 @@ public class FlareGunItem extends HWGGunLoadedBase {
 			stack.damage(1, shooter, p -> p.sendToolBreakStatus(shooter.getActiveHand()));
 			world.spawnEntity((Entity) projectileEntity2);
 		}
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BLOCK;
 	}
 
 	@Override

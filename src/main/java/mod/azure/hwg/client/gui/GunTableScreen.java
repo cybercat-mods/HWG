@@ -94,12 +94,12 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 		this.renderBackground(matrices);
 		super.render(matrices, mouseX, mouseY, delta);
 		List<GunTableRecipe> tradeOfferList = this.handler.getRecipes();
+		RenderSystem.pushMatrix();
 		if (!tradeOfferList.isEmpty()) {
 			int i = (this.width - this.backgroundWidth) / 2;
 			int j = (this.height - this.backgroundHeight) / 2;
 			int yPos = j + 17;
 			int xPos = i + 3;
-			RenderSystem.pushMatrix();
 			RenderSystem.enableRescaleNormal();
 			this.client.getTextureManager().bindTexture(TEXTURE);
 			this.renderScrollbar(matrices, i, j, tradeOfferList);

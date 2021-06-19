@@ -22,7 +22,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class IncineratorUnitItem extends HWGGunBase {
@@ -47,44 +46,12 @@ public class IncineratorUnitItem extends HWGGunBase {
 					abstractarrowentity.age = 30;
 					worldIn.spawnEntity(abstractarrowentity);
 
-					FlameFiring abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 10, 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity1.age = 30;
-					worldIn.spawnEntity(abstractarrowentity1);
-
-					FlameFiring abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.setProperties(playerentity, playerentity.pitch, playerentity.yaw + 5, 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity3.age = 30;
-					worldIn.spawnEntity(abstractarrowentity3);
-
-					FlameFiring abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setProperties(playerentity, playerentity.pitch, playerentity.yaw - 10, 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity2.age = 30;
-					worldIn.spawnEntity(abstractarrowentity2);
-
-					FlameFiring abstractarrowentity4 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity4.setProperties(playerentity, playerentity.pitch, playerentity.yaw - 5, 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity4.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity4.age = 30;
-					worldIn.spawnEntity(abstractarrowentity4);
-
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
+					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
+							playerentity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS,
+							1.0F, 1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 
 				}
-				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-						SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS, 1.0F,
-						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 			}
 		}
 	}
@@ -146,11 +113,6 @@ public class IncineratorUnitItem extends HWGGunBase {
 	@Override
 	public int getMaxUseTime(ItemStack stack) {
 		return 72000;
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BLOCK;
 	}
 
 	public static float getPullProgress(int useTicks) {

@@ -18,7 +18,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -132,11 +131,6 @@ public class Assasult1Item extends AnimatedItem {
 		}
 
 		return f;
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BOW;
 	}
 
 	public static float getPullProgress(int useTicks) {

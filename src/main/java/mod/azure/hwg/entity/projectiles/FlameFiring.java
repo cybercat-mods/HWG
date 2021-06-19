@@ -44,6 +44,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	protected boolean inAir;
 	private int ticksInAir;
 	private LivingEntity shooter;
+	private AnimationFactory factory = new AnimationFactory(this);
 
 	public FlameFiring(EntityType<? extends FlameFiring> entityType, World world) {
 		super(entityType, world);
@@ -67,8 +68,6 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 		}
 
 	}
-
-	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		return PlayState.STOP;
@@ -101,6 +100,15 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	public void setVelocity(double x, double y, double z, float speed, float divergence) {
 		super.setVelocity(x, y, z, speed, divergence);
 		this.ticksInAir = 0;
+	}
+
+	@Override
+	protected void onHit(LivingEntity living) {
+		super.onHit(living);
+		if (!(living instanceof PlayerEntity)) {
+			living.setVelocity(0, 0, 0);
+			living.timeUntilRegen = 0;
+		}
 	}
 
 	@Override
@@ -216,8 +224,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 				}
 			}
 
-			List<Entity> list1 = this.world.getOtherEntities(this,
-					new Box(this.getBlockPos().up()).expand(1D, 5D, 1D));
+			List<Entity> list1 = this.world.getOtherEntities(this, new Box(this.getBlockPos().up()).expand(1D, 5D, 1D));
 			for (int x = 0; x < list1.size(); ++x) {
 				Entity entity = (Entity) list1.get(x);
 				double y = (double) (MathHelper.sqrt(entity.distanceTo(this)));

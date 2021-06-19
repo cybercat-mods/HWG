@@ -1,3 +1,4 @@
-v.1.0.13
+v.1.0.14
 
-- Fixed SMG and Tommy.
+- All guns now use the gun action in 3rd person but don't stretch in 3rd person anymore.
+- Flamethrower is debuffed with less fire power to cut back on particles. 

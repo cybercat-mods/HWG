@@ -22,7 +22,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class BrimstoneItem extends HWGGunBase {
@@ -130,11 +129,6 @@ public class BrimstoneItem extends HWGGunBase {
 		ItemStack itemStack = user.getStackInHand(hand);
 		user.setCurrentHand(hand);
 		return TypedActionResult.consume(itemStack);
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BOW;
 	}
 
 	public static float getPullProgress(int useTicks) {
