@@ -43,44 +43,12 @@ public class FlamethrowerItem extends AnimatedItem {
 				if (!worldIn.isClient) {
 
 					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
-							0.25F * 3.0F, 2.0F);
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
+							0.0F, 0.25F * 3.0F, 2.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.age = 30;
 					worldIn.spawnEntity(abstractarrowentity);
-
-					FlameFiring abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 10, 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity1.age = 30;
-					worldIn.spawnEntity(abstractarrowentity1);
-
-					FlameFiring abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5, 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity3.age = 30;
-					worldIn.spawnEntity(abstractarrowentity3);
-
-					FlameFiring abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 10, 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity2.age = 30;
-					worldIn.spawnEntity(abstractarrowentity2);
-
-					FlameFiring abstractarrowentity4 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity4.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5, 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity4.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity4.age = 30;
-					worldIn.spawnEntity(abstractarrowentity4);
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
