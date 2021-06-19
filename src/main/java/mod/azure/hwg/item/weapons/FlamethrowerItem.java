@@ -23,7 +23,6 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -88,7 +87,7 @@ public class FlamethrowerItem extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof FlamethrowerItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-501, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
@@ -111,11 +110,6 @@ public class FlamethrowerItem extends AnimatedItem {
 		}
 
 		return f;
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BLOCK;
 	}
 
 	public static float getPullProgress(int useTicks) {

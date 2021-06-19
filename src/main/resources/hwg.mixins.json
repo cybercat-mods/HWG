@@ -9,7 +9,8 @@
 		"AnvilScreenHandlerMixin"
 	],
 	"client": [
-		"SniperMixin"
+		"SniperMixin",
+		"WeaponRenderingMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

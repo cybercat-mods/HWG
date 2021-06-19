@@ -151,7 +151,7 @@ if (file('key.properties').exists()) {
 
         	relations {
             	requiredDependency 'fabric-api'  
-            	requiredDependency 'geckolib-fabric'  
+            	requiredDependency 'geckolib'  
         	}
         	mainArtifact(remapJar)
 

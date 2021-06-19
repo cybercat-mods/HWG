@@ -19,7 +19,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -38,8 +37,8 @@ public class SniperItem extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 35);
 				if (!worldIn.isClient) {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
-							1.0F * 3.0F, 1.0F);
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
+							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.age = -15;
@@ -81,7 +80,7 @@ public class SniperItem extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof SniperItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(HWGItems.SNIPER_ROUND) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.SNIPER_ROUND) > 0) {
 				removeAmmo(HWGItems.SNIPER_ROUND, user);
 				user.getStackInHand(hand).damage(-2, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
@@ -102,11 +101,6 @@ public class SniperItem extends AnimatedItem {
 		}
 
 		return f;
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BOW;
 	}
 
 	public static float getPullProgress(int useTicks) {

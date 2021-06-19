@@ -39,7 +39,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
@@ -126,11 +125,6 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 			world.playSound((PlayerEntity) null, shooter.getX(), shooter.getY(), shooter.getZ(),
 					SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.0F, soundPitch);
 		}
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BLOCK;
 	}
 
 	@Override

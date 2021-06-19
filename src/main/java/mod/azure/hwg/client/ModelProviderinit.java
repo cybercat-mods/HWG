@@ -13,8 +13,7 @@ public class ModelProviderinit {
 					return isUsable(itemStack) ? 0.0F : 1.0F;
 				});
 	}
-
-	@SuppressWarnings("unused")
+	
 	private static boolean isUsable(ItemStack stack) {
 		return stack.getDamage() < stack.getMaxDamage() - 1;
 	}

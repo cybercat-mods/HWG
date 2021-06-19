@@ -16,7 +16,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class Meanietem extends HWGGunBase {
@@ -33,8 +32,8 @@ public class Meanietem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					MBulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
-							0.25F * 3.0F, 1.0F);
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
+							0.0F, 0.25F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 
@@ -66,7 +65,7 @@ public class Meanietem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof Meanietem) {
-			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(Items.REDSTONE) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(Items.REDSTONE) > 0) {
 				removeAmmo(Items.REDSTONE, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
@@ -94,11 +93,6 @@ public class Meanietem extends HWGGunBase {
 		}
 
 		return f;
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BOW;
 	}
 
 	public static float getPullProgress(int useTicks) {

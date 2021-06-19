@@ -44,6 +44,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	protected boolean inAir;
 	private int ticksInAir;
 	private LivingEntity shooter;
+	private AnimationFactory factory = new AnimationFactory(this);
 
 	public FlameFiring(EntityType<? extends FlameFiring> entityType, World world) {
 		super(entityType, world);
@@ -67,8 +68,6 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 		}
 
 	}
-
-	private AnimationFactory factory = new AnimationFactory(this);
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		return PlayState.STOP;
@@ -101,6 +100,15 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	public void setVelocity(double x, double y, double z, float speed, float divergence) {
 		super.setVelocity(x, y, z, speed, divergence);
 		this.ticksInAir = 0;
+	}
+
+	@Override
+	protected void onHit(LivingEntity living) {
+		super.onHit(living);
+		if (!(living instanceof PlayerEntity)) {
+			living.setVelocity(0, 0, 0);
+			living.timeUntilRegen = 0;
+		}
 	}
 
 	@Override

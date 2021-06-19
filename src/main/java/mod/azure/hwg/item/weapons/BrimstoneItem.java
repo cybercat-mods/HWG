@@ -22,7 +22,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class BrimstoneItem extends HWGGunBase {
@@ -38,8 +37,8 @@ public class BrimstoneItem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					FireballEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
-							0.25F * 3.0F, 1.0F);
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
+							0.0F, 0.25F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.setFireTicks(100);
@@ -47,8 +46,8 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity.setPunch(1);
 
 					FireballEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5, 0.0F,
-							0.25F * 3.0F, 1.0F);
+					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5,
+							0.0F, 0.25F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity1.setFireTicks(100);
@@ -56,8 +55,8 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity1.setPunch(1);
 
 					FireballEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5, 0.0F,
-							0.25F * 3.0F, 1.0F);
+					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5,
+							0.0F, 0.25F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity2.setFireTicks(100);
@@ -100,7 +99,7 @@ public class BrimstoneItem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof BrimstoneItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-186, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
@@ -130,11 +129,6 @@ public class BrimstoneItem extends HWGGunBase {
 		ItemStack itemStack = user.getStackInHand(hand);
 		user.setCurrentHand(hand);
 		return TypedActionResult.consume(itemStack);
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BOW;
 	}
 
 	public static float getPullProgress(int useTicks) {

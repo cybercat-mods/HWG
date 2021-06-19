@@ -22,7 +22,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class IncineratorUnitItem extends HWGGunBase {
@@ -40,40 +39,40 @@ public class IncineratorUnitItem extends HWGGunBase {
 				if (!worldIn.isClient) {
 
 					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
-							0.25F * 3.0F, 2.0F);
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
+							0.0F, 0.25F * 3.0F, 2.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.age = 30;
 					worldIn.spawnEntity(abstractarrowentity);
 
 					FlameFiring abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 10, 0.0F,
-							0.25F * 3.0F, 2.0F);
+					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(),
+							playerentity.getYaw() + 10, 0.0F, 0.25F * 3.0F, 2.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity1.age = 30;
 					worldIn.spawnEntity(abstractarrowentity1);
 
 					FlameFiring abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5, 0.0F,
-							0.25F * 3.0F, 2.0F);
+					abstractarrowentity3.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5,
+							0.0F, 0.25F * 3.0F, 2.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity3.age = 30;
 					worldIn.spawnEntity(abstractarrowentity3);
 
 					FlameFiring abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 10, 0.0F,
-							0.25F * 3.0F, 2.0F);
+					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(),
+							playerentity.getYaw() - 10, 0.0F, 0.25F * 3.0F, 2.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity2.age = 30;
 					worldIn.spawnEntity(abstractarrowentity2);
 
 					FlameFiring abstractarrowentity4 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity4.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5, 0.0F,
-							0.25F * 3.0F, 2.0F);
+					abstractarrowentity4.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5,
+							0.0F, 0.25F * 3.0F, 2.0F);
 					abstractarrowentity4.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity4.age = 30;
@@ -111,7 +110,7 @@ public class IncineratorUnitItem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof IncineratorUnitItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
+			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-501, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
@@ -146,11 +145,6 @@ public class IncineratorUnitItem extends HWGGunBase {
 	@Override
 	public int getMaxUseTime(ItemStack stack) {
 		return 72000;
-	}
-
-	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BLOCK;
 	}
 
 	public static float getPullProgress(int useTicks) {
