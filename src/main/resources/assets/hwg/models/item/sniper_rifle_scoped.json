@@ -37,17 +37,17 @@
 			]
 		},
 		"firstperson_righthand": {
-			"translation": [
-				-0.75,
-				-3.5,
-				-6.25
+			"scale": [
+				0.00,
+				0.00,
+				0.00
 			]
 		},
 		"firstperson_lefthand": {
-			"translation": [
-				-0.75,
-				-3.5,
-				-6.25
+			"scale": [
+				0.00,
+				0.00,
+				0.00
 			]
 		},
 		"ground": {

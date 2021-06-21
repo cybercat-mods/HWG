@@ -1,4 +1,4 @@
-v.1.0.14
+v.1.0.15
 
-- All guns now use the gun action in 3rd person but don't stretch in 3rd person anymore.
-- Flamethrower is debuffed with less fire power to cut back on particles. 
+- Fixed Greater Technodemon mini-gun holding.
+- Sniper Rifle has greater zoom now and sniper rifle is hidden when scoping.
