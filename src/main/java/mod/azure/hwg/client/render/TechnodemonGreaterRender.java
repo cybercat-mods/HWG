@@ -35,11 +35,11 @@ public class TechnodemonGreaterRender extends GeoEntityRenderer<TechnodemonGreat
 		if (bone.getName().equals("rightHand")) {
 			stack.push();
 			stack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -15 : -90));
-			stack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -35 : 0));
-			stack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? 15 : 0));
-			stack.translate(mainHand.getItem() instanceof Minigun ? 0.91D : 0.42D,
-					mainHand.getItem() instanceof Minigun ? 1.49D : 0.12D,
-					mainHand.getItem() instanceof Minigun ? 0.1D : 1.5D);
+			stack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(mainHand.getItem() instanceof Minigun ? -15 : 0));
+			stack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(0));
+			stack.translate(mainHand.getItem() instanceof Minigun ? 0.50D : 0.42D,
+					mainHand.getItem() instanceof Minigun ? 1.79D : 0.12D,
+					mainHand.getItem() instanceof Minigun ? -0.3D : 1.5D);
 			stack.scale(1.0f, 1.0f, 1.0f);
 			MinecraftClient.getInstance().getItemRenderer().renderItem(mainHand, Mode.THIRD_PERSON_RIGHT_HAND,
 					packedLightIn, packedOverlayIn, stack, this.rtb, 0);

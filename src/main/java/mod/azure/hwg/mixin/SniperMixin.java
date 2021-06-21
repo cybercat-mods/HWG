@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.hwg.item.weapons.SniperItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -38,9 +38,13 @@ public abstract class SniperMixin extends DrawableHelper {
 	@Inject(at = @At("TAIL"), method = "render")
 	private void render(CallbackInfo info) {
 		ItemStack itemStack = this.client.player.getInventory().getMainHandStack();
-		if (this.client.options.getPerspective().isFirstPerson() && itemStack.getItem() == HWGItems.SNIPER
-				&& this.client.options.keySneak.isPressed()) {
-			this.renderSniperOverlay();
+		if (this.client.options.getPerspective().isFirstPerson() && itemStack.getItem() instanceof SniperItem) {
+			if (this.client.options.keySneak.isPressed()) {
+				this.client.options.fov = 10;
+				this.renderSniperOverlay();
+			} else {
+				this.client.options.fov = 70;
+			}
 		}
 	}
 

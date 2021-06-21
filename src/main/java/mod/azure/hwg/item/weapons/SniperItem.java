@@ -9,8 +9,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,10 +69,6 @@ public class SniperItem extends AnimatedItem {
 					ClientPlayNetworking.send(HWGMod.SNIPER, passedData);
 				}
 			}
-		}
-		if (selected && entity instanceof PlayerEntity && entity.isSneaking()) {
-			((LivingEntity) entity)
-					.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 10, 10, true, false));
 		}
 	}
 
