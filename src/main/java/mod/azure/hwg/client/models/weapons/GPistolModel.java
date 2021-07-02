@@ -8,12 +8,12 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class GPistolModel extends AnimatedGeoModel<GPistolItem> {
 	@Override
 	public Identifier getModelLocation(GPistolItem object) {
-		return new Identifier(HWGMod.MODID, "geo/pistol.geo.json");
+		return new Identifier(HWGMod.MODID, "geo/golden_gun.geo.json");
 	}
 
 	@Override
 	public Identifier getTextureLocation(GPistolItem object) {
-		return new Identifier(HWGMod.MODID, "textures/items/pistol.png");
+		return new Identifier(HWGMod.MODID, "textures/items/golden_gun.png");
 	}
 
 	@Override

@@ -59,11 +59,6 @@ public class HWGGunBase extends Item {
 	}
 
 	@Override
-	public int getMaxUseTime(ItemStack stack) {
-		return 72000;
-	}
-
-	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		ItemStack itemStack = user.getStackInHand(hand);
 		user.setCurrentHand(hand);

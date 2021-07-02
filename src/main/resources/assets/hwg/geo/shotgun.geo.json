@@ -4,7 +4,7 @@
 		{
 			"description": {
 				"identifier": "geometry.shotgun",
-				"texture_width": 32,
+				"texture_width": 64,
 				"texture_height": 32,
 				"visible_bounds_width": 5,
 				"visible_bounds_height": 2.5,
@@ -219,6 +219,25 @@
 								"west": {"uv": [0, 0], "uv_size": [0, 3]},
 								"up": {"uv": [1, 0], "uv_size": [-1, 0]},
 								"down": {"uv": [1, 0], "uv_size": [-1, 0]}
+							}
+						}
+					]
+				},
+				{
+					"name": "bone2",
+					"parent": "shotgun",
+					"pivot": [0, 8.4, -6],
+					"cubes": [
+						{
+							"origin": [-0.5, 7.8, -6],
+							"size": [1, 1, 0.1],
+							"uv": {
+								"north": {"uv": [32, 0], "uv_size": [32, 32]},
+								"east": {"uv": [64, 0], "uv_size": [0.1, 1]},
+								"south": {"uv": [64, 0], "uv_size": [-32, 32]},
+								"west": {"uv": [64, 0], "uv_size": [0.1, 1]},
+								"up": {"uv": [64, 0], "uv_size": [-0.1, -1]},
+								"down": {"uv": [64, 0], "uv_size": [-0.1, -1]}
 							}
 						}
 					]

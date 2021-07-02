@@ -8,7 +8,6 @@ import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,7 +15,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -24,10 +22,8 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class FlamethrowerItem extends AnimatedItem {
+public class FlamethrowerItem extends HWGGunBase {
 
 	public FlamethrowerItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(251));
@@ -53,13 +49,6 @@ public class FlamethrowerItem extends AnimatedItem {
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS,
 							1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-				}
-				if (!worldIn.isClient) {
-					final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
-					GeckoLibNetwork.syncAnimation(playerentity, this, id, ANIM_OPEN);
-					for (PlayerEntity otherPlayer : PlayerLookup.tracking(playerentity)) {
-						GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
-					}
 				}
 			}
 		}

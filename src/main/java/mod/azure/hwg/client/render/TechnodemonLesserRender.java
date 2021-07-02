@@ -36,7 +36,7 @@ public class TechnodemonLesserRender extends GeoEntityRenderer<TechnodemonEntity
 			stack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
 			stack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(0));
 			stack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(0));
-			stack.translate(0.34D, 0.1D, 0.9D);
+			stack.translate(0.34D, 0.1D, 1.0D);
 			stack.scale(1.0f, 1.0f, 1.0f);
 			MinecraftClient.getInstance().getItemRenderer().renderItem(mainHand, Mode.THIRD_PERSON_RIGHT_HAND,
 					packedLightIn, packedOverlayIn, stack, this.rtb, 0);

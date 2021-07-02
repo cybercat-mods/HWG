@@ -36,7 +36,7 @@ public class MercRender extends GeoEntityRenderer<MercEntity> {
 			stack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-75));
 			stack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(0));
 			stack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(0));
-			stack.translate(0.4D, 0.3D, 0.6D);
+			stack.translate(0.4D, 0.3D, 0.7D);
 			stack.scale(1.0f, 1.0f, 1.0f);
 			MinecraftClient.getInstance().getItemRenderer().renderItem(mainHand, Mode.THIRD_PERSON_RIGHT_HAND,
 					packedLightIn, packedOverlayIn, stack, this.rtb, 0);

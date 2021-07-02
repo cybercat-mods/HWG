@@ -8,7 +8,9 @@ import mod.azure.hwg.item.weapons.BalrogItem;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
 import mod.azure.hwg.item.weapons.FlamethrowerItem;
 import mod.azure.hwg.item.weapons.HellhorseRevolverItem;
-import mod.azure.hwg.item.weapons.Meanietem;
+import mod.azure.hwg.item.weapons.LugerItem;
+import mod.azure.hwg.item.weapons.Meanie1Item;
+import mod.azure.hwg.item.weapons.Meanie2Item;
 import mod.azure.hwg.item.weapons.Minigun;
 import mod.azure.hwg.item.weapons.PistolItem;
 import mod.azure.hwg.item.weapons.RocketLauncher;
@@ -104,16 +106,28 @@ public class PacketHandler {
 						((BalrogItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
 					}
 				});
-		ServerPlayNetworking.registerGlobalReceiver(HWGMod.MEANIE,
+		ServerPlayNetworking.registerGlobalReceiver(HWGMod.MEANIE1,
 				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-					if (player.getMainHandStack().getItem() instanceof Meanietem) {
-						((Meanietem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+					if (player.getMainHandStack().getItem() instanceof Meanie1Item) {
+						((Meanie1Item) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+					}
+				});
+		ServerPlayNetworking.registerGlobalReceiver(HWGMod.MEANIE2,
+				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+					if (player.getMainHandStack().getItem() instanceof Meanie2Item) {
+						((Meanie1Item) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
 					}
 				});
 		ServerPlayNetworking.registerGlobalReceiver(HWGMod.HELL,
 				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
 					if (player.getMainHandStack().getItem() instanceof HellhorseRevolverItem) {
 						((HellhorseRevolverItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+					}
+				});
+		ServerPlayNetworking.registerGlobalReceiver(HWGMod.LUGER,
+				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+					if (player.getMainHandStack().getItem() instanceof LugerItem) {
+						((LugerItem) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
 					}
 				});
 //		ServerPlayNetworking.registerGlobalReceiver(HWGMod.SILVERHELL,

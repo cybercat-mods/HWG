@@ -19,7 +19,7 @@ public class BulletAmmo extends ArrowItem {
 
 	@Override
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, damage);
 		arrowentity.setDamage(this.damage);
 		return arrowentity;
 	}

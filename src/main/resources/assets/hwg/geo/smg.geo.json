@@ -4,11 +4,11 @@
 		{
 			"description": {
 				"identifier": "geometry.smg",
-				"texture_width": 16,
+				"texture_width": 32,
 				"texture_height": 16,
-				"visible_bounds_width": 2,
-				"visible_bounds_height": 1.5,
-				"visible_bounds_offset": [0, 0.25, 0]
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
 			},
 			"bones": [
 				{
@@ -181,6 +181,27 @@
 								"west": {"uv": [0, 0], "uv_size": [0, 2]},
 								"up": {"uv": [1, 0], "uv_size": [-1, 0]},
 								"down": {"uv": [1, 0], "uv_size": [-1, 0]}
+							}
+						}
+					]
+				},
+				{
+					"name": "bone",
+					"parent": "body",
+					"pivot": [0, 6.6, -5],
+					"cubes": [
+						{
+							"origin": [-0.4, 6.1, -5],
+							"size": [0.7, 0.7, 0.1],
+							"pivot": [0.2, 6.5, -5],
+							"rotation": [0, 0, 45],
+							"uv": {
+								"north": {"uv": [16, 0], "uv_size": [16, 16]},
+								"east": {"uv": [32, 0], "uv_size": [0.1, 1]},
+								"south": {"uv": [32, 0], "uv_size": [-16, 16]},
+								"west": {"uv": [32, 0], "uv_size": [0.1, 1]},
+								"up": {"uv": [32, 0], "uv_size": [-0.1, -1]},
+								"down": {"uv": [32, 0], "uv_size": [-0.1, -1]}
 							}
 						}
 					]

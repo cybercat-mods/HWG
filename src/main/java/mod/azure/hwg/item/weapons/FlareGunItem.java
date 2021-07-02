@@ -29,6 +29,7 @@ import mod.azure.hwg.item.ammo.FlareItem;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -43,6 +44,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
@@ -55,12 +57,27 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.AnimationState;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.network.ISyncable;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class FlareGunItem extends HWGGunLoadedBase {
+public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISyncable {
 
 	private boolean charged = false;
 	private boolean loaded = false;
 	protected static final Random RANDOM = new Random();
+	public AnimationFactory factory = new AnimationFactory(this);
+	public String controllerName = "controller";
+	public static final int ANIM_OPEN = 0;
+	public static final int ANIM_CLOSE = 1;
 
 	public static final Predicate<ItemStack> BLACK_FLARE = (stack) -> {
 		return stack.getItem() == HWGItems.BLACK_FLARE;
@@ -105,6 +122,40 @@ public class FlareGunItem extends HWGGunLoadedBase {
 
 	public FlareGunItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(31));
+		GeckoLibNetwork.registerSyncable(this);
+	}
+
+	public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		return PlayState.CONTINUE;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public void onAnimationSync(int id, int state) {
+		if (state == ANIM_OPEN) {
+			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+			if (controller.getAnimationState() == AnimationState.Stopped) {
+				controller.markNeedsReload();
+				controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
+			}
+		}
+		if (state == ANIM_CLOSE) {
+			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+			if (controller.getAnimationState() == AnimationState.Stopped) {
+				controller.markNeedsReload();
+				controller.setAnimation(new AnimationBuilder().addAnimation("loading", false));
+			}
+		}
 	}
 
 	@Override
@@ -217,6 +268,13 @@ public class FlareGunItem extends HWGGunLoadedBase {
 			shootAll(world, user, hand, itemStack, 2.6F, 1.0F);
 			user.getItemCooldownManager().set(this, 25);
 			setCharged(itemStack, false);
+			if (!world.isClient) {
+				final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerWorld) world);
+				GeckoLibNetwork.syncAnimation(user, this, id, ANIM_OPEN);
+				for (PlayerEntity otherPlayer : PlayerLookup.tracking(user)) {
+					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
+				}
+			}
 			return TypedActionResult.consume(itemStack);
 		} else if (!user.getArrowType(itemStack).isEmpty()) {
 			if (!isCharged(itemStack)) {
@@ -235,6 +293,14 @@ public class FlareGunItem extends HWGGunLoadedBase {
 			setCharged(stack, true);
 			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_CHAIN_BREAK,
 					SoundCategory.PLAYERS, 1.0F, 1.5F);
+			if (!world.isClient) {
+				final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+				GeckoLibNetwork.syncAnimation((PlayerEntity) user, this, id, ANIM_CLOSE);
+				for (PlayerEntity otherPlayer : PlayerLookup.tracking((PlayerEntity) user)) {
+					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_CLOSE);
+				}
+			}
+			((PlayerEntity) user).getItemCooldownManager().set(this, 15);
 		}
 	}
 

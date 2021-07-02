@@ -16,8 +16,10 @@ import mod.azure.hwg.entity.projectiles.launcher.SmokeGEntity;
 import mod.azure.hwg.entity.projectiles.launcher.StunGEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
 import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -31,8 +33,8 @@ import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -43,12 +45,27 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.AnimationState;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.network.ISyncable;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class GrenadeLauncherItem extends HWGGunLoadedBase {
+public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable, ISyncable {
 
 	private boolean charged = false;
 	private boolean loaded = false;
 	protected static final Random RANDOM = new Random();
+	public AnimationFactory factory = new AnimationFactory(this);
+	public String controllerName = "controller";
+	public static final int ANIM_OPEN = 0;
+	public static final int ANIM_CLOSE = 1;
 
 	public static final Predicate<ItemStack> EMP = (stack) -> {
 		return stack.getItem() == HWGItems.G_EMP;
@@ -65,6 +82,40 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 
 	public GrenadeLauncherItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(31));
+		GeckoLibNetwork.registerSyncable(this);
+	}
+
+	public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		return PlayState.CONTINUE;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public void onAnimationSync(int id, int state) {
+		if (state == ANIM_OPEN) {
+			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+			if (controller.getAnimationState() == AnimationState.Stopped) {
+				controller.markNeedsReload();
+				controller.setAnimation(new AnimationBuilder().addAnimation("firing", false));
+			}
+		}
+		if (state == ANIM_CLOSE) {
+			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+			if (controller.getAnimationState() == AnimationState.Stopped) {
+				controller.markNeedsReload();
+				controller.setAnimation(new AnimationBuilder().addAnimation("loading", false));
+			}
+		}
 	}
 
 	@Override
@@ -123,7 +174,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 			world.spawnEntity((Entity) projectileEntity2);
 
 			world.playSound((PlayerEntity) null, shooter.getX(), shooter.getY(), shooter.getZ(),
-					SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.0F, soundPitch);
+					HWGSounds.GLAUNCHERFIRE, SoundCategory.PLAYERS, 1.0F, 0.9F);
 		}
 	}
 
@@ -139,6 +190,13 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 			shootAll(world, user, hand, itemStack, getSpeed(itemStack), 1.0F);
 			user.getItemCooldownManager().set(this, 25);
 			setCharged(itemStack, false);
+			if (!world.isClient) {
+				final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerWorld) world);
+				GeckoLibNetwork.syncAnimation(user, this, id, ANIM_OPEN);
+				for (PlayerEntity otherPlayer : PlayerLookup.tracking(user)) {
+					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
+				}
+			}
 			return TypedActionResult.consume(itemStack);
 		} else if (!user.getArrowType(itemStack).isEmpty()) {
 			if (!isCharged(itemStack)) {
@@ -156,8 +214,16 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase {
 		if (!isCharged(stack) && loadProjectiles(user, stack)) {
 			setCharged(stack, true);
 			SoundCategory soundCategory = user instanceof PlayerEntity ? SoundCategory.PLAYERS : SoundCategory.HOSTILE;
-			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
-					SoundEvents.BLOCK_TRIPWIRE_CLICK_OFF, soundCategory, 1.0F, 0.5F);
+			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD,
+					soundCategory, 0.5F, 1.0F);
+			if (!world.isClient) {
+				final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+				GeckoLibNetwork.syncAnimation((PlayerEntity) user, this, id, ANIM_CLOSE);
+				for (PlayerEntity otherPlayer : PlayerLookup.tracking((PlayerEntity) user)) {
+					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_CLOSE);
+				}
+			}
+			((PlayerEntity) user).getItemCooldownManager().set(this, 15);
 		}
 	}
 

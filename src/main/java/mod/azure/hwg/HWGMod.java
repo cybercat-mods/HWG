@@ -16,6 +16,7 @@ import mod.azure.hwg.util.registry.BWCompatItems;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGMobs;
 import mod.azure.hwg.util.registry.HWGParticles;
+import mod.azure.hwg.util.registry.HWGSounds;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
@@ -38,18 +39,21 @@ public class HWGMod implements ModInitializer {
 	public static HWGMobs MOBS;
 	public static HWGItems ITEMS;
 	public static HWGConfig config;
+	public static HWGSounds SOUNDS;
 	public static BWCompatItems BWITEMS;
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
 	public static ProjectilesEntityRegister PROJECTILES;
 	public static final Block FUEL_TANK = new FuelTankBlock();
 	public static BlockEntityType<GunBlockEntity> GUN_TABLE_ENTITY;
+	public static final Identifier LUGER = new Identifier(MODID, "luger");
 	public static final Identifier HELL = new Identifier(MODID, "hellgun");
 	public static final Identifier ASSASULT = new Identifier(MODID, "smg");
 	public static final Identifier BALROG = new Identifier(MODID, "balrog");
-	public static final Identifier MEANIE = new Identifier(MODID, "meanie");
 	public static final Identifier PISTOL = new Identifier(MODID, "pistol");
 	public static final Identifier SNIPER = new Identifier(MODID, "sniper");
+	public static final Identifier MEANIE1 = new Identifier(MODID, "meanie");
+	public static final Identifier MEANIE2 = new Identifier(MODID, "meanie");
 	public static final Identifier ASSASULT1 = new Identifier(MODID, "smg1");
 	public static final Identifier ASSASULT2 = new Identifier(MODID, "smg2");
 	public static final Identifier MINIGUN = new Identifier(MODID, "minigun");
@@ -80,6 +84,7 @@ public class HWGMod implements ModInitializer {
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();
+		SOUNDS = new HWGSounds();
 //		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
 //			BWITEMS = new BWCompatItems();
 //			LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {

@@ -15,14 +15,16 @@ public class ModelProviderinit {
 				});
 		FabricModelPredicateProviderRegistry.register(HWGItems.SNIPER, new Identifier("scoped"),
 				(itemStack, clientWorld, livingEntity, seed) -> {
-					return isSneaking(livingEntity) ? 1.0F : 0.0F;
+					if (livingEntity != null)
+						return isSneaking(livingEntity) ? 1.0F : 0.0F;
+					return 0.0F;
 				});
 	}
-	
+
 	private static boolean isUsable(ItemStack stack) {
 		return stack.getDamage() < stack.getMaxDamage() - 1;
 	}
-	
+
 	private static boolean isSneaking(LivingEntity livingEntity) {
 		return livingEntity.isSneaking();
 	}

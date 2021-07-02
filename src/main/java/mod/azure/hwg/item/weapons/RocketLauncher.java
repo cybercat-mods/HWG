@@ -5,6 +5,7 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.RocketEntity;
 import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -35,8 +35,6 @@ public class RocketLauncher extends HWGGunBase {
 					RocketEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
 					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
 							0.0F, 0.25F * 3.0F, 1.0F);
-					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
-							entityLiving.getZ(), 0, 0);
 
 					abstractarrowentity.setDamage(2.5);
 
@@ -44,7 +42,7 @@ public class RocketLauncher extends HWGGunBase {
 					worldIn.spawnEntity(abstractarrowentity);
 				}
 				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-						SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.5F,
+						HWGSounds.RPG, SoundCategory.PLAYERS, 1.0F,
 						1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 			}
 		}
@@ -73,6 +71,8 @@ public class RocketLauncher extends HWGGunBase {
 				removeAmmo(HWGItems.ROCKET, user);
 				user.getStackInHand(hand).damage(-2, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
+				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+						HWGSounds.GLAUNCHERRELOAD, SoundCategory.PLAYERS, 0.5F, 1.0F);
 			}
 		}
 	}

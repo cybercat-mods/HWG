@@ -4,7 +4,7 @@
 		{
 			"description": {
 				"identifier": "geometry.tommy_gun",
-				"texture_width": 32,
+				"texture_width": 64,
 				"texture_height": 32,
 				"visible_bounds_width": 4,
 				"visible_bounds_height": 2.5,
@@ -238,6 +238,26 @@
 								"west": {"uv": [10, 27], "uv_size": [2, 5]},
 								"up": {"uv": [9, 29], "uv_size": [-5, -2]},
 								"down": {"uv": [9, 27], "uv_size": [-5, 2]}
+							}
+						}
+					]
+				},
+				{
+					"name": "bone",
+					"parent": "body",
+					"pivot": [0, 7.6, -8.8],
+					"rotation": [0, 0, 45],
+					"cubes": [
+						{
+							"origin": [-0.5, 7.2, -8.8],
+							"size": [1, 1, 0.1],
+							"uv": {
+								"north": {"uv": [32, 0], "uv_size": [32, 32]},
+								"east": {"uv": [64, 0], "uv_size": [0.1, 1]},
+								"south": {"uv": [64, 0], "uv_size": [-32, 32]},
+								"west": {"uv": [64, 0], "uv_size": [0.1, 1]},
+								"up": {"uv": [64, 0], "uv_size": [-0.1, -1]},
+								"down": {"uv": [64, 0], "uv_size": [-0.1, -1]}
 							}
 						}
 					]

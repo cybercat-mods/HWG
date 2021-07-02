@@ -40,7 +40,6 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
-					abstractarrowentity.setDamage(1.25);
 					abstractarrowentity.hasNoGravity();
 					double r = worldIn.random.nextDouble();
 					if (r < 0.1)
@@ -51,7 +50,6 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
-					abstractarrowentity1.setDamage(1.25);
 					abstractarrowentity1.hasNoGravity();
 					double a = worldIn.random.nextDouble();
 					if (a < 0.1)
@@ -62,7 +60,6 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
-					abstractarrowentity2.setDamage(1.25);
 					abstractarrowentity2.hasNoGravity();
 					double b = worldIn.random.nextDouble();
 					if (b < 0.1)
@@ -73,7 +70,6 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
-					abstractarrowentity3.setDamage(1.25);
 					abstractarrowentity3.hasNoGravity();
 					double c = worldIn.random.nextDouble();
 					if (c < 0.1)
@@ -84,10 +80,10 @@ public class BalrogItem extends HWGGunBase {
 					worldIn.spawnEntity(abstractarrowentity2);
 					worldIn.spawnEntity(abstractarrowentity3);
 					stack.damage(4, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
+					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
+							SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.PLAYERS, 1.0F,
+							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
-				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-						SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.PLAYERS, 1.0F,
-						1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 			}
 		}
 	}
@@ -115,6 +111,8 @@ public class BalrogItem extends HWGGunBase {
 				removeAmmo(Items.BLAZE_ROD, user);
 				user.getStackInHand(hand).damage(-50, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
+				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+						SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, 1.5F);
 			}
 		}
 	}

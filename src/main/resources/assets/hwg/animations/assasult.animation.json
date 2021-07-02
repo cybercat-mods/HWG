@@ -7,59 +7,53 @@
 			"bones": {
 				"body": {
 					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.04": {
-							"vector": [0, 0, 1],
-							"easing": "easeInOutSine"
-						},
-						"0.08": {
-							"vector": [0, 0, 0],
-							"easing": "easeInOutSine"
-						}
+						"vector": [0, 0, "math.sin(query.anim_time * 360) * 3 "]
+					}
+				},
+				"bone": {
+					"position": {
+						"vector": [0, 0, -0.4]
+					},
+					"scale": {
+						"vector": [5, 5, 0]
 					}
 				}
 			}
 		},
 		"smgfiring": {
 			"loop": true,
-			"animation_length": 0.16,
+			"animation_length": 0.12,
 			"bones": {
 				"body": {
 					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.08": {
-							"vector": [0, 0, 1],
-							"easing": "easeInOutSine"
-						},
-						"0.16": {
-							"vector": [0, 0, 0],
-							"easing": "easeInOutSine"
-						}
+						"vector": [0, 0, "math.sin(query.anim_time * 360) * 3 "]
+					}
+				},
+				"bone": {
+					"position": {
+						"vector": [0, 0, -0.7]
+					},
+					"scale": {
+						"vector": [6, 6, 0]
 					}
 				}
 			}
 		},
 		"akfiring": {
 			"loop": true,
-			"animation_length": 0.32,
+			"animation_length": 0.16,
 			"bones": {
 				"body": {
 					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.16": {
-							"vector": [0, 0, 1],
-							"easing": "easeInOutSine"
-						},
-						"0.32": {
-							"vector": [0, 0, 0],
-							"easing": "easeInOutSine"
-						}
+						"vector": [0, 0, "math.sin(query.anim_time * 360) * 3 "]
+					}
+				},
+				"bone": {
+					"position": {
+						"vector": [0, 0, -0.4]
+					},
+					"scale": {
+						"vector": [4, 4, 0]
 					}
 				}
 			}
