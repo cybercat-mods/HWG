@@ -41,7 +41,7 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -138,13 +138,6 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		this.dataTracker.startTracking(VARIANT, 0);
 	}
 
-	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
-		this.updateAttackType();
-		this.setVariant(tag.getInt("Variant"));
-	}
-
 	public void equipStack(EquipmentSlot slot, ItemStack stack) {
 		super.equipStack(slot, stack);
 		if (!this.world.isClient) {
@@ -192,8 +185,15 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
+		this.updateAttackType();
+		this.setVariant(tag.getInt("Variant"));
+	}
+
+	@Override
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putInt("Variant", this.getVariant());
 	}
 
@@ -204,8 +204,8 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_ARMOR, 4)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.lesser_health).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
-				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.lesser_health)
+				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	protected boolean shouldDrown() {
@@ -223,7 +223,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
-			EntityData entityData, CompoundTag entityTag) {
+			EntityData entityData, NbtCompound entityTag) {
 		this.setVariant(this.random.nextInt(5));
 		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		this.updateAttackType();

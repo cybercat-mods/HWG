@@ -2,9 +2,9 @@ package mod.azure.hwg.client.models;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.SpyEntity;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -44,29 +44,29 @@ public class SpyModel extends AnimatedGeoModel<SpyEntity> {
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 		if (head != null) {
 			head.setRotationX(
-					Vector3f.POSITIVE_X.getRadialQuaternion(extraData.headPitch * ((float) Math.PI / 180F)).getX());
+					Vec3f.POSITIVE_X.getRadialQuaternion(extraData.headPitch * ((float) Math.PI / 180F)).getX());
 			head.setRotationY(
-					Vector3f.POSITIVE_Y.getRadialQuaternion(extraData.netHeadYaw * ((float) Math.PI / 180F)).getY());
+					Vec3f.POSITIVE_Y.getRadialQuaternion(extraData.netHeadYaw * ((float) Math.PI / 180F)).getY());
 		}
 		if (Left_arm != null) {
-			Left_arm.setRotationX(Vector3f.POSITIVE_X
+			Left_arm.setRotationX(Vec3f.POSITIVE_X
 					.getRadialQuaternion(MathHelper.cos(entity.limbAngle * 0.6662F) * 2.0F * entity.limbDistance * 0.5F)
 					.getX());
 		}
 		if (Right_arm != null) {
-			Right_arm.setRotationX(Vector3f.POSITIVE_X
+			Right_arm.setRotationX(Vec3f.POSITIVE_X
 					.getRadialQuaternion(
 							MathHelper.cos(entity.limbAngle * 0.6662F + 3.1415927F) * 2.0F * entity.limbDistance * 0.5F)
 					.getX());
 		}
 		if (Left_leg != null) {
-			Left_leg.setRotationX(Vector3f.POSITIVE_X
+			Left_leg.setRotationX(Vec3f.POSITIVE_X
 					.getRadialQuaternion(
 							MathHelper.cos(entity.limbAngle * 0.6662F + 3.1415927F) * 1.4F * entity.limbDistance * 0.5F)
 					.getX());
 		}
 		if (Right_leg != null) {
-			Right_leg.setRotationX(Vector3f.POSITIVE_X
+			Right_leg.setRotationX(Vec3f.POSITIVE_X
 					.getRadialQuaternion(MathHelper.cos(entity.limbAngle * 0.6662F) * 1.4F * entity.limbDistance * 0.5F)
 					.getX());
 		}

@@ -20,7 +20,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.Monster;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.util.math.IntRange;
 import net.minecraft.world.LocalDifficulty;
@@ -70,18 +70,8 @@ public abstract class HWGEntity extends HostileEntity implements Angerable, Rang
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
-	}
-
-	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
-	}
-
-	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
-			EntityData entityData, CompoundTag entityTag) {
+			EntityData entityData, NbtCompound entityTag) {
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
 	}
 

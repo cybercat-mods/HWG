@@ -6,10 +6,14 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.gui.GunTableScreen;
 import mod.azure.hwg.client.render.projectiles.SilverBulletRender;
 import mod.azure.hwg.client.render.weapons.AKRender;
-import mod.azure.hwg.client.render.weapons.FlamethrowerRender;
+import mod.azure.hwg.client.render.weapons.FlareGunRender;
 import mod.azure.hwg.client.render.weapons.GPistolRender;
+import mod.azure.hwg.client.render.weapons.GrenadeLauncherRender;
 import mod.azure.hwg.client.render.weapons.HellRender;
 import mod.azure.hwg.client.render.weapons.LugerRender;
+import mod.azure.hwg.client.render.weapons.Meanie1Render;
+import mod.azure.hwg.client.render.weapons.Meanie2Render;
+import mod.azure.hwg.client.render.weapons.MinigunRender;
 import mod.azure.hwg.client.render.weapons.PistolRender;
 import mod.azure.hwg.client.render.weapons.SHellRender;
 import mod.azure.hwg.client.render.weapons.SMGRender;
@@ -34,7 +38,7 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.util.Identifier;
@@ -55,20 +59,24 @@ public class ClientInit implements ClientModInitializer {
 		GeoItemRenderer.registerItemRenderer(HWGItems.GOLDEN_GUN, new GPistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.LUGER, new LugerRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SPISTOL, new SPistolRender());
-		GeoItemRenderer.registerItemRenderer(HWGItems.FLAMETHROWER, new FlamethrowerRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SHOTGUN, new ShotgunRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.AK47, new AKRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SMG, new SMGRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.TOMMYGUN, new TommyGunRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.SNIPER, new SniperRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.HELLHORSE, new HellRender());
-		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
-			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERGUN, new SilverGunRender());
-			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERHELLHORSE, new SHellRender());
-			EntityRendererRegistry.INSTANCE.register(BWCompatItems.SILVERBULLETS, (dispatcher, context) -> {
-				return new SilverBulletRender(dispatcher);
-			});
-		}
+		GeoItemRenderer.registerItemRenderer(HWGItems.MINIGUN, new MinigunRender());
+		GeoItemRenderer.registerItemRenderer(HWGItems.G_LAUNCHER, new GrenadeLauncherRender());
+		GeoItemRenderer.registerItemRenderer(HWGItems.MEANIE1, new Meanie1Render());
+		GeoItemRenderer.registerItemRenderer(HWGItems.MEANIE2, new Meanie2Render());
+		GeoItemRenderer.registerItemRenderer(HWGItems.FLARE_GUN, new FlareGunRender());
+//		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
+//			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERGUN, new SilverGunRender());
+//			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERHELLHORSE, new SHellRender());
+//			EntityRendererRegistry.INSTANCE.register(BWCompatItems.SILVERBULLETS, (dispatcher, context) -> {
+//				return new SilverBulletRender(dispatcher);
+//			});
+//		}
 		ClientSidePacketRegistry.INSTANCE.register(EntityPacket.ID, (ctx, buf) -> {
 			EntityPacketOnClient.onPacket(ctx, buf);
 		});
@@ -96,7 +104,6 @@ public class ClientInit implements ClientModInitializer {
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.YELLOW_FLARE,
 				FlareParticle.YellowSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.GRAY_FLARE, FlareParticle.GraySmokeFactory::new);
-
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BRIM_ORANGE, BrimParticle.OrangeSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BRIM_RED, BrimParticle.RedSmokeFactory::new);
 	}

@@ -5,6 +5,7 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
@@ -15,19 +16,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.AnimationState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class GPistolItem extends AnimatedItem {
-
-	public double damage;
-
-	public GPistolItem(Double damage) {
+	
+	public GPistolItem() {
 		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(7));
-		this.damage = damage;
 	}
 
 	@Override
@@ -39,26 +39,32 @@ public class GPistolItem extends AnimatedItem {
 				if (!worldIn.isClient) {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
 					abstractarrowentity.setProperties(playerentity, playerentity.pitch, playerentity.yaw, 0.0F,
-							0.25F * 3.0F, 1.0F);
-					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
-							entityLiving.getZ(), 0, 0);
-
-					abstractarrowentity.setDamage(this.damage);
-					abstractarrowentity.age = 30;
+							1.0F * 3.0F, 1.0F);
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);
+					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
+							playerentity.getZ(), HWGSounds.PISTOL, SoundCategory.PLAYERS, 0.5F,
+							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					if (!worldIn.isClient) {
+						final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
+						GeckoLibNetwork.syncAnimation(playerentity, this, id, ANIM_OPEN);
+						for (PlayerEntity otherPlayer : PlayerLookup.tracking(playerentity)) {
+							GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
+						}
+					}
 				}
-				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-						SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.PLAYERS, 1.0F,
-						1.0F / (RANDOM.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 			}
-			if (!worldIn.isClient) {
-				final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
-				GeckoLibNetwork.syncAnimation(playerentity, this, id, ANIM_OPEN);
-				for (PlayerEntity otherPlayer : PlayerLookup.tracking(playerentity)) {
-					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
-				}
+		}
+	}
+
+	@Override
+	public void onAnimationSync(int id, int state) {
+		if (state == ANIM_OPEN) {
+			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+			if (controller.getAnimationState() == AnimationState.Stopped) {
+				controller.markNeedsReload();
+				controller.setAnimation(new AnimationBuilder().addAnimation("golden", false));
 			}
 		}
 	}
@@ -71,8 +77,6 @@ public class GPistolItem extends AnimatedItem {
 					PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.PISTOL, passedData);
-					world.playSound((PlayerEntity) null, entity.getX(), entity.getY(), entity.getZ(),
-							SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.PLAYERS, 3.0F, 1.5F);
 				}
 			}
 		}
@@ -84,12 +88,14 @@ public class GPistolItem extends AnimatedItem {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
+				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+						HWGSounds.PISTOLRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
 			}
 		}
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.golden_pistol_damage);
 		return arrowentity;
 	}
 

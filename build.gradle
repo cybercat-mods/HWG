@@ -1,6 +1,5 @@
 buildscript {
     repositories {
-        jcenter()
     	maven { url  = 'https://plugins.gradle.org/m2/' }
     }
 }
@@ -41,7 +40,7 @@ repositories {
         url = "https://www.cursemaven.com"
     }
      maven {
-        name = "OnyxStudios"
+        name = "onyxstudios"
         url = "https://maven.abusedmaster.xyz"
     }
     maven {
@@ -64,28 +63,16 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.32:dev'
+    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.43:dev'
 	modImplementation 'curse.maven:TDI-245733:3144149'
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-base:${cardinal_version}"
-    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-entity:${cardinal_version}"
-    modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-world:${cardinal_version}"
-	modImplementation "io.github.onyxstudios.Cardinal-Components-API:cardinal-components-chunk:${cardinal_version}"
     modApi "me.shedaniel.cloth:cloth-config-fabric:4.11.14"
     include "me.shedaniel.cloth:cloth-config-fabric:4.11.14"
 	modImplementation "de.siphalor:nbtcrafting-1.16:2+"
-	include "de.siphalor:nbtcrafting-1.16:2+"	
+	include "de.siphalor:nbtcrafting-1.16:2+"
     modImplementation "com.terraformersmc:modmenu:1.16.8"
     
     modImplementation "vazkii.patchouli:Patchouli:1.16.4-51-FABRIC"
 	modImplementation 'curse.maven:BW-394915:3228835'
-	modImplementation 'curse.maven:TC-341284:3100959'
-	modImplementation 'curse.maven:Nourish-389718:3181134'
-    modImplementation "top.theillusivec4.somnus:somnus-fabric:${project.somnus_version}"
-    modImplementation "curse.maven:Pehkui-319596:3223971"
-    modImplementation "io.github.ladysnake:Impersonate:${impersonate_version}"
-    modImplementation "io.github.ladysnake:PlayerAbilityLib:${pal_version}"
-    modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:${project.terraform_wood_api_version}"
-    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${project.reach_version}"
 }
 
 processResources {

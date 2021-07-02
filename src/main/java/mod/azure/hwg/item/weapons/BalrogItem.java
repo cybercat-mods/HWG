@@ -40,7 +40,6 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
-					abstractarrowentity.setDamage(1.25);
 					abstractarrowentity.hasNoGravity();
 					double r = RANDOM.nextDouble();
 					if (r < 0.1)
@@ -51,7 +50,6 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
-					abstractarrowentity1.setDamage(1.25);
 					abstractarrowentity1.hasNoGravity();
 					double a = RANDOM.nextDouble();
 					if (a < 0.1)
@@ -62,7 +60,6 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
-					abstractarrowentity2.setDamage(1.25);
 					abstractarrowentity2.hasNoGravity();
 					double b = RANDOM.nextDouble();
 					if (b < 0.1)
@@ -73,7 +70,6 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
-					abstractarrowentity3.setDamage(1.25);
 					abstractarrowentity3.hasNoGravity();
 					double c = RANDOM.nextDouble();
 					if (c < 0.1)

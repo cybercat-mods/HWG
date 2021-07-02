@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
+import mod.azure.hwg.util.registry.HWGSounds;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
@@ -63,7 +63,7 @@ public class WhiteFlareEntity extends PersistentProjectileEntity {
 		}
 		if (this.life == 0 && !this.isSilent()) {
 			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(),
-					SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 3.0F, 3.0F);
+					HWGSounds.FLAREGUN, SoundCategory.AMBIENT, 3.0F, 3.0F);
 		}
 		setNoGravity(false);
 
@@ -95,13 +95,13 @@ public class WhiteFlareEntity extends PersistentProjectileEntity {
 
 	@Override
 	protected SoundEvent getHitSound() {
-		return SoundEvents.ENTITY_GENERIC_EXPLODE;
+		return HWGSounds.FLAREGUN;
 	}
 
 	@Override
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
-		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
+		this.setSound(HWGSounds.FLAREGUN);
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public class WhiteFlareEntity extends PersistentProjectileEntity {
 		if (!this.world.isClient) {
 			this.remove();
 		}
-		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
+		this.setSound(HWGSounds.FLAREGUN);
 	}
 
 	@Override

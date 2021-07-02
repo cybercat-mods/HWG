@@ -1,18 +1,24 @@
 package mod.azure.hwg.entity.projectiles;
 
+import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.config.HWGConfig.Weapons;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
@@ -34,6 +40,7 @@ public class ShellEntity extends PersistentProjectileEntity implements IAnimatab
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
+	public static Weapons config = HWGMod.config.weapons;
 
 	public ShellEntity(EntityType<? extends ShellEntity> entityType, World world) {
 		super(entityType, world);
@@ -101,14 +108,14 @@ public class ShellEntity extends PersistentProjectileEntity implements IAnimatab
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
 	}
 
@@ -227,9 +234,42 @@ public class ShellEntity extends PersistentProjectileEntity implements IAnimatab
 
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult) {
-		super.onEntityHit(entityHitResult);
-		if (!this.world.isClient) {
-			this.remove();
+		Entity entity = entityHitResult.getEntity();
+		if (entityHitResult.getType() != HitResult.Type.ENTITY
+				|| !((EntityHitResult) entityHitResult).getEntity().isPartOf(entity)) {
+			if (!this.world.isClient) {
+				this.remove();
+			}
+		}
+		Entity entity2 = this.getOwner();
+		DamageSource damageSource2;
+		if (entity2 == null) {
+			damageSource2 = DamageSource.magic(this, this);
+		} else {
+			damageSource2 = DamageSource.magic(this, entity2);
+			if (entity2 instanceof LivingEntity) {
+				((LivingEntity) entity2).onAttacking(entity);
+			}
+		}
+		if (entity.damage(damageSource2, config.shotgun_damage)) {
+			if (entity instanceof LivingEntity) {
+				LivingEntity livingEntity = (LivingEntity) entity;
+				if (!this.world.isClient && entity2 instanceof LivingEntity) {
+					EnchantmentHelper.onUserDamaged(livingEntity, entity2);
+					EnchantmentHelper.onTargetDamaged((LivingEntity) entity2, livingEntity);
+				}
+
+				this.onHit(livingEntity);
+				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof PlayerEntity
+						&& entity2 instanceof ServerPlayerEntity && !this.isSilent()) {
+					((ServerPlayerEntity) entity2).networkHandler.sendPacket(
+							new GameStateChangeS2CPacket(GameStateChangeS2CPacket.PROJECTILE_HIT_PLAYER, 0.0F));
+				}
+			}
+		} else {
+			if (!this.world.isClient) {
+				this.remove();
+			}
 		}
 	}
 

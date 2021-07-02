@@ -47,7 +47,7 @@ public class GunTableOutputSlot extends Slot {
 		Optional<GunTableRecipe> optionalGunTableRecipe = player.world.getRecipeManager().getFirstMatch(GunTableRecipe.GUN_TABLE,gunTableInventory,player.world);
 		if (optionalGunTableRecipe.isPresent()) {
 			GunTableRecipe gunTableRecipe = optionalGunTableRecipe.get();
-			DefaultedList<ItemStack> defaultedList = gunTableRecipe.getRemainingStacks(gunTableInventory);
+			DefaultedList<ItemStack> defaultedList = gunTableRecipe.getRemainder(gunTableInventory);
 
 			for (int i = 0; i < defaultedList.size(); ++i) {
 				ItemStack itemStack = this.gunTableInventory.getStack(i);

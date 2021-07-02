@@ -42,7 +42,6 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.setFireTicks(100);
-					abstractarrowentity.setDamage(6.5);
 					abstractarrowentity.setPunch(1);
 
 					FireballEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
@@ -51,7 +50,6 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity1.setFireTicks(100);
-					abstractarrowentity1.setDamage(6.5);
 					abstractarrowentity1.setPunch(1);
 
 					FireballEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
@@ -60,7 +58,6 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity2.setFireTicks(100);
-					abstractarrowentity2.setDamage(6.5);
 					abstractarrowentity2.setPunch(1);
 
 					worldIn.spawnEntity(abstractarrowentity);

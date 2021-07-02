@@ -4,7 +4,7 @@
 		{
 			"description": {
 				"identifier": "geometry.hellhorse_revolver",
-				"texture_width": 16,
+				"texture_width": 32,
 				"texture_height": 16,
 				"visible_bounds_width": 2,
 				"visible_bounds_height": 1.5,
@@ -198,6 +198,25 @@
 								"west": {"uv": [0, 0], "uv_size": [3, 3]},
 								"up": {"uv": [15, 0], "uv_size": [-3, 3]},
 								"down": {"uv": [12, 3], "uv_size": [3, -3]}
+							}
+						}
+					]
+				},
+				{
+					"name": "bone2",
+					"parent": "revolver",
+					"pivot": [0, 7, -7.9],
+					"cubes": [
+						{
+							"origin": [-0.5, 6.6, -7.9],
+							"size": [1, 1, 0.1],
+							"uv": {
+								"north": {"uv": [16, 0], "uv_size": [16, 16]},
+								"east": {"uv": [32, 0], "uv_size": [0.1, 1]},
+								"south": {"uv": [32, 0], "uv_size": [-16, 16]},
+								"west": {"uv": [32, 0], "uv_size": [0.1, 1]},
+								"up": {"uv": [32, 0], "uv_size": [-0.1, -1]},
+								"down": {"uv": [32, 0], "uv_size": [-0.1, -1]}
 							}
 						}
 					]

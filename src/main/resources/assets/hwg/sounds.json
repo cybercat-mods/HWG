@@ -1,0 +1,59 @@
+{
+	"hwg.ak": {
+		"category": "music", "sounds": [{"name": "hwg:ak"}]
+	},
+	"hwg.minigun": {
+		"category": "music", "sounds": [{"name": "hwg:minigun"}]
+	},
+	"hwg.pistol": {
+		"category": "music", "sounds": [{"name": "hwg:pistol"}]
+	},
+	"hwg.rpg": {
+		"category": "music", "sounds": [{"name": "hwg:rpg"}]
+	},
+	"hwg.shotgun": {
+		"category": "music", "sounds": [{"name": "hwg:shotgun"}]
+	},
+	"hwg.smg": {
+		"category": "music", "sounds": [{"name": "hwg:smg"}]
+	},
+	"hwg.sniper": {
+		"category": "music", "sounds": [{"name": "hwg:sniper"}]
+	},
+	"hwg.spistol": {
+		"category": "music", "sounds": [{"name": "hwg:spistol"}]
+	},
+	"hwg.tommy": {
+		"category": "music", "sounds": [{"name": "hwg:tommy"}]
+	},
+	"hwg.glauncher-fire": {
+		"category": "music", "sounds": [{"name": "hwg:glauncher-fire"}]
+	},
+	"hwg.glauncher-reload": {
+		"category": "music", "sounds": [{"name": "hwg:glauncher-reload"}]
+	},
+	"hwg.clipreload": {
+		"category": "music", "sounds": [{"name": "hwg:clipreload"}]
+	},
+	"hwg.pistolreload": {
+		"category": "music", "sounds": [{"name": "hwg:pistolreload"}]
+	},
+	"hwg.shotgunreload": {
+		"category": "music", "sounds": [{"name": "hwg:shotgunreload"}]
+	},
+	"hwg.sniperreload": {
+		"category": "music", "sounds": [{"name": "hwg:sniperreload"}]
+	},
+	"hwg.revolverreload": {
+		"category": "music", "sounds": [{"name": "hwg:revolverreload"}]
+	},
+	"hwg.flare_gun": {
+		"category": "music", "sounds": [{"name": "hwg:flare_gun"}]
+	},
+	"hwg.luger": {
+		"category": "music", "sounds": [{"name": "hwg:luger"}]
+	},
+	"hwg.revolver": {
+		"category": "music", "sounds": [{"name": "hwg:revolver"}]
+	}
+}

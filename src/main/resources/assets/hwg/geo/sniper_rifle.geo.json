@@ -4,11 +4,11 @@
 		{
 			"description": {
 				"identifier": "geometry.sniper_rifle",
-				"texture_width": 32,
+				"texture_width": 64,
 				"texture_height": 32,
-				"visible_bounds_width": 2,
-				"visible_bounds_height": 1.5,
-				"visible_bounds_offset": [0, 0.25, 0]
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
 			},
 			"bones": [
 				{
@@ -227,6 +227,26 @@
 								"west": {"uv": [30, 13], "uv_size": [2, 2]},
 								"up": {"uv": [29, 15], "uv_size": [-2, -2]},
 								"down": {"uv": [32, 19], "uv_size": [-2, -2]}
+							}
+						}
+					]
+				},
+				{
+					"name": "bone2",
+					"parent": "m40",
+					"pivot": [0, 4, -18.8],
+					"rotation": [0, 0, 45],
+					"cubes": [
+						{
+							"origin": [-0.5, 3.5, -18.8],
+							"size": [1, 1, 1],
+							"uv": {
+								"north": {"uv": [32, 0], "uv_size": [32, 32]},
+								"east": {"uv": [64, 0], "uv_size": [0.1, 1]},
+								"south": {"uv": [64, 0], "uv_size": [-32, 32]},
+								"west": {"uv": [64, 0], "uv_size": [0.1, 1]},
+								"up": {"uv": [64, 0], "uv_size": [-0.1, -1]},
+								"down": {"uv": [64, 0], "uv_size": [-0.1, -1]}
 							}
 						}
 					]

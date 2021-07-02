@@ -8,11 +8,11 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
 
 public class FireballRender extends EntityRenderer<FireballEntity> {
 	private static final Identifier TEXTURE = new Identifier("textures/item/fire_charge.png");
@@ -31,7 +31,7 @@ public class FireballRender extends EntityRenderer<FireballEntity> {
 		matrixStack.push();
 		matrixStack.scale(0.5F, 0.5F, 0.5F);
 		matrixStack.multiply(this.dispatcher.getRotation());
-		matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
+		matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
 		MatrixStack.Entry entry = matrixStack.peek();
 		Matrix4f matrix4f = entry.getModel();
 		Matrix3f matrix3f = entry.getNormal();

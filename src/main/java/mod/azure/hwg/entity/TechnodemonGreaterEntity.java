@@ -42,7 +42,7 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -142,15 +142,15 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 	}
 
 	@Override
-	public void readCustomDataFromTag(CompoundTag tag) {
-		super.readCustomDataFromTag(tag);
+	public void readCustomDataFromNbt(NbtCompound tag) {
+		super.readCustomDataFromNbt(tag);
 		this.updateAttackType();
 		this.setVariant(tag.getInt("Variant"));
 	}
 
 	@Override
-	public void writeCustomDataToTag(CompoundTag tag) {
-		super.writeCustomDataToTag(tag);
+	public void writeCustomDataToNbt(NbtCompound tag) {
+		super.writeCustomDataToNbt(tag);
 		tag.putInt("Variant", this.getVariant());
 	}
 
@@ -226,7 +226,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 
 	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
-			EntityData entityData, CompoundTag entityTag) {
+			EntityData entityData, NbtCompound entityTag) {
 		this.setVariant(this.random.nextInt());
 		this.updateAttackType();
 		this.setUuid(UUID.randomUUID());

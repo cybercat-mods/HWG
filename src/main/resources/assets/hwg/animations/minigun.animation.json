@@ -1,0 +1,33 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"firing": {
+			"loop": true,
+			"animation_length": 0.04,
+			"bones": {
+				"bone": {
+					"rotation": {
+						"vector": [0, 0, "math.sin(query.anim_time * 360) * 18000"]
+					}
+				},
+				"bone2": {
+					"rotation": {
+						"vector": [0, 0, "math.sin(query.anim_time * 360) * 18000"]
+					},
+					"position": {
+						"vector": [0, 0, -5]
+					},
+					"scale": {
+						"vector": [14, 14, 1]
+					}
+				},
+				"minigun": {
+					"position": {
+						"vector": [0, 0, "math.sin(query.anim_time * 360) * 3"]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

@@ -1,0 +1,15 @@
+shotgun - https://soundbible.com/1958-Shotgun-12ga-Fire.html
+sniper - https://soundbible.com/1788-Sniper-Rifle.html
+minigun - https://soundbible.com/1920-Minigun.html
+smg - https://soundbible.com/2091-MP5-SMG-9mm.html
+ak - https://soundbible.com/987-AK47-Assault-Rifle.html
+tommy - https://soundbible.com/640-Machine-Gun.html
+spistol - https://soundbible.com/930-Gun-Silencer.html
+pistol - https://soundbible.com/1382-9mm-Glock-17.html
+rpg - https://soundbible.com/2075-RPG-Plus-Shrapnel.html
+glauncher-fire/reload - https://soundbible.com/2140-Grenade-Launcher-2.html
+shotgunreload - https://soundbible.com/1959-Shotgun-Reload-Pump.html
+pistolreload - https://soundbible.com/1069-Lock-And-Load.html
+clipreload - https://soundbible.com/414-Eject-Clip-And-Re-Load.html
+sniperreload - https://soundbible.com/2024-Sniper-Fire-Reload.html
+revolverreload - https://www.fesliyanstudios.com/royalty-free-sound-effects-download/gun-reloading-302
