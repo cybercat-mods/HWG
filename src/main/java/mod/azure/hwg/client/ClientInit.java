@@ -70,13 +70,13 @@ public class ClientInit implements ClientModInitializer {
 		GeoItemRenderer.registerItemRenderer(HWGItems.MEANIE1, new Meanie1Render());
 		GeoItemRenderer.registerItemRenderer(HWGItems.MEANIE2, new Meanie2Render());
 		GeoItemRenderer.registerItemRenderer(HWGItems.FLARE_GUN, new FlareGunRender());
-//		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
-//			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERGUN, new SilverGunRender());
-//			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERHELLHORSE, new SHellRender());
-//			EntityRendererRegistry.INSTANCE.register(BWCompatItems.SILVERBULLETS, (dispatcher, context) -> {
-//				return new SilverBulletRender(dispatcher);
-//			});
-//		}
+		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
+			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERGUN, new SilverGunRender());
+			GeoItemRenderer.registerItemRenderer(BWCompatItems.SILVERHELLHORSE, new SHellRender());
+			EntityRendererRegistry.INSTANCE.register(BWCompatItems.SILVERBULLETS, (dispatcher, context) -> {
+				return new SilverBulletRender(dispatcher);
+			});
+		}
 		ClientSidePacketRegistry.INSTANCE.register(EntityPacket.ID, (ctx, buf) -> {
 			EntityPacketOnClient.onPacket(ctx, buf);
 		});
