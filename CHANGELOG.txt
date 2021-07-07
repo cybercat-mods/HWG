@@ -1,7 +1,4 @@
-v.1.0.16
+v.1.0.17
 
-- Fixed weapon animations at 1 durability when they are disabled.
-- All weapons now animated when firing.
-- All weapons have new sounds for firing and reloading.
-- All gun damages are now configurable, save for Grenades and Rockets which use explosions to handle damage and the flame thrower since it's mainly to set things on fire. 
-- Fixed crash with REI.
+- Fixed hitbox of Gun Crafting Table.
+- Fixes crash with BW due to commented registeration code from debugging Fabric API issues with Java 8. 
