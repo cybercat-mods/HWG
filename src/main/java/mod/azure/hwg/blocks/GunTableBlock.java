@@ -93,7 +93,7 @@ public class GunTableBlock extends HorizontalFacingBlock implements BlockEntityP
 
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		Direction direction = (Direction) state.get(FACING);
-		return direction.getAxis() == Direction.Axis.X ? X_AXIS_AABB : Z_AXIS_AABB;
+		return direction.getAxis() == Direction.Axis.X ? Z_AXIS_AABB : X_AXIS_AABB;
 	}
 
 	public BlockState mirror(BlockState state, BlockMirror mirror) {

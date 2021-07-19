@@ -1,3 +1,3 @@
-v.1.0.6
+v.1.0.7
 
-- Fixed hitbox of Gun Crafting Table.
+- Fixed a few things since Fabric broke things yet again.

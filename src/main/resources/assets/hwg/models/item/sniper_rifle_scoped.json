@@ -98,13 +98,5 @@
 				0.56
 			]
 		}
-	},
-	"overrides": [
-		{
-			"predicate": {
-				"scoped": 1
-			},
-			"model": "hwg:item/sniper_rifle_scoped"
-		}
-	]
+	}
 }

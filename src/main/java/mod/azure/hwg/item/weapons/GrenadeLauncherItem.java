@@ -273,17 +273,17 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 	}
 
 	public static boolean isCharged(ItemStack stack) {
-		NbtCompound NbtCompound = stack.getTag();
+		NbtCompound NbtCompound = stack.getNbt();
 		return NbtCompound != null && NbtCompound.getBoolean("Charged");
 	}
 
 	public static void setCharged(ItemStack stack, boolean charged) {
-		NbtCompound NbtCompound = stack.getOrCreateTag();
+		NbtCompound NbtCompound = stack.getOrCreateNbt();
 		NbtCompound.putBoolean("Charged", charged);
 	}
 
 	private static void putProjectile(ItemStack crossbow, ItemStack projectile) {
-		NbtCompound NbtCompound = crossbow.getOrCreateTag();
+		NbtCompound NbtCompound = crossbow.getOrCreateNbt();
 		NbtList NbtList2;
 		if (NbtCompound.contains("ChargedProjectiles", 9)) {
 			NbtList2 = NbtCompound.getList("ChargedProjectiles", 10);
@@ -299,7 +299,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 
 	private static List<ItemStack> getProjectiles(ItemStack crossbow) {
 		List<ItemStack> list = Lists.newArrayList();
-		NbtCompound NbtCompound = crossbow.getTag();
+		NbtCompound NbtCompound = crossbow.getNbt();
 		if (NbtCompound != null && NbtCompound.contains("ChargedProjectiles", 9)) {
 			NbtList NbtList = NbtCompound.getList("ChargedProjectiles", 10);
 			if (NbtList != null) {
@@ -313,7 +313,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 	}
 
 	private static void clearProjectiles(ItemStack crossbow) {
-		NbtCompound NbtCompound = crossbow.getTag();
+		NbtCompound NbtCompound = crossbow.getNbt();
 		if (NbtCompound != null) {
 			NbtList NbtList = NbtCompound.getList("ChargedProjectiles", 9);
 			NbtList.clear();

@@ -70,7 +70,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 			}
 
 			craftingInventory.setStack(5, itemStack);
-			serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, 5, itemStack));
+			serverPlayerEntity.networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(syncId, 0, 5, itemStack));
 		}
 	}
 
@@ -157,7 +157,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 			for (int i = 0; i < 5; i++) {
 				Ingredient ingredient = gunTableRecipe.getIngredientForSlot(i);
 				if (!ingredient.isEmpty()) {
-					ItemStack[] possibleItems = ((IngredientAccess) (Object) ingredient).getMatchingStacks();
+					ItemStack[] possibleItems = ((IngredientAccess) (Object) ingredient).getMatchingStacksMod();
 					if (possibleItems != null) {
 						ItemStack first = new ItemStack(possibleItems[0].getItem(), gunTableRecipe.countRequired(i));
 						autofill(i, first);
@@ -190,7 +190,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 	}
 
 	private boolean equals(ItemStack itemStack, ItemStack otherItemStack) {
-		return itemStack.getItem() == otherItemStack.getItem() && ItemStack.areTagsEqual(itemStack, otherItemStack);
+		return itemStack.getItem() == otherItemStack.getItem() && ItemStack.areNbtEqual(itemStack, otherItemStack);
 	}
 
 	public void close(PlayerEntity player) {

@@ -12,7 +12,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.Durations;
 import net.minecraft.entity.ai.RangedAttackMob;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -22,6 +21,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -31,7 +31,7 @@ public abstract class HWGEntity extends HostileEntity implements Angerable, Rang
 
 	private static final TrackedData<Integer> ANGER_TIME = DataTracker.registerData(HWGEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
-	private static final UniformIntProvider ANGER_TIME_RANGE = Durations.betweenSeconds(20, 39);
+	private static final UniformIntProvider ANGER_TIME_RANGE = TimeHelper.betweenSeconds(20, 39);
 	public static final TrackedData<Integer> VARIANT = DataTracker.registerData(HWGEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
 	private UUID targetUuid;
