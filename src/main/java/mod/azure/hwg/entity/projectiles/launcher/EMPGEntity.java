@@ -231,7 +231,7 @@ public class EMPGEntity extends PersistentProjectileEntity implements IAnimatabl
 			double y = (MathHelper.sqrt((float) entity.squaredDistanceTo(vec3d)) / 8);
 			if (entity instanceof TechnodemonEntity || entity instanceof TechnodemonGreaterEntity) {
 				if (y <= 1.0D) {
-					entity.damage(DamageSource.magic(this, this), 10);
+					entity.damage(DamageSource.arrow(this, this), 10);
 				}
 			}
 		}
