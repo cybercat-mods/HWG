@@ -51,11 +51,18 @@ repositories {
         name "Siphalor's Maven"
         url "https://maven.siphalor.de"
     }
+    maven {
+        name "terraform wood api, trinkets"
+        url "https://maven.terraformersmc.com"
+    }
     maven { url "https://maven.shedaniel.me/" }
-    maven { url = 'https://maven.terraformersmc.com/' }
     maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
     maven { url 'https://maven.blamejared.com' }
     maven { url  = 'https://plugins.gradle.org/m2/' }
+    maven {
+        name "jitpack"
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
@@ -69,10 +76,25 @@ dependencies {
     include "me.shedaniel.cloth:cloth-config-fabric:4.11.14"
 	modImplementation "de.siphalor:nbtcrafting-1.16:2+"
 	include "de.siphalor:nbtcrafting-1.16:2+"
-    modImplementation "com.terraformersmc:modmenu:1.16.8"
+	modImplementation 'curse.maven:modmenu-308702:3268909'
     
     modImplementation "vazkii.patchouli:Patchouli:1.16.4-51-FABRIC"
-	modImplementation 'curse.maven:BW-394915:3228835'
+	modImplementation 'curse.maven:BW-394915:3375181'
+	//modImplementation 'curse.maven:trinkets-341284:3100959'
+	//modImplementation 'curse.maven:somnus-433538:3218841'
+	//modImplementation 'curse.maven:impersonate-360333:3186818'
+	//modImplementation 'curse.maven:pehkui-319596:3300900'
+	//modImplementation 'curse.maven:cca-318449:3312678'
+	//modImplementation 'curse.maven:ccaentity-318449:3312682'
+	//modImplementation 'curse.maven:ccabase-318449:3312679'
+    //modImplementation "com.jamieswhiteshirt:reach-entity-attributes:1.1.1"
+    //include "com.jamieswhiteshirt:reach-entity-attributes:1.1.1"
+    //modImplementation "com.github.emilyploszaj:step-height-entity-attribute:1.0.1"
+    //include "com.github.emilyploszaj:step-height-entity-attribute:1.0.1"
+    //modImplementation "io.github.ladysnake:PlayerAbilityLib:1.2.1"
+    //include "io.github.ladysnake:PlayerAbilityLib:1.2.1"
+    //modImplementation "com.terraformersmc.terraform-api:terraform-wood-api-v1:${terraform_wood_api_version}"
+    //include "com.terraformersmc.terraform-api:terraform-wood-api-v1:${terraform_wood_api_version}"
 }
 
 processResources {

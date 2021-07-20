@@ -212,7 +212,7 @@ public class FireballEntity extends PersistentProjectileEntity {
 				double y = (double) (MathHelper.sqrt(entity.distanceTo(this)));
 				if (y <= 1.0D) {
 					if (entity.isAlive()) {
-						entity.damage(DamageSource.magic(this, this.shooter), 3);
+						entity.damage(DamageSource.arrow(this, this.shooter), 3);
 						if (!(entity instanceof FireballEntity && this.getOwner() instanceof PlayerEntity)) {
 							entity.setFireTicks(90);
 						}
@@ -277,9 +277,9 @@ public class FireballEntity extends PersistentProjectileEntity {
 		Entity entity2 = this.getOwner();
 		DamageSource damageSource2;
 		if (entity2 == null) {
-			damageSource2 = DamageSource.magic(this, this);
+			damageSource2 = DamageSource.arrow(this, this);
 		} else {
-			damageSource2 = DamageSource.magic(this, entity2);
+			damageSource2 = DamageSource.arrow(this, entity2);
 			if (entity2 instanceof LivingEntity) {
 				((LivingEntity) entity2).onAttacking(entity);
 			}
