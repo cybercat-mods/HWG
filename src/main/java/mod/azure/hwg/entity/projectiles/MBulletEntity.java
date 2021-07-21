@@ -66,10 +66,8 @@ public class MBulletEntity extends PersistentProjectileEntity implements IAnimat
 	@Override
 	protected void onHit(LivingEntity living) {
 		super.onHit(living);
-		if (!(living instanceof PlayerEntity)) {
-			living.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 45, 1));
-			living.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 45, 1));
-		}
+		living.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 450, 1));
+		living.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 450, 1));
 	}
 
 	private AnimationFactory factory = new AnimationFactory(this);

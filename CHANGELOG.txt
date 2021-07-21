@@ -1,3 +1,3 @@
-v.1.0.18
+v.1.0.19
 
-- Fixed damage not respecting shields
+- Fixed Sniper Rifle not respecting players FOV when held and scoping. 

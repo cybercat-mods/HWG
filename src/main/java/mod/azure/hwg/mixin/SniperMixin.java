@@ -21,13 +21,14 @@ import net.minecraft.util.Identifier;
 @Mixin(InGameHud.class)
 public abstract class SniperMixin extends DrawableHelper {
 
-	private static final Identifier BLUR = new Identifier("hwg", "textures/gui/pumpkinblur.png");
+	private static final Identifier SNIPER = new Identifier("hwg", "textures/gui/pumpkinblur.png");
 	@Shadow
 	private final MinecraftClient client;
 	@Shadow
 	private int scaledWidth;
 	@Shadow
 	private int scaledHeight;
+	private boolean scoped = true;
 
 	public SniperMixin(MinecraftClient client) {
 		this.client = client;
@@ -38,10 +39,16 @@ public abstract class SniperMixin extends DrawableHelper {
 		ItemStack itemStack = this.client.player.inventory.getMainHandStack();
 		if (this.client.options.getPerspective().isFirstPerson() && itemStack.getItem() instanceof SniperItem) {
 			if (this.client.options.keySneak.isPressed()) {
-				this.client.options.fov = 10;
+				if (this.scoped == true) {
+					this.client.options.fov = this.client.options.fov - 60;
+					this.scoped = false;
+				}
 				this.renderSniperOverlay();
 			} else {
-				this.client.options.fov = 70;
+				if (!this.scoped) {
+					this.client.options.fov = this.client.options.fov + 60;
+					this.scoped = true;
+				}
 			}
 		}
 	}
@@ -52,7 +59,7 @@ public abstract class SniperMixin extends DrawableHelper {
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.disableAlphaTest();
-		this.client.getTextureManager().bindTexture(BLUR);
+		this.client.getTextureManager().bindTexture(SNIPER);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 		bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
