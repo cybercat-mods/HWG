@@ -1,3 +1,4 @@
-v.1.0.10
+v.1.0.11
 
-- Fixed Sniper Rifle not respecting players FOV when held and scoping. 
+- Fixes crash with placing Gun Table when looking down. 
+- Rebalanced somethings.
