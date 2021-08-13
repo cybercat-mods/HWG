@@ -222,7 +222,7 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	}
 
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
-		return MobEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 50.0D)
+		return MobEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35D)
 				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.merc_health).add(EntityAttributes.GENERIC_ARMOR, 3)
 				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D)
