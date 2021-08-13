@@ -1,4 +1,4 @@
-v.1.0.11
+v.1.0.12
 
-- Fixes crash with placing Gun Table when looking down. 
-- Rebalanced somethings.
+- Asset compression #RDKRACZ
+- Reduced argo range of mobs from 50 blocks to 25 blocks.

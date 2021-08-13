@@ -35,6 +35,8 @@ public class RocketLauncher extends HWGGunBase {
 					RocketEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
 					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
 							0.0F, 0.25F * 3.0F, 1.0F);
+					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.95),
+							entityLiving.getZ(), 0, 0);
 
 					abstractarrowentity.setDamage(2.5);
 
