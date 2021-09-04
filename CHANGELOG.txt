@@ -1,12 +1,3 @@
-v.1.0.14
+v.1.0.15
 
-- No longer bundle Cloth Config, now set a requirement on CurseForge and the mod.json. Makes mod smaller.
-- Config revamped, all old configs are no longer valid as the new config is saved in json not toml
- - Added Config options for:
-  - Per Mob Exp Drop
-  - Per Mob Biome Tag or Biome registry name for spawning.
-- Fixed Patchouli book.
-- Fixed lang file for missing Weapon Config.
-- Fixed Technodemons spawning in Wart trees.
-- Fixed Technodemons Spawn Egg spawns, now more random.
-- Flares now spawn a light block when hitting the ground, which removes itself with the flare when expired.
+- Fixed all Flares but the Black flare not removing light source.

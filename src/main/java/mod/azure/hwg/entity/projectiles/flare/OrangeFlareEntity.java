@@ -103,6 +103,13 @@ public class OrangeFlareEntity extends PersistentProjectileEntity {
 	}
 
 	@Override
+	public void onRemoved() {
+		world.updateNeighbors(this.getBlockPos(), Blocks.AIR);
+		world.setBlockState(this.getBlockPos(), Blocks.AIR.getDefaultState(), Block.NOTIFY_NEIGHBORS);
+		super.onRemoved();
+	}
+
+	@Override
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
 		if (this.isAlive())
