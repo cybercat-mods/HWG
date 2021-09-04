@@ -1,4 +1,4 @@
-v.1.0.12
+v.1.0.14
 
 - No longer bundle Cloth Config, now set a requirement on CurseForge and the mod.json. Makes mod smaller.
 - Config revamped, all old configs are no longer valid as the new config is saved in json not toml
