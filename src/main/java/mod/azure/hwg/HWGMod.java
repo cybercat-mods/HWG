@@ -1,7 +1,7 @@
 package mod.azure.hwg;
 
 import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import mod.azure.hwg.blocks.FuelTankBlock;
 import mod.azure.hwg.blocks.GunBlockEntity;
 import mod.azure.hwg.blocks.GunTableBlock;
@@ -79,24 +79,12 @@ public class HWGMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		AutoConfig.register(HWGConfig.class, Toml4jConfigSerializer::new);
+		AutoConfig.register(HWGConfig.class, GsonConfigSerializer::new);
 		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();
 		SOUNDS = new HWGSounds();
-//		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
-//			BWITEMS = new BWCompatItems();
-//			LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
-//				if (HWGLoot.BASTION_BRIDGE.equals(id) || HWGLoot.BASTION_HOGLIN_STABLE.equals(id)
-//						|| HWGLoot.BASTION_OTHER.equals(id) || HWGLoot.BASTION_TREASURE.equals(id)
-//						|| HWGLoot.NETHER_BRIDGE.equals(id) || HWGLoot.RUINED_PORTAL.equals(id)) {
-//					FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
-//							.rolls(ConstantLootTableRange.create(1)).withEntry(ItemEntry.builder(BWCompatItems.SILVERHELLHORSE).build());
-//					supplier.pool(poolBuilder);
-//				}
-//			});
-//		}
 		MOBS = new HWGMobs();
 		PARTICLES = new HWGParticles();
 		PROJECTILES = new ProjectilesEntityRegister();
@@ -106,16 +94,6 @@ public class HWGMod implements ModInitializer {
 		GUN_TABLE_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, MODID + ":guntable",
 				FabricBlockEntityTypeBuilder.create(GunBlockEntity::new, GUN_TABLE).build(null));
 		MobAttributes.init();
-//		LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
-//			if (HWGLoot.B_TREASURE.equals(id) || HWGLoot.JUNGLE.equals(id) || HWGLoot.U_BIG.equals(id)
-//					|| HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id)
-//					|| HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
-//				FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
-//						.rolls(ConstantLootTableRange.create(1)).withEntry(ItemEntry.builder(HWGItems.MEANIE1).build())
-//						.withEntry(ItemEntry.builder(HWGItems.MEANIE2).build());
-//				supplier.pool(poolBuilder);
-//			}
-//		});
 		PacketHandler.registerMessages();
 	}
 }

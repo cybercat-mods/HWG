@@ -1,4 +1,9 @@
 v.1.0.12
 
-- Asset compression #RDKRACZ
-- Reduced argo range of mobs from 50 blocks to 25 blocks.- Fixed Technodemons spawning in Wart trees.- No longer bundle Cloth Config, now set a requirement on CurseForge and the mod.json. Makes mod smaller.- Fixed Patchouli book.- Fixed Patchouli book.- Fixed Technodemons Spawn Egg spawns, now more random.
+- No longer bundle Cloth Config, now set a requirement on CurseForge and the mod.json. Makes mod smaller.
+- Config revamped, all old configs are no longer valid as the new config is saved in json not toml
+ - Added Config options for:
+  - Per Mob Exp Drop
+  - Per Mob Biome Tag or Biome registry name for spawning.
+- Fixed Patchouli book.- Fixed Technodemons spawning in Wart trees.
+- Fixed Technodemons Spawn Egg spawns, now more random.

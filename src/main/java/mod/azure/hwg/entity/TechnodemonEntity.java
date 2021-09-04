@@ -81,6 +81,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 
 	public TechnodemonEntity(EntityType<TechnodemonEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
+		this.experiencePoints = config.lesser_exp;
 	}
 
 	private AnimationFactory factory = new AnimationFactory(this);

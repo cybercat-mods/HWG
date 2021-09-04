@@ -1,5 +1,8 @@
 package mod.azure.hwg.config;
 
+import java.util.Arrays;
+import java.util.List;
+
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -18,18 +21,27 @@ public class HWGConfig implements ConfigData {
 	public Weapons weapons = new Weapons();
 
 	public static class Spawning {
+		@ConfigEntry.Gui.Tooltip(count = 1)
+		public List<String> merc_biomes = Arrays.asList("#forest", "#plains", "#icy", "#taiga", "#jungle", "#desert",
+				"#mesa");
 		public int merc_spawn_weight = 5;
 		public int merc_min_group = 1;
 		public int merc_max_group = 2;
 
+		@ConfigEntry.Gui.Tooltip(count = 1)
+		public List<String> spy_biomes = Arrays.asList("#taiga", "#jungle", "#mesa");
 		public int spy_spawn_weight = 5;
 		public int spy_min_group = 1;
 		public int spy_max_group = 2;
 
+		@ConfigEntry.Gui.Tooltip(count = 1)
+		public List<String> lesser_biomes = Arrays.asList("#nether");
 		public int lesser_spawn_weight = 2;
 		public int lesser_min_group = 1;
 		public int lesser_max_group = 2;
 
+		@ConfigEntry.Gui.Tooltip(count = 1)
+		public List<String> greater_biomes = Arrays.asList("#nether");
 		public int greater_spawn_weight = 1;
 		public int greater_min_group = 1;
 		public int greater_max_group = 1;
@@ -37,9 +49,13 @@ public class HWGConfig implements ConfigData {
 
 	public static class MobStats {
 		public double merc_health = 20;
+		public int merc_exp = 4;
 		public double spy_health = 20;
+		public int spy_exp = 4;
 		public double lesser_health = 48;
+		public int lesser_exp = 8;
 		public double greater_health = 100;
+		public int greater_exp = 16;
 	}
 
 	public static class Weapons {
