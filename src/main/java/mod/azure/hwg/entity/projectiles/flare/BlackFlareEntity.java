@@ -9,6 +9,8 @@ import mod.azure.hwg.util.registry.HWGSounds;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -20,6 +22,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -53,6 +56,20 @@ public class BlackFlareEntity extends PersistentProjectileEntity {
 			boolean shotAtAngle) {
 		this(world, stack, x, y, z, shotAtAngle);
 		this.setOwner(entity);
+	}
+
+	@Override
+	public boolean isOnGround() {
+		world.setBlockState(this.getBlockPos(), Blocks.LIGHT.getDefaultState(), Block.NOTIFY_NEIGHBORS);
+		world.updateNeighbors(this.getBlockPos(), Blocks.LIGHT);
+		return super.isOnGround();
+	}
+
+	@Override
+	public void onRemoved() {
+		world.updateNeighbors(this.getBlockPos(), Blocks.AIR);
+		world.setBlockState(this.getBlockPos(), Blocks.AIR.getDefaultState(), Block.NOTIFY_NEIGHBORS);
+		super.onRemoved();
 	}
 
 	@Override
@@ -102,6 +119,10 @@ public class BlackFlareEntity extends PersistentProjectileEntity {
 	@Override
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
+		if (this.isAlive())
+			world.setBlockState(blockHitResult.getBlockPos().offset(Direction.UP), Blocks.LIGHT.getDefaultState(), Block.NOTIFY_NEIGHBORS);
+		if (this.isRemoved())
+			world.setBlockState(blockHitResult.getBlockPos().offset(Direction.UP), Blocks.AIR.getDefaultState(), Block.NOTIFY_NEIGHBORS);
 		this.setSound(HWGSounds.FLAREGUN);
 	}
 

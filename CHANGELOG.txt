@@ -5,5 +5,8 @@ v.1.0.12
  - Added Config options for:
   - Per Mob Exp Drop
   - Per Mob Biome Tag or Biome registry name for spawning.
-- Fixed Patchouli book.- Fixed Technodemons spawning in Wart trees.
+- Fixed Patchouli book.
+- Fixed lang file for missing Weapon Config.
+- Fixed Technodemons spawning in Wart trees.
 - Fixed Technodemons Spawn Egg spawns, now more random.
+- Flares now spawn a light block when hitting the ground, which removes itself with the flare when expired.
