@@ -7,11 +7,11 @@
 	
 	"pages": [
 		{
-			"type": "text",
+			"type": "patchouli:text",
 			"text": "A resident of the Netherrealm. Using the resources found there, they have devised a powerful set of weapons they use to rip and tear though you."
 		},
 		{
-			"type": "entity",
+			"type": "patchouli:entity",
 			"entity": "hwg:technodemon_greater_1",
 			"scale": 1.0,
 			"rotate": false,

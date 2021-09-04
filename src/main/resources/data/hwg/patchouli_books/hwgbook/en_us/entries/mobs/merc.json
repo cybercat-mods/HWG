@@ -7,11 +7,11 @@
 	
 	"pages": [
 		{
-			"type": "text",
+			"type": "patchouli:text",
 			"text": "A class of Illagers that use weapons and hunt down the player. They seem to have no interest in Villagers strangely. Drops 2-3 Gunpowder, 5-10 Bullets, and rarely their gun."
 		},
 		{
-			"type": "entity",
+			"type": "patchouli:entity",
 			"entity": "hwg:merc",
 			"scale": 1.0,
 			"rotate": false,
