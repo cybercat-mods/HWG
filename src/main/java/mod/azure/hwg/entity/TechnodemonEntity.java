@@ -3,6 +3,7 @@ package mod.azure.hwg.entity;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.SplittableRandom;
 
 import mod.azure.hwg.entity.goal.RangedAttackGoal;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
@@ -16,6 +17,7 @@ import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityGroup;
@@ -228,7 +230,9 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	@Override
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
 			EntityData entityData, NbtCompound entityTag) {
-		this.setVariant(this.random.nextInt(5));
+		SplittableRandom random = new SplittableRandom();
+		int var = random.nextInt(0, 5);
+		this.setVariant(var);
 		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		this.updateAttackType();
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);

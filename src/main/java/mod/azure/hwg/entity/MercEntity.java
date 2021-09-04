@@ -3,6 +3,7 @@ package mod.azure.hwg.entity;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.SplittableRandom;
 
 import mod.azure.hwg.entity.goal.RangedAttackGoal;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
@@ -270,7 +271,9 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 			this.setVariant(4);
 			break;
 		default:
-			this.setVariant(random.nextInt(getVariants() - 1) + 1);
+			SplittableRandom random = new SplittableRandom();
+			int var = random.nextInt(0, 5);
+			this.setVariant(var);
 			break;
 		}
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
