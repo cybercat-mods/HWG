@@ -106,9 +106,13 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 		return this.factory;
 	}
 
-	public static boolean canSpawn(EntityType<? extends HWGEntity> type, WorldAccess world, SpawnReason spawnReason,
-			BlockPos pos, Random random) {
-		return world.getDifficulty() != Difficulty.PEACEFUL;
+	public static boolean canSpawn(EntityType<? extends HWGEntity> type, WorldAccess serverWorldAccess,
+			SpawnReason spawnReason, BlockPos pos, Random random) {
+		if (serverWorldAccess.getDifficulty() == Difficulty.PEACEFUL)
+			return false;
+		if ((spawnReason != SpawnReason.CHUNK_GENERATION && spawnReason != SpawnReason.NATURAL))
+			return !serverWorldAccess.getBlockState(pos.down()).isOf(Blocks.NETHER_WART_BLOCK);
+		return !serverWorldAccess.getBlockState(pos.down()).isOf(Blocks.NETHER_WART_BLOCK);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
 v.1.0.12
 
 - Asset compression #RDKRACZ
-- Reduced argo range of mobs from 50 blocks to 25 blocks.
+- Reduced argo range of mobs from 50 blocks to 25 blocks.- Fixed Technodemons spawning in Wart trees.
