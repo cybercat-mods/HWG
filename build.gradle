@@ -35,23 +35,20 @@ dependencies {
 	modApi("me.shedaniel.cloth:cloth-config-fabric:5.0.34") {
     	exclude(group: "com.terraformersmc.modmenu")
     }
-    include("me.shedaniel.cloth:cloth-config-fabric:5.0.34") {
-    	exclude(group: "com.terraformersmc.modmenu")
-    }
     modCompileOnly "vazkii.patchouli:Patchouli:1.17-55-FABRIC-SNAPSHOT"	
-	modCompileOnly("de.siphalor:nbtcrafting-1.17:2.0.16+mc1.17") {
+	modCompileOnly("de.siphalor:nbtcrafting-1.17:2.0.20+mc1.17.1") {
     	exclude(group: "com.terraformersmc.modmenu")
         exclude(group: "io.github.prospector")
         exclude(group: "me.shedaniel")
         exclude(group: "net.fabricmc")
     }
-	include("de.siphalor:nbtcrafting-1.17:2.0.16+mc1.17") {
+	include("de.siphalor:nbtcrafting-1.17:2.0.20+mc1.17.1") {
     	exclude(group: "com.terraformersmc.modmenu")
         exclude(group: "io.github.prospector")
         exclude(group: "me.shedaniel")
         exclude(group: "net.fabricmc")
     }	
-    modCompileOnly "com.terraformersmc:modmenu:2.0.0-beta.5"
+    modCompileOnly "com.terraformersmc:modmenu:2.0.5"
 }
 
 repositories {
@@ -152,6 +149,8 @@ if (file('key.properties').exists()) {
         	relations {
             	requiredDependency 'fabric-api'  
             	requiredDependency 'geckolib'  
+            	requiredDependency 'cloth-config'  
+            	optionalDependency 'patchouli-fabric'   
         	}
         	mainArtifact(remapJar)
 
