@@ -1,3 +1,5 @@
-v.1.0.15
+v.1.0.16
 
-- Fixed all Flares but the Black flare not removing light source.
+- Changed Patchouli book.
+- Flares no longer able to be picked up.
+- Flare light block placement updated, stricter if it will place the light source or not so it doesn't replace blocks.
