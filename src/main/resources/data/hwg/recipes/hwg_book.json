@@ -1,17 +1,12 @@
 {
-	"type": "minecraft:crafting_shapeless",
-	"ingredients": [
-		{
-			"item": "minecraft:gunpowder"
-		},
-		{
-			"item": "minecraft:book"
-		}
-	],
-	"result": {
-		"item": "patchouli:guide_book",
-		"data": {
-			"patchouli:book": "hwg:hwgbook"
-		}
-	}
+  "type": "patchouli:shapeless_book_recipe",
+  "ingredients": [
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:book"
+    }
+  ],
+  "book": "hwg:hwgbook"
 }
