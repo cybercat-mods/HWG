@@ -104,19 +104,31 @@ public class OrangeFlareEntity extends PersistentProjectileEntity {
 
 	@Override
 	public void onRemoved() {
-		world.updateNeighbors(this.getBlockPos(), Blocks.AIR);
-		world.setBlockState(this.getBlockPos(), Blocks.AIR.getDefaultState(), Block.NOTIFY_NEIGHBORS);
+		if (world.getBlockState(this.getBlockPos()) == Blocks.LIGHT.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().north()) == Blocks.LIGHT.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().south()) == Blocks.LIGHT.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().east()) == Blocks.LIGHT.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().west()) == Blocks.LIGHT.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().up()) == Blocks.LIGHT.getDefaultState()) {
+			world.updateNeighbors(this.getBlockPos(), Blocks.AIR);
+			world.setBlockState(this.getBlockPos(), Blocks.AIR.getDefaultState(), Block.NOTIFY_NEIGHBORS);
+		}
 		super.onRemoved();
 	}
 
 	@Override
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
-		if (this.isAlive())
-			world.setBlockState(blockHitResult.getBlockPos().offset(Direction.UP), Blocks.LIGHT.getDefaultState(), Block.NOTIFY_NEIGHBORS);
-		if (this.isRemoved())
-			world.setBlockState(blockHitResult.getBlockPos().offset(Direction.UP), Blocks.AIR.getDefaultState(), Block.NOTIFY_NEIGHBORS);
-		this.setSound(HWGSounds.FLAREGUN);
+		if (world.getBlockState(this.getBlockPos()) == Blocks.AIR.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().north()) == Blocks.AIR.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().south()) == Blocks.AIR.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().east()) == Blocks.AIR.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().west()) == Blocks.AIR.getDefaultState()
+				&& world.getBlockState(this.getBlockPos().up()) == Blocks.AIR.getDefaultState()) {
+			if (this.isAlive())
+				world.setBlockState(blockHitResult.getBlockPos().offset(Direction.UP), Blocks.LIGHT.getDefaultState(),
+						Block.NOTIFY_NEIGHBORS);
+		}
 	}
 
 	@Override
@@ -147,6 +159,11 @@ public class OrangeFlareEntity extends PersistentProjectileEntity {
 	@Environment(EnvType.CLIENT)
 	public boolean shouldRender(double distance) {
 		return true;
+	}
+	
+	@Override
+	protected boolean tryPickup(PlayerEntity player) {
+		return false;
 	}
 
 }
