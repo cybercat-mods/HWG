@@ -79,6 +79,7 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 
 	public MercEntity(EntityType<MercEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
+		this.experiencePoints = config.merc_exp;
 	}
 
 	private AnimationFactory factory = new AnimationFactory(this);

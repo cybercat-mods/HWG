@@ -77,6 +77,7 @@ public class SpyEntity extends HWGEntity implements IAnimatable {
 
 	public SpyEntity(EntityType<SpyEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
+		this.experiencePoints = config.spy_exp;
 	}
 
 	private AnimationFactory factory = new AnimationFactory(this);

@@ -37,9 +37,13 @@ public class HWGConfig implements ConfigData {
 
 	public static class MobStats {
 		public double merc_health = 20;
+		public int merc_exp = 4;
 		public double spy_health = 20;
+		public int spy_exp = 4;
 		public double lesser_health = 48;
+		public int lesser_exp = 8;
 		public double greater_health = 100;
+		public int greater_exp = 16;
 	}
 
 	public static class Weapons {
