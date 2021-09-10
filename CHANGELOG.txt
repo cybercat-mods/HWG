@@ -1,4 +1,4 @@
-v.1.0.21
+v.1.0.22
 
-- Asset compression #RDKRACZ
-- Reduced argo range of mobs from 50 blocks to 25 blocks.
+- Back ported mob spawning config/exp config.
+- Added a new dedicated button to Sniper Rifle Scoping, configurable in settings.
