@@ -62,6 +62,7 @@
 	"item.hwg.merc_spawn_egg": "Merc Spawn Egg",
 	"item.hwg.spy_spawn_egg": "Spy Spawn Egg",
 	"key.hwg.reload": "Weapon Reload",
+	"key.hwg.scope": "Sniper Scope",
 	"category.hwg.binds": "HWG",
 	"text.autoconfig.hwg.title": "Happiness is a Warm Gun Config",
 	"text.autoconfig.hwg.option.spawn": "Spawn Settings",

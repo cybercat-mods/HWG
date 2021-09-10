@@ -44,6 +44,9 @@ public class ClientInit implements ClientModInitializer {
 	public static KeyBinding reload = new KeyBinding("key.hwg.reload", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R,
 			"category.hwg.binds");
 
+	public static KeyBinding scope = new KeyBinding("key.hwg.scope", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT,
+			"category.hwg.binds");
+
 	@Override
 	public void onInitializeClient() {
 		ModelProviderinit.init();
@@ -75,6 +78,7 @@ public class ClientInit implements ClientModInitializer {
 			EntityPacketOnClient.onPacket(ctx, buf);
 		});
 		KeyBindingHelper.registerKeyBinding(reload);
+		KeyBindingHelper.registerKeyBinding(scope);
 		requestParticleTexture(new Identifier("hwg:particle/big_smoke_0"));
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BLACK_FLARE, FlareParticle.BlackSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BLUE_FLARE, FlareParticle.BlueSmokeFactory::new);
