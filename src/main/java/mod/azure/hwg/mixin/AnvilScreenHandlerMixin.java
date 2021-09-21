@@ -1,11 +1,11 @@
 package mod.azure.hwg.mixin;
 
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.annotation.Nullable;
 import mod.azure.hwg.item.weapons.HWGGunBase;
 import mod.azure.hwg.item.weapons.HWGGunLoadedBase;
 import net.minecraft.entity.player.PlayerInventory;

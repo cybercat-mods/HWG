@@ -1,4 +1,6 @@
-v.1.0.17
+v.1.0.0
 
-- Added a new dedicated button to Sniper Rifle Scoping, configurable in settings.
-- Fixed issue with chests not getting HWG guns. 
+- Updated to 1.18
+
+**Missing Currently**
+- Config Support, waiting on Cloth Config/Mod Menu for configs. 

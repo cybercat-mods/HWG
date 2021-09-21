@@ -1,7 +1,5 @@
 package mod.azure.hwg;
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import mod.azure.hwg.blocks.FuelTankBlock;
 import mod.azure.hwg.blocks.GunBlockEntity;
 import mod.azure.hwg.blocks.GunTableBlock;
@@ -84,8 +82,8 @@ public class HWGMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		AutoConfig.register(HWGConfig.class, GsonConfigSerializer::new);
-		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
+//		AutoConfig.register(HWGConfig.class, GsonConfigSerializer::new);
+//		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();
@@ -104,7 +102,8 @@ public class HWGMod implements ModInitializer {
 					|| HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id)
 					|| HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
 				FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
-						.rolls(ConstantLootNumberProvider.create(1)).withEntry(ItemEntry.builder(HWGItems.MEANIE1).build())
+						.rolls(ConstantLootNumberProvider.create(1))
+						.withEntry(ItemEntry.builder(HWGItems.MEANIE1).build())
 						.withEntry(ItemEntry.builder(HWGItems.MEANIE2).build());
 				supplier.pool(poolBuilder);
 			}

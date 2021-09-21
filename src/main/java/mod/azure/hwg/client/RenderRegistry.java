@@ -42,6 +42,7 @@ import mod.azure.hwg.util.registry.HWGMobs;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 
+@SuppressWarnings("deprecation")
 public class RenderRegistry {
 
 	public static void init() {

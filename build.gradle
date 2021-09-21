@@ -9,7 +9,7 @@ import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 
 plugins {
-	id 'fabric-loom' version '0.8-SNAPSHOT'
+	id 'fabric-loom' version '0.9-SNAPSHOT'
 	id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
@@ -113,8 +113,8 @@ jar {
 	from "LICENSE"
 }
 
-minecraft {
-	accessWidener "src/main/resources/hwg.accesswidener"
+loom {
+	accessWidenerPath = file("src/main/resources/hwg.accesswidener")
 }
 
 if (file('key.properties').exists()) {
