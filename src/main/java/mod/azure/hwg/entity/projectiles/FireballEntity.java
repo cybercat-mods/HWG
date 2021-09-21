@@ -2,7 +2,6 @@ package mod.azure.hwg.entity.projectiles;
 
 import java.util.List;
 
-import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
@@ -284,7 +283,7 @@ public class FireballEntity extends PersistentProjectileEntity {
 				((LivingEntity) entity2).onAttacking(entity);
 			}
 		}
-		if (entity.damage(damageSource2, HWGMod.config.weapons.brimstone_damage)) {
+		if (entity.damage(damageSource2, 3F)) {
 			if (entity instanceof LivingEntity) {
 				LivingEntity livingEntity = (LivingEntity) entity;
 				if (!this.world.isClient && entity2 instanceof LivingEntity) {

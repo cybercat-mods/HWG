@@ -95,7 +95,7 @@ public class LugerItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.luger_damage);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 5.5F);
 		return arrowentity;
 	}
 

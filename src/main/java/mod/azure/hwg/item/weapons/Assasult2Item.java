@@ -74,8 +74,7 @@ public class Assasult2Item extends AnimatedItem {
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
-							playerentity.getZ(),
-							HWGSounds.TOMMY, SoundCategory.PLAYERS, 0.25F,
+							playerentity.getZ(), HWGSounds.TOMMY, SoundCategory.PLAYERS, 0.25F,
 							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 					if (!worldIn.isClient) {
 						final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
@@ -108,14 +107,14 @@ public class Assasult2Item extends AnimatedItem {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
-				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(),
-						user.getZ(), HWGSounds.CLIPRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
+				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+						HWGSounds.CLIPRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
 			}
 		}
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.tommy_damage);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 3.0F);
 		return arrowentity;
 	}
 

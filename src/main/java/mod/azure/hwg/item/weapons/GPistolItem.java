@@ -95,7 +95,7 @@ public class GPistolItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.golden_pistol_damage);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 6F);
 		return arrowentity;
 	}
 

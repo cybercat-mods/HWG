@@ -1,6 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
@@ -249,7 +248,7 @@ public class ShellEntity extends PersistentProjectileEntity implements IAnimatab
 				((LivingEntity) entity2).onAttacking(entity);
 			}
 		}
-		if (entity.damage(damageSource2, HWGMod.config.weapons.shotgun_damage)) {
+		if (entity.damage(damageSource2, 5F)) {
 			if (entity instanceof LivingEntity) {
 				LivingEntity livingEntity = (LivingEntity) entity;
 				if (!this.world.isClient && entity2 instanceof LivingEntity) {

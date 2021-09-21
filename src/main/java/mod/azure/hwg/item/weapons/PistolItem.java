@@ -80,7 +80,7 @@ public class PistolItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.pistol_damage);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 5F);
 		return arrowentity;
 	}
 
