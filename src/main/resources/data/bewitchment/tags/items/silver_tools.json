@@ -1,9 +1,21 @@
 {
   "replace": false,
   "values": [
-	"hwg:silvergun",
-	"hwg:silver_bullet",
-	"hwg:shellhorse_revolver",
-	"hwg:silverbullets"
+	{
+	"id":"hwg:silvergun",
+	"required":false
+	},
+	{
+	"id":"hwg:silver_bullet",
+	"required":false
+	},
+	{
+	"id":"hwg:shellhorse_revolver",
+	"required":false
+	},
+	{
+	"id":"hwg:silverbullets",
+	"required":false
+	}
   ]
 }
