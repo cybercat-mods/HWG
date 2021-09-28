@@ -1,6 +1,6 @@
-v.1.0.0
+v.1.0.1
 
-- Updated to 1.18
+- Updated Weapon Pose Mixin to fix issues with MCDoom/MC Halo.
 
 **Missing Currently**
 - Config Support, waiting on Cloth Config/Mod Menu for configs. 
