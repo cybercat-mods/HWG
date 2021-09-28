@@ -1,4 +1,3 @@
-v.1.0.17
+v.1.0.18
 
-- Added a new dedicated button to Sniper Rifle Scoping, configurable in settings.
-- Fixed issue with chests not getting HWG guns. 
+- Updated Weapon Pose Mixin to fix issues with MCDoom/MC Halo.
