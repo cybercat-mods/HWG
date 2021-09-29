@@ -1,6 +1,6 @@
-v.1.0.1
+v.1.0.2
 
-- Updated Weapon Pose Mixin to fix issues with MCDoom/MC Halo.
+- Makes Tag not required anymore (milkev)
 
 **Missing Currently**
 - Config Support, waiting on Cloth Config/Mod Menu for configs. 
