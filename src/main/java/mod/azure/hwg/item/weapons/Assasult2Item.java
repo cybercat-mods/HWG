@@ -114,7 +114,7 @@ public class Assasult2Item extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 3.0F);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.tommy_damage);
 		return arrowentity;
 	}
 

@@ -92,7 +92,7 @@ public class HellhorseRevolverItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 5F);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.hellhorse_damage);
 		return arrowentity;
 	}
 

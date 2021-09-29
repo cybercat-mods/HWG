@@ -94,14 +94,14 @@ public class SPistolItem extends AnimatedItem {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
-				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(),
-						user.getZ(), HWGSounds.PISTOLRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
+				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+						HWGSounds.PISTOLRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
 			}
 		}
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 4F);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.silenced_pistol_damage);
 		return arrowentity;
 	}
 

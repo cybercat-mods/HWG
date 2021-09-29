@@ -1,6 +1,3 @@
-v.1.0.2
+v.1.0.3
 
-- Makes Tag not required anymore (milkev)
-
-**Missing Currently**
-- Config Support, waiting on Cloth Config/Mod Menu for configs. 
+- Cloth Config support readded.

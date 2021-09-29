@@ -1,9 +1,12 @@
 package mod.azure.hwg;
 
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import mod.azure.hwg.blocks.FuelTankBlock;
 import mod.azure.hwg.blocks.GunBlockEntity;
 import mod.azure.hwg.blocks.GunTableBlock;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.network.PacketHandler;
 import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.MobAttributes;
@@ -40,7 +43,7 @@ public class HWGMod implements ModInitializer {
 
 	public static HWGMobs MOBS;
 	public static HWGItems ITEMS;
-	// public static HWGConfig config;
+	public static HWGConfig config;
 	public static HWGSounds SOUNDS;
 	public static BWCompatItems BWITEMS;
 	public static HWGParticles PARTICLES;
@@ -81,8 +84,8 @@ public class HWGMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-//		AutoConfig.register(HWGConfig.class, GsonConfigSerializer::new);
-//		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
+		AutoConfig.register(HWGConfig.class, GsonConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
 		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();

@@ -81,7 +81,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 
 	public TechnodemonEntity(EntityType<TechnodemonEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
-		this.experiencePoints = 8;
+		this.experiencePoints = config.lesser_exp;
 	}
 
 	private AnimationFactory factory = new AnimationFactory(this);
@@ -211,7 +211,7 @@ public class TechnodemonEntity extends HWGEntity implements IAnimatable {
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_ARMOR, 4)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, 48.0D)
+				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.lesser_health)
 				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 

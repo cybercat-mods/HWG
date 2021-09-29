@@ -41,9 +41,9 @@ public class SniperItem extends AnimatedItem {
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);
-						worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
-								playerentity.getZ(), HWGSounds.SNIPER, SoundCategory.PLAYERS, 0.25F,
-								1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
+							playerentity.getZ(), HWGSounds.SNIPER, SoundCategory.PLAYERS, 0.25F,
+							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 					if (!worldIn.isClient) {
 						final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
 						GeckoLibNetwork.syncAnimation(playerentity, this, id, ANIM_OPEN);
@@ -82,7 +82,8 @@ public class SniperItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 25F);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter,
+				shooter.isSneaking() ? config.sniper_scoped_damage : config.sniper_damage);
 		return arrowentity;
 	}
 

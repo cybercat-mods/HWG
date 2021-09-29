@@ -77,7 +77,7 @@ public class SpyEntity extends HWGEntity implements IAnimatable {
 
 	public SpyEntity(EntityType<SpyEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
-		this.experiencePoints = 4;
+		this.experiencePoints = config.spy_exp;
 	}
 
 	private AnimationFactory factory = new AnimationFactory(this);
@@ -206,7 +206,7 @@ public class SpyEntity extends HWGEntity implements IAnimatable {
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return MobEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35D)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0D).add(EntityAttributes.GENERIC_ARMOR, 3)
+				.add(EntityAttributes.GENERIC_MAX_HEALTH, config.spy_health).add(EntityAttributes.GENERIC_ARMOR, 3)
 				.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
 				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}

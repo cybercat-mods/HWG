@@ -1,5 +1,7 @@
 package mod.azure.hwg.item.weapons;
 
+import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.config.HWGConfig.Weapons;
 import net.minecraft.item.Item;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -18,7 +20,7 @@ public class AnimatedItem extends HWGGunBase implements IAnimatable, ISyncable {
 	public AnimationFactory factory = new AnimationFactory(this);
 	public String controllerName = "controller";
 	public static final int ANIM_OPEN = 0;
-	// public static Weapons config = HWGMod.config.weapons;
+	public static Weapons config = HWGMod.config.weapons;
 
 	public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
 		return PlayState.CONTINUE;

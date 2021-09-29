@@ -3,39 +3,44 @@ package mod.azure.hwg.config;
 import java.util.Arrays;
 import java.util.List;
 
-//@Config(name = HWGMod.MODID)
-public class HWGConfig {// implements ConfigData {
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import mod.azure.hwg.HWGMod;
 
-//	@ConfigEntry.Gui.CollapsibleObject
+@Config(name = HWGMod.MODID)
+public class HWGConfig implements ConfigData {
+
+	@ConfigEntry.Gui.CollapsibleObject
 	public Spawning spawn = new Spawning();
 
-//	@ConfigEntry.Gui.CollapsibleObject
+	@ConfigEntry.Gui.CollapsibleObject
 	public MobStats stats = new MobStats();
 
-//	@ConfigEntry.Gui.CollapsibleObject
+	@ConfigEntry.Gui.CollapsibleObject
 	public Weapons weapons = new Weapons();
 
 	public static class Spawning {
-//		@ConfigEntry.Gui.Tooltip(count = 1)
+		@ConfigEntry.Gui.Tooltip(count = 1)
 		public List<String> merc_biomes = Arrays.asList("#forest", "#plains", "#icy", "#taiga", "#jungle", "#desert",
 				"#mesa");
 		public int merc_spawn_weight = 5;
 		public int merc_min_group = 1;
 		public int merc_max_group = 2;
 
-//		@ConfigEntry.Gui.Tooltip(count = 1)
+		@ConfigEntry.Gui.Tooltip(count = 1)
 		public List<String> spy_biomes = Arrays.asList("#taiga", "#jungle", "#mesa");
 		public int spy_spawn_weight = 5;
 		public int spy_min_group = 1;
 		public int spy_max_group = 2;
 
-//		@ConfigEntry.Gui.Tooltip(count = 1)
+		@ConfigEntry.Gui.Tooltip(count = 1)
 		public List<String> lesser_biomes = Arrays.asList("#nether");
 		public int lesser_spawn_weight = 2;
 		public int lesser_min_group = 1;
 		public int lesser_max_group = 2;
 
-//		@ConfigEntry.Gui.Tooltip(count = 1)
+		@ConfigEntry.Gui.Tooltip(count = 1)
 		public List<String> greater_biomes = Arrays.asList("#nether");
 		public int greater_spawn_weight = 1;
 		public int greater_min_group = 1;

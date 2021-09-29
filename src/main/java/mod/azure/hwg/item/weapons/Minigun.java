@@ -108,7 +108,7 @@ public class Minigun extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, 4F);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.minigun_damage);
 		return arrowentity;
 	}
 

@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
+import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.config.HWGConfig.MobStats;
 import mod.azure.hwg.util.packet.EntityPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -33,7 +35,7 @@ public abstract class HWGEntity extends HostileEntity implements Angerable, Rang
 	public static final TrackedData<Integer> VARIANT = DataTracker.registerData(HWGEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
 	private UUID targetUuid;
-	// public static MobStats config = HWGMod.config.stats;
+	public static MobStats config = HWGMod.config.stats;
 
 	protected HWGEntity(EntityType<? extends HostileEntity> type, World worldIn) {
 		super(type, worldIn);
