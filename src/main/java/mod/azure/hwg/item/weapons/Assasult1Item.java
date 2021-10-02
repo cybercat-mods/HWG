@@ -68,7 +68,7 @@ public class Assasult1Item extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, this.cooldown);
 				if (!worldIn.isClient) {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(),
 							0.0F, 1.0F * 3.0F, 1.0F);
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));

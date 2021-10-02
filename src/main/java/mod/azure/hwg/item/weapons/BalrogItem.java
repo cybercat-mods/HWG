@@ -36,7 +36,7 @@ public class BalrogItem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 25);
 				if (!worldIn.isClient) {
 					BlazeRodEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -46,7 +46,7 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity.isOnFire();
 
 					BlazeRodEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch() + 2, playerentity.getYaw(), 0.0F,
+					abstractarrowentity1.setVelocity(playerentity, playerentity.getPitch() + 2, playerentity.getYaw(), 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -56,7 +56,7 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity1.isOnFire();
 
 					BlazeRodEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 2, 0.0F,
+					abstractarrowentity2.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() + 2, 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -66,7 +66,7 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity2.isOnFire();
 
 					BlazeRodEntity abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 2, 0.0F,
+					abstractarrowentity3.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() - 2, 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);

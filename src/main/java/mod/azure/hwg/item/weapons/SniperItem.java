@@ -35,7 +35,7 @@ public class SniperItem extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 35);
 				if (!worldIn.isClient) {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(),
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(),
 							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity.age = -15;
 

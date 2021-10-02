@@ -266,7 +266,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		if (this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof BalrogItem) {
 
 			BlazeRodEntity abstractarrowentity = createBlaze(world, itemStack, this);
-			abstractarrowentity.setProperties(this, this.getPitch(), this.getYaw(), 0.0F, 1.0F * 3.0F, 1.0F);
+			abstractarrowentity.setVelocity(this, this.getPitch(), this.getYaw(), 0.0F, 1.0F * 3.0F, 1.0F);
 			abstractarrowentity.refreshPositionAndAngles(this.getX(), this.getBodyY(0.85), this.getZ(), 0, 0);
 			abstractarrowentity.setDamage(1.25);
 			abstractarrowentity.hasNoGravity();
@@ -275,7 +275,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 				abstractarrowentity.isOnFire();
 
 			BlazeRodEntity abstractarrowentity1 = createBlaze(world, itemStack, this);
-			abstractarrowentity1.setProperties(this, this.getPitch() + 2, getYaw(), 0.0F, 1.0F * 3.0F, 1.0F);
+			abstractarrowentity1.setVelocity(this, this.getPitch() + 2, getYaw(), 0.0F, 1.0F * 3.0F, 1.0F);
 			abstractarrowentity1.refreshPositionAndAngles(this.getX(), this.getBodyY(0.85), this.getZ(), 0, 0);
 			abstractarrowentity1.setDamage(1.25);
 			abstractarrowentity1.hasNoGravity();
@@ -284,7 +284,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 				abstractarrowentity1.isOnFire();
 
 			BlazeRodEntity abstractarrowentity2 = createBlaze(world, itemStack, this);
-			abstractarrowentity2.setProperties(this, this.getPitch(), getYaw() + 2, 0.0F, 1.0F * 3.0F, 1.0F);
+			abstractarrowentity2.setVelocity(this, this.getPitch(), getYaw() + 2, 0.0F, 1.0F * 3.0F, 1.0F);
 			abstractarrowentity2.refreshPositionAndAngles(this.getX(), this.getBodyY(0.85), this.getZ(), 0, 0);
 			abstractarrowentity2.setDamage(1.25);
 			abstractarrowentity2.hasNoGravity();
@@ -293,7 +293,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 				abstractarrowentity2.isOnFire();
 
 			BlazeRodEntity abstractarrowentity3 = createBlaze(world, itemStack, this);
-			abstractarrowentity3.setProperties(this, this.getPitch(), getYaw() - 2, 0.0F, 1.0F * 3.0F, 1.0F);
+			abstractarrowentity3.setVelocity(this, this.getPitch(), getYaw() - 2, 0.0F, 1.0F * 3.0F, 1.0F);
 			abstractarrowentity3.refreshPositionAndAngles(this.getX(), this.getBodyY(0.85), this.getZ(), 0, 0);
 			abstractarrowentity3.setDamage(1.25);
 			abstractarrowentity3.hasNoGravity();
@@ -308,21 +308,21 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 		}
 		if (this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof BrimstoneItem) {
 			FireballEntity abstractarrowentity = createArrow(world, itemStack, this);
-			abstractarrowentity.setProperties(this, this.getPitch(), getYaw(), 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity.setVelocity(this, this.getPitch(), getYaw(), 0.0F, 0.25F * 3.0F, 1.0F);
 			abstractarrowentity.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
 			abstractarrowentity.setFireTicks(100);
 			abstractarrowentity.setDamage(6.5);
 			abstractarrowentity.setPunch(1);
 
 			FireballEntity abstractarrowentity1 = createArrow(world, itemStack, this);
-			abstractarrowentity1.setProperties(this, this.getPitch(), getYaw() + 5, 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity1.setVelocity(this, this.getPitch(), getYaw() + 5, 0.0F, 0.25F * 3.0F, 1.0F);
 			abstractarrowentity1.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
 			abstractarrowentity1.setFireTicks(100);
 			abstractarrowentity1.setDamage(6.5);
 			abstractarrowentity1.setPunch(1);
 
 			FireballEntity abstractarrowentity2 = createArrow(world, itemStack, this);
-			abstractarrowentity2.setProperties(this, this.getPitch(), getYaw() - 5, 0.0F, 0.25F * 3.0F, 1.0F);
+			abstractarrowentity2.setVelocity(this, this.getPitch(), getYaw() - 5, 0.0F, 0.25F * 3.0F, 1.0F);
 			abstractarrowentity2.refreshPositionAndAngles(this.getX(), this.getBodyY(0.5), this.getZ(), 0, 0);
 			abstractarrowentity2.setFireTicks(100);
 			abstractarrowentity2.setDamage(6.5);

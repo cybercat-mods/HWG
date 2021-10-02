@@ -35,10 +35,10 @@ public class ShotgunItem extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 18);
 				if (!worldIn.isClient) {
 					ShellEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 1,
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() + 1,
 							0.5F, 1.0F * 3.0F, 1.0F);
 					ShellEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 1,
+					abstractarrowentity1.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() - 1,
 							0.5F, 1.0F * 3.0F, 1.0F);
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);

@@ -21,7 +21,7 @@ public class GrenadeEmpItem extends Item {
 			user.getItemCooldownManager().set(this, 25);
 			if (!world.isClient) {
 				EMPGrenadeEntity snowballEntity = new EMPGrenadeEntity(world, user);
-				snowballEntity.setProperties(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
+				snowballEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
 				snowballEntity.setDamage(0);
 				world.spawnEntity(snowballEntity);
 			}
