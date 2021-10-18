@@ -1,3 +1,4 @@
-v.1.0.20
+v.1.0.21
 
-- Reduces flames spawned by Lesser Technodemon with Flamethrower
+- Forced Mercs/Spys to only spawn in the Overworld biomes.
+- Added Chinese localization -MikhailTapio
