@@ -1,3 +1,4 @@
-v.1.0.4
+v.1.0.5
 
-- Updated for 21w39a
+- Forced Mercs/Spys to only spawn in the Overworld biomes.
+- Added Chinese localization -MikhailTapio
