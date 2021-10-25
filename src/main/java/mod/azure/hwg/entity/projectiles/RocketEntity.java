@@ -236,7 +236,7 @@ public class RocketEntity extends PersistentProjectileEntity implements IAnimata
 
 	protected void explode() {
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 2.0F, false,
-				config.rocket_breaks ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
+				config.rocket_breaks == true ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
 	}
 
 	@Override

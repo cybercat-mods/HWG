@@ -1,4 +1,4 @@
-v.1.0.21
+v.1.0.22
 
-- Forced Mercs/Spys to only spawn in the Overworld biomes.
-- Added Chinese localization -MikhailTapio
+- Fixed Rockets not respecting config for breaking blocks.
+- Added configs for Balrog and Frag Grenade to break blocks.
