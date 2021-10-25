@@ -1,5 +1,7 @@
 package mod.azure.hwg.entity.projectiles;
 
+import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.config.HWGConfig.Weapons;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
@@ -39,6 +41,7 @@ public class FragGrenadeEntity extends PersistentProjectileEntity implements IAn
 	protected boolean inAir;
 	protected String type;
 	private int ticksInAir;
+	private static Weapons config = HWGMod.config.weapons;
 
 	public FragGrenadeEntity(EntityType<? extends FragGrenadeEntity> entityType, World world) {
 		super(entityType, world);
@@ -237,7 +240,7 @@ public class FragGrenadeEntity extends PersistentProjectileEntity implements IAn
 
 	protected void explode() {
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 2.0F, false,
-				Explosion.DestructionType.NONE);
+				config.grenades_breaks == true ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
 	}
 
 	@Override

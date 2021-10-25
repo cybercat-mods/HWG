@@ -97,6 +97,8 @@
 	"text.autoconfig.hwg.option.stats.greater_exp": "Greater Technodemon Experince",
 	"text.autoconfig.hwg.option.weapons": "Weapon Settings",
 	"text.autoconfig.hwg.option.weapons.rocket_breaks": "Rockets Break Blocks",
+	"text.autoconfig.hwg.option.weapons.balrog_breaks": "Balrog Break Blocks",
+	"text.autoconfig.hwg.option.weapons.grenades_breaks": "Frag Grenades Break Blocks",
 	"text.autoconfig.hwg.option.weapons.pistol_damage": "Pistol Damage",
 	"text.autoconfig.hwg.option.weapons.golden_pistol_damage": "Golden Pistol Damage",
 	"text.autoconfig.hwg.option.weapons.silenced_pistol_damage": "Silenced Pistol Damage",
