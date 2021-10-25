@@ -60,6 +60,8 @@ public class HWGConfig implements ConfigData {
 
 	public static class Weapons {
 		public boolean rocket_breaks = true;
+		public boolean balrog_breaks = false;
+		public boolean grenades_breaks = false;
 		public float pistol_damage = 5F;
 		public float golden_pistol_damage = 6F;
 		public float silenced_pistol_damage = 4F;

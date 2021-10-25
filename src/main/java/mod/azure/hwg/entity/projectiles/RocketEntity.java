@@ -1,6 +1,7 @@
 package mod.azure.hwg.entity.projectiles;
 
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.config.HWGConfig.Weapons;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
@@ -36,6 +37,7 @@ public class RocketEntity extends PersistentProjectileEntity implements IAnimata
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
+	private static Weapons config = HWGMod.config.weapons;
 
 	public RocketEntity(EntityType<? extends RocketEntity> entityType, World world) {
 		super(entityType, world);
@@ -233,8 +235,7 @@ public class RocketEntity extends PersistentProjectileEntity implements IAnimata
 
 	protected void explode() {
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 2.0F, false,
-				HWGMod.config.weapons.rocket_breaks ? Explosion.DestructionType.DESTROY
-						: Explosion.DestructionType.NONE);
+				config.rocket_breaks == true ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
 	}
 
 	@Override
