@@ -110,7 +110,7 @@ public class BalrogItem extends HWGGunBase {
 			while (user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(Items.BLAZE_ROD) > 0) {
 				removeAmmo(Items.BLAZE_ROD, user);
 				user.getStackInHand(hand).damage(-50, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setCooldown(3);
+				user.getStackInHand(hand).setBobbingAnimationTime(3);
 				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
 						SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, 1.5F);
 			}

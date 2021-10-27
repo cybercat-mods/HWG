@@ -1,4 +1,3 @@
-v.1.0.6
+v.1.0.7
 
-- Fixed Rockets not respecting config for breaking blocks.
-- Added configs for Balrog and Frag Grenade to break blocks.
+- Updated to 21w43a

@@ -89,7 +89,7 @@ public class Meanie1Item extends AnimatedItem {
 			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(Items.REDSTONE) > 0) {
 				removeAmmo(Items.REDSTONE, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setCooldown(3);
+				user.getStackInHand(hand).setBobbingAnimationTime(3);
 				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
 						HWGSounds.PISTOLRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
 			}

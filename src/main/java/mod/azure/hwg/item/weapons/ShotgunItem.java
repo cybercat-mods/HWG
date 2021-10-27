@@ -76,7 +76,7 @@ public class ShotgunItem extends AnimatedItem {
 					&& user.getInventory().count(HWGItems.SHOTGUN_SHELL) > 0) {
 				removeAmmo(HWGItems.SHOTGUN_SHELL, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setCooldown(3);
+				user.getStackInHand(hand).setBobbingAnimationTime(3);
 				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(),
 						user.getZ(), HWGSounds.SHOTGUNRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
 			}
