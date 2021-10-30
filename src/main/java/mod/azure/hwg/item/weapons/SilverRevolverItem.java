@@ -82,7 +82,7 @@ public class SilverRevolverItem extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof SilverRevolverItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(BWCompatItems.SILVERBULLET) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(BWCompatItems.SILVERBULLET) > 0) {
 				removeAmmo(BWCompatItems.SILVERBULLET, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);

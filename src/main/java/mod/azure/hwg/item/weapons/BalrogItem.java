@@ -107,7 +107,7 @@ public class BalrogItem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof BalrogItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(Items.BLAZE_ROD) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(Items.BLAZE_ROD) > 0) {
 				removeAmmo(Items.BLAZE_ROD, user);
 				user.getStackInHand(hand).damage(-50, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
