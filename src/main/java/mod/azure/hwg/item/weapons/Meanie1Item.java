@@ -86,7 +86,7 @@ public class Meanie1Item extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof Meanie1Item) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(Items.REDSTONE) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(Items.REDSTONE) > 0) {
 				removeAmmo(Items.REDSTONE, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);

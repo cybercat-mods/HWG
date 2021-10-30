@@ -69,7 +69,7 @@ public class PistolItem extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof PistolItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.BULLETS) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.BULLETS) > 0) {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);

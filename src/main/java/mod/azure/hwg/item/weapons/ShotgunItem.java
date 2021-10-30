@@ -72,7 +72,7 @@ public class ShotgunItem extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof ShotgunItem) {
-			while (user.getStackInHand(hand).getDamage() != 0
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0
 					&& user.getInventory().count(HWGItems.SHOTGUN_SHELL) > 0) {
 				removeAmmo(HWGItems.SHOTGUN_SHELL, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));

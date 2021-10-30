@@ -94,7 +94,7 @@ public class BrimstoneItem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof BrimstoneItem) {
-			while (user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-186, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
