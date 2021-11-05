@@ -62,7 +62,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.45:dev'
+    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.53:dev'
 	modImplementation 'curse.maven:TDI-245733:3144149'
     modApi "me.shedaniel.cloth:cloth-config-fabric:4.11.14"
     include "me.shedaniel.cloth:cloth-config-fabric:4.11.14"
