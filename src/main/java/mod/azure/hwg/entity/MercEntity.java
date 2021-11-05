@@ -53,6 +53,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.Category;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -60,7 +61,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class MercEntity extends HWGEntity implements IAnimatable {
+public class MercEntity extends HWGEntity implements IAnimatable, IAnimationTickable {
 
 	private final RangedAttackGoal<MercEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 20, 15.0F);
 	private final MeleeAttackGoal meleeAttackGoal = new MeleeAttackGoal(this, 1.2D, false) {
@@ -326,6 +327,11 @@ public class MercEntity extends HWGEntity implements IAnimatable {
 	@Override
 	public EntityGroup getGroup() {
 		return EntityGroup.ILLAGER;
+	}
+
+	@Override
+	public int tickTimer() {
+		return age;
 	}
 
 }
