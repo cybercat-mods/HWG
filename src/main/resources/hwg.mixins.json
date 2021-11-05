@@ -6,7 +6,6 @@
 	"mixins": [
 		"IngredientAccess",
 		"HeldItemRendererMixin",
-		"SpawnRestrictionMixin",
 		"AnvilScreenHandlerMixin"
 	],
 	"client": [
