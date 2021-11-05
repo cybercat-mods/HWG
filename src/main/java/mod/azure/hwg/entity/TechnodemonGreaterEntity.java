@@ -55,6 +55,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -62,7 +63,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
+public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable, IAnimationTickable {
 
 	private final RangedAttackGoal<TechnodemonGreaterEntity> bowAttackGoal = new RangedAttackGoal<>(this, 1.0D, 1,
 			15.0F);
@@ -370,6 +371,11 @@ public class TechnodemonGreaterEntity extends HWGEntity implements IAnimatable {
 	@Override
 	public EntityGroup getGroup() {
 		return EntityGroup.UNDEAD;
+	}
+
+	@Override
+	public int tickTimer() {
+		return age;
 	}
 
 }
