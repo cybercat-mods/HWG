@@ -1,3 +1,4 @@
-v.1.0.8
+v.1.0.9
 
-- Fixed Creative Mode reloading, guns do not reload in Creative. Note a bug.
+- Now using the new ticking system in Geckolib, required version bumped.
+- Use Fabric Spawn placement instead of Mixin.
