@@ -407,6 +407,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 			}
 
 		}
+		tooltip.add(new TranslatableText("hwg.ammo.reloadgrenades").formatted(Formatting.ITALIC));
 	}
 
 	private static float getSpeed(ItemStack stack) {
