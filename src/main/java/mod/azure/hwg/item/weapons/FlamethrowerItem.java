@@ -89,6 +89,7 @@ public class FlamethrowerItem extends HWGGunBase {
 		tooltip.add(new TranslatableText(
 				"Fuel: " + (stack.getMaxDamage() - stack.getDamage() - 1) + " / " + (stack.getMaxDamage() - 1))
 						.formatted(Formatting.ITALIC));
+		tooltip.add(new TranslatableText("hwg.ammo.reloadfuel").formatted(Formatting.ITALIC));
 	}
 
 	public static float getArrowVelocity(int charge) {

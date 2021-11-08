@@ -96,7 +96,8 @@ public class BrimstoneItem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof BrimstoneItem) {
-			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.inventory.count(HWGItems.FUEL_TANK) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0
+					&& user.inventory.count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-186, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setCooldown(3);
@@ -109,6 +110,7 @@ public class BrimstoneItem extends HWGGunBase {
 		tooltip.add(new TranslatableText(
 				"Fuel: " + (stack.getMaxDamage() - stack.getDamage() - 6) + " / " + (stack.getMaxDamage() - 6))
 						.formatted(Formatting.ITALIC));
+		tooltip.add(new TranslatableText("hwg.ammo.reloadfuel").formatted(Formatting.ITALIC));
 	}
 
 	public static float getArrowVelocity(int charge) {

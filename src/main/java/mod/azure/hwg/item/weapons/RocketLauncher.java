@@ -1,5 +1,7 @@
 package mod.azure.hwg.item.weapons;
 
+import java.util.List;
+
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
@@ -7,6 +9,7 @@ import mod.azure.hwg.entity.projectiles.RocketEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +17,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -94,5 +100,11 @@ public class RocketLauncher extends HWGGunBase {
 	public RocketEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
 		RocketEntity arrowentity = new RocketEntity(worldIn, shooter);
 		return arrowentity;
+	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+		super.appendTooltip(stack, world, tooltip, context);
+		tooltip.add(new TranslatableText("hwg.ammo.reloadrockets").formatted(Formatting.ITALIC));
 	}
 }

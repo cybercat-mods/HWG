@@ -1,5 +1,6 @@
 package mod.azure.hwg.item.weapons;
 
+import java.util.List;
 import java.util.SplittableRandom;
 
 import io.netty.buffer.Unpooled;
@@ -10,6 +11,7 @@ import mod.azure.hwg.util.registry.BWCompatItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
@@ -115,5 +120,11 @@ public class SilverRevolverItem extends AnimatedItem {
 		}
 
 		return f;
+	}
+
+	@Override
+	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+		super.appendTooltip(stack, world, tooltip, context);
+		tooltip.add(new TranslatableText("hwg.ammo.reloadsilverbullets").formatted(Formatting.ITALIC));
 	}
 }
