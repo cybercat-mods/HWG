@@ -475,6 +475,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 				}
 			}
 		}
+		tooltip.add(new TranslatableText("hwg.ammo.reloadflares").formatted(Formatting.ITALIC));
 	}
 
 }
