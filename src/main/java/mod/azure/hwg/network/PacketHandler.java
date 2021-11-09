@@ -115,7 +115,7 @@ public class PacketHandler {
 		ServerPlayNetworking.registerGlobalReceiver(HWGMod.MEANIE2,
 				(server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
 					if (player.getMainHandStack().getItem() instanceof Meanie2Item) {
-						((Meanie1Item) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
+						((Meanie2Item) player.getMainHandStack().getItem()).reload(player, Hand.MAIN_HAND);
 					}
 				});
 		ServerPlayNetworking.registerGlobalReceiver(HWGMod.HELL,
