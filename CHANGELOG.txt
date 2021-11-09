@@ -1,3 +1,3 @@
-v.1.0.27
+v.1.0.28
 
-- Added a tooltip to what each weapon reloads with.
+- Fixed Meanie Gun 2 not reloading
