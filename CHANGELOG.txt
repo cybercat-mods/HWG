@@ -1,3 +1,4 @@
-v.1.0.12
+v.1.0.13
 
-- Fixed Meanie Gun 2 not reloading Part 2
+- Updated to 21w44a
+- Fixed Crafting GUI.
