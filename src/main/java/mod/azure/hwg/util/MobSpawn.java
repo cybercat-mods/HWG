@@ -17,7 +17,6 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.world.Heightmap;
 
-@SuppressWarnings("deprecation")
 public class MobSpawn {
 
 	private static Spawning config = HWGMod.config.spawn;
