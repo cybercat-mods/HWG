@@ -26,6 +26,7 @@ public class GrayFlareRender extends EntityRenderer<GrayFlareEntity> {
 		super.render(fireworkRocketEntity, f, g, matrixStack, vertexConsumerProvider, i);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Identifier getTexture(GrayFlareEntity fireworkRocketEntity) {
 		return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
 	}

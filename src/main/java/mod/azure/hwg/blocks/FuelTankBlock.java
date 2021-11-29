@@ -44,6 +44,7 @@ public class FuelTankBlock extends Block {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
 			BlockHitResult hit) {

@@ -26,6 +26,7 @@ public class BlueFlareRender extends EntityRenderer<BlueFlareEntity> {
 		super.render(fireworkRocketEntity, f, g, matrixStack, vertexConsumerProvider, i);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Identifier getTexture(BlueFlareEntity fireworkRocketEntity) {
 		return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
 	}

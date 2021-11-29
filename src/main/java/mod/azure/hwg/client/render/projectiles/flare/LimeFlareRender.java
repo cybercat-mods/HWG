@@ -26,6 +26,7 @@ public class LimeFlareRender extends EntityRenderer<LimeFlareEntity> {
 		super.render(fireworkRocketEntity, f, g, matrixStack, vertexConsumerProvider, i);
 	}
 
+	@SuppressWarnings("deprecation")
 	public Identifier getTexture(LimeFlareEntity fireworkRocketEntity) {
 		return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
 	}
