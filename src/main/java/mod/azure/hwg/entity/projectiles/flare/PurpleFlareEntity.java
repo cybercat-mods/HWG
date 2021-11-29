@@ -5,11 +5,14 @@ import org.jetbrains.annotations.Nullable;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
+import mod.azure.hwg.util.registry.HWGSounds;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.LightBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -19,10 +22,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import mod.azure.hwg.util.registry.HWGSounds;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -65,8 +66,8 @@ public class PurpleFlareEntity extends PersistentProjectileEntity {
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		if (this.life == 0 && !this.isSilent()) {
-			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(),
-					HWGSounds.FLAREGUN, SoundCategory.AMBIENT, 3.0F, 3.0F);
+			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN,
+					SoundCategory.AMBIENT, 3.0F, 3.0F);
 		}
 		setNoGravity(false);
 
@@ -104,14 +105,29 @@ public class PurpleFlareEntity extends PersistentProjectileEntity {
 
 	@Override
 	public void onRemoved() {
-		if (world.getBlockState(this.getBlockPos()) == Blocks.LIGHT.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().north()) == Blocks.LIGHT.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().south()) == Blocks.LIGHT.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().east()) == Blocks.LIGHT.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().west()) == Blocks.LIGHT.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().up()) == Blocks.LIGHT.getDefaultState()) {
-			world.updateNeighbors(this.getBlockPos(), Blocks.AIR);
-			world.setBlockState(this.getBlockPos(), Blocks.AIR.getDefaultState(), Block.NOTIFY_NEIGHBORS);
+		if (this.getBlockStateAtPos().getBlock() instanceof LightBlock) {
+			world.setBlockState(this.getBlockPos(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+		}
+		if (this.world.getBlockState(this.getBlockPos().up()).getBlock() instanceof LightBlock) {
+			world.setBlockState(this.getBlockPos().up(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+		}
+		if (this.world.getBlockState(this.getBlockPos().up()).getBlock() instanceof LightBlock) {
+			world.setBlockState(this.getBlockPos().up(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+		}
+		if (this.world.getBlockState(this.getBlockPos().down()).getBlock() instanceof LightBlock) {
+			world.setBlockState(this.getBlockPos().down(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+		}
+		if (this.world.getBlockState(this.getBlockPos().north()).getBlock() instanceof LightBlock) {
+			world.setBlockState(this.getBlockPos().north(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+		}
+		if (this.world.getBlockState(this.getBlockPos().south()).getBlock() instanceof LightBlock) {
+			world.setBlockState(this.getBlockPos().south(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+		}
+		if (this.world.getBlockState(this.getBlockPos().east()).getBlock() instanceof LightBlock) {
+			world.setBlockState(this.getBlockPos().east(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+		}
+		if (this.world.getBlockState(this.getBlockPos().west()).getBlock() instanceof LightBlock) {
+			world.setBlockState(this.getBlockPos().west(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
 		}
 		super.onRemoved();
 	}
@@ -119,15 +135,9 @@ public class PurpleFlareEntity extends PersistentProjectileEntity {
 	@Override
 	protected void onBlockHit(BlockHitResult blockHitResult) {
 		super.onBlockHit(blockHitResult);
-		if (world.getBlockState(this.getBlockPos()) == Blocks.AIR.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().north()) == Blocks.AIR.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().south()) == Blocks.AIR.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().east()) == Blocks.AIR.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().west()) == Blocks.AIR.getDefaultState()
-				&& world.getBlockState(this.getBlockPos().up()) == Blocks.AIR.getDefaultState()) {
-			if (this.isAlive())
-				world.setBlockState(blockHitResult.getBlockPos().offset(Direction.UP), Blocks.LIGHT.getDefaultState(),
-						Block.NOTIFY_NEIGHBORS);
+		if (this.isAlive() && world.getBlockState(blockHitResult.getBlockPos().up()).getBlock() instanceof AirBlock) {
+			world.setBlockState(blockHitResult.getBlockPos().up(), Blocks.LIGHT.getDefaultState(),
+					Block.NOTIFY_NEIGHBORS);
 		}
 	}
 
@@ -160,7 +170,7 @@ public class PurpleFlareEntity extends PersistentProjectileEntity {
 	public boolean shouldRender(double distance) {
 		return true;
 	}
-	
+
 	@Override
 	protected boolean tryPickup(PlayerEntity player) {
 		return false;
