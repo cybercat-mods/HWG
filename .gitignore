@@ -34,3 +34,4 @@ run/
 .github/workflows/build.yml
 build.bat
 update_mappings.bat
+*.bat
