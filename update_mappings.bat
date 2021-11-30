@@ -1,1 +1,1 @@
-cmd /k gradlew.bat migrateMappings --mappings "1.18-pre4+build.2" -Dorg.gradle.java.home="C:\Program Files\Java\jdk-17.0.1"
+cmd /k gradlew.bat migrateMappings --mappings "1.18-rc1+build.1" -Dorg.gradle.java.home="C:\Program Files\Java\jdk-17.0.1"
