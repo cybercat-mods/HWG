@@ -1,10 +1,12 @@
 package mod.azure.hwg.entity.projectiles;
 
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.PointedDripstoneBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -228,6 +230,10 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
 		super.onBlockHit(blockHitResult);
 		if (!this.world.isClient) {
 			this.remove(Entity.RemovalReason.DISCARDED);
+		}
+		if (world.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock
+				&& HWGMod.config.weapons.bullets_breakdripstone == true) {
+			world.breakBlock(blockHitResult.getBlockPos(), true);
 		}
 		this.setSound(SoundEvents.ITEM_ARMOR_EQUIP_IRON);
 	}
