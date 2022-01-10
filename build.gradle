@@ -29,12 +29,7 @@ dependencies {
     modImplementation "software.bernie.geckolib:geckolib-fabric-1.18:3.0.19"
 	modApi 'curse.maven:cloth-319057:3524837'
 	modImplementation 'curse.maven:modmenu-308702:3472549'
-    //modCompileOnly "vazkii.patchouli:Patchouli:1.17-55-FABRIC-SNAPSHOT"	
 	//modImplementation 'curse.maven:TDI-245733:3358651'
-	//modImplementation 'curse.maven:cca-318449:3380730'
-	//modImplementation 'curse.maven:ccaentity-318449:3380734'
-	//modImplementation 'curse.maven:ccaworld-318449:3380739'
-	//modImplementation 'curse.maven:ccabase-318449:3380731'
 }
 
 repositories {
