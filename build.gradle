@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         jcenter()
-    	maven { url  = 'https://plugins.gradle.org/m2/' }
+    	maven { url  = "https://plugins.gradle.org/m2/" }
     }
 }
 
@@ -33,36 +33,18 @@ dependencies {
 }
 
 repositories {
-    maven {
-        name = "reach"
-        url = "https://maven.jamieswhiteshirt.com/libs-release"
-    }
-	maven {
-		url = "https://maven.theillusivec4.top/"
-	}
-	maven {	
-		url = 'https://maven.fabricmc.net/io/github/prospector/modmenu/'
-	}
-	maven {
-        url = "https://www.cursemaven.com"
-    }
-     maven {
-        name = "OnyxStudios"
-        url = "https://maven.abusedmaster.xyz"
-    }
-    maven {
-        name = "CottonMC"
-        url = "https://server.bbkr.space/artifactory/libs-release"
-    }
-    maven {
-        name "Siphalor's Maven"
-        url "https://maven.siphalor.de"
-    }
+    maven { url "https://maven.jamieswhiteshirt.com/libs-release" }
+	maven { url "https://maven.theillusivec4.top/" }
+	maven {	url "https://maven.fabricmc.net/io/github/prospector/modmenu/" }
+	maven { url "https://cfa2.cursemaven.com" }
+    maven { url "https://maven.abusedmaster.xyz" }
+    maven { url "https://server.bbkr.space/artifactory/libs-release" }
+    maven { url "https://maven.siphalor.de" }
     maven { url "https://maven.shedaniel.me/" }
-    maven { url = 'https://maven.terraformersmc.com/' }
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
-    maven { url 'https://maven.blamejared.com' }
-    maven { url  = 'https://plugins.gradle.org/m2/' }
+    maven { url "https://maven.terraformersmc.com/" }
+    maven { url "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" }
+    maven { url "https://maven.blamejared.com" }
+    maven { url "https://plugins.gradle.org/m2/" }
 }
 
 processResources {
