@@ -89,7 +89,7 @@ public class Minigun extends AnimatedItem {
 		if (user.getStackInHand(hand).getItem() instanceof Minigun) {
 			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.BULLETS) > 0) {
 				removeAmmo(HWGItems.BULLETS, user);
-				user.getStackInHand(hand).damage(-50, user, s -> user.sendToolBreakStatus(hand));
+				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setBobbingAnimationTime(3);
 				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
 						HWGSounds.CLIPRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
