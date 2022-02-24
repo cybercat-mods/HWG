@@ -40,9 +40,9 @@ public class MobSpawn {
 				config.greater_max_group);
 		
 		SpawnRestrictionAccessor.callRegister(HWGMobs.TECHNOLESSER, SpawnRestriction.Location.ON_GROUND,
-				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, TechnodemonEntity::canSpawn);
+				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, TechnodemonEntity::canNetherSpawn);
 		SpawnRestrictionAccessor.callRegister(HWGMobs.TECHNOGREATER, SpawnRestriction.Location.ON_GROUND,
-				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, TechnodemonGreaterEntity::canSpawn);
+				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, TechnodemonGreaterEntity::canNetherSpawn);
 		SpawnRestrictionAccessor.callRegister(HWGMobs.MERC, SpawnRestriction.Location.ON_GROUND,
 				Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, MercEntity::canSpawn);
 		SpawnRestrictionAccessor.callRegister(HWGMobs.SPY, SpawnRestriction.Location.ON_GROUND,

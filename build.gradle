@@ -29,7 +29,7 @@ dependencies {
     modImplementation "software.bernie.geckolib:geckolib-fabric-1.18:3.0.19"
 	modApi 'curse.maven:cloth-319057:3524837'
 	modImplementation 'curse.maven:modmenu-308702:3472549'
-	//modImplementation 'curse.maven:TDI-245733:3358651'
+	modImplementation 'curse.maven:TDI-245733:3556912'
 }
 
 repositories {

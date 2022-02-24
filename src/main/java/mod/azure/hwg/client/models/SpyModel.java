@@ -53,7 +53,7 @@ public class SpyModel extends AnimatedTickingGeoModel<SpyEntity> {
 					.getRadialQuaternion(MathHelper.cos(entity.limbAngle * 0.6662F) * 2.0F * entity.limbDistance * 0.5F)
 					.getX());
 		}
-		if (Right_arm != null) {
+		if (Right_arm != null && entity.getAttckingState() == 0) {
 			Right_arm.setRotationX(Vec3f.POSITIVE_X
 					.getRadialQuaternion(
 							MathHelper.cos(entity.limbAngle * 0.6662F + 3.1415927F) * 2.0F * entity.limbDistance * 0.5F)

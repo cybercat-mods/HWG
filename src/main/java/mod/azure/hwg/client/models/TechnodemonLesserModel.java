@@ -37,12 +37,10 @@ public class TechnodemonLesserModel extends AnimatedTickingGeoModel<TechnodemonE
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 		if (head != null) {
-			if (head != null) {
-				head.setRotationX(Vec3f.POSITIVE_X
-						.getRadialQuaternion((extraData.headPitch - 5) * ((float) Math.PI / 180F)).getX());
-				head.setRotationY(
-						Vec3f.POSITIVE_Y.getRadialQuaternion(extraData.netHeadYaw * ((float) Math.PI / 340F)).getY());
-			}
+			head.setRotationX(
+					Vec3f.POSITIVE_X.getRadialQuaternion((extraData.headPitch - 5) * ((float) Math.PI / 180F)).getX());
+			head.setRotationY(
+					Vec3f.POSITIVE_Y.getRadialQuaternion(extraData.netHeadYaw * ((float) Math.PI / 340F)).getY());
 		}
 	}
 }

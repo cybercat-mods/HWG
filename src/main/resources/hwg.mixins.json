@@ -6,7 +6,8 @@
 	"mixins": [
 		"IngredientAccess",
 		"HeldItemRendererMixin",
-		"AnvilScreenHandlerMixin"
+		"AnvilScreenHandlerMixin",
+		"VillagerMixin"
 	],
 	"client": [
 		"SniperMixin",
