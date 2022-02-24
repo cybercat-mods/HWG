@@ -1,3 +1,7 @@
-v.1.0.2
+v.1.0.3
 
-- Fixes Minigun ammo reloading. 
+- Fixes Mob Damage.
+- Rewrote Attack AI, allowing animations to work properly.
+- Redid Technodemon animations. 
+- Guns now work on villagers at close range.
+- Cleaned up code.
