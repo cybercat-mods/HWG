@@ -9,12 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.entity.projectiles.launcher.EMPGEntity;
-import mod.azure.hwg.entity.projectiles.launcher.FragGEntity;
-import mod.azure.hwg.entity.projectiles.launcher.NapalmGEntity;
-import mod.azure.hwg.entity.projectiles.launcher.SmokeGEntity;
-import mod.azure.hwg.entity.projectiles.launcher.StunGEntity;
+import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
@@ -145,22 +142,19 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 			boolean b2 = projectile.getItem() == HWGItems.G_FRAG;
 			boolean b3 = projectile.getItem() == HWGItems.G_NAPALM;
 			boolean b4 = projectile.getItem() == HWGItems.G_STUN;
-			Object projectileEntity2;
+			GrenadeEntity projectileEntity2 = new GrenadeEntity(world, projectile, shooter, shooter.getX(),
+					shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			projectileEntity2.setState(0);
 			if (bl) {
-				projectileEntity2 = new EMPGEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				projectileEntity2.setVariant(1);
 			} else if (b2) {
-				projectileEntity2 = new FragGEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				projectileEntity2.setVariant(2);
 			} else if (b3) {
-				projectileEntity2 = new NapalmGEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				projectileEntity2.setVariant(3);
 			} else if (b4) {
-				projectileEntity2 = new StunGEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				projectileEntity2.setVariant(5);
 			} else {
-				projectileEntity2 = new SmokeGEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				projectileEntity2.setVariant(4);
 			}
 			Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
 			Quaternion quaternion = new Quaternion(new Vec3f(vec3d), simulated, true);
@@ -196,6 +190,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 				for (PlayerEntity otherPlayer : PlayerLookup.tracking(user)) {
 					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
 				}
+				world.setBlockState(user.getCameraBlockPos(), HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
 			}
 			return TypedActionResult.consume(itemStack);
 		} else if (!user.getArrowType(itemStack).isEmpty()) {

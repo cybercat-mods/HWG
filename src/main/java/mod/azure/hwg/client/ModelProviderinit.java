@@ -2,7 +2,6 @@ package mod.azure.hwg.client;
 
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -16,7 +15,7 @@ public class ModelProviderinit {
 		FabricModelPredicateProviderRegistry.register(HWGItems.SNIPER, new Identifier("scoped"),
 				(itemStack, clientWorld, livingEntity, seed) -> {
 					if (livingEntity != null)
-						return isSneaking(livingEntity) ? 1.0F : 0.0F;
+						return isScoped() ? 1.0F : 0.0F;
 					return 0.0F;
 				});
 	}
@@ -25,7 +24,7 @@ public class ModelProviderinit {
 		return stack.getDamage() < stack.getMaxDamage() - 1;
 	}
 
-	private static boolean isSneaking(LivingEntity livingEntity) {
-		return livingEntity.isSneaking();
+	private static boolean isScoped() {
+		return ClientInit.scope.isPressed();
 	}
 }

@@ -6,6 +6,7 @@ import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
@@ -38,8 +39,8 @@ public class FlamethrowerItem extends HWGGunBase {
 				if (!worldIn.isClient) {
 
 					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(),
-							0.0F, 0.25F * 3.0F, 2.0F);
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+							0.25F * 3.0F, 2.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.age = 30;
@@ -49,6 +50,8 @@ public class FlamethrowerItem extends HWGGunBase {
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS,
 							1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					worldIn.setBlockState(playerentity.getCameraBlockPos(),
+							HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
 				}
 			}
 		}

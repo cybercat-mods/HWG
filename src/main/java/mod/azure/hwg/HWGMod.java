@@ -2,9 +2,6 @@ package mod.azure.hwg;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import mod.azure.hwg.blocks.FuelTankBlock;
-import mod.azure.hwg.blocks.GunBlockEntity;
-import mod.azure.hwg.blocks.GunTableBlock;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.network.PacketHandler;
@@ -13,6 +10,7 @@ import mod.azure.hwg.util.MobAttributes;
 import mod.azure.hwg.util.MobSpawn;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
 import mod.azure.hwg.util.registry.BWCompatItems;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGLoot;
 import mod.azure.hwg.util.registry.HWGMobs;
@@ -23,12 +21,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.Material;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.entry.ItemEntry;
@@ -43,14 +36,13 @@ public class HWGMod implements ModInitializer {
 
 	public static HWGMobs MOBS;
 	public static HWGItems ITEMS;
+	public static HWGBlocks BLOCKS;
 	public static HWGConfig config;
 	public static HWGSounds SOUNDS;
 	public static BWCompatItems BWITEMS;
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
 	public static ProjectilesEntityRegister PROJECTILES;
-	public static final Block FUEL_TANK = new FuelTankBlock();
-	public static BlockEntityType<GunBlockEntity> GUN_TABLE_ENTITY;
 	public static final Identifier LUGER = new Identifier(MODID, "luger");
 	public static final Identifier HELL = new Identifier(MODID, "hellgun");
 	public static final Identifier ASSASULT = new Identifier(MODID, "smg");
@@ -73,8 +65,6 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier GUNSMITH_POI = new Identifier(MODID, "gun_smith_poi");
 	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
 	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
-	public static final GunTableBlock GUN_TABLE = new GunTableBlock(
-			FabricBlockSettings.of(Material.METAL).strength(4.0f).nonOpaque());
 	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE = ScreenHandlerRegistry
 			.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
 	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons"))
@@ -86,9 +76,8 @@ public class HWGMod implements ModInitializer {
 	public void onInitialize() {
 		AutoConfig.register(HWGConfig.class, GsonConfigSerializer::new);
 		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
-		Registry.register(Registry.BLOCK, new Identifier(MODID, "fuel_tank"), FUEL_TANK);
-		Registry.register(Registry.BLOCK, new Identifier(MODID, "gun_table"), GUN_TABLE);
 		ITEMS = new HWGItems();
+		BLOCKS = new HWGBlocks();
 		SOUNDS = new HWGSounds();
 		MOBS = new HWGMobs();
 		PARTICLES = new HWGParticles();
@@ -96,8 +85,6 @@ public class HWGMod implements ModInitializer {
 		GeckoLib.initialize();
 		GunSmithProfession.init();
 		MobSpawn.addSpawnEntries();
-		GUN_TABLE_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, MODID + ":guntable",
-				FabricBlockEntityTypeBuilder.create(GunBlockEntity::new, GUN_TABLE).build(null));
 		MobAttributes.init();
 		LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
 			if (HWGLoot.B_TREASURE.equals(id) || HWGLoot.JUNGLE.equals(id) || HWGLoot.U_BIG.equals(id)

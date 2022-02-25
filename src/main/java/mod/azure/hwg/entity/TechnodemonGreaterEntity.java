@@ -64,7 +64,7 @@ public class TechnodemonGreaterEntity extends HWGEntity {
 	protected void initGoals() {
 		super.initGoals();
 		this.goalSelector.add(4, new RangedStrafeAttackGoal(this,
-				new WeaponGoal(this).setProjectileOriginOffset(0.8, 0.8, 0.8), 0.5D, 5, 30, 15, 15F));
+				new WeaponGoal(this).setProjectileOriginOffset(0.8, 0.8, 0.8), 0.85D, 5, 30, 15, 15F));
 	}
 
 	@Override

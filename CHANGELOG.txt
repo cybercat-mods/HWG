@@ -1,7 +1,7 @@
-v.1.0.3
+v.1.1.0
 
-- Fixes Mob Damage.
-- Rewrote Attack AI, allowing animations to work properly.
-- Redid Technodemon animations. 
-- Guns now work on villagers at close range.
-- Cleaned up code.
+- Merged all Grenade entities into 1 variant/state based entity.
+- Merged all Flare entities into 1 variant based entity.
+- Added a 1 tick alive Light source block for the Flare and Balrog Projectile and firing flashes on weapons.
+- Sniper model now hidden when scoped in first person.
+- Mobs move faster when argo'd now.

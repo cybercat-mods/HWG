@@ -7,6 +7,7 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BlazeRodEntity;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
@@ -52,8 +53,8 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity.isOnFire();
 
 					BlazeRodEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setVelocity(playerentity, playerentity.getPitch() + 2, playerentity.getYaw(), 0.0F,
-							1.0F * 3.0F, 1.0F);
+					abstractarrowentity1.setVelocity(playerentity, playerentity.getPitch() + 2, playerentity.getYaw(),
+							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity1.hasNoGravity();
@@ -62,8 +63,8 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity1.isOnFire();
 
 					BlazeRodEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() + 2, 0.0F,
-							1.0F * 3.0F, 1.0F);
+					abstractarrowentity2.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() + 2,
+							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity2.hasNoGravity();
@@ -72,8 +73,8 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity2.isOnFire();
 
 					BlazeRodEntity abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() - 2, 0.0F,
-							1.0F * 3.0F, 1.0F);
+					abstractarrowentity3.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() - 2,
+							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity3.hasNoGravity();
@@ -86,9 +87,11 @@ public class BalrogItem extends HWGGunBase {
 					worldIn.spawnEntity(abstractarrowentity2);
 					worldIn.spawnEntity(abstractarrowentity3);
 					stack.damage(4, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
-					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-							SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.PLAYERS, 1.0F,
+					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
+							playerentity.getZ(), SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.PLAYERS, 1.0F,
 							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					worldIn.setBlockState(playerentity.getCameraBlockPos(),
+							HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
 				}
 			}
 		}
@@ -113,7 +116,8 @@ public class BalrogItem extends HWGGunBase {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof BalrogItem) {
-			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 &&user.getInventory().count(Items.BLAZE_ROD) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0
+					&& user.getInventory().count(Items.BLAZE_ROD) > 0) {
 				removeAmmo(Items.BLAZE_ROD, user);
 				user.getStackInHand(hand).damage(-50, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setBobbingAnimationTime(3);

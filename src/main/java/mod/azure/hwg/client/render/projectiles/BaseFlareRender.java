@@ -1,22 +1,22 @@
-package mod.azure.hwg.client.render.projectiles.flare;
+package mod.azure.hwg.client.render.projectiles;
 
-import mod.azure.hwg.entity.projectiles.flare.BrownFlareEntity;
+import mod.azure.hwg.entity.projectiles.BaseFlareEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3f;
 
-public class BrownFlareRender extends EntityRenderer<BrownFlareEntity> {
+public class BaseFlareRender extends EntityRenderer<BaseFlareEntity> {
 
-	public BrownFlareRender(EntityRendererFactory.Context dispatcher) {
+	public BaseFlareRender(EntityRendererFactory.Context dispatcher) {
 		super(dispatcher);
 	}
 
-	public void render(BrownFlareEntity fireworkRocketEntity, float f, float g, MatrixStack matrixStack,
+	public void render(BaseFlareEntity fireworkRocketEntity, float f, float g, MatrixStack matrixStack,
 			VertexConsumerProvider vertexConsumerProvider, int i) {
 		matrixStack.push();
 		matrixStack.multiply(this.dispatcher.getRotation());
@@ -27,12 +27,12 @@ public class BrownFlareRender extends EntityRenderer<BrownFlareEntity> {
 	}
 
 	@SuppressWarnings("deprecation")
-	public Identifier getTexture(BrownFlareEntity fireworkRocketEntity) {
+	public Identifier getTexture(BaseFlareEntity fireworkRocketEntity) {
 		return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
 	}
 
 	@Override
-	protected int getBlockLight(BrownFlareEntity entity, BlockPos blockPos) {
+	protected int getBlockLight(BaseFlareEntity entity, BlockPos blockPos) {
 		return 15;
 	}
 }

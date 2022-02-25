@@ -6,6 +6,7 @@ import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -41,15 +42,15 @@ public class SniperItem extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 35);
 				if (!worldIn.isClient) {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(),
-							0.0F, 1.0F * 3.0F, 1.0F);
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.age = -15;
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);
-						worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
-								playerentity.getZ(), HWGSounds.SNIPER, SoundCategory.PLAYERS, 0.25F,
-								1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
+							playerentity.getZ(), HWGSounds.SNIPER, SoundCategory.PLAYERS, 0.25F,
+							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 					if (!worldIn.isClient) {
 						final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
 						GeckoLibNetwork.syncAnimation(playerentity, this, id, ANIM_OPEN);
@@ -57,6 +58,8 @@ public class SniperItem extends AnimatedItem {
 							GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
 						}
 					}
+					worldIn.setBlockState(playerentity.getCameraBlockPos(),
+							HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
 				}
 			}
 		}
@@ -77,7 +80,8 @@ public class SniperItem extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof SniperItem) {
-			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.SNIPER_ROUND) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0
+					&& user.getInventory().count(HWGItems.SNIPER_ROUND) > 0) {
 				removeAmmo(HWGItems.SNIPER_ROUND, user);
 				user.getStackInHand(hand).damage(-2, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setBobbingAnimationTime(3);

@@ -9,22 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import com.google.common.collect.Lists;
 
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.entity.projectiles.flare.BlackFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.BlueFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.BrownFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.CyanFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.GrayFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.GreenFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.LightblueFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.LightgrayFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.LimeFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.MagentaFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.OrangeFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.PinkFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.PurpleFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.RedFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.WhiteFlareEntity;
-import mod.azure.hwg.entity.projectiles.flare.YellowFlareEntity;
+import mod.azure.hwg.entity.projectiles.BaseFlareEntity;
 import mod.azure.hwg.item.ammo.FlareItem;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
@@ -176,7 +161,8 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 	private static void shoot(World world, LivingEntity shooter, Hand hand, ItemStack stack, ItemStack projectile,
 			float soundPitch, boolean creative, float speed, float divergence, float simulated) {
 		if (!world.isClient) {
-			Object projectileEntity2;
+			BaseFlareEntity flareEntity = new BaseFlareEntity(world, projectile, shooter, shooter.getX(),
+					shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
 			boolean bl = projectile.getItem() == HWGItems.BLACK_FLARE;
 			boolean b2 = projectile.getItem() == HWGItems.BLUE_FLARE;
 			boolean b3 = projectile.getItem() == HWGItems.BROWN_FLARE;
@@ -193,53 +179,37 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 			boolean b14 = projectile.getItem() == HWGItems.RED_FLARE;
 			boolean b15 = projectile.getItem() == HWGItems.YELLOW_FLARE;
 			if (bl) {
-				projectileEntity2 = new BlackFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(1);
 			} else if (b2) {
-				projectileEntity2 = new BlueFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(2);
 			} else if (b3) {
-				projectileEntity2 = new BrownFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(3);
 			} else if (b4) {
-				projectileEntity2 = new CyanFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(4);
 			} else if (b5) {
-				projectileEntity2 = new GrayFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(5);
 			} else if (b6) {
-				projectileEntity2 = new GreenFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(6);
 			} else if (b7) {
-				projectileEntity2 = new LightblueFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(7);
 			} else if (b8) {
-				projectileEntity2 = new LightgrayFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(8);
 			} else if (b9) {
-				projectileEntity2 = new LimeFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(9);
 			} else if (b10) {
-				projectileEntity2 = new MagentaFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(10);
 			} else if (b11) {
-				projectileEntity2 = new OrangeFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(11);
 			} else if (b12) {
-				projectileEntity2 = new PinkFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(12);
 			} else if (b13) {
-				projectileEntity2 = new PurpleFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(13);
 			} else if (b14) {
-				projectileEntity2 = new RedFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(14);
 			} else if (b15) {
-				projectileEntity2 = new YellowFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(15);
 			} else {
-				projectileEntity2 = new WhiteFlareEntity(world, projectile, shooter, shooter.getX(),
-						shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+				flareEntity.setColor(16);
 			}
 
 			Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
@@ -247,12 +217,12 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 			Vec3d vec3d2 = shooter.getRotationVec(1.0F);
 			Vec3f vector3f = new Vec3f(vec3d2);
 			vector3f.rotate(quaternion);
-			((ProjectileEntity) projectileEntity2).setVelocity((double) vector3f.getX(), (double) vector3f.getY(),
+			((ProjectileEntity) flareEntity).setVelocity((double) vector3f.getX(), (double) vector3f.getY(),
 					(double) vector3f.getZ(), speed, divergence);
-			((PersistentProjectileEntity) projectileEntity2).setDamage(0.3D);
-			((PersistentProjectileEntity) projectileEntity2).pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
+			((PersistentProjectileEntity) flareEntity).setDamage(0.3D);
+			((PersistentProjectileEntity) flareEntity).pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 			stack.damage(1, shooter, p -> p.sendToolBreakStatus(shooter.getActiveHand()));
-			world.spawnEntity((Entity) projectileEntity2);
+			world.spawnEntity((Entity) flareEntity);
 		}
 	}
 

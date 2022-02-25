@@ -1,0 +1,52 @@
+{
+	"variants": {
+		"level=0": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=1": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=2": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=3": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=4": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=5": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=6": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=7": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=8": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=9": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=10": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=11": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=12": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=13": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=14": {
+			"model": "hwg:block/lightblock"
+		},
+		"level=15": {
+			"model": "hwg:block/lightblock"
+		}
+	}
+}

@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
@@ -29,7 +30,7 @@ import net.minecraft.world.poi.PointOfInterestType;
 public class GunSmithProfession {
 
 	public static final PointOfInterestType GUNSMITH_POI = PointOfInterestHelper.register(HWGMod.GUNSMITH_POI, 1, 1,
-			HWGMod.GUN_TABLE);
+			HWGBlocks.GUN_TABLE);
 	public static final VillagerProfession GUNSMITH = VillagerProfessionBuilder.create().id(HWGMod.GUNSMITH)
 			.workstation(GUNSMITH_POI).workSound(SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM).build();
 

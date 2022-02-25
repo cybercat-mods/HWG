@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.item.weapons.BalrogItem;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -152,6 +153,8 @@ public class RangedStrafeAttackGoal extends Goal {
 				} else {
 					this.attack.shoot();
 				}
+				this.entity.world.setBlockState(this.entity.getCameraBlockPos(),
+						HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
 			}
 			if (this.attackTime == 8) {
 				this.entity.setAttackingState(0);

@@ -1,7 +1,8 @@
-package mod.azure.hwg.blocks;
+package mod.azure.hwg.entity.blockentity;
 
-import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.blocks.ImplementedInventory;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
+import mod.azure.hwg.util.registry.HWGMobs;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +23,7 @@ public class GunBlockEntity extends BlockEntity implements ImplementedInventory,
 	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(6, ItemStack.EMPTY);
 
 	public GunBlockEntity(BlockPos pos, BlockState state) {
-		super(HWGMod.GUN_TABLE_ENTITY, pos, state);
+		super(HWGMobs.GUN_TABLE_ENTITY, pos, state);
 	}
 
 	@Override

@@ -5,8 +5,12 @@ import mod.azure.hwg.entity.MercEntity;
 import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
+import mod.azure.hwg.entity.blockentity.GunBlockEntity;
+import mod.azure.hwg.entity.blockentity.TickingLightEntity;
 import mod.azure.hwg.entity.projectiles.FuelTankEntity;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -40,4 +44,12 @@ public class HWGMobs {
 			FabricEntityTypeBuilder.<FuelTankEntity>create(SpawnGroup.MISC, FuelTankEntity::new)
 					.dimensions(EntityDimensions.fixed(0.98F, 0.98F)).trackRangeBlocks(90).trackedUpdateRate(4)
 					.build());
+
+	public static final BlockEntityType<GunBlockEntity> GUN_TABLE_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+			HWGMod.MODID + ":guntable",
+			FabricBlockEntityTypeBuilder.create(GunBlockEntity::new, HWGBlocks.GUN_TABLE).build(null));
+
+	public static final BlockEntityType<TickingLightEntity> TICKING_LIGHT_ENTITY = Registry.register(
+			Registry.BLOCK_ENTITY_TYPE, HWGMod.MODID + ":lightblock",
+			FabricBlockEntityTypeBuilder.create(TickingLightEntity::new, HWGBlocks.TICKING_LIGHT_BLOCK).build(null));
 }

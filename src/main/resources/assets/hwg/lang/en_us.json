@@ -56,6 +56,8 @@
 	"entity.hwg.rockets": "Rocket",
 	"entity.hwg.bullets": "Bullets",
 	"entity.hwg.flame_firing": "Flames",
+	"entity.hwg.grenade": "Grenade",
+	"entity.hwg.flare": "Flare",
 	"entity.minecraft.villager.gun_smith": "Gun Smith",
 	"item.hwg.lesser_spawn_egg": "Lesser Technodemon Spawn Egg",
 	"item.hwg.greater_spawn_egg": "Greater Technodemon Spawn Egg",

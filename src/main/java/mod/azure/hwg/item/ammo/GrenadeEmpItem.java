@@ -1,7 +1,7 @@
 package mod.azure.hwg.item.ammo;
 
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.entity.projectiles.EMPGrenadeEntity;
+import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,9 +20,11 @@ public class GrenadeEmpItem extends Item {
 		if (!user.getItemCooldownManager().isCoolingDown(this)) {
 			user.getItemCooldownManager().set(this, 25);
 			if (!world.isClient) {
-				EMPGrenadeEntity snowballEntity = new EMPGrenadeEntity(world, user);
+				GrenadeEntity snowballEntity = new GrenadeEntity(world, user);
 				snowballEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
 				snowballEntity.setDamage(0);
+				snowballEntity.setVariant(1);
+				snowballEntity.setState(1);
 				world.spawnEntity(snowballEntity);
 			}
 			if (!user.getAbilities().creativeMode) {

@@ -7,6 +7,7 @@ import java.util.Optional;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.mixin.IngredientAccess;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -82,7 +83,7 @@ public class GunTableScreenHandler extends ScreenHandler {
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
-		return canUse(context, player, HWGMod.GUN_TABLE);
+		return canUse(context, player, HWGBlocks.GUN_TABLE);
 	}
 
 	public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {

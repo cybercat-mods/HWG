@@ -7,6 +7,7 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -46,8 +47,8 @@ public class Minigun extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 0);
 				if (!worldIn.isClient) {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(),
-							0.0F, 1.0F * 3.0F, 1.0F);
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.hasNoGravity();
@@ -63,6 +64,8 @@ public class Minigun extends AnimatedItem {
 							GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
 						}
 					}
+					worldIn.setBlockState(playerentity.getCameraBlockPos(),
+							HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
 				}
 			}
 		}
@@ -87,7 +90,8 @@ public class Minigun extends AnimatedItem {
 
 	public void reload(PlayerEntity user, Hand hand) {
 		if (user.getStackInHand(hand).getItem() instanceof Minigun) {
-			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0 && user.getInventory().count(HWGItems.BULLETS) > 0) {
+			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0
+					&& user.getInventory().count(HWGItems.BULLETS) > 0) {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
 				user.getStackInHand(hand).setBobbingAnimationTime(3);

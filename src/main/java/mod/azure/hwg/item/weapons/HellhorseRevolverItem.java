@@ -8,6 +8,7 @@ import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -45,8 +46,8 @@ public class HellhorseRevolverItem extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(),
-							0.0F, 1.0F * 3.0F, 1.0F);
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+							1.0F * 3.0F, 1.0F);
 
 					SplittableRandom random = new SplittableRandom();
 					boolean r = random.nextInt(1, 101) <= 20;
@@ -65,6 +66,8 @@ public class HellhorseRevolverItem extends AnimatedItem {
 							GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
 						}
 					}
+					worldIn.setBlockState(playerentity.getCameraBlockPos(),
+							HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
 				}
 			}
 		}
