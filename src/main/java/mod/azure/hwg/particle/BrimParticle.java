@@ -19,10 +19,10 @@ public class BrimParticle extends SpriteBillboardParticle {
 		this.setBoundingBoxSpacing(0.25F, 0.25F);
         this.maxAge = this.random.nextInt(50) + 80;
 		this.gravityStrength = 3.0E-6F;
-		this.colorAlpha = 0.75F;
-		this.colorRed = red;
-		this.colorGreen = green;
-		this.colorBlue = blue;
+		this.alpha = 0.75F;
+		this.red = red;
+		this.green = green;
+		this.blue = blue;
 		this.velocityX = velocityX;
 		this.velocityY = velocityY + (double) (this.random.nextFloat() / 500.0F);
 		this.velocityZ = velocityZ;
@@ -32,15 +32,15 @@ public class BrimParticle extends SpriteBillboardParticle {
 		this.prevPosX = this.x;
 		this.prevPosY = this.y;
 		this.prevPosZ = this.z;
-		if (this.age++ < this.maxAge && this.colorAlpha > 0.0F) {
+		if (this.age++ < this.maxAge && this.alpha > 0.0F) {
 			this.velocityX += (double) (this.random.nextFloat() / 5000.0F
 					* (float) (this.random.nextBoolean() ? 1 : -1));
 			this.velocityZ += (double) (this.random.nextFloat() / 5000.0F
 					* (float) (this.random.nextBoolean() ? 1 : -1));
 			this.velocityY -= (double) this.gravityStrength;
 			this.move(this.velocityX, this.velocityY, this.velocityZ);
-			if (this.age >= this.maxAge - 60 && this.colorAlpha > 0.01F) {
-				this.colorAlpha -= 0.015F;
+			if (this.age >= this.maxAge - 60 && this.alpha > 0.01F) {
+				this.alpha -= 0.015F;
 			}
 
 		} else {

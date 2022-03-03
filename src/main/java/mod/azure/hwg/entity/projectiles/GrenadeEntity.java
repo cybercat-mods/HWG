@@ -33,11 +33,9 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -228,91 +226,6 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 	public void setVelocity(double x, double y, double z, float speed, float divergence) {
 		super.setVelocity(x, y, z, speed, divergence);
 		this.ticksInAir = 0;
-	}
-
-	@Override
-	public void tick() {
-		super.tick();
-		boolean bl = this.isNoClip();
-		Vec3d vec3d = this.getVelocity();
-		if (this.prevPitch == 0.0F && this.prevYaw == 0.0F) {
-			double f = vec3d.horizontalLength();
-			this.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875D));
-			this.setPitch((float) (MathHelper.atan2(vec3d.y, f) * 57.2957763671875D));
-			this.prevYaw = this.getYaw();
-			this.prevPitch = this.getPitch();
-		}
-		if (this.age >= 80) {
-			if (this.getVariant() == 1) {
-				this.emp();
-			} else if (this.getVariant() == 2) {
-				this.frag();
-			} else if (this.getVariant() == 3) {
-				this.naplam();
-			} else if (this.getVariant() == 5) {
-				this.stun();
-			}
-			this.remove(Entity.RemovalReason.DISCARDED);
-		}
-		if (this.inAir && !bl) {
-			this.age();
-			++this.timeInAir;
-		} else {
-			this.timeInAir = 0;
-			Vec3d vec3d3 = this.getPos();
-			Vec3d vector3d3 = vec3d3.add(vec3d);
-			HitResult hitResult = this.world.raycast(new RaycastContext(vec3d3, vector3d3,
-					RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this));
-			if (((HitResult) hitResult).getType() != HitResult.Type.MISS) {
-				vector3d3 = ((HitResult) hitResult).getPos();
-			}
-			while (!this.isRemoved()) {
-				EntityHitResult entityHitResult = this.getEntityCollision(vec3d3, vector3d3);
-				if (entityHitResult != null) {
-					hitResult = entityHitResult;
-				}
-				if (hitResult != null && ((HitResult) hitResult).getType() == HitResult.Type.ENTITY) {
-					Entity entity = ((EntityHitResult) hitResult).getEntity();
-					Entity entity2 = this.getOwner();
-					if (entity instanceof PlayerEntity && entity2 instanceof PlayerEntity
-							&& !((PlayerEntity) entity2).shouldDamagePlayer((PlayerEntity) entity)) {
-						hitResult = null;
-						entityHitResult = null;
-					}
-				}
-				if (hitResult != null && !bl) {
-					this.onCollision((HitResult) hitResult);
-					this.velocityDirty = true;
-				}
-				if (entityHitResult == null || this.getPierceLevel() <= 0) {
-					break;
-				}
-				hitResult = null;
-			}
-			vec3d = this.getVelocity();
-			double d = vec3d.x;
-			double e = vec3d.y;
-			double g = vec3d.z;
-			double h = this.getX() + d;
-			double j = this.getY() + e;
-			double k = this.getZ() + g;
-			double l = vec3d.horizontalLength();
-			if (bl) {
-				this.setYaw((float) (MathHelper.atan2(-e, -g) * 57.2957763671875D));
-			} else {
-				this.setYaw((float) (MathHelper.atan2(e, g) * 57.2957763671875D));
-			}
-			this.setPitch((float) (MathHelper.atan2(e, l) * 57.2957763671875D));
-			this.setPitch(updateRotation(this.prevPitch, this.getPitch()));
-			this.setYaw(updateRotation(this.prevYaw, this.getYaw()));
-			float m = 0.99F;
-
-			this.setVelocity(vec3d.multiply((double) m));
-			Vec3d vec3d5 = this.getVelocity();
-			this.setVelocity(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
-			this.updatePosition(h, j, k);
-			this.checkBlockCollision();
-		}
 	}
 
 	public void initFromStack(ItemStack stack) {

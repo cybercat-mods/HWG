@@ -118,7 +118,7 @@ public class MercEntity extends HWGEntity {
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
 			EntityData entityData, NbtCompound entityTag) {
 		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
-		switch (world.getBiome(getBlockPos()).getCategory()) {
+		switch (world.getBiome(getBlockPos()).value().getCategory()) {
 		case DESERT:
 			this.setVariant(1);
 			break;

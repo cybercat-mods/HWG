@@ -1,7 +1,3 @@
 v.1.1.0
 
-- Merged all Grenade entities into 1 variant/state based entity.
-- Merged all Flare entities into 1 variant based entity.
-- Added a 1 tick alive Light source block for the Flare and Balrog Projectile and firing flashes on weapons.
-- Sniper model now hidden when scoped in first person.
-- Mobs move faster when argo'd now.
+- 1.18.2 port.
