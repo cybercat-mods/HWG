@@ -1,3 +1,3 @@
-v.1.1.0
+v.1.1.1
 
-- 1.18.2 port.
+- Improved Sniper FOV zoom, no longer breaks when switching between items when zoomed. 
