@@ -10,6 +10,7 @@ import mod.azure.hwg.util.MobAttributes;
 import mod.azure.hwg.util.MobSpawn;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
 import mod.azure.hwg.util.registry.BWCompatItems;
+import mod.azure.hwg.util.registry.GigCompat;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGLoot;
@@ -22,6 +23,7 @@ import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.entry.ItemEntry;
@@ -36,6 +38,7 @@ public class HWGMod implements ModInitializer {
 
 	public static HWGMobs MOBS;
 	public static HWGItems ITEMS;
+	public static GigCompat GIG_ITEMS;
 	public static HWGBlocks BLOCKS;
 	public static HWGConfig config;
 	public static HWGSounds SOUNDS;
@@ -77,6 +80,9 @@ public class HWGMod implements ModInitializer {
 		AutoConfig.register(HWGConfig.class, GsonConfigSerializer::new);
 		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
 		ITEMS = new HWGItems();
+		if (FabricLoader.getInstance().isModLoaded("gigeresque")) {
+			GIG_ITEMS = new GigCompat();
+		}
 		BLOCKS = new HWGBlocks();
 		SOUNDS = new HWGSounds();
 		MOBS = new HWGMobs();

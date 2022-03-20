@@ -140,7 +140,8 @@ public class BalrogItem extends HWGGunBase {
 			}
 		}
 		if (!(entity instanceof HWGEntity) && selected) {
-			((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 5, 1));
+			((LivingEntity) entity)
+					.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1, 1, false, false, false));
 		}
 	}
 

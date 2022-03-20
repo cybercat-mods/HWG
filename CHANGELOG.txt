@@ -1,3 +1,7 @@
-v.1.1.1
+v.1.1.2
 
-- Improved Sniper FOV zoom, no longer breaks when switching between items when zoomed. 
+- Tweaked Lighting Light timer.
+- Flares die in water
+- Flame thrower flames cast light.
+- Balrog hides effects now.
+- Gig compat ready.

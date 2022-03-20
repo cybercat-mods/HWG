@@ -45,7 +45,6 @@ public class FlamethrowerItem extends HWGGunBase {
 							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.age = 30;
 					worldIn.spawnEntity(abstractarrowentity);
-
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS,

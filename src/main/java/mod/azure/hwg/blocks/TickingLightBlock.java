@@ -63,7 +63,7 @@ public class TickingLightBlock extends BlockWithEntity {
 
 	@Override
 	public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
-		return 15;
+		return 7;
 	}
 
 	@Override

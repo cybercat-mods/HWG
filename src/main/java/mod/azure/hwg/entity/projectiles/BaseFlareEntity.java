@@ -103,7 +103,7 @@ public class BaseFlareEntity extends PersistentProjectileEntity {
 			idleTicks = 0;
 		if (idleOpt <= 0 || idleTicks < idleOpt)
 			super.tick();
-		if (this.age >= 800) {
+		if (this.age >= 800 || this.isTouchingWater()) {
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		if (this.life == 0 && !this.isSilent()) {

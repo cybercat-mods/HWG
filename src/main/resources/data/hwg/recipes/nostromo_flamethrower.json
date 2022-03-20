@@ -1,0 +1,25 @@
+{
+	"type": "hwg:gun_table",
+	"pattern": "abcd",
+	"key": {
+		"a": {
+			"item": "minecraft:iron_ingot",
+			"count": 10
+		},
+		"b": {
+			"item": "hwg:fuel_tank",
+			"count": 1
+		},
+		"c": {
+			"item": "minecraft:lever",
+			"count": 1
+		},
+		"d": {
+			"item": "minecraft:black_terracotta",
+			"count": 2
+		}
+	},
+	"result": {
+		"item": "hwg:nostromo_flamethrower"
+	}
+}

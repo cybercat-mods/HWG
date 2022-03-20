@@ -2,12 +2,16 @@ package mod.azure.hwg.entity.projectiles;
 
 import java.util.List;
 
+import mod.azure.hwg.entity.blockentity.TickingLightEntity;
 import mod.azure.hwg.util.packet.EntityPacket;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.AbstractFireBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -43,6 +47,8 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	private int ticksInAir;
 	private LivingEntity shooter;
 	private AnimationFactory factory = new AnimationFactory(this);
+	private BlockPos lightBlockPos = null;
+	private int idleTicks = 0;
 
 	public FlameFiring(EntityType<? extends FlameFiring> entityType, World world) {
 		super(entityType, world);
@@ -123,7 +129,18 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 
 	@Override
 	public void tick() {
-		super.tick();
+		int idleOpt = 100;
+		if (getVelocity().lengthSquared() < 0.01)
+			idleTicks++;
+		else
+			idleTicks = 0;
+		if (idleOpt <= 0 || idleTicks < idleOpt)
+			super.tick();
+		if (this.age >= 60) {
+			this.remove(Entity.RemovalReason.DISCARDED);
+		}
+		boolean isInsideWaterBlock = world.isWater(getBlockPos());
+		spawnLightSource(isInsideWaterBlock);
 		float q = 4.0F;
 		int k2 = MathHelper.floor(this.getX() - (double) q - 1.0D);
 		int l2 = MathHelper.floor(this.getX() + (double) q + 1.0D);
@@ -225,6 +242,50 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	@Environment(EnvType.CLIENT)
 	public boolean shouldRender(double distance) {
 		return true;
+	}
+
+	private void spawnLightSource(boolean isInWaterBlock) {
+		if (lightBlockPos == null) {
+			lightBlockPos = findFreeSpace(world, getBlockPos(), 2);
+			if (lightBlockPos == null)
+				return;
+			world.setBlockState(lightBlockPos, HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
+		} else if (checkDistance(lightBlockPos, getBlockPos(), 2)) {
+			BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
+			if (blockEntity instanceof TickingLightEntity) {
+				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+			} else
+				lightBlockPos = null;
+		} else
+			lightBlockPos = null;
+	}
+
+	private boolean checkDistance(BlockPos blockPosA, BlockPos blockPosB, int distance) {
+		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance
+				&& Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance
+				&& Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
+	}
+
+	private BlockPos findFreeSpace(World world, BlockPos blockPos, int maxDistance) {
+		if (blockPos == null)
+			return null;
+
+		int[] offsets = new int[maxDistance * 2 + 1];
+		offsets[0] = 0;
+		for (int i = 2; i <= maxDistance * 2; i += 2) {
+			offsets[i - 1] = i / 2;
+			offsets[i] = -i / 2;
+		}
+		for (int x : offsets)
+			for (int y : offsets)
+				for (int z : offsets) {
+					BlockPos offsetPos = blockPos.add(x, y, z);
+					BlockState state = world.getBlockState(offsetPos);
+					if (state.isAir() || state.getBlock().equals(HWGBlocks.TICKING_LIGHT_BLOCK))
+						return offsetPos;
+				}
+
+		return null;
 	}
 
 }
