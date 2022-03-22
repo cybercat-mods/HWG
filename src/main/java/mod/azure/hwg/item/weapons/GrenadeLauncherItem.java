@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
-import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
@@ -190,7 +189,8 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 				for (PlayerEntity otherPlayer : PlayerLookup.tracking(user)) {
 					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
 				}
-				world.setBlockState(user.getCameraBlockPos(), HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
+				boolean isInsideWaterBlock = user.world.isWater(user.getBlockPos());
+				spawnLightSource(user, isInsideWaterBlock);
 			}
 			return TypedActionResult.consume(itemStack);
 		} else if (!user.getArrowType(itemStack).isEmpty()) {

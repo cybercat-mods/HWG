@@ -1,7 +1,3 @@
-v.1.1.2
+v.1.1.3
 
-- Tweaked Lighting Light timer.
-- Flares die in water
-- Flame thrower flames cast light.
-- Balrog hides effects now.
-- Gig compat ready.
+- Fixes light block from gun replacing blocks at chest level of player.
