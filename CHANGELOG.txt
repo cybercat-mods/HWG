@@ -1,3 +1,3 @@
-v.1.1.3
+v.1.1.4
 
-- Fixes light block from gun replacing blocks at chest level of player.
+- Fixes shotgun shells not dying.

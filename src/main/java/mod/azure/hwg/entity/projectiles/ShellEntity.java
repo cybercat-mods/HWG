@@ -119,6 +119,9 @@ public class ShellEntity extends PersistentProjectileEntity implements IAnimatab
 	@Override
 	public void tick() {
 		super.tick();
+		if (this.ticksInAir >= 40) {
+			this.remove(Entity.RemovalReason.DISCARDED);
+		}
 		if (this.world.isClient) {
 			double d2 = this.getX() + (this.random.nextDouble()) * (double) this.getWidth() * 0.5D;
 			double f2 = this.getZ() + (this.random.nextDouble()) * (double) this.getWidth() * 0.5D;
