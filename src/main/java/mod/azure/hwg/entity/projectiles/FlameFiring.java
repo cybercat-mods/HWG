@@ -136,7 +136,8 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 			idleTicks = 0;
 		if (idleOpt <= 0 || idleTicks < idleOpt)
 			super.tick();
-		if (this.age >= 60) {
+		++this.ticksInAir;
+		if (this.ticksInAir >= 40) {
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		boolean isInsideWaterBlock = world.isWater(getBlockPos());

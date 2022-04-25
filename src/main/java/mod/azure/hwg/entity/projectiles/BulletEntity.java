@@ -122,6 +122,7 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
 	@Override
 	public void tick() {
 		super.tick();
+		++this.ticksInAir;
 		if (this.ticksInAir >= 40) {
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}

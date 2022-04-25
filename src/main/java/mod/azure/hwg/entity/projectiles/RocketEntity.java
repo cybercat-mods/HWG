@@ -121,6 +121,11 @@ public class RocketEntity extends PersistentProjectileEntity implements IAnimata
 			this.prevYaw = this.getYaw();
 			this.prevPitch = this.getPitch();
 		}
+		++this.ticksInAir;
+		if (this.ticksInAir >= 40) {
+			this.explode();
+			this.remove(Entity.RemovalReason.DISCARDED);
+		}
 		if (this.age >= 80) {
 			this.explode();
 			this.remove(Entity.RemovalReason.DISCARDED);

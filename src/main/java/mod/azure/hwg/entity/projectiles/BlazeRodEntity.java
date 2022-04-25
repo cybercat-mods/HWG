@@ -138,6 +138,11 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 			idleTicks = 0;
 		if (idleOpt <= 0 || idleTicks < idleOpt)
 			super.tick();
+
+		++this.ticksInAir;
+		if (this.ticksInAir >= 40) {
+			this.remove(Entity.RemovalReason.DISCARDED);
+		}
 		boolean isInsideWaterBlock = world.isWater(getBlockPos());
 		spawnLightSource(isInsideWaterBlock);
 			float q = 4.0F;
