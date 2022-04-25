@@ -32,15 +32,11 @@ public class GunTableBlock extends Block implements BlockEntityProvider {
 
 	public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 	private static final VoxelShape X_LENGTH1 = Block.createCuboidShape(0, 0, 1, 16, 17, 16);
-	private static final VoxelShape X_LENGTH2 = Block.createCuboidShape(0, 16, 14, 16, 29, 15);
 	private static final VoxelShape Y_LENGTH1 = Block.createCuboidShape(1, 0, 0, 16, 17, 16);
-	private static final VoxelShape Y_LENGTH2 = Block.createCuboidShape(14, 16, 0, 15, 29, 16);
-	private static final VoxelShape X_AXIS_AABB = VoxelShapes.union(X_LENGTH1, X_LENGTH2);
-	private static final VoxelShape Z_AXIS_AABB = VoxelShapes.union(Y_LENGTH1, Y_LENGTH2);
 
 	public GunTableBlock() {
 		super(FabricBlockSettings.of(Material.METAL).strength(4.0f).nonOpaque());
-		this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
+		this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.SOUTH));
 	}
 
 	@Override
@@ -54,7 +50,7 @@ public class GunTableBlock extends Block implements BlockEntityProvider {
 
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		Direction direction = (Direction) state.get(FACING);
-		return direction.getAxis() == Direction.Axis.X ? Z_AXIS_AABB : X_AXIS_AABB;
+		return direction.getAxis() == Direction.Axis.X ? Y_LENGTH1 :X_LENGTH1;
 	}
 
 	public BlockState mirror(BlockState state, BlockMirror mirror) {
