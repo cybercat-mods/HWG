@@ -24,7 +24,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
@@ -50,7 +49,7 @@ public class GunTableBlock extends Block implements BlockEntityProvider {
 
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		Direction direction = (Direction) state.get(FACING);
-		return direction.getAxis() == Direction.Axis.X ? Y_LENGTH1 :X_LENGTH1;
+		return direction.getAxis() == Direction.Axis.X ? Y_LENGTH1 : X_LENGTH1;
 	}
 
 	public BlockState mirror(BlockState state, BlockMirror mirror) {
