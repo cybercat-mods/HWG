@@ -28,17 +28,16 @@ import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
-@SuppressWarnings("deprecation")
 public class ClientInit implements ClientModInitializer {
 
 	public static KeyBinding reload = new KeyBinding("key.hwg.reload", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R,
@@ -67,12 +66,15 @@ public class ClientInit implements ClientModInitializer {
 		GeoItemRenderer.registerItemRenderer(HWGItems.MEANIE1, new Meanie1Render());
 		GeoItemRenderer.registerItemRenderer(HWGItems.MEANIE2, new Meanie2Render());
 		GeoItemRenderer.registerItemRenderer(HWGItems.FLARE_GUN, new FlareGunRender());
-		ClientSidePacketRegistry.INSTANCE.register(EntityPacket.ID, (ctx, buf) -> {
-			EntityPacketOnClient.onPacket(ctx, buf);
+		ClientPlayNetworking.registerGlobalReceiver(EntityPacket.ID, (client, handler, buf, responseSender) -> {
+			EntityPacketOnClient.onPacket(client, buf);
 		});
 		KeyBindingHelper.registerKeyBinding(reload);
 		KeyBindingHelper.registerKeyBinding(scope);
-		requestParticleTexture(new Identifier("hwg:particle/big_smoke_0"));
+		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE)
+				.register(((atlasTexture, registry) -> {
+					registry.register(new Identifier("hwg", "particle/big_smoke_0"));
+				}));
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BLACK_FLARE, FlareParticle.BlackSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BLUE_FLARE, FlareParticle.BlueSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BROWN_FLARE, FlareParticle.BrownSmokeFactory::new);
@@ -97,11 +99,6 @@ public class ClientInit implements ClientModInitializer {
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.GRAY_FLARE, FlareParticle.GraySmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BRIM_ORANGE, BrimParticle.OrangeSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BRIM_RED, BrimParticle.RedSmokeFactory::new);
-	}
-
-	public static void requestParticleTexture(Identifier id) {
-		ClientSpriteRegistryCallback.event(SpriteAtlasTexture.PARTICLE_ATLAS_TEXTURE)
-				.register(((texture, registry) -> registry.register(id)));
 	}
 
 }

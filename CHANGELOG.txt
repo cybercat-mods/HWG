@@ -1,4 +1,3 @@
-v.1.1.6
+v.1.1.7
 
-- Fixes projectiles not dying. 
-- Tweaks hit box of table
+- Moves Projectile packets to the proper system and updates Particle registering to use the right map.
