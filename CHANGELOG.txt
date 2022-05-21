@@ -1,3 +1,4 @@
-v.1.1.7
+v.1.1.8
 
-- Moves Projectile packets to the proper system and updates Particle registering to use the right map.
+- Updates Screen stuff to new methods.
+- Adds in REI support for items crafted in the Gun Table. Input counts not working at this time. 
