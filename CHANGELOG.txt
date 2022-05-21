@@ -1,4 +1,3 @@
-v.1.1.8
+v.1.1.9
 
-- Updates Screen stuff to new methods.
-- Adds in REI support for items crafted in the Gun Table. Input counts not working at this time. 
+- Input counts added to REI plugin for input numbers!
