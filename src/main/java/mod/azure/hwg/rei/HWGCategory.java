@@ -52,33 +52,49 @@ public class HWGCategory implements DisplayCategory<HWGDisplay> {
 		Point outputPoint = new Point(startPoint.x + 100, startPoint.y + 30);
 		List<Widget> widgets = new ArrayList<>();
 		widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x, startPoint.y)));
-		widgets.add(Widgets.createSlot(startPoint).entries(display.input.get(0)).disableBackground());
+		widgets.add(Widgets.createSlot(new Point(startPoint.x - 3, startPoint.y - 4)).entries(display.input.get(0))
+				.disableBackground());
+		widgets.add(Widgets
+				.createLabel(new Point(startPoint.x + 14, startPoint.y + 11),
+						new TranslatableText(display.count.get(0).toString()))
+				.noShadow().color(0xFF404040, 0xFFBBBBBB).horizontalAlignment(3));
 
 		widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x + 30, startPoint.y)));
-		widgets.add(Widgets.createSlot(new Point(startPoint.x + 30, startPoint.y)).entries(display.input.get(1))
+		widgets.add(Widgets.createSlot(new Point(startPoint.x + 27, startPoint.y - 4)).entries(display.input.get(1))
 				.disableBackground());
+		widgets.add(Widgets
+				.createLabel(new Point(startPoint.x + 47, startPoint.y + 11),
+						new TranslatableText(display.count.get(1).toString()))
+				.noShadow().color(0xFF404040, 0xFFBBBBBB));
 
 		widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x + 60, startPoint.y)));
-		widgets.add(Widgets.createSlot(new Point(startPoint.x + 60, startPoint.y)).entries(display.input.get(2))
+		widgets.add(Widgets.createSlot(new Point(startPoint.x + 57, startPoint.y - 4)).entries(display.input.get(2))
 				.disableBackground());
+		widgets.add(Widgets
+				.createLabel(new Point(startPoint.x + 75, startPoint.y + 11),
+						new TranslatableText(display.count.get(2).toString()))
+				.noShadow().color(0xFF404040, 0xFFBBBBBB));
 
 		widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x, startPoint.y + 30)));
-		widgets.add(Widgets.createSlot(new Point(startPoint.x, startPoint.y + 30)).entries(display.input.get(3))
+		widgets.add(Widgets.createSlot(new Point(startPoint.x - 3, startPoint.y + 26)).entries(display.input.get(3))
 				.disableBackground());
+		widgets.add(Widgets
+				.createLabel(new Point(startPoint.x + 17, startPoint.y + 41),
+						new TranslatableText(display.count.get(3).toString()))
+				.noShadow().color(0xFF404040, 0xFFBBBBBB));
 
 		widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x + 30, startPoint.y + 30)));
-		widgets.add(Widgets.createSlot(new Point(startPoint.x + 30, startPoint.y + 30)).entries(display.input.get(4))
+		widgets.add(Widgets.createSlot(new Point(startPoint.x + 27, startPoint.y + 26)).entries(display.input.get(4))
 				.disableBackground());
+		widgets.add(Widgets
+				.createLabel(new Point(startPoint.x + 47, startPoint.y + 41),
+						new TranslatableText(display.count.get(4).toString()))
+				.noShadow().color(0xFF404040, 0xFFBBBBBB));
 
 		widgets.add(Widgets.createArrow(new Point(startPoint.x + 70, startPoint.y + 30)));
 		widgets.add(Widgets.createResultSlotBackground(outputPoint));
 		widgets.add(Widgets.createSlot(outputPoint).entries(display.getOutputEntries().get(0)).disableBackground()
 				.markOutput());
-		
-        widgets.add(Widgets
-                .createLabel(new Point(bounds.getMaxX() - 15, bounds.y + 5),
-                        new TranslatableText("rei.hwg.crafting.issue"))
-                .rightAligned().noShadow().color(0xFF404040, 0xFFBBBBBB));
 		return widgets;
 	}
 }
