@@ -22,7 +22,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -68,8 +67,7 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier GUNSMITH_POI = new Identifier(MODID, "gun_smith_poi");
 	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
 	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
-	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE = ScreenHandlerRegistry
-			.registerSimple(GUN_TABLE_GUI, GunTableScreenHandler::new);
+	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
 	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons"))
 			.icon(() -> new ItemStack(HWGItems.AK47)).build();
 	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry
@@ -103,6 +101,8 @@ public class HWGMod implements ModInitializer {
 				supplier.pool(poolBuilder);
 			}
 		});
+		SCREEN_HANDLER_TYPE = new ScreenHandlerType<>(GunTableScreenHandler::new);
+		Registry.register(Registry.SCREEN_HANDLER, new Identifier(MODID, "guntable_screen_type"), SCREEN_HANDLER_TYPE);
 		PacketHandler.registerMessages();
 	}
 }

@@ -30,8 +30,8 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -50,7 +50,7 @@ public class ClientInit implements ClientModInitializer {
 	public void onInitializeClient() {
 		ModelProviderinit.init();
 		RenderRegistry.init();
-		ScreenRegistry.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
+		HandledScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
 		GeoItemRenderer.registerItemRenderer(HWGItems.PISTOL, new PistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.GOLDEN_GUN, new GPistolRender());
 		GeoItemRenderer.registerItemRenderer(HWGItems.LUGER, new LugerRender());
