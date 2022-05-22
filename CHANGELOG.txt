@@ -1,3 +1,4 @@
-v.1.1.9
+v.1.1.10
 
-- Input counts added to REI plugin for input numbers!
+- Cleaned up REI recipe viewing! 
+- add korean localization - macaroni0423
