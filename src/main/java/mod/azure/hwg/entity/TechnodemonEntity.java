@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.SplittableRandom;
 
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.goal.RangedStrafeAttackGoal;
 import mod.azure.hwg.entity.goal.WeaponGoal;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -40,7 +41,7 @@ public class TechnodemonEntity extends HWGEntity {
 
 	public TechnodemonEntity(EntityType<TechnodemonEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
-		this.experiencePoints = statsconfig.lesser_exp;
+		this.experiencePoints = HWGConfig.lesser_exp;
 	}
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -90,7 +91,8 @@ public class TechnodemonEntity extends HWGEntity {
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D).add(EntityAttributes.GENERIC_ARMOR, 4)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, statsconfig.lesser_health)
+				.add(EntityAttributes.GENERIC_MAX_HEALTH,
+						HWGConfig.lesser_health)
 				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 

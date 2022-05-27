@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.SplittableRandom;
 
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.goal.RangedStrafeAttackGoal;
 import mod.azure.hwg.entity.goal.WeaponGoal;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -46,7 +47,7 @@ public class MercEntity extends HWGEntity {
 
 	public MercEntity(EntityType<MercEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
-		this.experiencePoints = statsconfig.merc_exp;
+		this.experiencePoints = HWGConfig.merc_exp;
 	}
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -104,9 +105,9 @@ public class MercEntity extends HWGEntity {
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return MobEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35D)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, statsconfig.merc_health)
-				.add(EntityAttributes.GENERIC_ARMOR, 3).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
-				.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D).add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
+				.add(EntityAttributes.GENERIC_MAX_HEALTH, HWGConfig.merc_health).add(EntityAttributes.GENERIC_ARMOR, 3)
+				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D).add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D)
+				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override

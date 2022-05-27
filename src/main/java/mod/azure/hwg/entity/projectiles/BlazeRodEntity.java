@@ -2,8 +2,7 @@ package mod.azure.hwg.entity.projectiles;
 
 import java.util.List;
 
-import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.config.HWGConfig.Weapons;
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
@@ -48,7 +47,6 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
-	private static Weapons config = HWGMod.config.weapons;
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
 
@@ -145,24 +143,24 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 		}
 		boolean isInsideWaterBlock = world.isWater(getBlockPos());
 		spawnLightSource(isInsideWaterBlock);
-			float q = 4.0F;
-			int k2 = MathHelper.floor(this.getX() - (double) q - 1.0D);
-			int l2 = MathHelper.floor(this.getX() + (double) q + 1.0D);
-			int t = MathHelper.floor(this.getY() - (double) q - 1.0D);
-			int u = MathHelper.floor(this.getY() + (double) q + 1.0D);
-			int v = MathHelper.floor(this.getZ() - (double) q - 1.0D);
-			int w = MathHelper.floor(this.getZ() + (double) q + 1.0D);
-			List<Entity> list = this.world.getOtherEntities(this,
-					new Box((double) k2, (double) t, (double) v, (double) l2, (double) u, (double) w));
-			for (int x = 0; x < list.size(); ++x) {
-				if (this.world.isClient) {
-					double d2 = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth();
-					double e2 = this.getY() + 0.05D + this.random.nextDouble();
-					double f2 = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth();
-					this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
-					this.world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, d2, e2, f2, 0, 0, 0);
-				}
+		float q = 4.0F;
+		int k2 = MathHelper.floor(this.getX() - (double) q - 1.0D);
+		int l2 = MathHelper.floor(this.getX() + (double) q + 1.0D);
+		int t = MathHelper.floor(this.getY() - (double) q - 1.0D);
+		int u = MathHelper.floor(this.getY() + (double) q + 1.0D);
+		int v = MathHelper.floor(this.getZ() - (double) q - 1.0D);
+		int w = MathHelper.floor(this.getZ() + (double) q + 1.0D);
+		List<Entity> list = this.world.getOtherEntities(this,
+				new Box((double) k2, (double) t, (double) v, (double) l2, (double) u, (double) w));
+		for (int x = 0; x < list.size(); ++x) {
+			if (this.world.isClient) {
+				double d2 = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth();
+				double e2 = this.getY() + 0.05D + this.random.nextDouble();
+				double f2 = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth();
+				this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
+				this.world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, d2, e2, f2, 0, 0, 0);
 			}
+		}
 	}
 
 	public void initFromStack(ItemStack stack) {
@@ -220,7 +218,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 				((LivingEntity) entity2).onAttacking(entity);
 			}
 		}
-		if (entity.damage(damageSource2, HWGMod.config.weapons.balrog_damage)) {
+		if (entity.damage(damageSource2, HWGConfig.balrog_damage)) {
 			if (entity instanceof LivingEntity) {
 				LivingEntity livingEntity = (LivingEntity) entity;
 				if (!this.world.isClient && entity2 instanceof LivingEntity) {
@@ -245,7 +243,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 
 	protected void explode() {
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 1.0F, false,
-				config.balrog_breaks == true ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
+				HWGConfig.balrog_breaks == true ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
 	}
 
 	@Override

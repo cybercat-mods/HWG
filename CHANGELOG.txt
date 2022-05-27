@@ -1,4 +1,3 @@
-v.1.1.10
+v.1.1.11
 
-- Cleaned up REI recipe viewing! 
-- add korean localization - macaroni0423
+- No longer use Cloth Config but a built-in Midnight Lib Config library.

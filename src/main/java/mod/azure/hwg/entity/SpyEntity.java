@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.goal.RangedStrafeAttackGoal;
 import mod.azure.hwg.entity.goal.WeaponGoal;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -43,7 +44,7 @@ public class SpyEntity extends HWGEntity {
 
 	public SpyEntity(EntityType<SpyEntity> entityType, World worldIn) {
 		super(entityType, worldIn);
-		this.experiencePoints = statsconfig.spy_exp;
+		this.experiencePoints = HWGConfig.spy_exp;
 	}
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -89,7 +90,8 @@ public class SpyEntity extends HWGEntity {
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return MobEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35D)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH, statsconfig.spy_health).add(EntityAttributes.GENERIC_ARMOR, 3)
+				.add(EntityAttributes.GENERIC_MAX_HEALTH,
+						HWGConfig.spy_health).add(EntityAttributes.GENERIC_ARMOR, 3)
 				.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
 				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}

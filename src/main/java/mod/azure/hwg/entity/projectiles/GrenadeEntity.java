@@ -4,8 +4,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.config.HWGConfig.Weapons;
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
 import mod.azure.hwg.util.packet.EntityPacket;
@@ -57,7 +56,6 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 	private static final TrackedData<Integer> STATE = DataTracker.registerData(GrenadeEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
 	private AnimationFactory factory = new AnimationFactory(this);
-	private static Weapons config = HWGMod.config.weapons;
 
 	public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, World world) {
 		super(entityType, world);
@@ -305,7 +303,7 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 
 	protected void frag() {
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 2.0F, false,
-				config.grenades_breaks == true ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
+				HWGConfig.grenades_breaks == true ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
 	}
 
 	protected void naplam() {

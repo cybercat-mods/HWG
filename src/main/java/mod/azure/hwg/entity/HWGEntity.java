@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
-import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.config.HWGConfig.MobStats;
 import mod.azure.hwg.item.weapons.Minigun;
 import mod.azure.hwg.util.packet.EntityPacket;
 import net.fabricmc.api.EnvType;
@@ -59,7 +57,6 @@ public abstract class HWGEntity extends HostileEntity implements IAnimatable, An
 	public static final TrackedData<Integer> STATE = DataTracker.registerData(HWGEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
 	private UUID targetUuid;
-	public static MobStats statsconfig = HWGMod.config.stats;
 	private AnimationFactory factory = new AnimationFactory(this);
 
 	protected HWGEntity(EntityType<? extends HostileEntity> type, World worldIn) {

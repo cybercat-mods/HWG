@@ -5,6 +5,7 @@ import java.util.List;
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -117,7 +118,7 @@ public class Minigun extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, config.minigun_damage);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, HWGConfig.minigun_damage);
 		return arrowentity;
 	}
 

@@ -1,8 +1,7 @@
 package mod.azure.hwg;
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
+import mod.azure.hwg.config.CustomMidnightConfig;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.network.PacketHandler;
 import mod.azure.hwg.util.GunSmithProfession;
@@ -39,7 +38,6 @@ public class HWGMod implements ModInitializer {
 	public static HWGItems ITEMS;
 	public static GigCompat GIG_ITEMS;
 	public static HWGBlocks BLOCKS;
-	public static HWGConfig config;
 	public static HWGSounds SOUNDS;
 	public static BWCompatItems BWITEMS;
 	public static HWGParticles PARTICLES;
@@ -75,8 +73,7 @@ public class HWGMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		AutoConfig.register(HWGConfig.class, GsonConfigSerializer::new);
-		config = AutoConfig.getConfigHolder(HWGConfig.class).getConfig();
+		CustomMidnightConfig.init(MODID, HWGConfig.class);
 		ITEMS = new HWGItems();
 		if (FabricLoader.getInstance().isModLoaded("gigeresque")) {
 			GIG_ITEMS = new GigCompat();

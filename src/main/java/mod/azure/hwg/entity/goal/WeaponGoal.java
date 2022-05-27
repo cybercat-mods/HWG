@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.goal;
 
-import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BlazeRodEntity;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
@@ -28,7 +28,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 
 public class WeaponGoal extends AbstractRangedAttack {
-	
+
 	public WeaponGoal(HWGEntity parentEntity, double xOffSetModifier, double entityHeightFraction,
 			double zOffSetModifier, float damage) {
 		super(parentEntity, xOffSetModifier, entityHeightFraction, zOffSetModifier, damage);
@@ -71,19 +71,19 @@ public class WeaponGoal extends AbstractRangedAttack {
 				|| heldItem instanceof SPistolItem || heldItem instanceof SniperItem
 				|| heldItem instanceof HellhorseRevolverItem || heldItem instanceof Minigun) ? new BulletEntity(world,
 						this.parentEntity,
-						(heldItem instanceof PistolItem ? HWGMod.config.weapons.pistol_damage
-								: heldItem instanceof LugerItem ? HWGMod.config.weapons.luger_damage
-										: heldItem instanceof AssasultItem ? HWGMod.config.weapons.ak47_damage
-												: heldItem instanceof Assasult1Item ? HWGMod.config.weapons.smg_damage
+						(heldItem instanceof PistolItem ? HWGConfig.pistol_damage
+								: heldItem instanceof LugerItem ? HWGConfig.luger_damage
+										: heldItem instanceof AssasultItem ? HWGConfig.ak47_damage
+												: heldItem instanceof Assasult1Item ? HWGConfig.smg_damage
 														: heldItem instanceof GPistolItem
-																? HWGMod.config.weapons.golden_pistol_damage
+																? HWGConfig.golden_pistol_damage
 																: heldItem instanceof SPistolItem
-																		? HWGMod.config.weapons.silenced_pistol_damage
+																		? HWGConfig.silenced_pistol_damage
 																		: heldItem instanceof HellhorseRevolverItem
-																				? HWGMod.config.weapons.hellhorse_damage
+																				? HWGConfig.hellhorse_damage
 																				: heldItem instanceof Minigun
-																						? HWGMod.config.weapons.minigun_damage
-																						: HWGMod.config.weapons.sniper_damage))
+																						? HWGConfig.minigun_damage
+																						: HWGConfig.sniper_damage))
 						: heldItem instanceof FlamethrowerItem ? new FlameFiring(world, this.parentEntity)
 								: heldItem instanceof BrimstoneItem ? new BlazeRodEntity(world, this.parentEntity)
 										: heldItem instanceof BalrogItem ? new FireballEntity(world, this.parentEntity)
