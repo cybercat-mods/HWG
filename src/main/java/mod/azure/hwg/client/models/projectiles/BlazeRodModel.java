@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class BlazeRodModel extends AnimatedGeoModel<BlazeRodEntity> {
 	@Override
-	public Identifier getModelLocation(BlazeRodEntity object) {
+	public Identifier getModelResource(BlazeRodEntity object) {
 		return new Identifier(HWGMod.MODID, "geo/blaze_rod_projectile.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(BlazeRodEntity object) {
+	public Identifier getTextureResource(BlazeRodEntity object) {
 		return new Identifier(HWGMod.MODID, "textures/items/projectiles/blaze_rod_projectile.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(BlazeRodEntity animatable) {
+	public Identifier getAnimationResource(BlazeRodEntity animatable) {
 		return new Identifier(HWGMod.MODID, "animations/bullet.animation.json");
 	}
 }

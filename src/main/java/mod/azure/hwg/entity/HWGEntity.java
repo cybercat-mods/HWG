@@ -1,6 +1,5 @@
 package mod.azure.hwg.entity;
 
-import java.util.Random;
 import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +32,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;

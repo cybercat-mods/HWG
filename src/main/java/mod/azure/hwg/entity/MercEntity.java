@@ -2,7 +2,6 @@ package mod.azure.hwg.entity;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.SplittableRandom;
 
 import mod.azure.hwg.config.HWGConfig;
@@ -28,14 +27,14 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.village.VillagerType;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LightType;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.Category;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -119,49 +118,34 @@ public class MercEntity extends HWGEntity {
 	public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
 			EntityData entityData, NbtCompound entityTag) {
 		this.equipStack(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
-		switch (world.getBiome(getBlockPos()).value().getCategory()) {
-		case DESERT:
+		if (VillagerType.forBiome(world.getBiome(this.getBlockPos())) == VillagerType.DESERT) {
 			this.setVariant(1);
-			break;
-		case MESA:
+		} else if (VillagerType.forBiome(world.getBiome(this.getBlockPos())) == VillagerType.SAVANNA) {
 			this.setVariant(1);
-			break;
-		case FOREST:
+		} else if (VillagerType.forBiome(world.getBiome(this.getBlockPos())) == VillagerType.SWAMP) {
 			this.setVariant(2);
-			break;
-		case JUNGLE:
+		} else if (VillagerType.forBiome(world.getBiome(this.getBlockPos())) == VillagerType.JUNGLE) {
 			this.setVariant(2);
-			break;
-		case ICY:
+		} else if (VillagerType.forBiome(world.getBiome(this.getBlockPos())) == VillagerType.SNOW) {
 			this.setVariant(3);
-			break;
-		case TAIGA:
+		} else if (VillagerType.forBiome(world.getBiome(this.getBlockPos())) == VillagerType.TAIGA) {
 			this.setVariant(4);
-			break;
-		case PLAINS:
+		} else if (VillagerType.forBiome(world.getBiome(this.getBlockPos())) == VillagerType.PLAINS) {
 			this.setVariant(4);
-			break;
-		default:
+		} else {
 			SplittableRandom random = new SplittableRandom();
 			int var = random.nextInt(0, 5);
 			this.setVariant(var);
-			break;
 		}
 		return super.initialize(world, difficulty, spawnReason, entityData, entityTag);
 	}
 
 	private ItemStack makeInitialWeapon() {
-		Random rand = new Random();
 		List<ItemConvertible> givenList = Arrays.asList(HWGItems.PISTOL, HWGItems.LUGER, HWGItems.AK47,
 				HWGItems.SHOTGUN, HWGItems.SMG);
-		int randomIndex = rand.nextInt(givenList.size());
+		int randomIndex = random.nextInt(givenList.size());
 		ItemConvertible randomElement = givenList.get(randomIndex);
 		return new ItemStack(randomElement);
-	}
-
-	public static int generateVariants(Biome random) {
-		return (Category.DESERT != null && Category.MESA != null) ? 1
-				: (Category.TAIGA != null && Category.PLAINS != null) ? 2 : Category.ICY != null ? 3 : 4;
 	}
 
 	public void setVariant(int variant) {

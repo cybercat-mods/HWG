@@ -22,7 +22,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -151,6 +150,6 @@ public class Assasult2Item extends AnimatedItem {
 	@Override
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
 		super.appendTooltip(stack, world, tooltip, context);
-		tooltip.add(new TranslatableText("hwg.ammo.reloadbullets").formatted(Formatting.ITALIC));
+		tooltip.add(Text.translatable("hwg.ammo.reloadbullets").formatted(Formatting.ITALIC));
 	}
 }

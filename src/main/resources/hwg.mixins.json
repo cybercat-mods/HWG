@@ -4,9 +4,10 @@
 	"package": "mod.azure.hwg.mixin",
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
-		"IngredientAccess",
-		"HeldItemRendererMixin",
 		"AnvilScreenHandlerMixin",
+		"HeldItemRendererMixin",
+		"IngredientAccess",
+		"PointOfInterestTypesInvoker",
 		"VillagerMixin"
 	],
 	"client": [

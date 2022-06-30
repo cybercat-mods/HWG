@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class SMGModel extends AnimatedGeoModel<Assasult1Item> {
 	@Override
-	public Identifier getModelLocation(Assasult1Item object) {
+	public Identifier getModelResource(Assasult1Item object) {
 		return new Identifier(HWGMod.MODID, "geo/smg.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(Assasult1Item object) {
+	public Identifier getTextureResource(Assasult1Item object) {
 		return new Identifier(HWGMod.MODID, "textures/items/smg.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(Assasult1Item animatable) {
+	public Identifier getAnimationResource(Assasult1Item animatable) {
 		return new Identifier(HWGMod.MODID, "animations/assasult.animation.json");
 	}
 }

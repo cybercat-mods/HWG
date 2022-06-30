@@ -19,11 +19,11 @@ import mod.azure.hwg.util.registry.HWGSounds;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
-import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootPool;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.recipe.RecipeSerializer;
@@ -36,9 +36,9 @@ public class HWGMod implements ModInitializer {
 
 	public static HWGMobs MOBS;
 	public static HWGItems ITEMS;
-	public static GigCompat GIG_ITEMS;
 	public static HWGBlocks BLOCKS;
 	public static HWGSounds SOUNDS;
+	public static GigCompat GIG_ITEMS;
 	public static BWCompatItems BWITEMS;
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
@@ -57,7 +57,6 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier SHOTGUN = new Identifier(MODID, "shotgun");
 	public static final Identifier SPISTOL = new Identifier(MODID, "spistol");
 	public static final Identifier GUNS = new Identifier(MODID, "crafting_guns");
-	public static final Identifier GUNSMITH = new Identifier(MODID, "gun_smith");
 	public static final Identifier BRIMSTONE = new Identifier(MODID, "brimstone");
 	public static final Identifier SILVERGUN = new Identifier(MODID, "silvergun");
 	public static final Identifier SILVERHELL = new Identifier(MODID, "silverhell");
@@ -87,14 +86,13 @@ public class HWGMod implements ModInitializer {
 		GunSmithProfession.init();
 		MobSpawn.addSpawnEntries();
 		MobAttributes.init();
-		LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, supplier, setter) -> {
+		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, supplier, setter) -> {
 			if (HWGLoot.B_TREASURE.equals(id) || HWGLoot.JUNGLE.equals(id) || HWGLoot.U_BIG.equals(id)
 					|| HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id)
 					|| HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
-				FabricLootPoolBuilder poolBuilder = FabricLootPoolBuilder.builder()
-						.rolls(ConstantLootNumberProvider.create(1))
-						.withEntry(ItemEntry.builder(HWGItems.MEANIE1).build())
-						.withEntry(ItemEntry.builder(HWGItems.MEANIE2).build());
+				LootPool poolBuilder = LootPool.builder().rolls(ConstantLootNumberProvider.create(1))
+						.with(ItemEntry.builder(HWGItems.MEANIE1).build())
+						.with(ItemEntry.builder(HWGItems.MEANIE2).build()).build();
 				supplier.pool(poolBuilder);
 			}
 		});

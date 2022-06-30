@@ -16,17 +16,17 @@ public class SpyModel extends AnimatedTickingGeoModel<SpyEntity> {
 	}
 
 	@Override
-	public Identifier getModelLocation(SpyEntity object) {
+	public Identifier getModelResource(SpyEntity object) {
 		return new Identifier(HWGMod.MODID, "geo/merc_illager.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(SpyEntity object) {
+	public Identifier getTextureResource(SpyEntity object) {
 		return new Identifier(HWGMod.MODID, "textures/entity/spy_0" + object.getVariant() + ".png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(SpyEntity object) {
+	public Identifier getAnimationResource(SpyEntity object) {
 		return new Identifier(HWGMod.MODID, "animations/merc_illager.animation.json");
 	}
 

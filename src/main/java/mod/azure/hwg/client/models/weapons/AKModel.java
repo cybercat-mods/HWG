@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class AKModel extends AnimatedGeoModel<AssasultItem> {
 	@Override
-	public Identifier getModelLocation(AssasultItem object) {
+	public Identifier getModelResource(AssasultItem object) {
 		return new Identifier(HWGMod.MODID, "geo/ak47.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(AssasultItem object) {
+	public Identifier getTextureResource(AssasultItem object) {
 		return new Identifier(HWGMod.MODID, "textures/items/ak47.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(AssasultItem animatable) {
+	public Identifier getAnimationResource(AssasultItem animatable) {
 		return new Identifier(HWGMod.MODID, "animations/assasult.animation.json");
 	}
 }

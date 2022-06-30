@@ -25,7 +25,7 @@
 		"modmenu": [
 			"mod.azure.hwg.config.ModMenuHWG"
 		],
-		"rei_plugins": [
+		"rei_common": [
 			"mod.azure.hwg.rei.ReiPlugin"
 		]
 	},
@@ -33,11 +33,11 @@
 		"hwg.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.12.5",
+		"fabricloader": ">=0.14.6",
 		"fabric": "*",
-		"minecraft": "1.18.x",
+		"minecraft": "1.19.x",
 		"java": ">=17",
-		"geckolib3": ">=3.0.12"
+		"geckolib3": ">=3.1.2"
 	},
 	"accessWidener": "hwg.accesswidener"
 }

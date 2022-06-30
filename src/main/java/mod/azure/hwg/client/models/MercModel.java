@@ -16,17 +16,17 @@ public class MercModel extends AnimatedTickingGeoModel<MercEntity> {
 	}
 
 	@Override
-	public Identifier getModelLocation(MercEntity object) {
+	public Identifier getModelResource(MercEntity object) {
 		return new Identifier(HWGMod.MODID, "geo/merc_illager.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(MercEntity object) {
+	public Identifier getTextureResource(MercEntity object) {
 		return new Identifier(HWGMod.MODID, "textures/entity/merc_" + object.getVariant() + ".png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(MercEntity object) {
+	public Identifier getAnimationResource(MercEntity object) {
 		return new Identifier(HWGMod.MODID, "animations/merc_illager.animation.json");
 	}
 

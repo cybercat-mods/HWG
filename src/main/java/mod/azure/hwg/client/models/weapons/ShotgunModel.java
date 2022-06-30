@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class ShotgunModel extends AnimatedGeoModel<ShotgunItem> {
 	@Override
-	public Identifier getModelLocation(ShotgunItem object) {
+	public Identifier getModelResource(ShotgunItem object) {
 		return new Identifier(HWGMod.MODID, "geo/shotgun.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(ShotgunItem object) {
+	public Identifier getTextureResource(ShotgunItem object) {
 		return new Identifier(HWGMod.MODID, "textures/items/shotgun.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(ShotgunItem animatable) {
+	public Identifier getAnimationResource(ShotgunItem animatable) {
 		return new Identifier(HWGMod.MODID, "animations/shotgun.animation.json");
 	}
 }

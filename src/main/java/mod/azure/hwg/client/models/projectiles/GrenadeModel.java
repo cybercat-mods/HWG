@@ -7,12 +7,12 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class GrenadeModel extends AnimatedGeoModel<GrenadeEntity> {
 	@Override
-	public Identifier getModelLocation(GrenadeEntity object) {
+	public Identifier getModelResource(GrenadeEntity object) {
 		return new Identifier(HWGMod.MODID, "geo/grenade.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(GrenadeEntity object) {
+	public Identifier getTextureResource(GrenadeEntity object) {
 		return new Identifier(HWGMod.MODID, "textures/items/projectiles/grenade_"
 				+ (object.getVariant() == 2 ? "frag"
 						: object.getVariant() == 3 ? "napalm"
@@ -21,7 +21,7 @@ public class GrenadeModel extends AnimatedGeoModel<GrenadeEntity> {
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(GrenadeEntity animatable) {
+	public Identifier getAnimationResource(GrenadeEntity animatable) {
 		return new Identifier(HWGMod.MODID, "animations/grenade.animation.json");
 	}
 }

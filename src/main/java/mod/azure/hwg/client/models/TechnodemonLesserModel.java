@@ -15,17 +15,17 @@ public class TechnodemonLesserModel extends AnimatedTickingGeoModel<TechnodemonE
 	}
 
 	@Override
-	public Identifier getModelLocation(TechnodemonEntity object) {
+	public Identifier getModelResource(TechnodemonEntity object) {
 		return new Identifier(HWGMod.MODID, "geo/technodemon_lesser_" + object.getVariant() + ".geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(TechnodemonEntity object) {
+	public Identifier getTextureResource(TechnodemonEntity object) {
 		return new Identifier(HWGMod.MODID, "textures/entity/technodemon_lesser_" + object.getVariant() + ".png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(TechnodemonEntity object) {
+	public Identifier getAnimationResource(TechnodemonEntity object) {
 		return new Identifier(HWGMod.MODID, "animations/technodemon_lesser_1.animation.json");
 	}
 

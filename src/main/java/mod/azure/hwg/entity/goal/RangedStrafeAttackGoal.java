@@ -153,7 +153,7 @@ public class RangedStrafeAttackGoal extends Goal {
 				} else {
 					this.attack.shoot();
 				}
-				this.entity.world.setBlockState(this.entity.getCameraBlockPos(),
+				this.entity.world.setBlockState(this.entity.getBlockPos(),
 						HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
 			}
 			if (this.attackTime == 8) {

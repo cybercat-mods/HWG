@@ -12,7 +12,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -22,7 +21,7 @@ import net.minecraft.world.World;
 public class HWGGunBase extends Item {
 
 	private BlockPos lightBlockPos = null;
-	
+
 	public HWGGunBase(Settings settings) {
 		super(settings);
 	}
@@ -61,9 +60,10 @@ public class HWGGunBase extends Item {
 
 	@Override
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(new TranslatableText(
-				"Ammo: " + (stack.getMaxDamage() - stack.getDamage() - 1) + " / " + (stack.getMaxDamage() - 1))
-						.formatted(Formatting.ITALIC));
+		tooltip.add(Text
+				.translatable(
+						"Ammo: " + (stack.getMaxDamage() - stack.getDamage() - 1) + " / " + (stack.getMaxDamage() - 1))
+				.formatted(Formatting.ITALIC));
 	}
 
 	@Override

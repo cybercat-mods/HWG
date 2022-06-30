@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class MinigunModel extends AnimatedGeoModel<AnimatedItem> {
 	@Override
-	public Identifier getModelLocation(AnimatedItem object) {
+	public Identifier getModelResource(AnimatedItem object) {
 		return new Identifier(HWGMod.MODID, "geo/minigun.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(AnimatedItem object) {
+	public Identifier getTextureResource(AnimatedItem object) {
 		return new Identifier(HWGMod.MODID, "textures/items/minigun.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(AnimatedItem animatable) {
+	public Identifier getAnimationResource(AnimatedItem animatable) {
 		return new Identifier(HWGMod.MODID, "animations/minigun.animation.json");
 	}
 }

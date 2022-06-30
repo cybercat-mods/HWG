@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class SniperModel extends AnimatedGeoModel<SniperItem> {
 	@Override
-	public Identifier getModelLocation(SniperItem object) {
+	public Identifier getModelResource(SniperItem object) {
 		return new Identifier(HWGMod.MODID, "geo/sniper_rifle.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(SniperItem object) {
+	public Identifier getTextureResource(SniperItem object) {
 		return new Identifier(HWGMod.MODID, "textures/items/sniper_rifle.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(SniperItem animatable) {
+	public Identifier getAnimationResource(SniperItem animatable) {
 		return new Identifier(HWGMod.MODID, "animations/sniper_rifle.animation.json");
 	}
 }

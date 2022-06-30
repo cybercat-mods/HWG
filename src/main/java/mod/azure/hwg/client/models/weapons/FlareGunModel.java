@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class FlareGunModel extends AnimatedGeoModel<FlareGunItem> {
 	@Override
-	public Identifier getModelLocation(FlareGunItem object) {
+	public Identifier getModelResource(FlareGunItem object) {
 		return new Identifier(HWGMod.MODID, "geo/flare_gun.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(FlareGunItem object) {
+	public Identifier getTextureResource(FlareGunItem object) {
 		return new Identifier(HWGMod.MODID, "textures/items/flare_gun.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(FlareGunItem animatable) {
+	public Identifier getAnimationResource(FlareGunItem animatable) {
 		return new Identifier(HWGMod.MODID, "animations/flare_gun.animation.json");
 	}
 }

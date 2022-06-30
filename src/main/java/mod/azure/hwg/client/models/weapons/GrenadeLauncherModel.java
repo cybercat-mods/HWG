@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class GrenadeLauncherModel extends AnimatedGeoModel<GrenadeLauncherItem> {
 	@Override
-	public Identifier getModelLocation(GrenadeLauncherItem object) {
+	public Identifier getModelResource(GrenadeLauncherItem object) {
 		return new Identifier(HWGMod.MODID, "geo/grenade_launcher.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(GrenadeLauncherItem object) {
+	public Identifier getTextureResource(GrenadeLauncherItem object) {
 		return new Identifier(HWGMod.MODID, "textures/items/grenade_launcher.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(GrenadeLauncherItem animatable) {
+	public Identifier getAnimationResource(GrenadeLauncherItem animatable) {
 		return new Identifier(HWGMod.MODID, "animations/grenade_launcher.animation.json");
 	}
 }

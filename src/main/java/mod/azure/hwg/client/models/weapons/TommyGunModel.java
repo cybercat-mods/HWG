@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class TommyGunModel extends AnimatedGeoModel<Assasult2Item> {
 	@Override
-	public Identifier getModelLocation(Assasult2Item object) {
+	public Identifier getModelResource(Assasult2Item object) {
 		return new Identifier(HWGMod.MODID, "geo/tommy_gun.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureLocation(Assasult2Item object) {
+	public Identifier getTextureResource(Assasult2Item object) {
 		return new Identifier(HWGMod.MODID, "textures/items/tommy_gun.png");
 	}
 
 	@Override
-	public Identifier getAnimationFileLocation(Assasult2Item animatable) {
+	public Identifier getAnimationResource(Assasult2Item animatable) {
 		return new Identifier(HWGMod.MODID, "animations/assasult.animation.json");
 	}
 }

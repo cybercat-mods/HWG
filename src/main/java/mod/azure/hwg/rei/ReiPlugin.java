@@ -17,7 +17,6 @@ public class ReiPlugin implements REIClientPlugin {
 	public void registerCategories(CategoryRegistry registry) {
 		registry.add(new HWGCategory());
 		registry.addWorkstations(CRAFTING, HWGCategory.ICON);
-		registry.removePlusButton(CRAFTING);
 	}
 
 	@Override

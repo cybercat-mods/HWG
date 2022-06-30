@@ -1,18 +1,18 @@
 package mod.azure.hwg.util;
 
-import java.util.Random;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.mixin.PointOfInterestTypesInvoker;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
-import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerProfessionBuilder;
-import net.fabricmc.fabric.api.object.builder.v1.world.poi.PointOfInterestHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -20,7 +20,10 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.TradeOffers.Factory;
@@ -29,14 +32,30 @@ import net.minecraft.world.poi.PointOfInterestType;
 
 public class GunSmithProfession {
 
-	public static final PointOfInterestType GUNSMITH_POI = PointOfInterestHelper.register(HWGMod.GUNSMITH_POI, 1, 1,
-			HWGBlocks.GUN_TABLE);
-	public static final VillagerProfession GUNSMITH = VillagerProfessionBuilder.create().id(HWGMod.GUNSMITH)
-			.workstation(GUNSMITH_POI).workSound(SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM).build();
+	public static final Supplier<PointOfInterestType> GUNSMITH_POI = registerPoiType("gun_smith",
+			() -> new PointOfInterestType(PointOfInterestTypesInvoker.invokeGetBlockStates(HWGBlocks.GUN_TABLE), 1, 1));
+	public static final Supplier<VillagerProfession> GUNSMITH = registerProfession("gun_smith",
+			() -> new VillagerProfession("gun_smith", holder -> holder.value().equals(GUNSMITH_POI.get()),
+					holder -> holder.value().equals(GUNSMITH_POI.get()), ImmutableSet.of(), ImmutableSet.of(),
+					SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM));
+
+	public static Supplier<VillagerProfession> registerProfession(String name,
+			Supplier<VillagerProfession> profession) {
+		var registry = Registry.register(Registry.VILLAGER_PROFESSION, new Identifier(HWGMod.MODID, name),
+				profession.get());
+		return () -> registry;
+	}
+
+	public static Supplier<PointOfInterestType> registerPoiType(String name, Supplier<PointOfInterestType> poiType) {
+		RegistryKey<PointOfInterestType> resourceKey = RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY,
+				new Identifier(HWGMod.MODID, name));
+		var registry = Registry.register(Registry.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
+		PointOfInterestTypesInvoker.invokeRegisterBlockStates(Registry.POINT_OF_INTEREST_TYPE.entryOf(resourceKey));
+		return () -> registry;
+	}
 
 	public static void init() {
-		Registry.register(Registry.VILLAGER_PROFESSION, HWGMod.GUNSMITH, GUNSMITH);
-		TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(GUNSMITH, copyToFastUtilMap(ImmutableMap.of(1,
+		TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(GUNSMITH.get(), copyToFastUtilMap(ImmutableMap.of(1,
 				new TradeOffers.Factory[] { new GunSmithProfession.BuyForOneEmeraldFactory(Items.GUNPOWDER, 1, 16, 2),
 						new GunSmithProfession.SellItemFactory(Items.IRON_NUGGET, 2, 1, 16, 1) },
 				2,

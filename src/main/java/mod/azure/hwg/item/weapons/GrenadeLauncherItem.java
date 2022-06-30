@@ -1,7 +1,6 @@
 package mod.azure.hwg.item.weapons;
 
 import java.util.List;
-import java.util.Random;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.Nullable;
@@ -31,15 +30,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -57,7 +55,6 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 
 	private boolean charged = false;
 	private boolean loaded = false;
-	protected static final Random RANDOM = new Random();
 	public AnimationFactory factory = new AnimationFactory(this);
 	public String controllerName = "controller";
 	public static final int ANIM_OPEN = 0;
@@ -345,12 +342,12 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 
 	private static float[] getSoundPitches(Random random) {
 		boolean bl = random.nextBoolean();
-		return new float[] { 1.0F, getSoundPitch(bl), getSoundPitch(!bl) };
+		return new float[] { 1.0F, getSoundPitch(bl, random), getSoundPitch(!bl, random) };
 	}
 
-	private static float getSoundPitch(boolean flag) {
+	private static float getSoundPitch(boolean flag, Random random) {
 		float f = flag ? 0.63F : 0.43F;
-		return 1.0F / (RANDOM.nextFloat() * 0.5F + 1.8F) + f;
+		return 1.0F / (random.nextFloat() * 0.5F + 1.8F) + f;
 	}
 
 	private static void postShoot(World world, LivingEntity entity, ItemStack stack) {
@@ -389,20 +386,20 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 		List<ItemStack> list = getProjectiles(stack);
 		if (isCharged(stack) && !list.isEmpty()) {
 			ItemStack itemStack = (ItemStack) list.get(0);
-			tooltip.add((new TranslatableText("Ammo")).append(" ").append(itemStack.toHoverableText()));
+			tooltip.add((Text.translatable("Ammo")).append(" ").append(itemStack.toHoverableText()));
 			if (context.isAdvanced() && itemStack.getItem() == GRENADES) {
 				List<Text> list2 = Lists.newArrayList();
 				HWGItems.G_EMP.appendTooltip(itemStack, world, list2, context);
 				if (!list2.isEmpty()) {
 					for (int i = 0; i < list2.size(); ++i) {
-						list2.set(i, (new LiteralText("  ")).append((Text) list2.get(i)).formatted(Formatting.GRAY));
+						list2.set(i, (Text.literal("  ")).append((Text) list2.get(i)).formatted(Formatting.GRAY));
 					}
 					tooltip.addAll(list2);
 				}
 			}
 
 		}
-		tooltip.add(new TranslatableText("hwg.ammo.reloadgrenades").formatted(Formatting.ITALIC));
+		tooltip.add(Text.translatable("hwg.ammo.reloadgrenades").formatted(Formatting.ITALIC));
 	}
 
 	private static float getSpeed(ItemStack stack) {

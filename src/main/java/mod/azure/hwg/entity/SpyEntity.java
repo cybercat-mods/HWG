@@ -2,7 +2,6 @@ package mod.azure.hwg.entity;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.goal.RangedStrafeAttackGoal;
@@ -27,6 +26,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LightType;
 import net.minecraft.world.LocalDifficulty;
@@ -90,8 +90,7 @@ public class SpyEntity extends HWGEntity {
 	public static DefaultAttributeContainer.Builder createMobAttributes() {
 		return MobEntity.createLivingAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25.0D)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35D)
-				.add(EntityAttributes.GENERIC_MAX_HEALTH,
-						HWGConfig.spy_health).add(EntityAttributes.GENERIC_ARMOR, 3)
+				.add(EntityAttributes.GENERIC_MAX_HEALTH, HWGConfig.spy_health).add(EntityAttributes.GENERIC_ARMOR, 3)
 				.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 1D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10D)
 				.add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 1.0D);
 	}
@@ -122,11 +121,10 @@ public class SpyEntity extends HWGEntity {
 	}
 
 	private ItemStack makeInitialWeapon() {
-		Random rand = new Random();
 		List<ItemConvertible> givenList = Arrays.asList(HWGItems.SPISTOL, HWGItems.SNIPER);
-		int randomIndex = rand.nextInt(givenList.size());
+		int randomIndex = random.nextInt(givenList.size());
 		ItemConvertible randomElement = givenList.get(randomIndex);
-		return rand.nextFloat() <= 0.5 ? new ItemStack(HWGItems.GOLDEN_GUN) : new ItemStack(randomElement);
+		return random.nextFloat() <= 0.5 ? new ItemStack(HWGItems.GOLDEN_GUN) : new ItemStack(randomElement);
 	}
 
 	public void setVariant(int variant) {
