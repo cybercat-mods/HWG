@@ -20,7 +20,6 @@ import net.minecraft.world.World;
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
 
-
 	public AbstractClientPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile,
 			PlayerPublicKey publicKey) {
 		super(world, pos, yaw, gameProfile, publicKey);
