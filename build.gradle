@@ -7,11 +7,13 @@ buildscript {
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
+import com.modrinth.minotaur.dependencies.ModDependency
 
 plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id "com.modrinth.minotaur" version "2.+"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -126,4 +128,27 @@ if (file('key.properties').exists()) {
         	forgeGradleIntegration = false
     	}
     }
+}
+
+if (file('key.properties').exists()) {
+	modrinth {
+		def modrinthProp = new Properties()
+		File secretPropsFile = file("key.properties")
+		modrinthProp.load(secretPropsFile.newInputStream())
+		
+		token = modrinthProp.getProperty('modrinthKey')
+		projectId = 'SPMW1tzD' 
+		versionNumber = project.mod_version 
+		versionName = 'Fabric 1.19'
+		uploadFile = jar 
+		changelog = rootProject.file("changelog.txt").text
+		gameVersions = ['1.19.1', '1.19.2']
+		loaders = ['fabric']
+		dependencies { 
+        	required.project "geckolib3"
+        	required.project "fabric-api"
+            optional.project "modmenu"
+            optional.project "roughly-enough-items"
+   		}
+	}
 }
