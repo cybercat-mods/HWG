@@ -145,7 +145,7 @@ if (file('key.properties').exists()) {
 		gameVersions = ['1.19.1', '1.19.2']
 		loaders = ['fabric']
 		dependencies { 
-        	required.project "geckolib3"
+        	required.project "geckolib"
         	required.project "fabric-api"
             optional.project "modmenu"
             optional.project "roughly-enough-items"
