@@ -1,3 +1,3 @@
-v.1.2.2
+v.1.2.3
 
-- 1.19.1
+- Updated for latest Fabric API changes.
