@@ -1,6 +1,8 @@
 package mod.azure.hwg;
 
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
+import mod.azure.hwg.compat.BWCompat;
+import mod.azure.hwg.compat.GigCompat;
 import mod.azure.hwg.config.CustomMidnightConfig;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.network.PacketHandler;
@@ -8,8 +10,6 @@ import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.MobAttributes;
 import mod.azure.hwg.util.MobSpawn;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
-import mod.azure.hwg.util.registry.BWCompatItems;
-import mod.azure.hwg.util.registry.GigCompat;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGLoot;
@@ -38,8 +38,8 @@ public class HWGMod implements ModInitializer {
 	public static HWGItems ITEMS;
 	public static HWGBlocks BLOCKS;
 	public static HWGSounds SOUNDS;
+	public static BWCompat BW_ITEMS;
 	public static GigCompat GIG_ITEMS;
-	public static BWCompatItems BWITEMS;
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
 	public static ProjectilesEntityRegister PROJECTILES;
@@ -76,6 +76,9 @@ public class HWGMod implements ModInitializer {
 		ITEMS = new HWGItems();
 		if (FabricLoader.getInstance().isModLoaded("gigeresque")) {
 			GIG_ITEMS = new GigCompat();
+		}
+		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
+			BW_ITEMS = new BWCompat();
 		}
 		BLOCKS = new HWGBlocks();
 		SOUNDS = new HWGSounds();

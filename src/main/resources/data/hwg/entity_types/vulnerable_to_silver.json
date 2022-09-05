@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		"bewitchment:vampire",
+		"bewitchment:werewolf",
+		"bewitchment:hellhound",
+		"bewitchment:demon"
+	]
+}

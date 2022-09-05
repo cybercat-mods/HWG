@@ -37,8 +37,8 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
 
 	protected int timeInAir;
 	protected boolean inAir;
-	private int ticksInAir;
-	private static float bulletdamage;
+	protected int ticksInAir;
+	protected static float bulletdamage;
 
 	public BulletEntity(EntityType<? extends BulletEntity> entityType, World world) {
 		super(entityType, world);

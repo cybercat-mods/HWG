@@ -1,4 +1,4 @@
-package mod.azure.hwg.util.registry;
+package mod.azure.hwg.compat;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.IncineratorUnitItem;
