@@ -3,8 +3,8 @@
 	"pattern": "abc",
 	"key": {
 		"a": {
-			"item": "minecraft:iron_ingot",
-			"count": 6
+			"item": "minecraft:iron_nugget",
+			"count": 54
 		},
 		"b": {
 			"item": "minecraft:lever",
