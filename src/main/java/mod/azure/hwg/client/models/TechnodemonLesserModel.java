@@ -29,7 +29,6 @@ public class TechnodemonLesserModel extends AnimatedTickingGeoModel<TechnodemonE
 		return new Identifier(HWGMod.MODID, "animations/technodemon_lesser_1.animation.json");
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setLivingAnimations(TechnodemonEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);

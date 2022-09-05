@@ -25,7 +25,6 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
 		super(world, pos, yaw, gameProfile, publicKey);
 	}
 
-	@SuppressWarnings("resource")
 	@Inject(at = @At("HEAD"), method = "getFovMultiplier", cancellable = true)
 	private void render(CallbackInfoReturnable<Float> ci) {
 		ItemStack itemStack = this.getMainHandStack();

@@ -30,7 +30,6 @@ public class MercModel extends AnimatedTickingGeoModel<MercEntity> {
 		return new Identifier(HWGMod.MODID, "animations/merc_illager.animation.json");
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setLivingAnimations(MercEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);

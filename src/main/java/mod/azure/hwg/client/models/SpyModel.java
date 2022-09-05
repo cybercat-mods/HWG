@@ -30,7 +30,6 @@ public class SpyModel extends AnimatedTickingGeoModel<SpyEntity> {
 		return new Identifier(HWGMod.MODID, "animations/merc_illager.animation.json");
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setLivingAnimations(SpyEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);

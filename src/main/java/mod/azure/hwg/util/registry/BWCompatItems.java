@@ -15,9 +15,7 @@ import net.minecraft.util.registry.Registry;
 
 public class BWCompatItems {
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List<EntityType<? extends Entity>> ENTITY_TYPES = new LinkedList();
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList();
 
 	// public static SilverGunItem SILVERGUN = item(new SilverGunItem(),

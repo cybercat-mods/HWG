@@ -23,9 +23,7 @@ import net.minecraft.util.registry.Registry;
 
 public class ProjectilesEntityRegister {
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List<EntityType<? extends Entity>> ENTITY_TYPES = new LinkedList();
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList();
 
 	public static EntityType<ShellEntity> SHELL = projectile(ShellEntity::new, "shell");

@@ -30,7 +30,6 @@ public class TechnodemonGreaterModel extends AnimatedTickingGeoModel<Technodemon
 				"animations/technodemon_greater_" + object.getVariant() + ".animation.json");
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setLivingAnimations(TechnodemonGreaterEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
