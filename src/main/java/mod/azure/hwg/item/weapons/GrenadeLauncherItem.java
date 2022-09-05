@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.jetbrains.annotations.Nullable;
+import org.quiltmc.qsl.networking.api.PlayerLookup;
 
 import com.google.common.collect.Lists;
 
@@ -14,7 +15,6 @@ import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -37,7 +37,7 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -338,12 +338,12 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 		postShoot(world, entity, stack);
 	}
 
-	private static float[] getSoundPitches(Random random) {
+	private static float[] getSoundPitches(RandomGenerator random) {
 		boolean bl = random.nextBoolean();
 		return new float[] { 1.0F, getSoundPitch(bl, random), getSoundPitch(!bl, random) };
 	}
 
-	private static float getSoundPitch(boolean flag, Random random) {
+	private static float getSoundPitch(boolean flag, RandomGenerator random) {
 		float f = flag ? 0.63F : 0.43F;
 		return 1.0F / (random.nextFloat() * 0.5F + 1.8F) + f;
 	}

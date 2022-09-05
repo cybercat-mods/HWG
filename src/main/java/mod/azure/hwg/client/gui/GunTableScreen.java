@@ -15,7 +15,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -124,7 +124,7 @@ public class GunTableScreen extends HandledScreen<GunTableScreenHandler> {
 					}
 
 				for (WidgetButtonPage widgetButtonPage : this.offers) {
-					if (widgetButtonPage.isHovered()) {
+					if (widgetButtonPage.isHoveredOrFocused()) {
 						widgetButtonPage.renderToolTip(matrices, mouseX, mouseY);
 					}
 

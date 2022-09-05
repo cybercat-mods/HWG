@@ -2,15 +2,16 @@ package mod.azure.hwg.util;
 
 import java.util.List;
 
+import org.quiltmc.qsl.worldgen.biome.api.BiomeModifications;
+import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectionContext;
+import org.quiltmc.qsl.worldgen.biome.api.BiomeSelectors;
+
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.MercEntity;
 import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
 import mod.azure.hwg.util.registry.HWGMobs;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.world.Heightmap;
@@ -48,6 +49,6 @@ public class MobSpawn {
 
 	private static boolean parseBiomes(List<String> biomes, BiomeSelectionContext biomeContext) {
 		return biomes.contains(biomeContext.getBiomeKey().getValue().toString())
-				|| biomes.contains("#" + biomeContext.getBiomeRegistryEntry().toString());
+				|| biomes.contains("#" + biomeContext.getBiomeHolder().toString());
 	}
 }

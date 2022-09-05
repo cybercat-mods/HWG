@@ -1,9 +1,10 @@
 package mod.azure.hwg.client.render.projectiles;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import mod.azure.hwg.entity.projectiles.FireballEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -33,8 +34,8 @@ public class FireballRender extends EntityRenderer<FireballEntity> {
 		matrixStack.multiply(this.dispatcher.getRotation());
 		matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
 		MatrixStack.Entry entry = matrixStack.peek();
-		Matrix4f matrix4f = entry.getPositionMatrix();
-		Matrix3f matrix3f = entry.getNormalMatrix();
+		Matrix4f matrix4f = entry.getPosition();
+		Matrix3f matrix3f = entry.getNormal();
 		VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(LAYER);
 		produceVertex(vertexConsumer, matrix4f, matrix3f, i, 0.0F, 0, 0, 1);
 		produceVertex(vertexConsumer, matrix4f, matrix3f, i, 1.0F, 0, 1, 1);
@@ -47,7 +48,7 @@ public class FireballRender extends EntityRenderer<FireballEntity> {
 	private static void produceVertex(VertexConsumer vertexConsumer, Matrix4f modelMatrix, Matrix3f normalMatrix,
 			int light, float x, int y, int textureU, int textureV) {
 		vertexConsumer.vertex(modelMatrix, x - 0.5F, (float) y - 0.25F, 0.0F).color(255, 255, 255, 255)
-				.texture((float) textureU, (float) textureV).overlay(OverlayTexture.DEFAULT_UV).light(light)
+				.uv((float) textureU, (float) textureV).overlay(OverlayTexture.DEFAULT_UV).light(light)
 				.normal(normalMatrix, 0.0F, 1.0F, 0.0F).next();
 	}
 

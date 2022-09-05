@@ -2,12 +2,13 @@ package mod.azure.hwg.item.weapons;
 
 import java.util.List;
 
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
+
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BlazeRodEntity;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -41,7 +42,7 @@ public class BalrogItem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 25);
 				if (!worldIn.isClient) {
 					BlazeRodEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -51,7 +52,7 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity.isOnFire();
 
 					BlazeRodEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setVelocity(playerentity, playerentity.getPitch() + 2, playerentity.getYaw(),
+					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch() + 2, playerentity.getYaw(),
 							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -61,7 +62,7 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity1.isOnFire();
 
 					BlazeRodEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() + 2,
+					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 2,
 							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -71,7 +72,7 @@ public class BalrogItem extends HWGGunBase {
 						abstractarrowentity2.isOnFire();
 
 					BlazeRodEntity abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() - 2,
+					abstractarrowentity3.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 2,
 							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
@@ -118,8 +119,8 @@ public class BalrogItem extends HWGGunBase {
 					&& user.getInventory().count(Items.BLAZE_ROD) > 0) {
 				removeAmmo(Items.BLAZE_ROD, user);
 				user.getStackInHand(hand).damage(-50, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setBobbingAnimationTime(3);
-				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+				user.getStackInHand(hand).setCooldown(3);
+				user.getCommandSenderWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
 						SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, 1.5F);
 			}
 		}

@@ -1,6 +1,12 @@
 package mod.azure.hwg.client;
 
 import org.lwjgl.glfw.GLFW;
+import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.loader.api.QuiltLoader;
+import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
+
+import com.mojang.blaze3d.platform.InputUtil;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.gui.GunTableScreen;
@@ -19,6 +25,7 @@ import mod.azure.hwg.client.render.weapons.SPistolRender;
 import mod.azure.hwg.client.render.weapons.ShotgunRender;
 import mod.azure.hwg.client.render.weapons.SniperRender;
 import mod.azure.hwg.client.render.weapons.TommyGunRender;
+import mod.azure.hwg.compat.BWClientCompat;
 import mod.azure.hwg.particle.BrimParticle;
 import mod.azure.hwg.particle.FlareParticle;
 import mod.azure.hwg.particle.WFlareParticle;
@@ -26,28 +33,25 @@ import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.packet.EntityPacketOnClient;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.option.KeyBind;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class ClientInit implements ClientModInitializer {
 
-	public static KeyBinding reload = new KeyBinding("key.hwg.reload", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R,
+	public static KeyBind reload = new KeyBind("key.hwg.reload", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R,
 			"category.hwg.binds");
 
-	public static KeyBinding scope = new KeyBinding("key.hwg.scope", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT,
+	public static KeyBind scope = new KeyBind("key.hwg.scope", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT,
 			"category.hwg.binds");
 
 	@Override
-	public void onInitializeClient() {
+	public void onInitializeClient(ModContainer mod) {
 		ModelProviderinit.init();
 		RenderRegistry.init();
 		HandledScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
@@ -69,6 +73,9 @@ public class ClientInit implements ClientModInitializer {
 		ClientPlayNetworking.registerGlobalReceiver(EntityPacket.ID, (client, handler, buf, responseSender) -> {
 			EntityPacketOnClient.onPacket(client, buf);
 		});
+		if (QuiltLoader.isModLoaded("bewitchment")) {
+			BWClientCompat.onInitializeClient();
+		}
 		KeyBindingHelper.registerKeyBinding(reload);
 		KeyBindingHelper.registerKeyBinding(scope);
 		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE)

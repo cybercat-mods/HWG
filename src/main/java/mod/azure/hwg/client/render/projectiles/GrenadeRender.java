@@ -1,9 +1,10 @@
 package mod.azure.hwg.client.render.projectiles;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import mod.azure.hwg.client.models.projectiles.GrenadeModel;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;

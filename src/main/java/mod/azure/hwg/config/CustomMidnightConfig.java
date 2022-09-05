@@ -23,6 +23,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import org.quiltmc.loader.api.QuiltLoader;
+import org.quiltmc.loader.api.minecraft.MinecraftQuiltLoader;
+
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -30,7 +33,6 @@ import com.google.gson.GsonBuilder;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -43,7 +45,7 @@ import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.ScreenTexts;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -86,14 +88,14 @@ public abstract class CustomMidnightConfig {
 			.addSerializationExclusionStrategy(new HiddenAnnotationExclusionStrategy()).setPrettyPrinting().create();
 
 	public static void init(String modid, Class<?> config) {
-		path = FabricLoader.getInstance().getConfigDir().resolve(modid + ".json");
+		path = QuiltLoader.getConfigDir().resolve(modid + ".json");
 		configClass.put(modid, config);
 
 		for (Field field : config.getFields()) {
 			EntryInfo info = new EntryInfo();
 			if ((field.isAnnotationPresent(Entry.class) || field.isAnnotationPresent(Comment.class))
 					&& !field.isAnnotationPresent(Server.class))
-				if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT)
+				if (MinecraftQuiltLoader.getEnvironmentType() == EnvType.CLIENT)
 					initClient(modid, field, info);
 			if (field.isAnnotationPresent(Entry.class))
 				try {
@@ -211,7 +213,7 @@ public abstract class CustomMidnightConfig {
 	}
 
 	public static void write(String modid) {
-		path = FabricLoader.getInstance().getConfigDir().resolve(modid + ".json");
+		path = QuiltLoader.getConfigDir().resolve(modid + ".json");
 		try {
 			if (!Files.exists(path))
 				Files.createFile(path);

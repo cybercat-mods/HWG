@@ -1,5 +1,3 @@
-v.1.2.5
+v.1.2.6
 
-- Fixed config screen.
-- Changed lugar recipe to iron nuggets
-- Code clean up
+- Enabled Silver weapons if BW is installed.

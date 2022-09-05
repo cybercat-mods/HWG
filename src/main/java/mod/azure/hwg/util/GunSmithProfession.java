@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
@@ -50,7 +50,7 @@ public class GunSmithProfession {
 		RegistryKey<PointOfInterestType> resourceKey = RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY,
 				new Identifier(HWGMod.MODID, name));
 		var registry = Registry.register(Registry.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
-		PointOfInterestTypesInvoker.invokeRegisterBlockStates(Registry.POINT_OF_INTEREST_TYPE.entryOf(resourceKey));
+		PointOfInterestTypesInvoker.invokeRegisterBlockStates(Registry.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey));
 		return () -> registry;
 	}
 
@@ -119,7 +119,7 @@ public class GunSmithProfession {
 		}
 
 		@Nullable
-		public TradeOffer create(Entity entity, Random random) {
+		public TradeOffer create(Entity entity, RandomGenerator random) {
 			return new TradeOffer(new ItemStack(Items.EMERALD, this.price),
 					new ItemStack(this.secondBuy.getItem(), this.secondCount),
 					new ItemStack(this.sell.getItem(), this.sellCount), this.maxUses, this.experience, this.multiplier);
@@ -141,7 +141,7 @@ public class GunSmithProfession {
 			this.multiplier = 0.05F;
 		}
 
-		public TradeOffer create(Entity entity, Random random) {
+		public TradeOffer create(Entity entity, RandomGenerator random) {
 			ItemStack itemStack = new ItemStack(this.buy, this.price);
 			return new TradeOffer(itemStack, new ItemStack(Items.EMERALD), this.maxUses, this.experience,
 					this.multiplier);
@@ -165,7 +165,7 @@ public class GunSmithProfession {
 			this.multiplier = 0.05F;
 		}
 
-		public TradeOffer create(Entity entity, Random random) {
+		public TradeOffer create(Entity entity, RandomGenerator random) {
 			ItemStack itemStack = new ItemStack(this.buy, this.price);
 			return new TradeOffer(itemStack, new ItemStack(sell.asItem()), this.maxUses, this.experience,
 					this.multiplier);
@@ -206,7 +206,7 @@ public class GunSmithProfession {
 			this.multiplier = multiplier;
 		}
 
-		public TradeOffer create(Entity entity, Random random) {
+		public TradeOffer create(Entity entity, RandomGenerator random) {
 			return new TradeOffer(new ItemStack(Items.EMERALD, this.price),
 					new ItemStack(this.sell.getItem(), this.count), this.maxUses, this.experience, this.multiplier);
 		}

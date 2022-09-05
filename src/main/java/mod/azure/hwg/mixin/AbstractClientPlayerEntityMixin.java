@@ -25,7 +25,7 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
 		super(world, pos, yaw, gameProfile, publicKey);
 	}
 
-	@Inject(at = @At("HEAD"), method = "getFovMultiplier", cancellable = true)
+	@Inject(at = @At("HEAD"), method = "getSpeed", cancellable = true)
 	private void render(CallbackInfoReturnable<Float> ci) {
 		ItemStack itemStack = this.getMainHandStack();
 		if (MinecraftClient.getInstance().options.getPerspective().isFirstPerson()) {

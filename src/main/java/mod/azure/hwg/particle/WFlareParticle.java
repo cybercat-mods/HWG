@@ -28,15 +28,15 @@ public class WFlareParticle extends SpriteBillboardParticle {
 		this.prevPosX = this.x;
 		this.prevPosY = this.y;
 		this.prevPosZ = this.z;
-		if (this.age++ < this.maxAge && this.alpha > 0.0F) {
+		if (this.age++ < this.maxAge && this.colorAlpha > 0.0F) {
 			this.velocityX += (double) (this.random.nextFloat() / 5000.0F
 					* (float) (this.random.nextBoolean() ? 1 : -1));
 			this.velocityZ += (double) (this.random.nextFloat() / 5000.0F
 					* (float) (this.random.nextBoolean() ? 1 : -1));
 			this.velocityY -= (double) this.gravityStrength;
 			this.move(this.velocityX, this.velocityY, this.velocityZ);
-			if (this.age >= this.maxAge - 60 && this.alpha > 0.01F) {
-				this.alpha -= 0.015F;
+			if (this.age >= this.maxAge - 60 && this.colorAlpha > 0.01F) {
+				this.colorAlpha -= 0.015F;
 			}
 
 		} else {

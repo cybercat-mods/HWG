@@ -1,5 +1,7 @@
 package mod.azure.hwg.network;
 
+import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
+
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.Assasult1Item;
 import mod.azure.hwg.item.weapons.Assasult2Item;
@@ -17,7 +19,6 @@ import mod.azure.hwg.item.weapons.RocketLauncher;
 import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 

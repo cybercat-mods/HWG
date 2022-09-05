@@ -13,11 +13,11 @@ import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.RevengeGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -32,7 +32,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.util.TimeHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -96,12 +96,12 @@ public abstract class HWGEntity extends HostileEntity implements IAnimatable, An
 		this.goalSelector.add(9, new SwimGoal(this));
 		this.goalSelector.add(5, new WanderAroundFarGoal(this, 0.8D));
 		this.targetSelector.add(2, new RevengeGoal(this).setGroupRevenge());
-		this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-		this.targetSelector.add(2, new ActiveTargetGoal<>(this, MerchantEntity.class, true));
+		this.targetSelector.add(2, new TargetGoal<>(this, PlayerEntity.class, true));
+		this.targetSelector.add(2, new TargetGoal<>(this, MerchantEntity.class, true));
 	}
 
 	public static boolean canNetherSpawn(EntityType<? extends HWGEntity> type, WorldAccess serverWorldAccess,
-			SpawnReason spawnReason, BlockPos pos, Random random) {
+			SpawnReason spawnReason, BlockPos pos, RandomGenerator random) {
 		if (serverWorldAccess.getDifficulty() == Difficulty.PEACEFUL)
 			return false;
 		if ((spawnReason != SpawnReason.CHUNK_GENERATION && spawnReason != SpawnReason.NATURAL))

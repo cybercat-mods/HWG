@@ -64,13 +64,13 @@ public abstract class AbstractRangedAttack implements IRangedAttack {
 
 	public void shoot() {
 		LivingEntity livingentity = this.parentEntity.getTarget();
-		World world = this.parentEntity.getEntityWorld();
+		World world = this.parentEntity.getCommandSenderWorld();
 		Vec3d vector3d = this.parentEntity.getRotationVec(1.0F);
 		double d2 = livingentity.getX() - (this.parentEntity.getX() + vector3d.x * xOffSetModifier);
 		double d3 = livingentity.getBodyY(0.5D) - (this.parentEntity.getBodyY(entityHeightFraction));
 		double d4 = livingentity.getZ() - (this.parentEntity.getZ() + vector3d.z * zOffSetModifier);
 		ProjectileEntity projectile = getProjectile(world, rollAccuracy(d2), rollAccuracy(d3), rollAccuracy(d4));
-		projectile.setVelocity(parentEntity, parentEntity.getPitch(), parentEntity.getYaw(), 0.0F, 0.25F * 3.0F, 1.0F);
+		projectile.setProperties(parentEntity, parentEntity.getPitch(), parentEntity.getYaw(), 0.0F, 0.25F * 3.0F, 1.0F);
 		world.spawnEntity(projectile);
 		if (sound == null)
 			getDefaultAttackSound().play(this.parentEntity);
@@ -80,33 +80,33 @@ public abstract class AbstractRangedAttack implements IRangedAttack {
 
 	public void shoot1() {
 		LivingEntity livingentity = this.parentEntity.getTarget();
-		World world = this.parentEntity.getEntityWorld();
+		World world = this.parentEntity.getCommandSenderWorld();
 		Vec3d vector3d = this.parentEntity.getRotationVec(1.0F);
 		double d2 = livingentity.getX() - (this.parentEntity.getX() + vector3d.x * xOffSetModifier);
 		double d3 = livingentity.getBodyY(0.5D) - (this.parentEntity.getBodyY(entityHeightFraction));
 		double d4 = livingentity.getZ() - (this.parentEntity.getZ() + vector3d.z * zOffSetModifier);
 		ProjectileEntity projectile = getProjectile(world, rollAccuracy(d2), rollAccuracy(d3), rollAccuracy(d4));
-		projectile.setVelocity(parentEntity, parentEntity.getPitch(), parentEntity.getYaw(), 0.0F, 0.25F * 3.0F, 1.0F);
+		projectile.setProperties(parentEntity, parentEntity.getPitch(), parentEntity.getYaw(), 0.0F, 0.25F * 3.0F, 1.0F);
 		projectile.refreshPositionAndAngles(parentEntity.getX(), parentEntity.getBodyY(0.85), parentEntity.getZ(), 0,
 				0);
 		projectile.hasNoGravity();
 
 		ProjectileEntity projectile1 = getProjectile(world, rollAccuracy(d2), rollAccuracy(d3), rollAccuracy(d4));
-		projectile1.setVelocity(parentEntity, parentEntity.getPitch() + 2, parentEntity.getYaw(), 0.0F, 0.25F * 3.0F,
+		projectile1.setProperties(parentEntity, parentEntity.getPitch() + 2, parentEntity.getYaw(), 0.0F, 0.25F * 3.0F,
 				1.0F);
 		projectile1.refreshPositionAndAngles(parentEntity.getX(), parentEntity.getBodyY(0.85), parentEntity.getZ(), 0,
 				0);
 		projectile1.hasNoGravity();
 
 		ProjectileEntity projectile2 = getProjectile(world, rollAccuracy(d2), rollAccuracy(d3), rollAccuracy(d4));
-		projectile2.setVelocity(parentEntity, parentEntity.getPitch(), parentEntity.getYaw() + 2, 0.0F, 0.25F * 3.0F,
+		projectile2.setProperties(parentEntity, parentEntity.getPitch(), parentEntity.getYaw() + 2, 0.0F, 0.25F * 3.0F,
 				1.0F);
 		projectile2.refreshPositionAndAngles(parentEntity.getX(), parentEntity.getBodyY(0.85), parentEntity.getZ(), 0,
 				0);
 		projectile2.hasNoGravity();
 
 		ProjectileEntity projectile3 = getProjectile(world, rollAccuracy(d2), rollAccuracy(d3), rollAccuracy(d4));
-		projectile3.setVelocity(parentEntity, parentEntity.getPitch(), parentEntity.getYaw() - 2, 0.0F, 0.25F * 3.0F,
+		projectile3.setProperties(parentEntity, parentEntity.getPitch(), parentEntity.getYaw() - 2, 0.0F, 0.25F * 3.0F,
 				1.0F);
 		projectile3.refreshPositionAndAngles(parentEntity.getX(), parentEntity.getBodyY(0.85), parentEntity.getZ(), 0,
 				0);
@@ -124,20 +124,20 @@ public abstract class AbstractRangedAttack implements IRangedAttack {
 
 	public void shoot2() {
 		LivingEntity livingentity = this.parentEntity.getTarget();
-		World world = this.parentEntity.getEntityWorld();
+		World world = this.parentEntity.getCommandSenderWorld();
 		Vec3d vector3d = this.parentEntity.getRotationVec(1.0F);
 		double d2 = livingentity.getX() - (this.parentEntity.getX() + vector3d.x * xOffSetModifier);
 		double d3 = livingentity.getBodyY(0.5D) - (this.parentEntity.getBodyY(entityHeightFraction));
 		double d4 = livingentity.getZ() - (this.parentEntity.getZ() + vector3d.z * zOffSetModifier);
 		ProjectileEntity projectile = getProjectile(world, rollAccuracy(d2), rollAccuracy(d3), rollAccuracy(d4));
-		projectile.setVelocity(parentEntity, parentEntity.getPitch(), parentEntity.getYaw(), 0.0F, 0.25F * 3.0F, 1.0F);
+		projectile.setProperties(parentEntity, parentEntity.getPitch(), parentEntity.getYaw(), 0.0F, 0.25F * 3.0F, 1.0F);
 		projectile.refreshPositionAndAngles(parentEntity.getX(), parentEntity.getBodyY(0.5), parentEntity.getZ(), 0, 0);
 		projectile.setFireTicks(100);
 		projectile.updatePosition(this.parentEntity.getX() + vector3d.x * xOffSetModifier,
 				this.parentEntity.getBodyY(entityHeightFraction),
 				this.parentEntity.getZ() + vector3d.z * zOffSetModifier);
 		ProjectileEntity projectile1 = getProjectile(world, rollAccuracy(d2), rollAccuracy(d3), rollAccuracy(d4));
-		projectile1.setVelocity(parentEntity, parentEntity.getPitch(), parentEntity.getYaw() + 5, 0.0F, 0.25F * 3.0F,
+		projectile1.setProperties(parentEntity, parentEntity.getPitch(), parentEntity.getYaw() + 5, 0.0F, 0.25F * 3.0F,
 				1.0F);
 		projectile1.refreshPositionAndAngles(parentEntity.getX(), parentEntity.getBodyY(0.5), parentEntity.getZ(), 0,
 				0);
@@ -146,7 +146,7 @@ public abstract class AbstractRangedAttack implements IRangedAttack {
 				this.parentEntity.getBodyY(entityHeightFraction),
 				this.parentEntity.getZ() + vector3d.z * zOffSetModifier);
 		ProjectileEntity projectile2 = getProjectile(world, rollAccuracy(d2), rollAccuracy(d3), rollAccuracy(d4));
-		projectile2.setVelocity(parentEntity, parentEntity.getPitch(), parentEntity.getYaw() - 5, 0.0F, 0.25F * 3.0F,
+		projectile2.setProperties(parentEntity, parentEntity.getPitch(), parentEntity.getYaw() - 5, 0.0F, 0.25F * 3.0F,
 				1.0F);
 		projectile2.refreshPositionAndAngles(parentEntity.getX(), parentEntity.getBodyY(0.5), parentEntity.getZ(), 0,
 				0);

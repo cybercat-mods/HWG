@@ -2,12 +2,13 @@ package mod.azure.hwg.item.weapons;
 
 import java.util.List;
 
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
+
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.FireballEntity;
 import mod.azure.hwg.util.registry.HWGItems;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -36,7 +37,7 @@ public class BrimstoneItem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					FireballEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							0.25F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -44,7 +45,7 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity.setPunch(1);
 
 					FireballEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5,
+					abstractarrowentity1.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5,
 							0.0F, 0.25F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -52,7 +53,7 @@ public class BrimstoneItem extends HWGGunBase {
 					abstractarrowentity1.setPunch(1);
 
 					FireballEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5,
+					abstractarrowentity2.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5,
 							0.0F, 0.25F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -99,8 +100,8 @@ public class BrimstoneItem extends HWGGunBase {
 					&& user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-186, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setBobbingAnimationTime(3);
-				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+				user.getStackInHand(hand).setCooldown(3);
+				user.getCommandSenderWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
 						SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, 1.5F);
 			}
 		}

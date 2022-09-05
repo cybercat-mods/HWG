@@ -2,13 +2,14 @@ package mod.azure.hwg.item.weapons;
 
 import java.util.List;
 
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
+
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.RocketEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -38,7 +39,7 @@ public class RocketLauncher extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 15);
 				if (!worldIn.isClient) {
 					RocketEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							0.25F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.95),
 							entityLiving.getZ(), 0, 0);
@@ -80,8 +81,8 @@ public class RocketLauncher extends HWGGunBase {
 					&& user.getInventory().count(HWGItems.ROCKET) > 0) {
 				removeAmmo(HWGItems.ROCKET, user);
 				user.getStackInHand(hand).damage(-2, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setBobbingAnimationTime(3);
-				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+				user.getStackInHand(hand).setCooldown(3);
+				user.getCommandSenderWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
 						HWGSounds.GLAUNCHERRELOAD, SoundCategory.PLAYERS, 0.5F, 1.0F);
 			}
 		}

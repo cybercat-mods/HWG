@@ -2,12 +2,13 @@ package mod.azure.hwg.item.weapons;
 
 import java.util.List;
 
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
+
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
 import mod.azure.hwg.util.registry.HWGItems;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -37,7 +38,7 @@ public class IncineratorUnitItem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							0.25F * 3.0F, 2.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
@@ -80,7 +81,7 @@ public class IncineratorUnitItem extends HWGGunBase {
 					&& user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getStackInHand(hand).damage(-501, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setBobbingAnimationTime(3);
+				user.getStackInHand(hand).setCooldown(3);
 			}
 		}
 	}

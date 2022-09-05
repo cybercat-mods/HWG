@@ -2,13 +2,14 @@ package mod.azure.hwg.item.weapons;
 
 import java.util.List;
 
+import org.quiltmc.qsl.networking.api.PlayerLookup;
+import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
+
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.MBulletEntity;
 import mod.azure.hwg.util.registry.HWGSounds;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -45,7 +46,7 @@ public class Meanie2Item extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					MBulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+					abstractarrowentity.setProperties(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							1.0F * 3.0F, 1.0F);
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
@@ -97,8 +98,8 @@ public class Meanie2Item extends AnimatedItem {
 					&& user.getInventory().count(Items.REDSTONE) > 0) {
 				removeAmmo(Items.REDSTONE, user);
 				user.getStackInHand(hand).damage(-1, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setBobbingAnimationTime(3);
-				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+				user.getStackInHand(hand).setCooldown(3);
+				user.getCommandSenderWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
 						HWGSounds.PISTOLRELOAD, SoundCategory.PLAYERS, 1.00F, 1.0F);
 			}
 		}

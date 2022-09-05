@@ -26,7 +26,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LightType;
 import net.minecraft.world.LocalDifficulty;
@@ -96,13 +96,13 @@ public class SpyEntity extends HWGEntity {
 	}
 
 	public static boolean canSpawn(EntityType<? extends HWGEntity> type, WorldAccess world, SpawnReason spawnReason,
-			BlockPos pos, Random random) {
+			BlockPos pos, RandomGenerator random) {
 		return world.getLightLevel(LightType.BLOCK, pos) > 8 && world.getDifficulty() != Difficulty.PEACEFUL ? false
 				: canSpawnIgnoreLightLevel(type, world, spawnReason, pos, random);
 	}
 
 	public static boolean canSpawnIgnoreLightLevel(EntityType<? extends HWGEntity> type, ServerWorldAccess world,
-			SpawnReason spawnReason, BlockPos pos, Random random) {
+			SpawnReason spawnReason, BlockPos pos, RandomGenerator random) {
 		return world.getDifficulty() != Difficulty.PEACEFUL
 				&& HostileEntity.canSpawnInDark(type, world, spawnReason, pos, random);
 	}
@@ -136,7 +136,7 @@ public class SpyEntity extends HWGEntity {
 		return 4;
 	}
 
-	public static int generateVariants(Random random) {
+	public static int generateVariants(RandomGenerator random) {
 		return random.nextInt(500) == 0 ? 3 : random.nextInt(100) < 5 ? 2 : 1;
 	}
 

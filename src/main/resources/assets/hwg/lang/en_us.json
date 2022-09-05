@@ -126,5 +126,5 @@
 	"hwg.midnightconfig.meanie_damage": "Meanie Damage",
 	"hwg.midnightconfig.balrog_damage": "Balrog Damage",
 	"hwg.midnightconfig.brimstone_damage": "Brimstone Damage",
-	"itemGroup.hwg": "HWG Weapons"
+	"itemGroup.hwg.weapons": "HWG Weapons"
 }

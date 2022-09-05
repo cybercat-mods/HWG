@@ -21,7 +21,7 @@ public class GrenadeStunItem extends Item {
 			user.getItemCooldownManager().set(this, 25);
 			if (!world.isClient) {
 				GrenadeEntity snowballEntity = new GrenadeEntity(world, user);
-				snowballEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
+				snowballEntity.setProperties(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
 				snowballEntity.setVariant(5);
 				snowballEntity.setState(1);
 				world.spawnEntity(snowballEntity);

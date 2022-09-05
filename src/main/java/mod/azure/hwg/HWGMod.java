@@ -1,6 +1,13 @@
 package mod.azure.hwg;
 
+import org.quiltmc.loader.api.ModContainer;
+import org.quiltmc.loader.api.QuiltLoader;
+import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+import org.quiltmc.qsl.item.group.api.QuiltItemGroup;
+
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
+import mod.azure.hwg.compat.BWCompat;
+import mod.azure.hwg.compat.GigCompat;
 import mod.azure.hwg.config.CustomMidnightConfig;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.network.PacketHandler;
@@ -8,8 +15,6 @@ import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.MobAttributes;
 import mod.azure.hwg.util.MobSpawn;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
-import mod.azure.hwg.util.registry.BWCompatItems;
-import mod.azure.hwg.util.registry.GigCompat;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGLoot;
@@ -17,10 +22,7 @@ import mod.azure.hwg.util.registry.HWGMobs;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGSounds;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootPool;
@@ -38,8 +40,8 @@ public class HWGMod implements ModInitializer {
 	public static HWGItems ITEMS;
 	public static HWGBlocks BLOCKS;
 	public static HWGSounds SOUNDS;
+	public static BWCompat BW_ITEMS;
 	public static GigCompat GIG_ITEMS;
-	public static BWCompatItems BWITEMS;
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
 	public static ProjectilesEntityRegister PROJECTILES;
@@ -65,17 +67,20 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
 	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
 	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
-	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons"))
+	public static final ItemGroup WeaponItemGroup = QuiltItemGroup.builder(new Identifier(MODID, "weapons"))
 			.icon(() -> new ItemStack(HWGItems.AK47)).build();
 	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry
 			.register(Registry.RECIPE_SERIALIZER, new Identifier(MODID, "gun_table"), new GunTableRecipe.Serializer());
 
 	@Override
-	public void onInitialize() {
+	public void onInitialize(ModContainer mod) {
 		CustomMidnightConfig.init(MODID, HWGConfig.class);
 		ITEMS = new HWGItems();
-		if (FabricLoader.getInstance().isModLoaded("gigeresque")) {
+		if (QuiltLoader.isModLoaded("gigeresque")) {
 			GIG_ITEMS = new GigCompat();
+		}
+		if (QuiltLoader.isModLoaded("bewitchment")) {
+			BW_ITEMS = new BWCompat();
 		}
 		BLOCKS = new HWGBlocks();
 		SOUNDS = new HWGSounds();
