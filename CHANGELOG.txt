@@ -1,3 +1,5 @@
-v.1.2.4
+v.1.2.5
 
-- Converts the sounds to mono.
+- Fixed config screen.
+- Changed lugar recipe to iron nuggets
+- Code clean up
