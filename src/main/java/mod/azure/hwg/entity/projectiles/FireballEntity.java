@@ -83,6 +83,15 @@ public class FireballEntity extends PersistentProjectileEntity {
 	}
 
 	@Override
+	protected void onHit(LivingEntity living) {
+		super.onHit(living);
+		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof PlayerEntity)) {
+			living.timeUntilRegen = 0;
+			living.setVelocity(0, 0, 0);
+		}
+	}
+
+	@Override
 	public void age() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 40) {

@@ -87,7 +87,7 @@ public class BulletEntity extends PersistentProjectileEntity implements IAnimata
 	@Override
 	protected void onHit(LivingEntity living) {
 		super.onHit(living);
-		if (!(living instanceof PlayerEntity)) {
+		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof PlayerEntity)) {
 			living.timeUntilRegen = 0;
 			living.setVelocity(0, 0, 0);
 		}
