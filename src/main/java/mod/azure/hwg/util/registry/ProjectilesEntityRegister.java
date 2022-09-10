@@ -95,7 +95,7 @@ public class ProjectilesEntityRegister {
 
 		EntityType<T> type = FabricEntityTypeBuilder.<T>create(SpawnGroup.MISC, factory)
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
-				.trackRangeBlocks(90).trackedUpdateRate(40).build();
+				.trackRangeBlocks(90).trackedUpdateRate(1).build();
 
 		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
 
@@ -117,7 +117,7 @@ public class ProjectilesEntityRegister {
 
 		EntityType<T> type = FabricEntityTypeBuilder.<T>create(SpawnGroup.MISC, factory)
 				.dimensions(new EntityDimensions(1.5F, 1.5F, false)).disableSummon().spawnableFarFromPlayer()
-				.fireImmune().trackRangeBlocks(90).trackedUpdateRate(40).build();
+				.fireImmune().trackRangeBlocks(90).trackedUpdateRate(1).build();
 
 		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
 
