@@ -23,26 +23,26 @@ public class HWGMobs {
 			new Identifier(HWGMod.MODID, "technodemon_lesser_1"),
 			FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, TechnodemonEntity::new)
 					.dimensions(EntityDimensions.fixed(0.9f, 2.5F)).fireImmune().trackRangeBlocks(90)
-					.trackedUpdateRate(4).build());
+					.trackedUpdateRate(1).build());
 
 	public static final EntityType<TechnodemonGreaterEntity> TECHNOGREATER = Registry.register(Registry.ENTITY_TYPE,
 			new Identifier(HWGMod.MODID, "technodemon_greater_1"),
 			FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, TechnodemonGreaterEntity::new)
 					.dimensions(EntityDimensions.fixed(1.3f, 3.5F)).fireImmune().trackRangeBlocks(90)
-					.trackedUpdateRate(4).build());
+					.trackedUpdateRate(1).build());
 
 	public static final EntityType<MercEntity> MERC = Registry.register(Registry.ENTITY_TYPE,
 			new Identifier(HWGMod.MODID, "merc"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, MercEntity::new)
-					.dimensions(EntityDimensions.fixed(1.1F, 2.1F)).trackRangeBlocks(90).trackedUpdateRate(4).build());
+					.dimensions(EntityDimensions.fixed(1.1F, 2.1F)).trackRangeBlocks(90).trackedUpdateRate(1).build());
 
 	public static final EntityType<SpyEntity> SPY = Registry.register(Registry.ENTITY_TYPE,
 			new Identifier(HWGMod.MODID, "spy"), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, SpyEntity::new)
-					.dimensions(EntityDimensions.fixed(1.1F, 2.1F)).trackRangeBlocks(90).trackedUpdateRate(4).build());
+					.dimensions(EntityDimensions.fixed(1.1F, 2.1F)).trackRangeBlocks(90).trackedUpdateRate(1).build());
 
 	public static final EntityType<FuelTankEntity> FUELTANK = Registry.register(Registry.ENTITY_TYPE,
 			new Identifier(HWGMod.MODID, "fuel_tank"),
 			FabricEntityTypeBuilder.<FuelTankEntity>create(SpawnGroup.MISC, FuelTankEntity::new)
-					.dimensions(EntityDimensions.fixed(0.98F, 0.98F)).trackRangeBlocks(90).trackedUpdateRate(4)
+					.dimensions(EntityDimensions.fixed(0.98F, 0.98F)).trackRangeBlocks(90).trackedUpdateRate(1)
 					.build());
 
 	public static final BlockEntityType<GunBlockEntity> GUN_TABLE_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
