@@ -2,6 +2,7 @@ package mod.azure.hwg.entity.projectiles;
 
 import org.jetbrains.annotations.Nullable;
 
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
@@ -66,6 +67,15 @@ public class BaseFlareEntity extends PersistentProjectileEntity {
 			boolean shotAtAngle) {
 		this(world, stack, x, y, z, shotAtAngle);
 		this.setOwner(entity);
+	}
+
+	@Override
+	protected void onHit(LivingEntity living) {
+		super.onHit(living);
+		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof PlayerEntity)) {
+			living.timeUntilRegen = 0;
+			living.setVelocity(0, 0, 0);
+		}
 	}
 
 	@Override

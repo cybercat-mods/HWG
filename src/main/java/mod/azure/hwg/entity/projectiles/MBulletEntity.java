@@ -65,9 +65,11 @@ public class MBulletEntity extends PersistentProjectileEntity implements IAnimat
 	@Override
 	protected void onHit(LivingEntity living) {
 		super.onHit(living);
-		if (!(living instanceof PlayerEntity)) {
-			living.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 45, 1));
-			living.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 45, 1));
+		living.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 45, 1));
+		living.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 45, 1));
+		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof PlayerEntity)) {
+			living.setVelocity(0, 0, 0);
+			living.timeUntilRegen = 0;
 		}
 	}
 

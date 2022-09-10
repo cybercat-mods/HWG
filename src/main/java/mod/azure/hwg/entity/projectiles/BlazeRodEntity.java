@@ -91,7 +91,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements IAnima
 	@Override
 	protected void onHit(LivingEntity living) {
 		super.onHit(living);
-		if (!(living instanceof PlayerEntity)) {
+		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof PlayerEntity)) {
 			living.timeUntilRegen = 0;
 		}
 	}

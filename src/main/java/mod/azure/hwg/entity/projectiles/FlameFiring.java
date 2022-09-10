@@ -2,6 +2,7 @@ package mod.azure.hwg.entity.projectiles;
 
 import java.util.List;
 
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
 import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
@@ -109,7 +110,7 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	@Override
 	protected void onHit(LivingEntity living) {
 		super.onHit(living);
-		if (!(living instanceof PlayerEntity)) {
+		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof PlayerEntity)) {
 			living.setVelocity(0, 0, 0);
 			living.timeUntilRegen = 0;
 		}
