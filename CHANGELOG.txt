@@ -1,4 +1,4 @@
-v.1.2.8
+v.1.2.9
 
-- Changed the default biomes. RESET YOUR CONFIGS
-- Added new config option to enable bullets to remove I-Frames on damage on players.
+- Updated en_us.json for new config.
+- Tweaks Nades
