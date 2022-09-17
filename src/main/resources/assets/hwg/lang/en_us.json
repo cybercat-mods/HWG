@@ -111,6 +111,7 @@
 	"hwg.midnightconfig.balrog_breaks": "Balrog Break Blocks",
 	"hwg.midnightconfig.grenades_breaks": "Frag Grenades Break Blocks",
 	"hwg.midnightconfig.bullets_breakdripstone": "Bullets Break Dripstone",
+	"hwg.midnightconfig.bullets_diable_iframes_on_Players": "Bullets Disable IFrames",
 	"hwg.midnightconfig.pistol_damage": "Pistol Damage",
 	"hwg.midnightconfig.golden_pistol_damage": "Golden Pistol Damage",
 	"hwg.midnightconfig.silenced_pistol_damage": "Silenced Pistol Damage",
