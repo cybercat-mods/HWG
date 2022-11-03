@@ -28,7 +28,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:3.1.12"
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.19:3.1.35"
 	modImplementation ("com.terraformersmc:modmenu:4.0.6")
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:9.1.520") {
         exclude(group: "net.fabricmc.fabric-api")

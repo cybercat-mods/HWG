@@ -26,6 +26,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -72,7 +73,7 @@ public class GPistolItem extends AnimatedItem {
 			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
 			if (controller.getAnimationState() == AnimationState.Stopped) {
 				controller.markNeedsReload();
-				controller.setAnimation(new AnimationBuilder().addAnimation("golden", false));
+				controller.setAnimation(new AnimationBuilder().addAnimation("golden", EDefaultLoopTypes.PLAY_ONCE));
 			}
 		}
 	}

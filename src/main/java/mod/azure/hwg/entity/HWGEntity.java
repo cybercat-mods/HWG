@@ -42,10 +42,12 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public abstract class HWGEntity extends HostileEntity implements IAnimatable, Angerable, Monster, IAnimationTickable {
 
@@ -57,7 +59,7 @@ public abstract class HWGEntity extends HostileEntity implements IAnimatable, An
 	public static final TrackedData<Integer> STATE = DataTracker.registerData(HWGEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
 	private UUID targetUuid;
-	private AnimationFactory factory = new AnimationFactory(this);
+	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
 	protected HWGEntity(EntityType<? extends HostileEntity> type, World worldIn) {
 		super(type, worldIn);
@@ -78,7 +80,7 @@ public abstract class HWGEntity extends HostileEntity implements IAnimatable, An
 	private <E extends IAnimatable> PlayState predicate1(AnimationEvent<E> event) {
 		if (this.dataTracker.get(STATE) == 1 && !(this.dead || this.getHealth() < 0.01 || this.isDead())
 				&& !(this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof Minigun)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("attacking", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("attacking", EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
