@@ -1,4 +1,3 @@
-v.1.2.9
+v.1.2.10
 
-- Updated en_us.json for new config.
-- Tweaks Nades
+- Updated for latest Geckolib methods
