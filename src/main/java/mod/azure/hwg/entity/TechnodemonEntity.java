@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -46,10 +47,10 @@ public class TechnodemonEntity extends HWGEntity {
 
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		if (event.isMoving() && !this.isSwimming()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walking", EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}
 
