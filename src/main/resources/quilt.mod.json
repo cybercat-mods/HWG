@@ -53,5 +53,5 @@
 	"minecraft": {
 		"environment": "*"
 	},
-	"accessWidener": "hwg.accesswidener"
+	"access_widener": "hwg.accesswidener"
 }
