@@ -19,21 +19,24 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.TradeOffers.Factory;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.poi.PointOfInterestType;
+import net.minecraft.world.poi.PointOfInterestTypes;
 
 public class GunSmithProfession {
 
 	public static final Supplier<PointOfInterestType> GUNSMITH_POI = registerPoiType("gun_smith",
-			() -> new PointOfInterestType(PointOfInterestTypesInvoker.invokeGetBlockStates(HWGBlocks.GUN_TABLE), 1, 1));
+			() -> new PointOfInterestType(PointOfInterestTypesInvoker.invokeGetBlockStates(HWGBlocks.GUN_TABLE), 1, 10));
 	public static final Supplier<VillagerProfession> GUNSMITH = registerProfession("gun_smith",
 			() -> new VillagerProfession("gun_smith", holder -> holder.value().equals(GUNSMITH_POI.get()),
 					holder -> holder.value().equals(GUNSMITH_POI.get()), ImmutableSet.of(), ImmutableSet.of(),
@@ -41,16 +44,16 @@ public class GunSmithProfession {
 
 	public static Supplier<VillagerProfession> registerProfession(String name,
 			Supplier<VillagerProfession> profession) {
-		var registry = Registry.register(Registry.VILLAGER_PROFESSION, new Identifier(HWGMod.MODID, name),
+		var registry = Registry.register(Registries.VILLAGER_PROFESSION, new Identifier(HWGMod.MODID, name),
 				profession.get());
 		return () -> registry;
 	}
 
 	public static Supplier<PointOfInterestType> registerPoiType(String name, Supplier<PointOfInterestType> poiType) {
-		RegistryKey<PointOfInterestType> resourceKey = RegistryKey.of(Registry.POINT_OF_INTEREST_TYPE_KEY,
+		RegistryKey<PointOfInterestType> resourceKey = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE,
 				new Identifier(HWGMod.MODID, name));
-		var registry = Registry.register(Registry.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
-		PointOfInterestTypesInvoker.invokeRegisterBlockStates(Registry.POINT_OF_INTEREST_TYPE.entryOf(resourceKey));
+		var registry = Registry.register(Registries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
+		PointOfInterestTypesInvoker.invokeRegisterBlockStates(Registries.POINT_OF_INTEREST_TYPE.entryOf(resourceKey),PointOfInterestTypes.getStatesOfBlock(HWGBlocks.GUN_TABLE));
 		return () -> registry;
 	}
 

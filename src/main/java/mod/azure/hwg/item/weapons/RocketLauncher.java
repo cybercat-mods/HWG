@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 public class RocketLauncher extends HWGGunBase {
 
 	public RocketLauncher() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(2));
+		super(new Item.Settings().maxCount(1).maxDamage(2));
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class RocketLauncher extends HWGGunBase {
 				if (!worldIn.isClient) {
 					RocketEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
 					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
-							0.25F * 3.0F, 1.0F);
+							0.5F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.95),
 							entityLiving.getZ(), 0, 0);
 
@@ -47,12 +47,12 @@ public class RocketLauncher extends HWGGunBase {
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);
-					boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
-					spawnLightSource(entityLiving, isInsideWaterBlock);
+					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
+							HWGSounds.RPG, SoundCategory.PLAYERS, 1.0F,
+							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
-				worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-						HWGSounds.RPG, SoundCategory.PLAYERS, 1.0F,
-						1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+				boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
+				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}

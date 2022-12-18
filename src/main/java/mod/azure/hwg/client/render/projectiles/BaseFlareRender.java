@@ -8,7 +8,7 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 public class BaseFlareRender extends EntityRenderer<BaseFlareEntity> {
 
@@ -20,7 +20,9 @@ public class BaseFlareRender extends EntityRenderer<BaseFlareEntity> {
 			VertexConsumerProvider vertexConsumerProvider, int i) {
 		matrixStack.push();
 		matrixStack.multiply(this.dispatcher.getRotation());
-		matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
+		matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F));
+		matrixStack.scale(fireworkRocketEntity.age > 2 ? 0.5F : 0.0F, fireworkRocketEntity.age > 2 ? 0.5F : 0.0F,
+				fireworkRocketEntity.age > 2 ? 0.5F : 0.0F);
 
 		matrixStack.pop();
 		super.render(fireworkRocketEntity, f, g, matrixStack, vertexConsumerProvider, i);

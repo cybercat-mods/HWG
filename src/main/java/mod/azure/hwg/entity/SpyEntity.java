@@ -6,6 +6,7 @@ import java.util.List;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.goal.RangedStrafeAttackGoal;
 import mod.azure.hwg.entity.goal.WeaponGoal;
+import mod.azure.hwg.item.weapons.Minigun;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityDimensions;
@@ -33,13 +34,10 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 
 public class SpyEntity extends HWGEntity {
 
@@ -48,15 +46,16 @@ public class SpyEntity extends HWGEntity {
 		this.experiencePoints = HWGConfig.spy_exp;
 	}
 
-	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", EDefaultLoopTypes.LOOP));
-		return PlayState.CONTINUE;
-	}
-
 	@Override
-	public void registerControllers(AnimationData data) {
-		super.registerControllers(data);
-		data.addAnimationController(new AnimationController<SpyEntity>(this, "controller", 0, this::predicate));
+	public void registerControllers(ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, event -> {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+		})).add(new AnimationController<>(this, event -> {
+			if (this.dataTracker.get(STATE) == 1 && !(this.dead || this.getHealth() < 0.01 || this.isDead())
+					&& !(this.getEquippedStack(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
+				return event.setAndContinue(RawAnimation.begin().thenLoop("attacking"));
+			return PlayState.CONTINUE;
+		}));
 	}
 
 	@Override

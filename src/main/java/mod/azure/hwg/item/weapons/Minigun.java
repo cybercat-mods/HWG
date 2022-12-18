@@ -1,18 +1,21 @@
 package mod.azure.hwg.item.weapons;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
+import mod.azure.hwg.client.render.weapons.MinigunRender;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -28,13 +31,17 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.animatable.client.RenderProvider;
 
 public class Minigun extends AnimatedItem {
 
+	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
+
 	public Minigun() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(101));
+		super(new Item.Settings().maxCount(1).maxDamage(101));
+		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
 	@Override
@@ -48,24 +55,17 @@ public class Minigun extends AnimatedItem {
 					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
 					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
 							1.0F * 3.0F, 1.0F);
-					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
-							entityLiving.getZ(), 0, 0);
 					abstractarrowentity.hasNoGravity();
 
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					worldIn.spawnEntity(abstractarrowentity);
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), HWGSounds.MINIGUN, SoundCategory.PLAYERS, 0.25F, 1.0F);
-					if (!worldIn.isClient) {
-						final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
-						GeckoLibNetwork.syncAnimation(playerentity, this, id, ANIM_OPEN);
-						for (PlayerEntity otherPlayer : PlayerLookup.tracking(playerentity)) {
-							GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
-						}
-					}
-					boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
-					spawnLightSource(entityLiving, isInsideWaterBlock);
+					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerWorld) worldIn), "shoot_controller",
+							"firing");
 				}
+				boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
+				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}
@@ -135,5 +135,22 @@ public class Minigun extends AnimatedItem {
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
 		super.appendTooltip(stack, world, tooltip, context);
 		tooltip.add(Text.translatable("hwg.ammo.reloadbullets").formatted(Formatting.ITALIC));
+	}
+
+	@Override
+	public void createRenderer(Consumer<Object> consumer) {
+		consumer.accept(new RenderProvider() {
+			private final MinigunRender renderer = new MinigunRender();
+
+			@Override
+			public BuiltinModelItemRenderer getCustomRenderer() {
+				return this.renderer;
+			}
+		});
+	}
+
+	@Override
+	public Supplier<Object> getRenderProvider() {
+		return this.renderProvider;
 	}
 }

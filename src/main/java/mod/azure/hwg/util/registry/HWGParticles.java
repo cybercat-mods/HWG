@@ -3,8 +3,9 @@ package mod.azure.hwg.util.registry;
 import mod.azure.hwg.HWGMod;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class HWGParticles {
 
@@ -28,6 +29,6 @@ public class HWGParticles {
 	public static final DefaultParticleType LIGHTGRAY_FLARE = register(new Identifier(HWGMod.MODID, "lightgray_flare"), false);
 
 	private static DefaultParticleType register(Identifier identifier, boolean alwaysSpawn) {
-		return Registry.register(Registry.PARTICLE_TYPE, identifier, FabricParticleTypes.simple(alwaysSpawn));
+		return Registry.register(Registries.PARTICLE_TYPE, identifier, FabricParticleTypes.simple(alwaysSpawn));
 	}
 }

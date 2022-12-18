@@ -2,6 +2,7 @@ package mod.azure.hwg.entity.projectiles;
 
 import org.jetbrains.annotations.Nullable;
 
+import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.util.registry.HWGMobs;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -10,9 +11,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
 
 public class FuelTankEntity extends Entity {
 
@@ -25,7 +25,7 @@ public class FuelTankEntity extends Entity {
 
 	protected void explode() {
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 4.0F, true,
-				Explosion.DestructionType.NONE);
+				World.ExplosionSourceType.NONE);
 	}
 
 	public FuelTankEntity(World worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
@@ -64,8 +64,8 @@ public class FuelTankEntity extends Entity {
 	}
 
 	@Override
-	public Packet<?> createSpawnPacket() {
-		return new EntitySpawnS2CPacket(this);
+	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+		return HWGEntityPacket.createPacket(this);
 	}
 
 	@Override

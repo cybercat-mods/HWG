@@ -3,9 +3,9 @@ package mod.azure.hwg.client.models.weapons;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.GrenadeLauncherItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class GrenadeLauncherModel extends AnimatedGeoModel<GrenadeLauncherItem> {
+public class GrenadeLauncherModel extends GeoModel<GrenadeLauncherItem> {
 	@Override
 	public Identifier getModelResource(GrenadeLauncherItem object) {
 		return new Identifier(HWGMod.MODID, "geo/grenade_launcher.geo.json");
@@ -13,7 +13,7 @@ public class GrenadeLauncherModel extends AnimatedGeoModel<GrenadeLauncherItem> 
 
 	@Override
 	public Identifier getTextureResource(GrenadeLauncherItem object) {
-		return new Identifier(HWGMod.MODID, "textures/items/grenade_launcher.png");
+		return new Identifier(HWGMod.MODID, "textures/item/grenade_launcher.png");
 	}
 
 	@Override

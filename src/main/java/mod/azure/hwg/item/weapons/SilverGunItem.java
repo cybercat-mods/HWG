@@ -1,17 +1,20 @@
 package mod.azure.hwg.item.weapons;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import io.netty.buffer.Unpooled;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
+import mod.azure.hwg.client.render.weapons.SilverGunRender;
 import mod.azure.hwg.compat.BWCompat;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.SBulletEntity;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,13 +27,17 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.animatable.client.RenderProvider;
 
 public class SilverGunItem extends AnimatedItem {
 
+	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
+
 	public SilverGunItem() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(7));
+		super(new Item.Settings().maxCount(1).maxDamage(7));
+		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
 	@Override
@@ -41,11 +48,8 @@ public class SilverGunItem extends AnimatedItem {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					SBulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(),
-							0.0F, 0.25F * 3.0F, 1.0F);
-					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
-							entityLiving.getZ(), 0, 0);
-
+					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.setDamage(2.5);
 					abstractarrowentity.age = 30;
 
@@ -54,14 +58,11 @@ public class SilverGunItem extends AnimatedItem {
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), HWGSounds.PISTOL, SoundCategory.PLAYERS, 0.5F,
 							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-					if (!worldIn.isClient) {
-						final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
-						GeckoLibNetwork.syncAnimation(playerentity, this, id, ANIM_OPEN);
-						for (PlayerEntity otherPlayer : PlayerLookup.tracking(playerentity)) {
-							GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
-						}
-					}
+					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerWorld) worldIn), "shoot_controller",
+							"firing");
 				}
+				boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
+				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}
@@ -121,5 +122,22 @@ public class SilverGunItem extends AnimatedItem {
 	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
 		super.appendTooltip(stack, world, tooltip, context);
 		tooltip.add(Text.translatable("hwg.ammo.reloadsilverbullets").formatted(Formatting.ITALIC));
+	}
+
+	@Override
+	public void createRenderer(Consumer<Object> consumer) {
+		consumer.accept(new RenderProvider() {
+			private final SilverGunRender renderer = new SilverGunRender();
+
+			@Override
+			public BuiltinModelItemRenderer getCustomRenderer() {
+				return this.renderer;
+			}
+		});
+	}
+
+	@Override
+	public Supplier<Object> getRenderProvider() {
+		return this.renderProvider;
 	}
 }

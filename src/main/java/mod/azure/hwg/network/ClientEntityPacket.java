@@ -1,4 +1,4 @@
-package mod.azure.hwg.util.packet;
+package mod.azure.hwg.network;
 
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registries;
 
-public class EntityPacketOnClient {
+public class ClientEntityPacket {
 	@Environment(EnvType.CLIENT)
 	public static void onPacket(MinecraftClient context, PacketByteBuf byteBuf) {
 		EntityType<?> type = Registries.ENTITY_TYPE.get(byteBuf.readVarInt());
@@ -20,16 +20,14 @@ public class EntityPacketOnClient {
 		double x = byteBuf.readDouble();
 		double y = byteBuf.readDouble();
 		double z = byteBuf.readDouble();
-		float pitch = (byteBuf.readByte() * 360) / 256.0F;
-		float yaw = (byteBuf.readByte() * 360) / 256.0F;
 		context.execute(() -> {
 			ClientWorld world = MinecraftClient.getInstance().world;
 			Entity entity = type.create(world);
 			if (entity != null) {
-				entity.updatePosition(x, y, z);
 				entity.updateTrackedPosition(x, y, z);
-				entity.setPitch(pitch);
-				entity.setYaw(yaw);
+				entity.refreshPositionAfterTeleport(x, y, z);
+				entity.setPitch((float) (entity.getPitch() * 360) / 256f);
+				entity.setYaw((float) (entity.getYaw() * 360) / 256f);
 				entity.setId(entityID);
 				entity.setUuid(entityUUID);
 				world.addEntity(entityID, entity);

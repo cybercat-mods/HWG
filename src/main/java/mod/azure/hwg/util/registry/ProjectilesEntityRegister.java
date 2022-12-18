@@ -18,8 +18,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class ProjectilesEntityRegister {
 
@@ -47,7 +48,7 @@ public class ProjectilesEntityRegister {
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
 				.trackRangeBlocks(90).trackedUpdateRate(1).build();
 
-		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
+		Registry.register(Registries.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 
@@ -69,7 +70,7 @@ public class ProjectilesEntityRegister {
 				.dimensions(new EntityDimensions(1.5F, 1.5F, false)).disableSummon().spawnableFarFromPlayer()
 				.fireImmune().trackRangeBlocks(90).trackedUpdateRate(40).build();
 
-		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
+		Registry.register(Registries.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 

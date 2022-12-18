@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "hwg:items/bullet_sniper"
+    "layer0": "hwg:item/bullet_sniper"
   }
 }

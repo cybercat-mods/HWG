@@ -3,9 +3,9 @@ package mod.azure.hwg.client.models.projectiles;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class FlameFiringModel extends AnimatedGeoModel<FlameFiring> {
+public class FlameFiringModel extends GeoModel<FlameFiring> {
 	@Override
 	public Identifier getModelResource(FlameFiring object) {
 		return new Identifier(HWGMod.MODID, "geo/flamefiring.geo.json");
@@ -13,7 +13,7 @@ public class FlameFiringModel extends AnimatedGeoModel<FlameFiring> {
 
 	@Override
 	public Identifier getTextureResource(FlameFiring object) {
-		return new Identifier(HWGMod.MODID, "textures/items/empty.png");
+		return new Identifier(HWGMod.MODID, "textures/item/empty.png");
 	}
 
 	@Override

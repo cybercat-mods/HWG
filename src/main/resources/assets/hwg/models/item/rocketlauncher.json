@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "hwg:items/rocket_launcher",
-		"1": "hwg:items/projectiles/rocket",
-		"particle": "hwg:items/rocket_launcher"
+		"0": "hwg:item/rocket_launcher",
+		"1": "hwg:item/projectiles/rocket",
+		"particle": "hwg:item/rocket_launcher"
 	},
 	"elements": [
 		{

@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "hwg:items/projectiles/grenade_frag",
-		"particle": "hwg:items/projectiles/grenade_frag"
+		"0": "hwg:item/projectiles/grenade_frag",
+		"particle": "hwg:item/projectiles/grenade_frag"
 	},
 	"elements": [
 		{

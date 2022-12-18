@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
-import mod.azure.hwg.util.packet.EntityPacket;
+import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
@@ -22,11 +22,13 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -36,18 +38,14 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class GrenadeEntity extends PersistentProjectileEntity implements IAnimatable {
+public class GrenadeEntity extends PersistentProjectileEntity implements GeoEntity {
 
 	protected int timeInAir;
 	protected boolean inAir;
@@ -57,7 +55,9 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 			TrackedDataHandlerRegistry.INTEGER);
 	private static final TrackedData<Integer> STATE = DataTracker.registerData(GrenadeEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(GrenadeEntity.class,
+			TrackedDataHandlerRegistry.FLOAT);
 
 	public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, World world) {
 		super(entityType, world);
@@ -98,9 +98,16 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 		this.setOwner(entity);
 	}
 
+	public GrenadeEntity(World world, double x, double y, double z) {
+		super(ProjectilesEntityRegister.GRENADE, x, y, z, world);
+		this.setNoGravity(true);
+		this.setDamage(0);
+	}
+
 	@Override
 	protected void initDataTracker() {
 		super.initDataTracker();
+		this.getDataTracker().startTracking(FORCED_YAW, 0f);
 		this.dataTracker.startTracking(VARIANT, 0);
 		this.dataTracker.startTracking(STATE, 0);
 	}
@@ -111,6 +118,7 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 		tag.putInt("Variant", this.getVariant());
 		tag.putInt("State", this.getVariant());
 		tag.putShort("life", (short) this.ticksInAir);
+		tag.putFloat("ForcedYaw", dataTracker.get(FORCED_YAW));
 	}
 
 	@Override
@@ -119,6 +127,14 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 		this.setVariant(tag.getInt("Variant"));
 		this.setVariant(tag.getInt("State"));
 		this.ticksInAir = tag.getShort("life");
+		dataTracker.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
+	}
+	
+	@Override
+	public void tick() {
+		super.tick();
+		if (getOwner()instanceof PlayerEntity owner)
+			setYaw(dataTracker.get(FORCED_YAW));
 	}
 
 	public int getVariant() {
@@ -137,29 +153,23 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 		this.dataTracker.set(STATE, color);
 	}
 
-	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		if (this.dataTracker.get(STATE) == 1) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("spin", EDefaultLoopTypes.LOOP));
-			return PlayState.CONTINUE;
-		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("bullet", EDefaultLoopTypes.LOOP));
-			return PlayState.CONTINUE;
-		}
+	@Override
+	public void registerControllers(ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, event -> {
+			if (this.dataTracker.get(STATE) == 1)
+				return event.setAndContinue(RawAnimation.begin().thenLoop("spin"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("bullet"));
+		}));
 	}
 
 	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController<GrenadeEntity>(this, "controller", 0, this::predicate));
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
 	}
 
 	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
-	}
-
-	@Override
-	public Packet<?> createSpawnPacket() {
-		return EntityPacket.createPacket(this);
+	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+		return HWGEntityPacket.createPacket(this);
 	}
 
 	@Override
@@ -302,7 +312,7 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 
 	protected void frag() {
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 2.0F, false,
-				HWGConfig.grenades_breaks == true ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
+				HWGConfig.grenades_breaks == true ? World.ExplosionSourceType.BLOCK : World.ExplosionSourceType.NONE);
 	}
 
 	protected void naplam() {
@@ -325,7 +335,7 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 			}
 		}
 		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 1.0F, true,
-				Explosion.DestructionType.NONE);
+				World.ExplosionSourceType.NONE);
 	}
 
 	protected void emp() {
@@ -358,6 +368,14 @@ public class GrenadeEntity extends PersistentProjectileEntity implements IAnimat
 	@Environment(EnvType.CLIENT)
 	public boolean shouldRender(double distance) {
 		return true;
+	}
+
+	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
+		float f = 0.017453292F;
+		float x = -MathHelper.sin(yaw * f) * MathHelper.cos(pitch * f);
+		float y = -MathHelper.sin((pitch + roll) * f);
+		float z = MathHelper.cos(yaw * f) * MathHelper.cos(pitch * f);
+		this.setVelocity(x, y, z, modifierZ, 0);
 	}
 
 }

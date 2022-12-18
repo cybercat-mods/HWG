@@ -1,12 +1,11 @@
 package mod.azure.hwg.entity.projectiles;
 
-import java.util.List;
-
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
-import mod.azure.hwg.util.packet.EntityPacket;
+import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,13 +16,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
@@ -31,25 +35,27 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FlameFiring extends PersistentProjectileEntity implements IAnimatable {
+public class FlameFiring extends PersistentProjectileEntity implements GeoEntity {
 
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
 	private LivingEntity shooter;
-	private AnimationFactory factory = new AnimationFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
+	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(FlameFiring.class,
+			TrackedDataHandlerRegistry.FLOAT);
+	public SoundEvent hitSound = this.getHitSound();
 
 	public FlameFiring(EntityType<? extends FlameFiring> entityType, World world) {
 		super(entityType, world);
@@ -71,26 +77,29 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 		if (owner instanceof PlayerEntity) {
 			this.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
 		}
-
 	}
 
-	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		return PlayState.STOP;
-	}
-
-	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController<FlameFiring>(this, "controller", 0, this::predicate));
+	public FlameFiring(World world, double x, double y, double z) {
+		super(ProjectilesEntityRegister.FIRING, x, y, z, world);
+		this.setNoGravity(true);
+		this.setDamage(0);
 	}
 
 	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
+	public void registerControllers(ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, event -> {
+			return PlayState.CONTINUE;
+		}));
 	}
 
 	@Override
-	public Packet<?> createSpawnPacket() {
-		return EntityPacket.createPacket(this);
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
+	}
+
+	@Override
+	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+		return HWGEntityPacket.createPacket(this);
 	}
 
 	@Override
@@ -117,15 +126,23 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 	}
 
 	@Override
+	protected void initDataTracker() {
+		super.initDataTracker();
+		this.getDataTracker().startTracking(FORCED_YAW, 0f);
+	}
+
+	@Override
 	public void writeCustomDataToNbt(NbtCompound tag) {
 		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
+		tag.putFloat("ForcedYaw", dataTracker.get(FORCED_YAW));
 	}
 
 	@Override
 	public void readCustomDataFromNbt(NbtCompound tag) {
 		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
+		dataTracker.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
 	}
 
 	@Override
@@ -143,45 +160,28 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 		}
 		boolean isInsideWaterBlock = world.isWater(getBlockPos());
 		spawnLightSource(isInsideWaterBlock);
-		float q = 4.0F;
-		int k2 = MathHelper.floor(this.getX() - (double) q - 1.0D);
-		int l2 = MathHelper.floor(this.getX() + (double) q + 1.0D);
-		int t = MathHelper.floor(this.getY() - (double) q - 1.0D);
-		int u = MathHelper.floor(this.getY() + (double) q + 1.0D);
-		int v = MathHelper.floor(this.getZ() - (double) q - 1.0D);
-		int w = MathHelper.floor(this.getZ() + (double) q + 1.0D);
-		List<Entity> list = this.world.getOtherEntities(this,
-				new Box((double) k2, (double) t, (double) v, (double) l2, (double) u, (double) w));
-		Vec3d vec3d2 = new Vec3d(this.getX(), this.getY(), this.getZ());
-		for (int x = 0; x < list.size(); ++x) {
-			Entity entity = (Entity) list.get(x);
-			double y = (MathHelper.sqrt((float) entity.squaredDistanceTo(vec3d2)) / q);
-			if (y <= 1.0D) {
-				if (this.world.isClient) {
-					double d2 = this.getX()
-							+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
-					double e2 = this.getY() + 0.05D + this.random.nextDouble();
-					double f2 = this.getZ()
-							+ (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
-					this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
-					this.world.addParticle(ParticleTypes.SMOKE, true, d2, e2, f2, 0, 0, 0);
+		if (getOwner()instanceof PlayerEntity owner) 
+			setYaw(dataTracker.get(FORCED_YAW));
+		if (this.age % 16 == 2)
+			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(),
+					SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 0.5F, 1.0F);
+		if (this.world.isClient) {
+			double d2 = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
+			double e2 = this.getY() + 0.05D + this.random.nextDouble();
+			double f2 = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
+			this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
+			this.world.addParticle(HWGParticles.BRIM_ORANGE, true, d2, e2, f2, 0, 0, 0);
+			this.world.addParticle(HWGParticles.BRIM_RED, true, d2, e2, f2, 0, 0, 0);
+		}
+		final Box aabb = new Box(this.getBlockPos().up()).expand(1D, 5D, 1D);
+		this.getEntityWorld().getOtherEntities(this, aabb).forEach(e -> {
+			if (e.isAlive()) {
+				e.damage(DamageSource.arrow(this, this.shooter), 3);
+				if (!(e instanceof FlameFiring || this.getOwner() instanceof PlayerEntity)) {
+					e.setFireTicks(90);
 				}
 			}
-		}
-
-		List<Entity> list1 = this.world.getOtherEntities(this, new Box(this.getBlockPos().up()).expand(1D, 5D, 1D));
-		for (int x = 0; x < list1.size(); ++x) {
-			Entity entity = (Entity) list1.get(x);
-			double y = (double) (MathHelper.sqrt(entity.distanceTo(this)));
-			if (y <= 1.0D) {
-				if (entity.isAlive()) {
-					entity.damage(DamageSource.arrow(this, this.shooter), 3);
-					if (!(entity instanceof FlameFiring && this.getOwner() instanceof PlayerEntity)) {
-						entity.setFireTicks(90);
-					}
-				}
-			}
-		}
+		});
 	}
 
 	public void initFromStack(ItemStack stack) {
@@ -197,8 +197,6 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 			return true;
 		}
 	}
-
-	public SoundEvent hitSound = this.getHitSound();
 
 	@Override
 	public void setSound(SoundEvent soundIn) {
@@ -288,6 +286,14 @@ public class FlameFiring extends PersistentProjectileEntity implements IAnimatab
 				}
 
 		return null;
+	}
+
+	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
+		float f = 0.017453292F;
+		float x = -MathHelper.sin(yaw * f) * MathHelper.cos(pitch * f);
+		float y = -MathHelper.sin((pitch + roll) * f);
+		float z = MathHelper.cos(yaw * f) * MathHelper.cos(pitch * f);
+		this.setVelocity(x, y, z, modifierZ, 0);
 	}
 
 }

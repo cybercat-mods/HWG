@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "hwg:items/flamethrower",
-		"1": "hwg:items/nostromo_flamethrower_pilot_light",
-		"particle": "hwg:items/flamethrower"
+		"0": "hwg:item/flamethrower",
+		"1": "hwg:item/nostromo_flamethrower_pilot_light",
+		"particle": "hwg:item/flamethrower"
 	},
 	"elements": [
 		{

@@ -50,10 +50,16 @@
 	"hwg.flare_gun": {
 		"category": "music", "sounds": [{"name": "hwg:flare_gun"}]
 	},
+	"hwg.flare_gun_shoot": {
+		"category": "music", "sounds": [{"name": "hwg:flare_gun_shoot"}]
+	},
 	"hwg.luger": {
 		"category": "music", "sounds": [{"name": "hwg:luger"}]
 	},
 	"hwg.revolver": {
 		"category": "music", "sounds": [{"name": "hwg:revolver"}]
+	},
+	"hwg.flamethrower": {
+		"category": "music", "sounds": [{"name": "hwg:flamethrower"}]
 	}
 }

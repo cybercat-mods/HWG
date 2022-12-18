@@ -3,9 +3,9 @@ package mod.azure.hwg.client.models.weapons;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.HellhorseRevolverItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class HellhorseRevolverModel extends AnimatedGeoModel<HellhorseRevolverItem> {
+public class HellhorseRevolverModel extends GeoModel<HellhorseRevolverItem> {
 	@Override
 	public Identifier getModelResource(HellhorseRevolverItem object) {
 		return new Identifier(HWGMod.MODID, "geo/hellhorse_revolver.geo.json");
@@ -13,7 +13,7 @@ public class HellhorseRevolverModel extends AnimatedGeoModel<HellhorseRevolverIt
 
 	@Override
 	public Identifier getTextureResource(HellhorseRevolverItem object) {
-		return new Identifier(HWGMod.MODID, "textures/items/hellhorse_revolver.png");
+		return new Identifier(HWGMod.MODID, "textures/item/hellhorse_revolver.png");
 	}
 
 	@Override

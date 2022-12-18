@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "hwg:items/projectiles/grenade_emp",
-		"particle": "hwg:items/projectiles/grenade_emp"
+		"0": "hwg:item/projectiles/grenade_emp",
+		"particle": "hwg:item/projectiles/grenade_emp"
 	},
 	"elements": [
 		{

@@ -1,20 +1,24 @@
 package mod.azure.hwg.item.weapons;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import com.google.common.collect.Lists;
 
-import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.client.render.weapons.FlareGunRender;
 import mod.azure.hwg.entity.projectiles.BaseFlareEntity;
 import mod.azure.hwg.item.ammo.FlareItem;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -35,32 +39,26 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.network.ISyncable;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.animatable.client.RenderProvider;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.Animation.LoopType;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISyncable {
+public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 
 	private boolean charged = false;
 	private boolean loaded = false;
-	public AnimationFactory factory = new AnimationFactory(this);
-	public String controllerName = "controller";
-	public static final int ANIM_OPEN = 0;
-	public static final int ANIM_CLOSE = 1;
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public static final Predicate<ItemStack> BLACK_FLARE = (stack) -> {
 		return stack.getItem() == HWGItems.BLACK_FLARE;
@@ -104,40 +102,20 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 	});
 
 	public FlareGunItem() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(31));
-		GeckoLibNetwork.registerSyncable(this);
-	}
-
-	public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		return PlayState.CONTINUE;
+		super(new Item.Settings().maxCount(1).maxDamage(31));
+		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
 	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+	public void registerControllers(ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE)
+				.triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE))
+				.triggerableAnim("loading", RawAnimation.begin().then("loading", LoopType.PLAY_ONCE)));
 	}
 
 	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
-	}
-
-	@Override
-	public void onAnimationSync(int id, int state) {
-		if (state == ANIM_OPEN) {
-			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-			if (controller.getAnimationState() == AnimationState.Stopped) {
-				controller.markNeedsReload();
-				controller.setAnimation(new AnimationBuilder().addAnimation("firing", EDefaultLoopTypes.PLAY_ONCE));
-			}
-		}
-		if (state == ANIM_CLOSE) {
-			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-			if (controller.getAnimationState() == AnimationState.Stopped) {
-				controller.markNeedsReload();
-				controller.setAnimation(new AnimationBuilder().addAnimation("loading", EDefaultLoopTypes.PLAY_ONCE));
-			}
-		}
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
 	}
 
 	@Override
@@ -210,12 +188,13 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 			}
 
 			Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
-			Quaternion quaternion = new Quaternion(new Vec3f(vec3d), simulated, true);
-			Vec3d vec3d2 = shooter.getRotationVec(1.0F);
-			Vec3f vector3f = new Vec3f(vec3d2);
-			vector3f.rotate(quaternion);
-			((ProjectileEntity) flareEntity).setVelocity((double) vector3f.getX(), (double) vector3f.getY(),
-					(double) vector3f.getZ(), speed, divergence);
+			Quaternionf quaternionf = new Quaternionf().setAngleAxis((double) (simulated * ((float) Math.PI / 180)),
+					vec3d.x, vec3d.y, vec3d.z);
+			Vec3d vec3d2 = shooter.getRotationVec(1.0f);
+			Vector3f vector3f = vec3d2.toVector3f().rotate(quaternionf);
+			vector3f.rotate(quaternionf);
+			((ProjectileEntity) flareEntity).setVelocity((double) vector3f.x, (double) vector3f.y, (double) vector3f.z,
+					speed, divergence);
 			((PersistentProjectileEntity) flareEntity).setDamage(0.3D);
 			((PersistentProjectileEntity) flareEntity).pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
 			stack.damage(1, shooter, p -> p.sendToolBreakStatus(shooter.getActiveHand()));
@@ -236,11 +215,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 			user.getItemCooldownManager().set(this, 25);
 			setCharged(itemStack, false);
 			if (!world.isClient) {
-				final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerWorld) world);
-				GeckoLibNetwork.syncAnimation(user, this, id, ANIM_OPEN);
-				for (PlayerEntity otherPlayer : PlayerLookup.tracking(user)) {
-					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
-				}
+				triggerAnim(user, GeoItem.getOrAssignId(itemStack, (ServerWorld) world), "shoot_controller", "firing");
 			}
 			return TypedActionResult.consume(itemStack);
 		} else if (!user.getArrowType(itemStack).isEmpty()) {
@@ -261,11 +236,8 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(), SoundEvents.BLOCK_CHAIN_BREAK,
 					SoundCategory.PLAYERS, 1.0F, 1.5F);
 			if (!world.isClient) {
-				final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-				GeckoLibNetwork.syncAnimation((PlayerEntity) user, this, id, ANIM_CLOSE);
-				for (PlayerEntity otherPlayer : PlayerLookup.tracking((PlayerEntity) user)) {
-					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_CLOSE);
-				}
+				triggerAnim((PlayerEntity) user, GeoItem.getOrAssignId(stack, (ServerWorld) world), "shoot_controller",
+						"loading");
 			}
 			((PlayerEntity) user).getItemCooldownManager().set(this, 15);
 		}
@@ -443,6 +415,23 @@ public class FlareGunItem extends HWGGunLoadedBase implements IAnimatable, ISync
 			}
 		}
 		tooltip.add(Text.translatable("hwg.ammo.reloadflares").formatted(Formatting.ITALIC));
+	}
+
+	@Override
+	public void createRenderer(Consumer<Object> consumer) {
+		consumer.accept(new RenderProvider() {
+			private final FlareGunRender renderer = new FlareGunRender();
+
+			@Override
+			public BuiltinModelItemRenderer getCustomRenderer() {
+				return this.renderer;
+			}
+		});
+	}
+
+	@Override
+	public Supplier<Object> getRenderProvider() {
+		return this.renderProvider;
 	}
 
 }

@@ -17,11 +17,12 @@ public class FlareParticle extends SpriteBillboardParticle {
 		super(world, x, y, z);
 		this.scale(3.0F);
 		this.setBoundingBoxSpacing(0.25F, 0.25F);
-		this.maxAge = this.random.nextInt(50) + 340;
+		this.maxAge = this.random.nextInt(50) + 780;
 		this.gravityStrength = 3.0E-6F;
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
+		this.alpha = 0.75F;
 		this.velocityX = velocityX;
 		this.velocityY = velocityY + (double) (this.random.nextFloat() / 500.0F);
 		this.velocityZ = velocityZ;
@@ -38,7 +39,7 @@ public class FlareParticle extends SpriteBillboardParticle {
 					* (float) (this.random.nextBoolean() ? 1 : -1));
 			this.velocityY -= (double) this.gravityStrength;
 			this.move(this.velocityX, this.velocityY, this.velocityZ);
-			if (this.age >= this.maxAge - 60 && this.alpha > 0.01F) {
+			if (this.age >= this.maxAge && this.alpha > 0.01F) {
 				this.alpha -= 0.015F;
 			}
 

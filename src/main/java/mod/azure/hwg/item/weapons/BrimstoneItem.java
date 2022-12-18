@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 public class BrimstoneItem extends HWGGunBase {
 	public BrimstoneItem() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(186));
+		super(new Item.Settings().maxCount(1).maxDamage(186));
 	}
 
 	@Override
@@ -40,6 +40,7 @@ public class BrimstoneItem extends HWGGunBase {
 							0.25F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
+					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					abstractarrowentity.setFireTicks(100);
 					abstractarrowentity.setPunch(1);
 
@@ -48,6 +49,7 @@ public class BrimstoneItem extends HWGGunBase {
 							0.0F, 0.25F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
+					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					abstractarrowentity1.setFireTicks(100);
 					abstractarrowentity1.setPunch(1);
 
@@ -56,6 +58,7 @@ public class BrimstoneItem extends HWGGunBase {
 							0.0F, 0.25F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
 							entityLiving.getZ(), 0, 0);
+					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					abstractarrowentity2.setFireTicks(100);
 					abstractarrowentity2.setPunch(1);
 
@@ -68,9 +71,9 @@ public class BrimstoneItem extends HWGGunBase {
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS,
 							1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-					boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
-					spawnLightSource(entityLiving, isInsideWaterBlock);
 				}
+				boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
+				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}

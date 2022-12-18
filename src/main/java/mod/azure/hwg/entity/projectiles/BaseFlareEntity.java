@@ -4,7 +4,6 @@ import org.jetbrains.annotations.Nullable;
 
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
-import mod.azure.hwg.util.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -25,6 +24,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.EntityHitResult;
@@ -117,16 +118,16 @@ public class BaseFlareEntity extends PersistentProjectileEntity {
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		if (this.life == 0 && !this.isSilent()) {
-			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN,
-					SoundCategory.AMBIENT, 3.0F, 3.0F);
+			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN_SHOOT,
+					SoundCategory.PLAYERS, 6.0F, 1.0F);
 		}
 		setNoGravity(false);
 		++this.life;
 		Vec3d vec3d = this.getVelocity();
 		vec3d = this.getVelocity();
 		this.setVelocity(vec3d.multiply((double) 0.99F));
-		Vec3d vec3d5 = this.getVelocity();
-		this.setVelocity(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
+		if (this.age > 25)
+			this.setVelocity(0.0, -0.1, 0.0);
 		boolean isInsideWaterBlock = world.isWater(getBlockPos());
 		spawnLightSource(isInsideWaterBlock);
 		if (this.world.isClient) {
@@ -155,9 +156,15 @@ public class BaseFlareEntity extends PersistentProjectileEntity {
 																																	: this.getColor() == 1
 																																			? HWGParticles.BLACK_FLARE
 																																			: HWGParticles.WHITE_FLARE,
-					true, this.getX(), this.getY() - 0.3D, this.getZ(), this.random.nextGaussian() * 0.05D,
-					-this.getVelocity().y * 0.07D, this.random.nextGaussian() * 0.05D);
+					true, this.getX(), this.getY() - 0.3D, this.getZ(), 0, -this.getVelocity().y * 0.17D, 0);
 		}
+	}
+
+	@Override
+	public final void fall() {
+		this.inGround = false;
+		this.setVelocity(0.0, -0.09, 0.0);
+		this.life = 0;
 	}
 
 	@Override
@@ -192,8 +199,8 @@ public class BaseFlareEntity extends PersistentProjectileEntity {
 	}
 
 	@Override
-	public Packet<?> createSpawnPacket() {
-		return EntityPacket.createPacket(this);
+	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+		return new EntitySpawnS2CPacket(this);
 	}
 
 	@Override

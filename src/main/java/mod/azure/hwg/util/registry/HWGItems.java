@@ -33,8 +33,9 @@ import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class HWGItems {
 
@@ -86,13 +87,11 @@ public class HWGItems {
 	public static HellhorseRevolverItem HELLHORSE = item(new HellhorseRevolverItem(), "hellhorse_revolver");
 	public static HWGSpawnEgg LESSER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOLESSER), "lesser_spawn_egg");
 	public static HWGSpawnEgg GREATER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOGREATER), "greater_spawn_egg");
-	public static BlockItem FUEL_TANK = item(
-			new BlockItem(HWGBlocks.FUEL_TANK, new Item.Settings().group(HWGMod.WeaponItemGroup)), "fuel_tank");
-	public static BlockItem GUN_TABLE = item(
-			new BlockItem(HWGBlocks.GUN_TABLE, new Item.Settings().group(HWGMod.WeaponItemGroup)), "gun_table");
+	public static BlockItem FUEL_TANK = item(new BlockItem(HWGBlocks.FUEL_TANK, new Item.Settings()), "fuel_tank");
+	public static BlockItem GUN_TABLE = item(new BlockItem(HWGBlocks.GUN_TABLE, new Item.Settings()), "gun_table");
 
 	static <T extends Item> T item(T c, String id) {
-		Registry.register(Registry.ITEM, new Identifier(HWGMod.MODID, id), c);
+		Registry.register(Registries.ITEM, new Identifier(HWGMod.MODID, id), c);
 		return c;
 	}
 
@@ -102,7 +101,8 @@ public class HWGItems {
 	public static Map<Item, Item> getItemMap() {
 		Map<Item, Item> vanillaItemMap = new HashMap<>();
 		for (Item i : HWGItems.ITEMS) {
-			vanillaItemMap.put(Registry.ITEM.get(new Identifier(HWGMod.MODID, Registry.ITEM.getId(i).getPath())), i);
+			vanillaItemMap.put(Registries.ITEM.get(new Identifier(HWGMod.MODID, Registries.ITEM.getId(i).getPath())),
+					i);
 		}
 		return vanillaItemMap;
 	}

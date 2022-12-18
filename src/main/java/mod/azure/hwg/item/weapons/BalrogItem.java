@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 public class BalrogItem extends HWGGunBase {
 
 	public BalrogItem() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(5));
+		super(new Item.Settings().maxCount(1).maxDamage(5));
 	}
 
 	@Override
@@ -45,6 +45,7 @@ public class BalrogItem extends HWGGunBase {
 							1.0F * 3.0F, 1.0F);
 					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
+					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					abstractarrowentity.hasNoGravity();
 					double r = worldIn.random.nextDouble();
 					if (r < 0.1)
@@ -55,6 +56,7 @@ public class BalrogItem extends HWGGunBase {
 							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
+					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					abstractarrowentity1.hasNoGravity();
 					double a = worldIn.random.nextDouble();
 					if (a < 0.1)
@@ -65,6 +67,7 @@ public class BalrogItem extends HWGGunBase {
 							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
+					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					abstractarrowentity2.hasNoGravity();
 					double b = worldIn.random.nextDouble();
 					if (b < 0.1)
@@ -75,6 +78,7 @@ public class BalrogItem extends HWGGunBase {
 							0.0F, 1.0F * 3.0F, 1.0F);
 					abstractarrowentity3.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.85),
 							entityLiving.getZ(), 0, 0);
+					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
 					abstractarrowentity3.hasNoGravity();
 					double c = worldIn.random.nextDouble();
 					if (c < 0.1)
@@ -88,9 +92,9 @@ public class BalrogItem extends HWGGunBase {
 					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), SoundEvents.ENTITY_SHULKER_SHOOT, SoundCategory.PLAYERS, 1.0F,
 							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-					boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
-					spawnLightSource(entityLiving, isInsideWaterBlock);
 				}
+				boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
+				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}

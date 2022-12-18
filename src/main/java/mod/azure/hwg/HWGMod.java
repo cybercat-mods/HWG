@@ -18,7 +18,7 @@ import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGSounds;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroup;
@@ -27,10 +27,11 @@ import net.minecraft.loot.LootPool;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib.GeckoLib;
 
 public class HWGMod implements ModInitializer {
 
@@ -65,21 +66,79 @@ public class HWGMod implements ModInitializer {
 	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
 	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
 	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
-	public static final ItemGroup WeaponItemGroup = FabricItemGroupBuilder.create(new Identifier(MODID, "weapons"))
-			.icon(() -> new ItemStack(HWGItems.AK47)).build();
-	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry
-			.register(Registry.RECIPE_SERIALIZER, new Identifier(MODID, "gun_table"), new GunTableRecipe.Serializer());
+	public static final ItemGroup WeaponItemGroup = FabricItemGroup.builder(new Identifier(MODID, "weapons"))
+			.icon(() -> new ItemStack(HWGItems.AK47)).entries((enabledFeatures, entries, operatorEnabled) -> {
+				// Weapons
+				entries.add(HWGItems.PISTOL);
+				entries.add(HWGItems.SPISTOL);
+				if (FabricLoader.getInstance().isModLoaded("bewitchment"))
+					entries.add(BWCompat.SILVERGUN);
+				entries.add(HWGItems.LUGER);
+				entries.add(HWGItems.MEANIE1);
+				entries.add(HWGItems.MEANIE2);
+				entries.add(HWGItems.GOLDEN_GUN);
+				entries.add(HWGItems.HELLHORSE);
+				if (FabricLoader.getInstance().isModLoaded("bewitchment"))
+					entries.add(BWCompat.SILVERHELLHORSE);
+				entries.add(HWGItems.AK47);
+				entries.add(HWGItems.SMG);
+				entries.add(HWGItems.TOMMYGUN);
+				entries.add(HWGItems.MINIGUN);
+				entries.add(HWGItems.SHOTGUN);
+				entries.add(HWGItems.SNIPER);
+				if (FabricLoader.getInstance().isModLoaded("gigeresque"))
+					entries.add(GigCompat.INCINERATOR);
+				entries.add(HWGItems.FLAMETHROWER);
+				entries.add(HWGItems.BALROG);
+				entries.add(HWGItems.BRIMSTONE);
+				entries.add(HWGItems.ROCKETLAUNCHER);
+				entries.add(HWGItems.G_LAUNCHER);
+				entries.add(HWGItems.FLARE_GUN);
+				// Ammo
+				entries.add(HWGItems.BULLETS);
+				entries.add(HWGItems.SNIPER_ROUND);
+				entries.add(HWGItems.ROCKET);
+				entries.add(HWGItems.G_FRAG);
+				entries.add(HWGItems.G_STUN);
+				entries.add(HWGItems.G_SMOKE);
+				entries.add(HWGItems.G_NAPALM);
+				entries.add(HWGItems.G_EMP);
+				entries.add(HWGItems.RED_FLARE);
+				entries.add(HWGItems.BLUE_FLARE);
+				entries.add(HWGItems.CYAN_FLARE);
+				entries.add(HWGItems.GRAY_FLARE);
+				entries.add(HWGItems.LIME_FLARE);
+				entries.add(HWGItems.PINK_FLARE);
+				entries.add(HWGItems.BLACK_FLARE);
+				entries.add(HWGItems.BROWN_FLARE);
+				entries.add(HWGItems.GREEN_FLARE);
+				entries.add(HWGItems.WHITE_FLARE);
+				entries.add(HWGItems.ORANGE_FLARE);
+				entries.add(HWGItems.PURPLE_FLARE);
+				entries.add(HWGItems.YELLOW_FLARE);
+				entries.add(HWGItems.MAGENTA_FLARE);
+				entries.add(HWGItems.LIGHTBLUE_FLARE);
+				entries.add(HWGItems.LIGHTGRAY_FLARE);
+				// Blocks
+				entries.add(HWGItems.FUEL_TANK);
+				entries.add(HWGItems.GUN_TABLE);
+				// Spawn Eggs
+				entries.add(HWGItems.MERC_SPAWN_EGG);
+				entries.add(HWGItems.SPY_SPAWN_EGG);
+				entries.add(HWGItems.LESSER_SPAWN_EGG);
+				entries.add(HWGItems.GREATER_SPAWN_EGG);
+			}).build();
+	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(
+			Registries.RECIPE_SERIALIZER, new Identifier(MODID, "gun_table"), new GunTableRecipe.Serializer());
 
 	@Override
 	public void onInitialize() {
 		CustomMidnightConfig.init(MODID, HWGConfig.class);
 		ITEMS = new HWGItems();
-		if (FabricLoader.getInstance().isModLoaded("gigeresque")) {
+		if (FabricLoader.getInstance().isModLoaded("gigeresque"))
 			GIG_ITEMS = new GigCompat();
-		}
-		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
+		if (FabricLoader.getInstance().isModLoaded("bewitchment"))
 			BW_ITEMS = new BWCompat();
-		}
 		BLOCKS = new HWGBlocks();
 		SOUNDS = new HWGSounds();
 		MOBS = new HWGMobs();
@@ -100,7 +159,8 @@ public class HWGMod implements ModInitializer {
 			}
 		});
 		SCREEN_HANDLER_TYPE = new ScreenHandlerType<>(GunTableScreenHandler::new);
-		Registry.register(Registry.SCREEN_HANDLER, new Identifier(MODID, "guntable_screen_type"), SCREEN_HANDLER_TYPE);
+		Registry.register(Registries.SCREEN_HANDLER, new Identifier(MODID, "guntable_screen_type"),
+				SCREEN_HANDLER_TYPE);
 		PacketHandler.registerMessages();
 	}
 }

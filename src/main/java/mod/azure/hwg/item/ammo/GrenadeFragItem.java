@@ -1,6 +1,5 @@
 package mod.azure.hwg.item.ammo;
 
-import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -12,7 +11,7 @@ import net.minecraft.world.World;
 public class GrenadeFragItem extends Item {
 
 	public GrenadeFragItem() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup));
+		super(new Item.Settings());
 	}
 
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {

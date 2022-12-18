@@ -1,3 +1,6 @@
-v.1.2.10
+v.1.3.0
 
-- Updated for latest Geckolib methods
+- Updated for 1.19.3
+- Reworked the Flamer thrower with better placement and sounds.
+- Reworked Flares to lazily fall instead of falling fast. 
+- More sounds redone, with more to come! 

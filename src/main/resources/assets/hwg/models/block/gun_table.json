@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "hwg:blocks/gun_table",
-		"1": "hwg:blocks/gun_table_blueprint",
-		"particle": "hwg:blocks/gun_table"
+		"0": "hwg:block/gun_table",
+		"1": "hwg:block/gun_table_blueprint",
+		"particle": "hwg:block/gun_table"
 	},
 	"elements": [
 		{

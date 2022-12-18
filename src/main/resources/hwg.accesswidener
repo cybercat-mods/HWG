@@ -3,4 +3,5 @@ accessWidener v1 named
 accessible method net/minecraft/world/poi/PointOfInterestTypes getStatesOfBlock (Lnet/minecraft/block/Block;)Ljava/util/Set;
 accessible    class    net/minecraft/entity/projectile/ProjectileEntity
 accessible    class    net/minecraft/village/TradeOffers$ProcessItemFactory
-accessible    method    net/minecraft/world/poi/PointOfInterestTypes of (Ljava/lang/String;)Lnet/minecraft/util/registry/RegistryKey;
+accessible    method   net/minecraft/entity/projectile/PersistentProjectileEntity fall ()V
+extendable    method   net/minecraft/entity/projectile/PersistentProjectileEntity fall ()V

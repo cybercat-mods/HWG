@@ -1,21 +1,25 @@
 package mod.azure.hwg.item.weapons;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import com.google.common.collect.Lists;
 
-import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.client.render.weapons.GrenadeLauncherRender;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -34,32 +38,26 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.network.ISyncable;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
+import software.bernie.geckolib.animatable.client.RenderProvider;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.Animation.LoopType;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable, ISyncable {
+public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
 	private boolean charged = false;
 	private boolean loaded = false;
-	public AnimationFactory factory = new AnimationFactory(this);
-	public String controllerName = "controller";
-	public static final int ANIM_OPEN = 0;
-	public static final int ANIM_CLOSE = 1;
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public static final Predicate<ItemStack> EMP = (stack) -> {
 		return stack.getItem() == HWGItems.G_EMP;
@@ -75,39 +73,20 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 	});
 
 	public GrenadeLauncherItem() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(31));
-		GeckoLibNetwork.registerSyncable(this);
-	}
-
-	public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		return PlayState.CONTINUE;
-	}
-	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+		super(new Item.Settings().maxCount(1).maxDamage(31));
+		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
 	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
+	public void registerControllers(ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE)
+				.triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE))
+				.triggerableAnim("loading", RawAnimation.begin().then("loading", LoopType.PLAY_ONCE)));
 	}
 
 	@Override
-	public void onAnimationSync(int id, int state) {
-		if (state == ANIM_OPEN) {
-			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-			if (controller.getAnimationState() == AnimationState.Stopped) {
-				controller.markNeedsReload();
-				controller.setAnimation(new AnimationBuilder().addAnimation("firing", EDefaultLoopTypes.PLAY_ONCE));
-			}
-		}
-		if (state == ANIM_CLOSE) {
-			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-			if (controller.getAnimationState() == AnimationState.Stopped) {
-				controller.markNeedsReload();
-				controller.setAnimation(new AnimationBuilder().addAnimation("loading", EDefaultLoopTypes.PLAY_ONCE));
-			}
-		}
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
 	}
 
 	@Override
@@ -152,12 +131,13 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 				projectileEntity2.setVariant(4);
 			}
 			Vec3d vec3d = shooter.getOppositeRotationVector(1.0F);
-			Quaternion quaternion = new Quaternion(new Vec3f(vec3d), simulated, true);
-			Vec3d vec3d2 = shooter.getRotationVec(1.0F);
-			Vec3f vector3f = new Vec3f(vec3d2);
-			vector3f.rotate(quaternion);
-			((PersistentProjectileEntity) projectileEntity2).setVelocity((double) vector3f.getX(),
-					(double) vector3f.getY(), (double) vector3f.getZ(), speed, divergence);
+			Quaternionf quaternionf = new Quaternionf().setAngleAxis((double) (simulated * ((float) Math.PI / 180)),
+					vec3d.x, vec3d.y, vec3d.z);
+			Vec3d vec3d2 = shooter.getRotationVec(1.0f);
+			Vector3f vector3f = vec3d2.toVector3f().rotate(quaternionf);
+			vector3f.rotate(quaternionf);
+			((PersistentProjectileEntity) projectileEntity2).setVelocity((double) vector3f.x, (double) vector3f.y,
+					(double) vector3f.z, speed, divergence);
 
 			stack.damage(1, shooter, p -> p.sendToolBreakStatus(shooter.getActiveHand()));
 			world.spawnEntity((Entity) projectileEntity2);
@@ -180,14 +160,10 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 			user.getItemCooldownManager().set(this, 25);
 			setCharged(itemStack, false);
 			if (!world.isClient) {
-				final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerWorld) world);
-				GeckoLibNetwork.syncAnimation(user, this, id, ANIM_OPEN);
-				for (PlayerEntity otherPlayer : PlayerLookup.tracking(user)) {
-					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_OPEN);
-				}
-				boolean isInsideWaterBlock = user.world.isWater(user.getBlockPos());
-				spawnLightSource(user, isInsideWaterBlock);
+				triggerAnim(user, GeoItem.getOrAssignId(itemStack, (ServerWorld) world), "shoot_controller", "firing");
 			}
+			boolean isInsideWaterBlock = user.world.isWater(user.getBlockPos());
+			spawnLightSource(user, isInsideWaterBlock);
 			return TypedActionResult.consume(itemStack);
 		} else if (!user.getArrowType(itemStack).isEmpty()) {
 			if (!isCharged(itemStack)) {
@@ -208,11 +184,8 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD,
 					soundCategory, 0.5F, 1.0F);
 			if (!world.isClient) {
-				final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-				GeckoLibNetwork.syncAnimation((PlayerEntity) user, this, id, ANIM_CLOSE);
-				for (PlayerEntity otherPlayer : PlayerLookup.tracking((PlayerEntity) user)) {
-					GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_CLOSE);
-				}
+				triggerAnim((PlayerEntity) user, GeoItem.getOrAssignId(stack, (ServerWorld) world), "shoot_controller",
+						"loading");
 			}
 			((PlayerEntity) user).getItemCooldownManager().set(this, 15);
 		}
@@ -403,6 +376,23 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements IAnimatable
 
 	private static float getSpeed(ItemStack stack) {
 		return stack.getItem() == Items.CROSSBOW && hasProjectile(stack, Items.FIREWORK_ROCKET) ? 1.6F : 3.15F;
+	}
+
+	@Override
+	public void createRenderer(Consumer<Object> consumer) {
+		consumer.accept(new RenderProvider() {
+			private final GrenadeLauncherRender renderer = new GrenadeLauncherRender();
+
+			@Override
+			public BuiltinModelItemRenderer getCustomRenderer() {
+				return this.renderer;
+			}
+		});
+	}
+
+	@Override
+	public Supplier<Object> getRenderProvider() {
+		return this.renderProvider;
 	}
 
 }

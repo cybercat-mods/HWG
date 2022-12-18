@@ -14,8 +14,9 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class BWCompat {
 
@@ -28,7 +29,7 @@ public class BWCompat {
 	public static EntityType<SBulletEntity> SILVERBULLETS = projectile(SBulletEntity::new, "silverbullets");
 
 	static <T extends Item> T item(T c, String id) {
-		Registry.register(Registry.ITEM, new Identifier(HWGMod.MODID, id), c);
+		Registry.register(Registries.ITEM, new Identifier(HWGMod.MODID, id), c);
 		return c;
 	}
 
@@ -43,7 +44,7 @@ public class BWCompat {
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
 				.trackRangeBlocks(90).trackedUpdateRate(4).build();
 
-		Registry.register(Registry.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
+		Registry.register(Registries.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 

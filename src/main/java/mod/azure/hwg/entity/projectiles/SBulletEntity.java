@@ -12,12 +12,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class SBulletEntity extends BulletEntity {
@@ -44,6 +44,12 @@ public class SBulletEntity extends BulletEntity {
 		}
 
 	}
+
+	public SBulletEntity(World world, double x, double y, double z) {
+		super(BWCompat.SILVERBULLETS, x, y, z, world);
+		this.setNoGravity(true);
+		this.setDamage(0);
+	}
 	
 	@Override
 	protected void onEntityHit(EntityHitResult entityHitResult) {
@@ -65,7 +71,7 @@ public class SBulletEntity extends BulletEntity {
 			}
 		}
 		if (entity.getType()
-				.isIn(TagKey.of(Registry.ENTITY_TYPE_KEY, new Identifier(HWGMod.MODID, "vulnerable_to_silver")))) {
+				.isIn(TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(HWGMod.MODID, "vulnerable_to_silver")))) {
 			if (entity.damage(damageSource2, bulletdamage * 3)) {
 				if (entity instanceof LivingEntity) {
 					LivingEntity livingEntity = (LivingEntity) entity;

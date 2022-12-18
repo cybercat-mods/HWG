@@ -26,8 +26,18 @@ import net.minecraft.world.World;
 public class IncineratorUnitItem extends HWGGunBase {
 
 	public IncineratorUnitItem() {
-		super(new Item.Settings().group(HWGMod.WeaponItemGroup).maxCount(1).maxDamage(251));
+		super(new Item.Settings().maxCount(1).maxDamage(251));
 	}
+
+	@Override
+	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+		if (!world.isClient) {
+			world.playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
+					SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		}
+		return super.use(world, user, hand);
+	}
+
 
 	@Override
 	public void usageTick(World worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
@@ -37,19 +47,27 @@ public class IncineratorUnitItem extends HWGGunBase {
 				playerentity.getItemCooldownManager().set(this, 5);
 				if (!worldIn.isClient) {
 					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
-							0.25F * 3.0F, 2.0F);
-					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
-							entityLiving.getZ(), 0, 0);
-					abstractarrowentity.age = 30;
+					abstractarrowentity.setProperties(playerentity.getPitch(), playerentity.getYaw(), 0f, 1.0f);
+					abstractarrowentity.getDataTracker().set(FlameFiring.FORCED_YAW, playerentity.getYaw());
+					abstractarrowentity.refreshPositionAndAngles(
+							entityLiving.getX() + (switch (playerentity.getHorizontalFacing()) {
+							case WEST -> -0.75F;
+							case EAST -> 0.75F;
+							default -> 0.0F;
+							}), entityLiving.getY() + (switch (playerentity.getHorizontalFacing()) {
+							case DOWN -> 0.5F;
+							case UP -> -1.85F;
+							default -> 0.75F;
+							}), entityLiving.getZ() + (switch (playerentity.getHorizontalFacing()) {
+							case NORTH -> -0.75F;
+							case SOUTH -> 0.75F;
+							default -> 0.0F;
+							}), 0, 0);
 					worldIn.spawnEntity(abstractarrowentity);
 					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
-					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
-							playerentity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS,
-							1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-					boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
-					spawnLightSource(entityLiving, isInsideWaterBlock);
 				}
+				boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
+				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}
@@ -101,13 +119,6 @@ public class IncineratorUnitItem extends HWGGunBase {
 		}
 
 		return f;
-	}
-
-	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		ItemStack itemStack = user.getStackInHand(hand);
-		user.setCurrentHand(hand);
-		return TypedActionResult.consume(itemStack);
 	}
 
 	@Override

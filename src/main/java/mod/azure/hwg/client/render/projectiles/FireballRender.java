@@ -1,5 +1,8 @@
 package mod.azure.hwg.client.render.projectiles;
 
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+
 import mod.azure.hwg.entity.projectiles.FireballEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -10,9 +13,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Matrix3f;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 public class FireballRender extends EntityRenderer<FireballEntity> {
 	private static final Identifier TEXTURE = new Identifier("textures/item/fire_charge.png");
@@ -31,7 +32,7 @@ public class FireballRender extends EntityRenderer<FireballEntity> {
 		matrixStack.push();
 		matrixStack.scale(0.5F, 0.5F, 0.5F);
 		matrixStack.multiply(this.dispatcher.getRotation());
-		matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F));
+		matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F));
 		MatrixStack.Entry entry = matrixStack.peek();
 		Matrix4f matrix4f = entry.getPositionMatrix();
 		Matrix3f matrix3f = entry.getNormalMatrix();

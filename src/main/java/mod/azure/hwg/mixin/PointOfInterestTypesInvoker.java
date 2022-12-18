@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.minecraft.world.poi.PointOfInterestTypes;
 
@@ -27,7 +27,7 @@ public interface PointOfInterestTypesInvoker {
 	}
 
 	@Invoker("registerStates")
-	static void invokeRegisterBlockStates(RegistryEntry<PointOfInterestType> holder) {
+	static void invokeRegisterBlockStates(RegistryEntry<PointOfInterestType> poiTypeEntry, Set<BlockState> states) {
 		throw new AssertionError();
 	}
 }

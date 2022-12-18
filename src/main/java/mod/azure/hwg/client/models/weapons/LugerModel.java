@@ -3,9 +3,9 @@ package mod.azure.hwg.client.models.weapons;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.LugerItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class LugerModel extends AnimatedGeoModel<LugerItem> {
+public class LugerModel extends GeoModel<LugerItem> {
 	@Override
 	public Identifier getModelResource(LugerItem object) {
 		return new Identifier(HWGMod.MODID, "geo/luger.geo.json");
@@ -13,7 +13,7 @@ public class LugerModel extends AnimatedGeoModel<LugerItem> {
 
 	@Override
 	public Identifier getTextureResource(LugerItem object) {
-		return new Identifier(HWGMod.MODID, "textures/items/luger.png");
+		return new Identifier(HWGMod.MODID, "textures/item/luger.png");
 	}
 
 	@Override

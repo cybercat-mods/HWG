@@ -3,9 +3,9 @@ package mod.azure.hwg.client.models.weapons;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.SilverGunItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class SilverGunModel extends AnimatedGeoModel<SilverGunItem> {
+public class SilverGunModel extends GeoModel<SilverGunItem> {
 	@Override
 	public Identifier getModelResource(SilverGunItem object) {
 		return new Identifier(HWGMod.MODID, "geo/pistol.geo.json");
@@ -13,7 +13,7 @@ public class SilverGunModel extends AnimatedGeoModel<SilverGunItem> {
 
 	@Override
 	public Identifier getTextureResource(SilverGunItem object) {
-		return new Identifier(HWGMod.MODID, "textures/items/silvergun.png");
+		return new Identifier(HWGMod.MODID, "textures/item/silvergun.png");
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import java.util.List;
 
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
-import mod.azure.hwg.util.packet.EntityPacket;
+import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
@@ -19,12 +19,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -48,6 +52,8 @@ public class FireballEntity extends PersistentProjectileEntity {
 	private LivingEntity shooter;
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
+	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(FireballEntity.class,
+			TrackedDataHandlerRegistry.FLOAT);
 
 	public FireballEntity(EntityType<? extends FireballEntity> entityType, World world) {
 		super(entityType, world);
@@ -72,14 +78,15 @@ public class FireballEntity extends PersistentProjectileEntity {
 
 	}
 
-	@Override
-	public boolean doesRenderOnFire() {
-		return true;
+	public FireballEntity(World world, double x, double y, double z) {
+		super(ProjectilesEntityRegister.FIREBALL, x, y, z, world);
+		this.setNoGravity(true);
+		this.setDamage(0);
 	}
 
 	@Override
-	public Packet<?> createSpawnPacket() {
-		return EntityPacket.createPacket(this);
+	public boolean doesRenderOnFire() {
+		return true;
 	}
 
 	@Override
@@ -100,21 +107,34 @@ public class FireballEntity extends PersistentProjectileEntity {
 	}
 
 	@Override
+	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+		return HWGEntityPacket.createPacket(this);
+	}
+
+	@Override
 	public void setVelocity(double x, double y, double z, float speed, float divergence) {
 		super.setVelocity(x, y, z, speed, divergence);
 		this.ticksInAir = 0;
 	}
 
 	@Override
+	protected void initDataTracker() {
+		super.initDataTracker();
+		this.getDataTracker().startTracking(FORCED_YAW, 0f);
+	}
+
+	@Override
 	public void writeCustomDataToNbt(NbtCompound tag) {
 		super.writeCustomDataToNbt(tag);
 		tag.putShort("life", (short) this.ticksInAir);
+		tag.putFloat("ForcedYaw", dataTracker.get(FORCED_YAW));
 	}
 
 	@Override
 	public void readCustomDataFromNbt(NbtCompound tag) {
 		super.readCustomDataFromNbt(tag);
 		this.ticksInAir = tag.getShort("life");
+		dataTracker.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
 	}
 
 	@Override
@@ -130,6 +150,8 @@ public class FireballEntity extends PersistentProjectileEntity {
 		if (this.ticksInAir >= 40) {
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
+		if (getOwner()instanceof PlayerEntity owner)
+			setYaw(dataTracker.get(FORCED_YAW));
 		boolean isInsideWaterBlock = world.isWater(getBlockPos());
 		spawnLightSource(isInsideWaterBlock);
 		float q = 4.0F;
@@ -310,6 +332,14 @@ public class FireballEntity extends PersistentProjectileEntity {
 	@Environment(EnvType.CLIENT)
 	public boolean shouldRender(double distance) {
 		return true;
+	}
+
+	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
+		float f = 0.017453292F;
+		float x = -MathHelper.sin(yaw * f) * MathHelper.cos(pitch * f);
+		float y = -MathHelper.sin((pitch + roll) * f);
+		float z = MathHelper.cos(yaw * f) * MathHelper.cos(pitch * f);
+		this.setVelocity(x, y, z, modifierZ, 0);
 	}
 
 }

@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "hwg:blocks/fuel_tank",
-		"particle": "hwg:blocks/fuel_tank"
+		"0": "hwg:block/fuel_tank",
+		"particle": "hwg:block/fuel_tank"
 	},
 	"elements": [
 		{

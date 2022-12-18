@@ -3,9 +3,9 @@ package mod.azure.hwg.client.models.weapons;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.AnimatedItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class MinigunModel extends AnimatedGeoModel<AnimatedItem> {
+public class MinigunModel extends GeoModel<AnimatedItem> {
 	@Override
 	public Identifier getModelResource(AnimatedItem object) {
 		return new Identifier(HWGMod.MODID, "geo/minigun.geo.json");
@@ -13,7 +13,7 @@ public class MinigunModel extends AnimatedGeoModel<AnimatedItem> {
 
 	@Override
 	public Identifier getTextureResource(AnimatedItem object) {
-		return new Identifier(HWGMod.MODID, "textures/items/minigun.png");
+		return new Identifier(HWGMod.MODID, "textures/item/minigun.png");
 	}
 
 	@Override

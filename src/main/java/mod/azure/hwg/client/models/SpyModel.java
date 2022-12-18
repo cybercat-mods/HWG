@@ -2,15 +2,16 @@ package mod.azure.hwg.client.models;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.SpyEntity;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
-public class SpyModel extends AnimatedTickingGeoModel<SpyEntity> {
+public class SpyModel extends GeoModel<SpyEntity> {
 
 	public SpyModel() {
 	}
@@ -29,45 +30,40 @@ public class SpyModel extends AnimatedTickingGeoModel<SpyEntity> {
 	public Identifier getAnimationResource(SpyEntity object) {
 		return new Identifier(HWGMod.MODID, "animations/merc_illager.animation.json");
 	}
+	
+	@Override
+	public RenderLayer getRenderType(SpyEntity animatable, Identifier texture) {
+		return RenderLayer.getEntityTranslucent(getTextureResource(animatable));
+	}
 
 	@Override
-	public void setLivingAnimations(SpyEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
-		IBone head = this.getAnimationProcessor().getBone("head");
+	public void setCustomAnimations(SpyEntity animatable, long instanceId, AnimationState<SpyEntity> animationState) {
+		super.setCustomAnimations(animatable, instanceId, animationState);
 
-		IBone Left_arm = this.getAnimationProcessor().getBone("BipedLeftArm");
-		IBone Right_arm = this.getAnimationProcessor().getBone("BipedRightArm");
-		IBone Left_leg = this.getAnimationProcessor().getBone("BipedLeftLeg");
-		IBone Right_leg = this.getAnimationProcessor().getBone("BipedRightLeg");
+		CoreGeoBone head = getAnimationProcessor().getBone("head");
+		CoreGeoBone left_arm = getAnimationProcessor().getBone("BipedLeftArm");
+		CoreGeoBone right_arm = getAnimationProcessor().getBone("BipedRightArm");
+		CoreGeoBone left_leg = getAnimationProcessor().getBone("BipedLeftLeg");
+		CoreGeoBone right_leg = getAnimationProcessor().getBone("BipedRightLeg");
+		EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
-		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
 		if (head != null) {
-			head.setRotationX(
-					Vec3f.POSITIVE_X.getRadialQuaternion(extraData.headPitch * ((float) Math.PI / 180F)).getX());
-			head.setRotationY(
-					Vec3f.POSITIVE_Y.getRadialQuaternion(extraData.netHeadYaw * ((float) Math.PI / 180F)).getY());
+			head.setRotX(entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE);
+			head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
 		}
-		if (Left_arm != null) {
-			Left_arm.setRotationX(Vec3f.POSITIVE_X
-					.getRadialQuaternion(MathHelper.cos(entity.limbAngle * 0.6662F) * 2.0F * entity.limbDistance * 0.5F)
-					.getX());
+		if (left_arm != null) {
+			left_arm.setRotX(MathHelper.cos(animatable.limbAngle * 0.6662F) * 2.0F * animatable.limbDistance * 0.5F);
 		}
-		if (Right_arm != null && entity.getAttckingState() == 0) {
-			Right_arm.setRotationX(Vec3f.POSITIVE_X
-					.getRadialQuaternion(
-							MathHelper.cos(entity.limbAngle * 0.6662F + 3.1415927F) * 2.0F * entity.limbDistance * 0.5F)
-					.getX());
+		if (right_arm != null && animatable.getAttckingState() == 0) {
+			right_arm.setRotX(MathHelper.cos(animatable.limbAngle * 0.6662F + 3.1415927F) * 2.0F
+					* animatable.limbDistance * 0.5F);
 		}
-		if (Left_leg != null) {
-			Left_leg.setRotationX(Vec3f.POSITIVE_X
-					.getRadialQuaternion(
-							MathHelper.cos(entity.limbAngle * 0.6662F + 3.1415927F) * 1.4F * entity.limbDistance * 0.5F)
-					.getX());
+		if (left_leg != null) {
+			left_leg.setRotX(MathHelper.cos(animatable.limbAngle * 0.6662F + 3.1415927F) * 1.4F
+					* animatable.limbDistance * 0.5F);
 		}
-		if (Right_leg != null) {
-			Right_leg.setRotationX(Vec3f.POSITIVE_X
-					.getRadialQuaternion(MathHelper.cos(entity.limbAngle * 0.6662F) * 1.4F * entity.limbDistance * 0.5F)
-					.getX());
+		if (right_leg != null) {
+			right_leg.setRotX(MathHelper.cos(animatable.limbAngle * 0.6662F) * 1.4F * animatable.limbDistance * 0.5F);
 		}
 	}
 }

@@ -2,14 +2,16 @@ package mod.azure.hwg.client.models;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.TechnodemonEntity;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3f;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
+import net.minecraft.util.math.MathHelper;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
-public class TechnodemonLesserModel extends AnimatedTickingGeoModel<TechnodemonEntity> {
+public class TechnodemonLesserModel extends GeoModel<TechnodemonEntity> {
 
 	public TechnodemonLesserModel() {
 	}
@@ -28,18 +30,22 @@ public class TechnodemonLesserModel extends AnimatedTickingGeoModel<TechnodemonE
 	public Identifier getAnimationResource(TechnodemonEntity object) {
 		return new Identifier(HWGMod.MODID, "animations/technodemon_lesser_1.animation.json");
 	}
-
+	
 	@Override
-	public void setLivingAnimations(TechnodemonEntity entity, Integer uniqueID, AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
-		IBone head = this.getAnimationProcessor().getBone("head");
+	public RenderLayer getRenderType(TechnodemonEntity animatable, Identifier texture) {
+		return RenderLayer.getEntityTranslucent(getTextureResource(animatable));
+	}
+	
+	@Override
+	public void setCustomAnimations(TechnodemonEntity animatable, long instanceId, AnimationState<TechnodemonEntity> animationState) {
+		super.setCustomAnimations(animatable, instanceId, animationState);
 
-		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+		CoreGeoBone head = getAnimationProcessor().getBone("head");
+
 		if (head != null) {
-			head.setRotationX(
-					Vec3f.POSITIVE_X.getRadialQuaternion((extraData.headPitch - 5) * ((float) Math.PI / 180F)).getX());
-			head.setRotationY(
-					Vec3f.POSITIVE_Y.getRadialQuaternion(extraData.netHeadYaw * ((float) Math.PI / 340F)).getY());
+			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			head.setRotX((entityData.headPitch() - 5) * MathHelper.RADIANS_PER_DEGREE);
+			head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
 		}
 	}
 }
