@@ -1,6 +1,3 @@
-v.1.3.0
+v.1.3.1
 
-- Updated for 1.19.3
-- Reworked the Flamer thrower with better placement and sounds.
-- Reworked Flares to lazily fall instead of falling fast. 
-- More sounds redone, with more to come! 
+- Fixes config menu names.
