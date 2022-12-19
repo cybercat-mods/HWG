@@ -231,10 +231,10 @@ public abstract class CustomMidnightConfig {
 	@Environment(EnvType.CLIENT)
 	public static class MidnightConfigScreen extends Screen {
 		protected MidnightConfigScreen(Screen parent, String modid) {
-			super(Text.translatable("wotr.wotrconfig." + "title"));
+			super(Text.translatable("hwg.midnightconfig." + "title"));
 			this.parent = parent;
 			this.modid = modid;
-			this.translationPrefix = "wotr.wotrconfig.";
+			this.translationPrefix = "hwg.midnightconfig.";
 		}
 
 		public final String translationPrefix;
