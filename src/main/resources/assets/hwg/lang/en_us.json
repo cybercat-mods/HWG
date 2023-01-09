@@ -78,7 +78,7 @@
 	"key.hwg.reload": "Weapon Reload",
 	"key.hwg.scope": "Sniper Scope",
 	"category.hwg.binds": "HWG",
-	"text.autoconfig.hwg.title": "Happiness is a Warm Gun Config",
+	"hwg.midnightconfig.title": "Happiness is a Warm Gun Config",
 	"hwg.midnightconfig.merc_biomes.@Tooltip": "Use # for Biome Category names and modid:biome_id for registry name",
 	"hwg.midnightconfig.merc_biomes": "Merc Spawn Biomes",
 	"hwg.midnightconfig.merc_spawn_weight": "Merc Spawn Weight",

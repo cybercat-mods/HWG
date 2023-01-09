@@ -1,9 +1,9 @@
 package mod.azure.hwg;
 
+import eu.midnightdust.lib.config.MidnightConfig;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import mod.azure.hwg.compat.BWCompat;
 import mod.azure.hwg.compat.GigCompat;
-import mod.azure.hwg.config.CustomMidnightConfig;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.network.PacketHandler;
 import mod.azure.hwg.util.GunSmithProfession;
@@ -133,7 +133,7 @@ public class HWGMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		CustomMidnightConfig.init(MODID, HWGConfig.class);
+		MidnightConfig.init(MODID, HWGConfig.class);
 		ITEMS = new HWGItems();
 		if (FabricLoader.getInstance().isModLoaded("gigeresque"))
 			GIG_ITEMS = new GigCompat();

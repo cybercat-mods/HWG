@@ -3,7 +3,9 @@ package mod.azure.hwg.config;
 import java.util.Arrays;
 import java.util.List;
 
-public class HWGConfig extends CustomMidnightConfig {
+import eu.midnightdust.lib.config.MidnightConfig;
+
+public class HWGConfig extends MidnightConfig {
 
 	@Entry
 	public static List<String> merc_biomes = Arrays.asList("minecraft:forest", "minecraft:flower_forest",
