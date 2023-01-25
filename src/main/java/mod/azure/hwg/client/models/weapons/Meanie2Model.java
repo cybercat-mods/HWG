@@ -3,7 +3,7 @@ package mod.azure.hwg.client.models.weapons;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.Meanie2Item;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib.model.GeoModel;
+import mod.azure.azurelib.model.GeoModel;
 
 public class Meanie2Model extends GeoModel<Meanie2Item> {
 	@Override

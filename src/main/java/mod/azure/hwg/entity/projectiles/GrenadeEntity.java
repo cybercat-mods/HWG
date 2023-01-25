@@ -4,10 +4,16 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import mod.azure.azurelib.animatable.GeoEntity;
+import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
+import mod.azure.azurelib.core.animation.AnimationController;
+import mod.azure.azurelib.core.animation.RawAnimation;
+import mod.azure.azurelib.network.packet.EntityPacket;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
-import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
@@ -38,12 +44,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class GrenadeEntity extends PersistentProjectileEntity implements GeoEntity {
 
@@ -55,7 +55,7 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 			TrackedDataHandlerRegistry.INTEGER);
 	private static final TrackedData<Integer> STATE = DataTracker.registerData(GrenadeEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
 	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(GrenadeEntity.class,
 			TrackedDataHandlerRegistry.FLOAT);
 
@@ -129,7 +129,7 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 		this.ticksInAir = tag.getShort("life");
 		dataTracker.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
 	}
-	
+
 	@Override
 	public void tick() {
 		super.tick();
@@ -169,7 +169,7 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 
 	@Override
 	public Packet<ClientPlayPacketListener> createSpawnPacket() {
-		return HWGEntityPacket.createPacket(this);
+		return EntityPacket.createPacket(this);
 	}
 
 	@Override

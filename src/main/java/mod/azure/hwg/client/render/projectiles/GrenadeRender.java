@@ -1,5 +1,8 @@
 package mod.azure.hwg.client.render.projectiles;
 
+import mod.azure.azurelib.cache.object.BakedGeoModel;
+import mod.azure.azurelib.renderer.GeoEntityRenderer;
+import mod.azure.azurelib.util.RenderUtils;
 import mod.azure.hwg.client.models.projectiles.GrenadeModel;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import net.minecraft.client.render.VertexConsumer;
@@ -7,9 +10,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.util.RenderUtils;
 
 public class GrenadeRender extends GeoEntityRenderer<GrenadeEntity> {
 

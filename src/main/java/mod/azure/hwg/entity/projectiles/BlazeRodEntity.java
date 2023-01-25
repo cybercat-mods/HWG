@@ -2,9 +2,15 @@ package mod.azure.hwg.entity.projectiles;
 
 import java.util.List;
 
+import mod.azure.azurelib.animatable.GeoEntity;
+import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
+import mod.azure.azurelib.core.animation.AnimationController;
+import mod.azure.azurelib.core.object.PlayState;
+import mod.azure.azurelib.network.packet.EntityPacket;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
-import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
@@ -38,12 +44,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class BlazeRodEntity extends PersistentProjectileEntity implements GeoEntity {
 
@@ -52,7 +52,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements GeoEnt
 	private int ticksInAir;
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
 	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(BlazeRodEntity.class,
 			TrackedDataHandlerRegistry.FLOAT);
 
@@ -106,7 +106,7 @@ public class BlazeRodEntity extends PersistentProjectileEntity implements GeoEnt
 
 	@Override
 	public Packet<ClientPlayPacketListener> createSpawnPacket() {
-		return HWGEntityPacket.createPacket(this);
+		return EntityPacket.createPacket(this);
 	}
 
 	@Override

@@ -34,9 +34,9 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import mod.azure.azurelib.animatable.GeoEntity;
+import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.util.AzureLibUtil;
 
 public abstract class HWGEntity extends HostileEntity implements GeoEntity, Angerable, Monster {
 
@@ -48,7 +48,7 @@ public abstract class HWGEntity extends HostileEntity implements GeoEntity, Ange
 	public static final TrackedData<Integer> STATE = DataTracker.registerData(HWGEntity.class,
 			TrackedDataHandlerRegistry.INTEGER);
 	private UUID targetUuid;
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
 
 	protected HWGEntity(EntityType<? extends HostileEntity> type, World worldIn) {
 		super(type, worldIn);

@@ -31,7 +31,7 @@ repositories {
 	maven { url "https://cfa2.cursemaven.com" }
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/" }
-    maven { url "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" }
+    maven { url 'https://dl.cloudsmith.io/public/azuredoom-mods/azurelib/maven/' }
     maven { url "https://plugins.gradle.org/m2/" }
     maven { url "https://api.modrinth.com/maven" }
 }
@@ -45,7 +45,7 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation 'software.bernie.geckolib:geckolib-fabric-1.19.3:4.0.2'
+  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.3:1.0.1'
 	modImplementation "maven.modrinth:midnightlib:1.1.0-fabric"
     shade group: 'maven.modrinth', name: 'midnightlib', version: '1.1.0-fabric'
 	modImplementation ("com.terraformersmc:modmenu:5.0.2")
@@ -136,7 +136,7 @@ if (file('key.properties').exists()) {
 
         	relations {
             	requiredDependency 'fabric-api'  
-            	requiredDependency 'geckolib'  
+            	requiredDependency 'azurelib'  
             	optionalDependency 'roughly-enough-items' 
         	}
         	mainArtifact(remapJar)
@@ -167,7 +167,7 @@ if (file('key.properties').exists()) {
 		gameVersions = ['1.19.3']
 		loaders = ['fabric', 'quilt']
 		dependencies { 
-        	required.project "geckolib"
+        	required.project "azurelib"
         	required.project "fabric-api"
             optional.project "modmenu"
             optional.project "roughly-enough-items"

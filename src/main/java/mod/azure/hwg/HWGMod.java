@@ -1,6 +1,7 @@
 package mod.azure.hwg;
 
 import eu.midnightdust.lib.config.MidnightConfig;
+import mod.azure.azurelib.AzureLib;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import mod.azure.hwg.compat.BWCompat;
 import mod.azure.hwg.compat.GigCompat;
@@ -31,7 +32,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib.GeckoLib;
 
 public class HWGMod implements ModInitializer {
 
@@ -144,7 +144,7 @@ public class HWGMod implements ModInitializer {
 		MOBS = new HWGMobs();
 		PARTICLES = new HWGParticles();
 		PROJECTILES = new ProjectilesEntityRegister();
-		GeckoLib.initialize();
+		AzureLib.initialize();
 		GunSmithProfession.init();
 		MobSpawn.addSpawnEntries();
 		MobAttributes.init();

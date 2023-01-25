@@ -1,8 +1,14 @@
 package mod.azure.hwg.entity.projectiles;
 
+import mod.azure.azurelib.animatable.GeoEntity;
+import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
+import mod.azure.azurelib.core.animation.AnimationController;
+import mod.azure.azurelib.core.object.PlayState;
+import mod.azure.azurelib.network.packet.EntityPacket;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
-import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
@@ -37,12 +43,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class FlameFiring extends PersistentProjectileEntity implements GeoEntity {
 
@@ -50,7 +50,7 @@ public class FlameFiring extends PersistentProjectileEntity implements GeoEntity
 	protected boolean inAir;
 	private int ticksInAir;
 	private LivingEntity shooter;
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
 	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(FlameFiring.class,
@@ -99,7 +99,7 @@ public class FlameFiring extends PersistentProjectileEntity implements GeoEntity
 
 	@Override
 	public Packet<ClientPlayPacketListener> createSpawnPacket() {
-		return HWGEntityPacket.createPacket(this);
+		return EntityPacket.createPacket(this);
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class FlameFiring extends PersistentProjectileEntity implements GeoEntity
 		}
 		boolean isInsideWaterBlock = world.isWater(getBlockPos());
 		spawnLightSource(isInsideWaterBlock);
-		if (getOwner()instanceof PlayerEntity owner) 
+		if (getOwner()instanceof PlayerEntity owner)
 			setYaw(dataTracker.get(FORCED_YAW));
 		if (this.age % 16 == 2)
 			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(),

@@ -2,9 +2,9 @@ package mod.azure.hwg.entity.projectiles;
 
 import java.util.List;
 
+import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.blockentity.TickingLightEntity;
-import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
@@ -108,7 +108,7 @@ public class FireballEntity extends PersistentProjectileEntity {
 
 	@Override
 	public Packet<ClientPlayPacketListener> createSpawnPacket() {
-		return HWGEntityPacket.createPacket(this);
+		return EntityPacket.createPacket(this);
 	}
 
 	@Override

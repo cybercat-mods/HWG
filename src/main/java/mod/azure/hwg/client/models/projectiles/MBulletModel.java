@@ -4,7 +4,7 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.MBulletEntity;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib.model.GeoModel;
+import mod.azure.azurelib.model.GeoModel;
 
 public class MBulletModel extends GeoModel<MBulletEntity> {
 	@Override

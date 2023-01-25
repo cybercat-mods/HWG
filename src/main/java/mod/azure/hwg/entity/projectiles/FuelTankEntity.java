@@ -2,7 +2,7 @@ package mod.azure.hwg.entity.projectiles;
 
 import org.jetbrains.annotations.Nullable;
 
-import mod.azure.hwg.network.HWGEntityPacket;
+import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGMobs;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -65,7 +65,7 @@ public class FuelTankEntity extends Entity {
 
 	@Override
 	public Packet<ClientPlayPacketListener> createSpawnPacket() {
-		return HWGEntityPacket.createPacket(this);
+		return EntityPacket.createPacket(this);
 	}
 
 	@Override

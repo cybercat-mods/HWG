@@ -5,17 +5,12 @@ import org.lwjgl.glfw.GLFW;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.gui.GunTableScreen;
 import mod.azure.hwg.compat.BWClientCompat;
-import mod.azure.hwg.network.ClientEntityPacket;
-import mod.azure.hwg.network.HWGEntityPacket;
 import mod.azure.hwg.particle.BrimParticle;
 import mod.azure.hwg.particle.FlareParticle;
 import mod.azure.hwg.particle.WFlareParticle;
-import mod.azure.hwg.util.packet.EntityPacket;
-import mod.azure.hwg.util.packet.EntityPacketOnClient;
 import mod.azure.hwg.util.registry.HWGParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
@@ -35,15 +30,9 @@ public class ClientInit implements ClientModInitializer {
 		ModelProviderinit.init();
 		RenderRegistry.init();
 		HandledScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
-		ClientPlayNetworking.registerGlobalReceiver(EntityPacket.ID, (client, handler, buf, responseSender) -> {
-			EntityPacketOnClient.onPacket(client, buf);
-		});
 		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
 			BWClientCompat.onInitializeClient();
 		}
-		ClientPlayNetworking.registerGlobalReceiver(HWGEntityPacket.ID, (client, handler, buf, responseSender) -> {
-			ClientEntityPacket.onPacket(client, buf);
-		});
 		KeyBindingHelper.registerKeyBinding(reload);
 		KeyBindingHelper.registerKeyBinding(scope);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BLACK_FLARE, FlareParticle.BlackSmokeFactory::new);

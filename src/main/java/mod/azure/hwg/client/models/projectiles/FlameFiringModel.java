@@ -3,7 +3,7 @@ package mod.azure.hwg.client.models.projectiles;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib.model.GeoModel;
+import mod.azure.azurelib.model.GeoModel;
 
 public class FlameFiringModel extends GeoModel<FlameFiring> {
 	@Override
