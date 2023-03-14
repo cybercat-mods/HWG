@@ -6,9 +6,10 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
 
 import com.google.common.collect.Lists;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 
 import mod.azure.azurelib.animatable.GeoItem;
 import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
@@ -20,6 +21,7 @@ import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.util.AzureLibUtil;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.render.weapons.FlareGunRender;
 import mod.azure.hwg.entity.projectiles.BaseFlareEntity;
 import mod.azure.hwg.item.ammo.FlareItem;
@@ -100,7 +102,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 	});
 
 	public FlareGunItem() {
-		super(new Item.Properties().stacksTo(1).durability(31));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(31));
 		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
@@ -151,46 +153,45 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 			var purple = projectile.getItem() == HWGItems.PURPLE_FLARE;
 			var red = projectile.getItem() == HWGItems.RED_FLARE;
 			var yellow = projectile.getItem() == HWGItems.YELLOW_FLARE;
-			if (black) 
+			if (black)
 				flareEntity.setColor(1);
-			else if (blue) 
+			else if (blue)
 				flareEntity.setColor(2);
-			else if (brown) 
+			else if (brown)
 				flareEntity.setColor(3);
-			else if (cyan) 
+			else if (cyan)
 				flareEntity.setColor(4);
-			else if (gray) 
+			else if (gray)
 				flareEntity.setColor(5);
-			else if (green) 
+			else if (green)
 				flareEntity.setColor(6);
-			else if (lightblue) 
+			else if (lightblue)
 				flareEntity.setColor(7);
-			else if (lightgray) 
+			else if (lightgray)
 				flareEntity.setColor(8);
-			else if (lime) 
+			else if (lime)
 				flareEntity.setColor(9);
-			else if (magenta) 
+			else if (magenta)
 				flareEntity.setColor(10);
-			else if (orange) 
+			else if (orange)
 				flareEntity.setColor(11);
-			else if (pink) 
+			else if (pink)
 				flareEntity.setColor(12);
-			else if (purple) 
+			else if (purple)
 				flareEntity.setColor(13);
-			else if (red) 
+			else if (red)
 				flareEntity.setColor(14);
-			else if (yellow) 
+			else if (yellow)
 				flareEntity.setColor(15);
-			else 
+			else
 				flareEntity.setColor(16);
 
 			var vec3d = shooter.getUpVector(1.0F);
-			var quaternionf = new Quaternionf().setAngleAxis((double) (simulated * ((float) Math.PI / 180)),
-					vec3d.x, vec3d.y, vec3d.z);
+			var quaternion = new Quaternion(new Vector3f(vec3d), simulated, true);
 			var vec3d2 = shooter.getViewVector(1.0f);
-			var vector3f = vec3d2.toVector3f().rotate(quaternionf);
-			vector3f.rotate(quaternionf);
-			((Projectile) flareEntity).shoot((double) vector3f.x, (double) vector3f.y, (double) vector3f.z, speed,
+			var vector3f = new Vector3f(vec3d2);
+			vector3f.transform(quaternion);
+			((Projectile) flareEntity).shoot((double) vector3f.x(), (double) vector3f.y(), (double) vector3f.z(), speed,
 					divergence);
 			((AbstractArrow) flareEntity).setBaseDamage(0.3D);
 			((AbstractArrow) flareEntity).pickup = AbstractArrow.Pickup.DISALLOWED;
@@ -211,7 +212,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 			shootAll(world, user, hand, itemStack, 2.6F, 1.0F);
 			user.getCooldowns().addCooldown(this, 25);
 			setCharged(itemStack, false);
-			if (!world.isClientSide) 
+			if (!world.isClientSide)
 				triggerAnim(user, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "shoot_controller", "firing");
 			return InteractionResultHolder.consume(itemStack);
 		} else if (!user.getProjectile(itemStack).isEmpty()) {
@@ -221,7 +222,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 				user.startUsingItem(hand);
 			}
 			return InteractionResultHolder.consume(itemStack);
-		} else 
+		} else
 			return InteractionResultHolder.fail(itemStack);
 	}
 
@@ -230,7 +231,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 			setCharged(stack, true);
 			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.CHAIN_BREAK,
 					SoundSource.PLAYERS, 1.0F, 1.5F);
-			if (!world.isClientSide) 
+			if (!world.isClientSide)
 				triggerAnim((Player) user, GeoItem.getOrAssignId(stack, (ServerLevel) world), "shoot_controller",
 						"loading");
 			((Player) user).getCooldowns().addCooldown(this, 15);
@@ -307,7 +308,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 		var NbtCompound = crossbow.getTag();
 		if (NbtCompound != null && NbtCompound.contains("ChargedProjectiles", 9)) {
 			var NbtList = NbtCompound.getList("ChargedProjectiles", 10);
-			if (NbtList != null) 
+			if (NbtList != null)
 				for (int i = 0; i < NbtList.size(); ++i) {
 					var NbtCompound2 = NbtList.getCompound(i);
 					list.add(ItemStack.of(NbtCompound2));

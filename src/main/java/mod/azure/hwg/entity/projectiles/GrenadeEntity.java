@@ -36,6 +36,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -283,7 +284,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
 	protected void frag() {
 		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
-				HWGConfig.grenades_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+				HWGConfig.grenades_breaks == true ? Explosion.BlockInteraction.BREAK  : Explosion.BlockInteraction.NONE);
 	}
 
 	protected void naplam() {
@@ -294,7 +295,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 			}
 		});
 		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true,
-				Level.ExplosionInteraction.NONE);
+				Explosion.BlockInteraction.NONE);
 	}
 
 	protected void emp() {

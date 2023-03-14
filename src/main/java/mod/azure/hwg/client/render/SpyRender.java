@@ -3,7 +3,7 @@ package mod.azure.hwg.client.render;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 
 import mod.azure.azurelib.cache.object.GeoBone;
 import mod.azure.azurelib.renderer.GeoEntityRenderer;
@@ -41,9 +41,9 @@ public class SpyRender extends GeoEntityRenderer<SpyEntity> {
 			@Override
 			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, SpyEntity animatable,
 					MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
-				poseStack.mulPose(Axis.XP.rotationDegrees(-90));
-				poseStack.mulPose(Axis.YP.rotationDegrees(0));
-				poseStack.mulPose(Axis.ZP.rotationDegrees(0));
+				poseStack.mulPose(Vector3f.XP.rotationDegrees(-90));
+				poseStack.mulPose(Vector3f.YP.rotationDegrees(0));
+				poseStack.mulPose(Vector3f.ZP.rotationDegrees(0));
 				poseStack.translate(0.0D, 0.1D, -0.1D);
 				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight,
 						packedOverlay);

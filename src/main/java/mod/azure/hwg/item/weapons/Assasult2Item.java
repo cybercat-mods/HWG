@@ -5,6 +5,14 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import io.netty.buffer.Unpooled;
+import mod.azure.azurelib.animatable.GeoItem;
+import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
+import mod.azure.azurelib.animatable.client.RenderProvider;
+import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
+import mod.azure.azurelib.core.animation.Animation.LoopType;
+import mod.azure.azurelib.core.animation.AnimationController;
+import mod.azure.azurelib.core.animation.RawAnimation;
+import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.TommyGunRender;
@@ -28,14 +36,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.animatable.client.RenderProvider;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.Animation.LoopType;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
 
 public class Assasult2Item extends AnimatedItem {
 
@@ -46,7 +46,7 @@ public class Assasult2Item extends AnimatedItem {
 	public String animation;
 
 	public Assasult2Item(int maxammo, int cooldown, String animation) {
-		super(new Item.Properties().stacksTo(1).durability(maxammo));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(maxammo));
 		this.maxammo = maxammo;
 		this.cooldown = cooldown;
 		this.animation = animation;

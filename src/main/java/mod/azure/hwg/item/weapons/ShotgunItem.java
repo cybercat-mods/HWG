@@ -35,7 +35,7 @@ public class ShotgunItem extends AnimatedItem {
 	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public ShotgunItem() {
-		super(new Item.Properties().stacksTo(1).durability(3));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(3));
 		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 

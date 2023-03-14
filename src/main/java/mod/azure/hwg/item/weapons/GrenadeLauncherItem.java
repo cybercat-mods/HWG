@@ -6,9 +6,10 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
-import org.joml.Quaternionf;
 
 import com.google.common.collect.Lists;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 
 import mod.azure.azurelib.animatable.GeoItem;
 import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
@@ -20,6 +21,7 @@ import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.util.AzureLibUtil;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.render.weapons.GrenadeLauncherRender;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
@@ -40,7 +42,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -71,7 +73,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 	});
 
 	public GrenadeLauncherItem() {
-		super(new Item.Properties().stacksTo(1).durability(31));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(31));
 		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
@@ -129,12 +131,11 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 				nade.setVariant(4);
 			}
 			var vec3d = shooter.getUpVector(1.0F);
-			var quaternionf = new Quaternionf().setAngleAxis((double) (simulated * ((float) Math.PI / 180)), vec3d.x,
-					vec3d.y, vec3d.z);
+			var quaternion = new Quaternion(new Vector3f(vec3d), simulated, true);
 			var vec3d2 = shooter.getViewVector(1.0f);
-			var vector3f = vec3d2.toVector3f().rotate(quaternionf);
-			vector3f.rotate(quaternionf);
-			((AbstractArrow) nade).shoot((double) vector3f.x, (double) vector3f.y, (double) vector3f.z, speed,
+			var vector3f = new Vector3f(vec3d2);
+			vector3f.transform(quaternion);
+			((Projectile) nade).shoot((double) vector3f.x(), (double) vector3f.y(), (double) vector3f.z(), speed,
 					divergence);
 
 			stack.hurtAndBreak(1, shooter, p -> p.broadcastBreakEvent(shooter.getUsedItemHand()));

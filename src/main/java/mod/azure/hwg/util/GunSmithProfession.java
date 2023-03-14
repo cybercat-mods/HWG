@@ -14,8 +14,6 @@ import mod.azure.hwg.mixin.PointOfInterestTypesInvoker;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -44,17 +42,17 @@ public class GunSmithProfession {
 
 	public static Supplier<VillagerProfession> registerProfession(String name,
 			Supplier<VillagerProfession> profession) {
-		var registry = Registry.register(BuiltInRegistries.VILLAGER_PROFESSION,
+		var registry = Registry.register(Registry.VILLAGER_PROFESSION,
 				new ResourceLocation(HWGMod.MODID, name), profession.get());
 		return () -> registry;
 	}
 
 	public static Supplier<PoiType> registerPoiType(String name, Supplier<PoiType> poiType) {
-		var resourceKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE,
+		var resourceKey = ResourceKey.create(Registry.POINT_OF_INTEREST_TYPE_REGISTRY,
 				new ResourceLocation(HWGMod.MODID, name));
-		var registry = Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
+		var registry = Registry.register(Registry.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
 		PointOfInterestTypesInvoker.invokeRegisterBlockStates(
-				BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey),
+				Registry.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey),
 				PoiTypes.getBlockStates(HWGBlocks.GUN_TABLE));
 		return () -> registry;
 	}

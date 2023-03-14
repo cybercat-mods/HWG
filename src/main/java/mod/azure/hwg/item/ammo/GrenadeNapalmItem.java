@@ -1,5 +1,6 @@
 package mod.azure.hwg.item.ammo;
 
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.Level;
 public class GrenadeNapalmItem extends Item {
 
 	public GrenadeNapalmItem() {
-		super(new Item.Properties());
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup));
 	}
 
 	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {

@@ -31,7 +31,6 @@ import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -57,13 +56,13 @@ public class HWGItems {
 	public static FlareItem WHITE_FLARE = item(new FlareItem(), "white_flare");
 	public static Meanie1Item MEANIE1 = item(new Meanie1Item(), "meanie_gun_1");
 	public static Meanie2Item MEANIE2 = item(new Meanie2Item(), "meanie_gun_2");
-	public static Item ROCKET = item(new Item(new Item.Properties()), "rocket");
+	public static Item ROCKET = item(new Item(new Item.Properties().tab(HWGMod.WeaponItemGroup)), "rocket");
 	public static FlareGunItem FLARE_GUN = item(new FlareGunItem(), "flare_gun");
 	public static FlareItem ORANGE_FLARE = item(new FlareItem(), "orange_flare");
 	public static FlareItem PURPLE_FLARE = item(new FlareItem(), "purple_flare");
 	public static FlareItem YELLOW_FLARE = item(new FlareItem(), "yellow_flare");
 	public static GPistolItem GOLDEN_GUN = item(new GPistolItem(), "golden_gun");
-	public static Item BULLETS = item(new Item(new Item.Properties()), "bullets");
+	public static Item BULLETS = item(new Item(new Item.Properties().tab(HWGMod.WeaponItemGroup)), "bullets");
 	public static GrenadeEmpItem G_EMP = item(new GrenadeEmpItem(), "grenade_emp");
 	public static FlareItem MAGENTA_FLARE = item(new FlareItem(), "magenta_flare");
 	public static BrimstoneItem BRIMSTONE = item(new BrimstoneItem(), "brimstone_gun");
@@ -74,23 +73,23 @@ public class HWGItems {
 	public static AssasultItem AK47 = item(new AssasultItem(21, 5, "akfiring"), "ak47");
 	public static Assasult1Item SMG = item(new Assasult1Item(51, 3, "smgfiring"), "smg");
 	public static GrenadeSmokeItem G_SMOKE = item(new GrenadeSmokeItem(), "grenade_smoke");
-	public static Item SNIPER_ROUND = item(new Item(new Item.Properties()), "sniper_round");
-	public static Item SHOTGUN_SHELL = item(new Item(new Item.Properties()), "shotgun_shell");
+	public static Item SNIPER_ROUND = item(new Item(new Item.Properties().tab(HWGMod.WeaponItemGroup)), "sniper_round");
+	public static Item SHOTGUN_SHELL = item(new Item(new Item.Properties().tab(HWGMod.WeaponItemGroup)), "shotgun_shell");
 	public static FlamethrowerItem FLAMETHROWER = item(new FlamethrowerItem(), "flamethrower");
 	public static GrenadeNapalmItem G_NAPALM = item(new GrenadeNapalmItem(), "grenade_napalm");
 	public static RocketLauncher ROCKETLAUNCHER = item(new RocketLauncher(), "rocketlauncher");
 	public static Assasult2Item TOMMYGUN = item(new Assasult2Item(51, 2, "tommyfiring"), "tommy_gun");
 	public static GrenadeLauncherItem G_LAUNCHER = item(new GrenadeLauncherItem(), "grenade_launcher");
 	public static HellhorseRevolverItem HELLHORSE = item(new HellhorseRevolverItem(), "hellhorse_revolver");
-	public static BlockItem FUEL_TANK = item(new BlockItem(HWGBlocks.FUEL_TANK, new Item.Properties()), "fuel_tank");
-	public static BlockItem GUN_TABLE = item(new BlockItem(HWGBlocks.GUN_TABLE, new Item.Properties()), "gun_table");
+	public static BlockItem FUEL_TANK = item(new BlockItem(HWGBlocks.FUEL_TANK, new Item.Properties().tab(HWGMod.WeaponItemGroup)), "fuel_tank");
+	public static BlockItem GUN_TABLE = item(new BlockItem(HWGBlocks.GUN_TABLE, new Item.Properties().tab(HWGMod.WeaponItemGroup)), "gun_table");
 	public static AzureSpawnEgg SPY_SPAWN_EGG = item(new AzureSpawnEgg(HWGMobs.SPY, 11022961, 11035249), "spy_spawn_egg");
 	public static AzureSpawnEgg MERC_SPAWN_EGG = item(new AzureSpawnEgg(HWGMobs.MERC, 11022961, 11035249), "merc_spawn_egg");
 	public static AzureSpawnEgg LESSER_SPAWN_EGG = item(new AzureSpawnEgg(HWGMobs.TECHNOLESSER, 11022961, 11035249), "lesser_spawn_egg");
 	public static AzureSpawnEgg GREATER_SPAWN_EGG = item(new AzureSpawnEgg(HWGMobs.TECHNOGREATER, 11022961, 11035249), "greater_spawn_egg");
 
 	static <T extends Item> T item(T c, String id) {
-		Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
+		Registry.register(Registry.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
 		return c;
 	}
 
@@ -100,7 +99,7 @@ public class HWGItems {
 	public static Map<Item, Item> getItemMap() {
 		Map<Item, Item> vanillaItemMap = new HashMap<>();
 		for (Item i : HWGItems.ITEMS) {
-			vanillaItemMap.put(BuiltInRegistries.ITEM.get(new ResourceLocation(HWGMod.MODID, BuiltInRegistries.ITEM.getKey(i).getPath())),
+			vanillaItemMap.put(Registry.ITEM.get(new ResourceLocation(HWGMod.MODID, Registry.ITEM.getKey(i).getPath())),
 					i);
 		}
 		return vanillaItemMap;

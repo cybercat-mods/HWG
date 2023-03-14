@@ -36,7 +36,7 @@ public class SniperItem extends AnimatedItem {
 	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public SniperItem() {
-		super(new Item.Properties().stacksTo(1).durability(2));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(2));
 		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 

@@ -1,7 +1,8 @@
 package mod.azure.hwg.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
+
 import mod.azure.hwg.entity.projectiles.BaseFlareEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -20,7 +21,7 @@ public class BaseFlareRender extends EntityRenderer<BaseFlareEntity> {
 			MultiBufferSource vertexConsumerProvider, int i) {
 		matrixStack.pushPose();
 		matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-		matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+		matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
 		matrixStack.scale(fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F, fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F,
 				fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F);
 

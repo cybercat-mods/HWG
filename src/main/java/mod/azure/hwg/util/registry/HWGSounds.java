@@ -2,7 +2,6 @@ package mod.azure.hwg.util.registry;
 
 import mod.azure.hwg.HWGMod;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
@@ -31,8 +30,8 @@ public class HWGSounds {
 	public static SoundEvent GLAUNCHERRELOAD = of("hwg.glauncher-reload");
 
 	static SoundEvent of(String id) {
-		SoundEvent sound = SoundEvent.createVariableRangeEvent(new ResourceLocation(HWGMod.MODID, id));
-		Registry.register(BuiltInRegistries.SOUND_EVENT, new ResourceLocation(HWGMod.MODID, id), sound);
+		SoundEvent sound = new SoundEvent(new ResourceLocation(HWGMod.MODID, id));
+		Registry.register(Registry.SOUND_EVENT, new ResourceLocation(HWGMod.MODID, id), sound);
 		return sound;
 	}
 }

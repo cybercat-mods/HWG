@@ -3,7 +3,7 @@ package mod.azure.hwg.client.render;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 
 import mod.azure.azurelib.cache.object.GeoBone;
 import mod.azure.azurelib.renderer.GeoEntityRenderer;
@@ -45,11 +45,11 @@ public class TechnodemonGreaterRender extends GeoEntityRenderer<TechnodemonGreat
 			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack,
 					TechnodemonGreaterEntity animatable, MultiBufferSource bufferSource, float partialTick,
 					int packedLight, int packedOverlay) {
-				poseStack.mulPose(
-						Axis.XP.rotationDegrees(animatable.getMainHandItem().getItem() instanceof Minigun ? -15 : -90));
-				poseStack.mulPose(
-						Axis.YP.rotationDegrees(animatable.getMainHandItem().getItem() instanceof Minigun ? -15 : 0));
-				poseStack.mulPose(Axis.ZP.rotationDegrees(0f));
+				poseStack.mulPose(Vector3f.XP
+						.rotationDegrees(animatable.getMainHandItem().getItem() instanceof Minigun ? -15 : -90));
+				poseStack.mulPose(Vector3f.YP
+						.rotationDegrees(animatable.getMainHandItem().getItem() instanceof Minigun ? -15 : 0));
+				poseStack.mulPose(Vector3f.ZP.rotationDegrees(0f));
 				poseStack.translate(animatable.getMainHandItem().getItem() instanceof Minigun ? 0.10D : 0.1D,
 						animatable.getMainHandItem().getItem() instanceof Minigun ? 0.1D : 0.15D,
 						animatable.getMainHandItem().getItem() instanceof Minigun ? -0.5D : -0.1D);

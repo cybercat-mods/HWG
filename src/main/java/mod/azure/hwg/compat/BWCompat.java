@@ -9,7 +9,6 @@ import mod.azure.hwg.item.weapons.SilverGunItem;
 import mod.azure.hwg.item.weapons.SilverRevolverItem;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -28,7 +27,7 @@ public class BWCompat {
 	public static EntityType<SBulletEntity> SILVERBULLETS = projectile(SBulletEntity::new, "silverbullets");
 
 	static <T extends Item> T item(T c, String id) {
-		Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
+		Registry.register(Registry.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
 		return c;
 	}
 
@@ -43,7 +42,7 @@ public class BWCompat {
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
 				.trackRangeBlocks(90).trackedUpdateRate(1).build();
 
-		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
+		Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 

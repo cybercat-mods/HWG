@@ -16,7 +16,7 @@ import com.google.gson.JsonSyntaxException;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.gui.GunTableInventory;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -103,7 +103,7 @@ public class GunTableRecipe implements Recipe<GunTableInventory>, Comparable<Gun
 	public int compareTo(@NotNull GunTableRecipe o) {
 		var outputThis = getResultItem().getItem();
 		var outputOther = o.getResultItem().getItem();
-		return BuiltInRegistries.ITEM.getKey(outputThis).compareTo(BuiltInRegistries.ITEM.getKey(outputOther));
+		return Registry.ITEM.getKey(outputThis).compareTo(Registry.ITEM.getKey(outputOther));
 	}
 
 	public static class Serializer implements RecipeSerializer<GunTableRecipe> {

@@ -12,6 +12,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 
 public class FuelTankEntity extends Entity {
@@ -25,7 +26,7 @@ public class FuelTankEntity extends Entity {
 
 	protected void explode() {
 		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 4.0F, true,
-				Level.ExplosionInteraction.NONE);
+				Explosion.BlockInteraction.NONE);
 	}
 
 	public FuelTankEntity(Level worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {

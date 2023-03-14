@@ -28,6 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -238,7 +239,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 
 	protected void explode() {
 		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
-				HWGConfig.rocket_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+				HWGConfig.rocket_breaks == true ? Explosion.BlockInteraction.BREAK  : Explosion.BlockInteraction.NONE);
 	}
 
 	@Override

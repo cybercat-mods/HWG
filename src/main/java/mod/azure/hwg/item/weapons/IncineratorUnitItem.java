@@ -26,7 +26,7 @@ import net.minecraft.world.level.Level;
 public class IncineratorUnitItem extends HWGGunBase {
 
 	public IncineratorUnitItem() {
-		super(new Item.Properties().stacksTo(1).durability(251));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(251));
 	}
 
 	@Override

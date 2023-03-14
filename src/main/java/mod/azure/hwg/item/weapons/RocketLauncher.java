@@ -25,7 +25,7 @@ import net.minecraft.world.level.Level;
 public class RocketLauncher extends HWGGunBase {
 
 	public RocketLauncher() {
-		super(new Item.Properties().stacksTo(1).durability(2));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(2));
 	}
 
 	@Override

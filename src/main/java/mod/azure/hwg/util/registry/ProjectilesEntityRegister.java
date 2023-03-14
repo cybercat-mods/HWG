@@ -15,7 +15,6 @@ import mod.azure.hwg.entity.projectiles.RocketEntity;
 import mod.azure.hwg.entity.projectiles.ShellEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -48,7 +47,7 @@ public class ProjectilesEntityRegister {
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
 				.trackRangeBlocks(90).trackedUpdateRate(1).build();
 
-		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
+		Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 
@@ -69,7 +68,7 @@ public class ProjectilesEntityRegister {
 				.dimensions(new EntityDimensions(1.5F, 1.5F, false)).disableSummon().spawnableFarFromPlayer()
 				.fireImmune().trackRangeBlocks(90).trackedUpdateRate(40).build();
 
-		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
+		Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 

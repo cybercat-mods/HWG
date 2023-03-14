@@ -209,7 +209,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 		final int index;
 
 		public WidgetButtonPage(int x, int y, int index, Button.OnPress onPress) {
-			super(x, y, 112, 20, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION);
+			super(x, y, 112, 20, CommonComponents.EMPTY, onPress);
 			this.index = index;
 			this.visible = false;
 		}
@@ -221,15 +221,15 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 		public void renderToolTip(PoseStack matrices, int mouseX, int mouseY) {
 			if (this.isHovered && menu.getRecipes().size() > this.index + indexStartOffset) {
 				ItemStack stack;
-				if (mouseX < this.getX() + 20) {
+				if (mouseX < this.x + 20) {
 					stack = menu.getRecipes().get(this.index + indexStartOffset).getResultItem();
 					renderTooltip(matrices, mouseX, mouseY);
-				} else if (mouseX < this.getX() + 50 && mouseX > this.getX() + 30) {
+				} else if (mouseX < this.x + 50 && mouseX > this.x + 30) {
 					stack = menu.getRecipes().get(this.index + indexStartOffset).getResultItem();
 					if (!stack.isEmpty()) {
 						renderTooltip(matrices, mouseX, mouseY);
 					}
-				} else if (mouseX > this.getX() + 65) {
+				} else if (mouseX > this.x + 65) {
 					stack = menu.getRecipes().get(this.index + indexStartOffset).getResultItem();
 					renderTooltip(matrices, mouseX, mouseY);
 				}

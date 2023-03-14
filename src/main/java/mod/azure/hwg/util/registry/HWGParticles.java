@@ -4,7 +4,6 @@ import mod.azure.hwg.HWGMod;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
 public class HWGParticles {
@@ -29,6 +28,6 @@ public class HWGParticles {
 	public static final SimpleParticleType LIGHTGRAY_FLARE = register(new ResourceLocation(HWGMod.MODID, "lightgray_flare"), false);
 
 	private static SimpleParticleType register(ResourceLocation identifier, boolean alwaysSpawn) {
-		return Registry.register(BuiltInRegistries.PARTICLE_TYPE, identifier, FabricParticleTypes.simple(alwaysSpawn));
+		return Registry.register(Registry.PARTICLE_TYPE, identifier, FabricParticleTypes.simple(alwaysSpawn));
 	}
 }

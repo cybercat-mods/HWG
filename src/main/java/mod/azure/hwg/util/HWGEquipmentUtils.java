@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import mod.azure.hwg.util.registry.HWGItems;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -32,7 +32,7 @@ public class HWGEquipmentUtils {
 	}
 
 	public static int compareItemsById(Item i1, Item i2) {
-		return BuiltInRegistries.ITEM.getKey(i1).compareTo(BuiltInRegistries.ITEM.getKey(i2));
+		return Registry.ITEM.getKey(i1).compareTo(Registry.ITEM.getKey(i2));
 	}
 
 	public static int generateRepairLevelCost(ItemStack repaired, int maxLevel) {
@@ -69,7 +69,7 @@ public class HWGEquipmentUtils {
 			var enchantItem = encodedEnchant.split(">");
 			var enchantKey = enchantItem[0].split(":");
 			var enchantLevel = Integer.parseInt(enchantItem[1]);
-			enchants.put(BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(enchantKey[0], enchantKey[1])),
+			enchants.put(Registry.ENCHANTMENT.get(new ResourceLocation(enchantKey[0], enchantKey[1])),
 					enchantLevel);
 		}
 		return enchants.isEmpty() ? null : enchants;
@@ -99,7 +99,7 @@ public class HWGEquipmentUtils {
 	public static CompoundTag getTagForEnchantments(ItemStack breakingStack, ItemStack ruinedStack) {
 		Set<String> enchantmentStrings = new HashSet<>();
 		for (Map.Entry<Enchantment, Integer> ench : EnchantmentHelper.getEnchantments(breakingStack).entrySet()) {
-			var enchantString = BuiltInRegistries.ENCHANTMENT.getKey(ench.getKey()) + ">" + ench.getValue();
+			var enchantString = Registry.ENCHANTMENT.getKey(ench.getKey()) + ">" + ench.getValue();
 			enchantmentStrings.add(enchantString);
 		}
 		if (!enchantmentStrings.isEmpty()) {

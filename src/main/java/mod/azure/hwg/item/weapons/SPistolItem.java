@@ -5,6 +5,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import io.netty.buffer.Unpooled;
+import mod.azure.azurelib.animatable.GeoItem;
+import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
+import mod.azure.azurelib.animatable.client.RenderProvider;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.SPistolRender;
@@ -28,16 +31,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.animatable.client.RenderProvider;
 
 public class SPistolItem extends AnimatedItem {
 
 	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public SPistolItem() {
-		super(new Item.Properties().stacksTo(1).durability(7));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(7));
 		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 

@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level;
 
 public class BrimstoneItem extends HWGGunBase {
 	public BrimstoneItem() {
-		super(new Item.Properties().stacksTo(1).durability(186));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(186));
 	}
 
 	@Override

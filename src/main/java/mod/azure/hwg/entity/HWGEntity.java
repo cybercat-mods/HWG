@@ -200,7 +200,7 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 			var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());
 			bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);
 			bullet.shootFromRotation(this, this.getXRot(), this.getYRot(), 0.0F, 1.0F * 3.0F, 1.0F);
-			world.playSound(this, blockPosition(),
+			world.playSound(null, blockPosition(),
 					getDefaultAttackSound(getItemBySlot(EquipmentSlot.MAINHAND).getItem()), SoundSource.HOSTILE, 1.0F,
 					1.0f);
 			world.addFreshEntity(bullet);

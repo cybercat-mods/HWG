@@ -3,7 +3,7 @@ package mod.azure.hwg.client.render;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
+import com.mojang.math.Vector3f;
 
 import mod.azure.azurelib.cache.object.GeoBone;
 import mod.azure.azurelib.renderer.GeoEntityRenderer;
@@ -44,10 +44,10 @@ public class TechnodemonLesserRender extends GeoEntityRenderer<TechnodemonEntity
 			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack,
 					TechnodemonEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight,
 					int packedOverlay) {
-				poseStack.mulPose(Axis.XP.rotationDegrees(-90));
-				poseStack.mulPose(Axis.YP
+				poseStack.mulPose(Vector3f.XP.rotationDegrees(-90));
+				poseStack.mulPose(Vector3f.YP
 						.rotationDegrees(animatable.getMainHandItem().getItem() instanceof BrimstoneItem ? 0 : 8));
-				poseStack.mulPose(Axis.ZP.rotationDegrees(0));
+				poseStack.mulPose(Vector3f.ZP.rotationDegrees(0));
 				if (animatable.getMainHandItem().getItem() instanceof BrimstoneItem)
 					poseStack.translate(0.0D, 0.15D, -0.7D);
 				else

@@ -46,7 +46,7 @@ public class AssasultItem extends AnimatedItem {
 	public String animation;
 
 	public AssasultItem(int maxammo, int cooldown, String animation) {
-		super(new Item.Properties().stacksTo(1).durability(maxammo));
+		super(new Item.Properties().tab(HWGMod.WeaponItemGroup).stacksTo(1).durability(maxammo));
 		this.maxammo = maxammo;
 		this.cooldown = cooldown;
 		this.animation = animation;

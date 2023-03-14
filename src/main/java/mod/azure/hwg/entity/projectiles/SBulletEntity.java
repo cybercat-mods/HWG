@@ -3,7 +3,7 @@ package mod.azure.hwg.entity.projectiles;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.compat.BWCompat;
 import mod.azure.hwg.util.registry.HWGItems;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -66,7 +66,7 @@ public class SBulletEntity extends BulletEntity {
 				((LivingEntity) entity2).setLastHurtMob(entity);
 		}
 		if (entity.getType().is(
-				TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, "vulnerable_to_silver")))) {
+				TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(HWGMod.MODID, "vulnerable_to_silver")))) {
 			if (entity.hurt(damageSource2, bulletdamage * 3)) {
 				if (entity instanceof LivingEntity) {
 					var livingEntity = (LivingEntity) entity;
