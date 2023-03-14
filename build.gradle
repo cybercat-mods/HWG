@@ -45,21 +45,21 @@ dependencies {
     mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.3:1.0.7'
-	modImplementation "curse.maven:SBL-661293:4277537-sources-4277538"
-	modImplementation "maven.modrinth:midnightlib:1.1.0-fabric"
-    shade group: 'maven.modrinth', name: 'midnightlib', version: '1.1.0-fabric'
-	modImplementation ("com.terraformersmc:modmenu:5.0.2")
-    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:10.0.581") {
+  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.2:1.0.9'
+	modImplementation "curse.maven:SBL-661293:4312490-sources-4312491"
+	modImplementation "maven.modrinth:midnightlib:1.0.0-fabric"
+    shade group: 'maven.modrinth', name: 'midnightlib', version: '1.0.0-fabric'
+	modImplementation ("com.terraformersmc:modmenu:4.2.0-beta.2")
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:9.1.591") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:10.0.581") {
+    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:9.1.591") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modApi("dev.architectury:architectury-fabric:7.0.65") {
+    modApi("dev.architectury:architectury-fabric:6.5.69") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-    modApi("me.shedaniel.cloth:cloth-config-fabric:9.0.94") {
+    modApi("me.shedaniel.cloth:cloth-config-fabric:8.2.88") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 }
@@ -130,7 +130,7 @@ if (file('key.properties').exists()) {
         	releaseType = "release"
         	changelogType = 'text'
         	changelog = file('CHANGELOG.txt')
-			addGameVersion("1.19.3")
+			addGameVersion("1.19.2")
 			addGameVersion("Fabric")
 			addGameVersion("Quilt")
 			addGameVersion("Java 17")
@@ -164,10 +164,10 @@ if (file('key.properties').exists()) {
 		token = modrinthProp.getProperty('modrinthKey')
 		projectId = 'SPMW1tzD' 
 		versionNumber = project.mod_version 
-		versionName = '1.19.3'
+		versionName = '1.19.2'
 		uploadFile = remapJar 
 		changelog = rootProject.file("changelog.txt").text
-		gameVersions = ['1.19.3']
+		gameVersions = ['1.19.2']
 		loaders = ['fabric', 'quilt']
 		dependencies { 
         	required.project "azurelib"
