@@ -66,7 +66,7 @@ public class HWGMod implements ModInitializer {
 	public static final ResourceLocation ROCKETLAUNCHER = new ResourceLocation(MODID, "rocketlauncher");
 	public static MenuType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
 	public static final CreativeModeTab WeaponItemGroup = FabricItemGroupBuilder
-			.build(new ResourceLocation(MODID, "blocks"), () -> new ItemStack(HWGItems.AK47));
+			.build(new ResourceLocation(MODID, "weapons"), () -> new ItemStack(HWGItems.AK47));
 	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(
 			Registry.RECIPE_SERIALIZER, new ResourceLocation(MODID, "gun_table"), new GunTableRecipe.Serializer());
 
