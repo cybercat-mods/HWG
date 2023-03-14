@@ -1,3 +1,6 @@
-v.1.3.3
+v.1.4.0
 
-- Convert from Geckolib to AzureLib
+- Rewrites library to use SmartBrainLib.
+- Massive clean up of code.
+- Removes Flamethrowers damaging any players at this time. 
+- Animations updated for the Technodemons.
