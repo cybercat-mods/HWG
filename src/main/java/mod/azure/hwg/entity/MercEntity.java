@@ -75,7 +75,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 		controllers.add(new AnimationController<>(this, event -> {
 			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
 		})).add(new AnimationController<>(this, event -> {
-			if (this.entityData.get(STATE) == 1 && !isDead
+			if ((this.entityData.get(STATE) == 1 || this.swinging) && !isDead
 					&& !(this.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
 				return event.setAndContinue(RawAnimation.begin().thenLoop("attacking"));
 			return PlayState.STOP;
