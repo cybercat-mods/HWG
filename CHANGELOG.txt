@@ -1,6 +1,4 @@
-v.1.4.0
+v.1.4.1
 
-- Rewrites library to use SmartBrainLib.
-- Massive clean up of code.
-- Removes Flamethrowers damaging any players at this time. 
-- Animations updated for the Technodemons.
+- Adds SmartBrainLib to required mods in fabric.mod.json
+- Bumps AzureLib required version to newest.

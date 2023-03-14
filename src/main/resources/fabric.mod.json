@@ -37,7 +37,8 @@
 		"fabric": "*",
 		"minecraft": ">=1.19.3",
 		"java": ">=17",
-		"azurelib": ">=1.0.1"
+		"smartbrainlib": ">=1.7.4",
+		"azurelib": ">=1.0.7"
 	},
 	"accessWidener": "hwg.accesswidener"
 }
