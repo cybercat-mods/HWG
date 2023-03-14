@@ -71,7 +71,7 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
 		var isDead = this.dead || this.getHealth() < 0.01 || this.isDeadOrDying();
-		controllers.add(new AnimationController<>(this, event -> {
+		controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
 			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
 		})).add(new AnimationController<>(this, event -> {
 			if ((this.entityData.get(STATE) == 1 || this.swinging) && !isDead

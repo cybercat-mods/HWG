@@ -66,7 +66,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
 		var isDead = this.dead || this.getHealth() < 0.01 || this.isDeadOrDying();
-		controllers.add(new AnimationController<>(this, event -> {
+		controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
 			if (event.isMoving())
 				return event.setAndContinue(RawAnimation.begin().thenLoop("walking"));
 			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
@@ -147,7 +147,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 
 	public static AttributeSupplier.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D)
-				.add(Attributes.MOVEMENT_SPEED, 0.29D).add(Attributes.ARMOR, 4)
+				.add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.ARMOR, 4)
 				.add(Attributes.MAX_HEALTH, HWGConfig.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}

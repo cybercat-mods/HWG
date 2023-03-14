@@ -28,7 +28,7 @@ public class TechnodemonLesserModel extends GeoModel<TechnodemonEntity> {
 
 	@Override
 	public ResourceLocation getAnimationResource(TechnodemonEntity object) {
-		return new ResourceLocation(HWGMod.MODID, "animations/technodemon_lesser_1.animation.json");
+		return new ResourceLocation(HWGMod.MODID, "animations/technodemon_lesser_" + object.getVariant() + ".animation.json");
 	}
 	
 	@Override

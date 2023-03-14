@@ -67,7 +67,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
 		var isDead = this.dead || this.getHealth() < 0.01 || this.isDeadOrDying();
-		controllers.add(new AnimationController<>(this, event -> {
+		controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
 			if (event.isMoving() && !this.isSwimming())
 				return event.setAndContinue(RawAnimation.begin().thenLoop("walking"));
 			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
