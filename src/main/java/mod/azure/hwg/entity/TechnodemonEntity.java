@@ -109,7 +109,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 								|| target instanceof Player && ((Player) target).isCreative()),
 						new SetRandomLookTarget<>()),
 				new OneRandomBehaviour<>(
-						new SetRandomWalkTarget<>().speedModifier(1).startCondition(entity -> !entity.isAggressive()),
+						new SetRandomWalkTarget<>().speedModifier(0.85F).startCondition(entity -> !entity.isAggressive()),
 						new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
 	}
 
@@ -147,7 +147,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 
 	public static AttributeSupplier.Builder createMobAttributes() {
 		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D)
-				.add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.ARMOR, 4)
+				.add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ARMOR, 4)
 				.add(Attributes.MAX_HEALTH, HWGConfig.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D)
 				.add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}

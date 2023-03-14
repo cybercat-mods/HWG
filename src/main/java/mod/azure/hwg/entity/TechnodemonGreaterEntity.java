@@ -110,7 +110,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 								|| target instanceof Player && ((Player) target).isCreative()),
 						new SetRandomLookTarget<>()),
 				new OneRandomBehaviour<>(
-						new SetRandomWalkTarget<>().speedModifier(1).startCondition(entity -> !entity.isAggressive()),
+						new SetRandomWalkTarget<>().speedModifier(0.7F).startCondition(entity -> !entity.isAggressive()),
 						new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
 	}
 
