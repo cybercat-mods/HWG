@@ -13,7 +13,7 @@ import groovy.json.JsonOutput
 import com.modrinth.minotaur.dependencies.ModDependency
 
 plugins {
-    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'fabric-loom' version '1.1-SNAPSHOT'
 	id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
@@ -42,10 +42,11 @@ configurations {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.3:1.0.3'
+  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.3:1.0.7'
+	modImplementation "curse.maven:SBL-661293:4277537-sources-4277538"
 	modImplementation "maven.modrinth:midnightlib:1.1.0-fabric"
     shade group: 'maven.modrinth', name: 'midnightlib', version: '1.1.0-fabric'
 	modImplementation ("com.terraformersmc:modmenu:5.0.2")
@@ -137,6 +138,8 @@ if (file('key.properties').exists()) {
         	relations {
             	requiredDependency 'fabric-api'  
             	requiredDependency 'azurelib'  
+            	requiredDependency 'smartbrainlib'  
+            	optionalDependency 'modmenu' 
             	optionalDependency 'roughly-enough-items' 
         	}
         	mainArtifact(remapJar)
@@ -168,6 +171,7 @@ if (file('key.properties').exists()) {
 		loaders = ['fabric', 'quilt']
 		dependencies { 
         	required.project "azurelib"
+        	required.project "smartbrainlib"
         	required.project "fabric-api"
             optional.project "modmenu"
             optional.project "roughly-enough-items"

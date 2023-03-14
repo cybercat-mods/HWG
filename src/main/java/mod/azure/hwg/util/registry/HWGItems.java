@@ -31,11 +31,11 @@ import mod.azure.hwg.item.weapons.RocketLauncher;
 import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 
 public class HWGItems {
 
@@ -87,11 +87,11 @@ public class HWGItems {
 	public static HellhorseRevolverItem HELLHORSE = item(new HellhorseRevolverItem(), "hellhorse_revolver");
 	public static HWGSpawnEgg LESSER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOLESSER), "lesser_spawn_egg");
 	public static HWGSpawnEgg GREATER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOGREATER), "greater_spawn_egg");
-	public static BlockItem FUEL_TANK = item(new BlockItem(HWGBlocks.FUEL_TANK, new Item.Settings()), "fuel_tank");
-	public static BlockItem GUN_TABLE = item(new BlockItem(HWGBlocks.GUN_TABLE, new Item.Settings()), "gun_table");
+	public static BlockItem FUEL_TANK = item(new BlockItem(HWGBlocks.FUEL_TANK, new Item.Properties()), "fuel_tank");
+	public static BlockItem GUN_TABLE = item(new BlockItem(HWGBlocks.GUN_TABLE, new Item.Properties()), "gun_table");
 
 	static <T extends Item> T item(T c, String id) {
-		Registry.register(Registries.ITEM, new Identifier(HWGMod.MODID, id), c);
+		Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
 		return c;
 	}
 
@@ -101,7 +101,7 @@ public class HWGItems {
 	public static Map<Item, Item> getItemMap() {
 		Map<Item, Item> vanillaItemMap = new HashMap<>();
 		for (Item i : HWGItems.ITEMS) {
-			vanillaItemMap.put(Registries.ITEM.get(new Identifier(HWGMod.MODID, Registries.ITEM.getId(i).getPath())),
+			vanillaItemMap.put(BuiltInRegistries.ITEM.get(new ResourceLocation(HWGMod.MODID, BuiltInRegistries.ITEM.getKey(i).getPath())),
 					i);
 		}
 		return vanillaItemMap;

@@ -12,63 +12,63 @@ import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
-public class RocketEntity extends PersistentProjectileEntity implements GeoEntity {
+public class RocketEntity extends AbstractArrow implements GeoEntity {
 
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(RocketEntity.class,
-			TrackedDataHandlerRegistry.FLOAT);
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(RocketEntity.class,
+			EntityDataSerializers.FLOAT);
 
-	public RocketEntity(EntityType<? extends RocketEntity> entityType, World world) {
+	public RocketEntity(EntityType<? extends RocketEntity> entityType, Level world) {
 		super(entityType, world);
-		this.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
+		this.pickup = AbstractArrow.Pickup.DISALLOWED;
 	}
 
-	public RocketEntity(World world, LivingEntity owner) {
+	public RocketEntity(Level world, LivingEntity owner) {
 		super(ProjectilesEntityRegister.ROCKETS, owner, world);
 	}
 
-	protected RocketEntity(EntityType<? extends RocketEntity> type, double x, double y, double z, World world) {
+	protected RocketEntity(EntityType<? extends RocketEntity> type, double x, double y, double z, Level world) {
 		this(type, world);
 	}
 
-	protected RocketEntity(EntityType<? extends RocketEntity> type, LivingEntity owner, World world) {
+	protected RocketEntity(EntityType<? extends RocketEntity> type, LivingEntity owner, Level world) {
 		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
 		this.setOwner(owner);
-		if (owner instanceof PlayerEntity) {
-			this.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
+		if (owner instanceof Player) {
+			this.pickup = AbstractArrow.Pickup.ALLOWED;
 		}
 
 	}
 
-	public RocketEntity(World world, double x, double y, double z) {
+	public RocketEntity(Level world, double x, double y, double z) {
 		super(ProjectilesEntityRegister.ROCKETS, x, y, z, world);
 		this.setNoGravity(true);
-		this.setDamage(0);
+		this.setBaseDamage(0);
 	}
 
 	@Override
@@ -84,12 +84,12 @@ public class RocketEntity extends PersistentProjectileEntity implements GeoEntit
 	}
 
 	@Override
-	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return EntityPacket.createPacket(this);
 	}
 
 	@Override
-	public void age() {
+	public void tickDespawn() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
 			this.explode();
@@ -98,114 +98,114 @@ public class RocketEntity extends PersistentProjectileEntity implements GeoEntit
 	}
 
 	@Override
-	public void setVelocity(double x, double y, double z, float speed, float divergence) {
-		super.setVelocity(x, y, z, speed, divergence);
+	public void shoot(double x, double y, double z, float speed, float divergence) {
+		super.shoot(x, y, z, speed, divergence);
 		this.ticksInAir = 0;
 	}
 
 	@Override
-	protected void initDataTracker() {
-		super.initDataTracker();
-		this.getDataTracker().startTracking(FORCED_YAW, 0f);
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.getEntityData().define(FORCED_YAW, 0f);
 	}
 
 	@Override
-	public void writeCustomDataToNbt(NbtCompound tag) {
-		super.writeCustomDataToNbt(tag);
+	public void addAdditionalSaveData(CompoundTag tag) {
+		super.addAdditionalSaveData(tag);
 		tag.putShort("life", (short) this.ticksInAir);
-		tag.putFloat("ForcedYaw", dataTracker.get(FORCED_YAW));
+		tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
 	}
 
 	@Override
-	public void readCustomDataFromNbt(NbtCompound tag) {
-		super.readCustomDataFromNbt(tag);
+	public void readAdditionalSaveData(CompoundTag tag) {
+		super.readAdditionalSaveData(tag);
 		this.ticksInAir = tag.getShort("life");
-		dataTracker.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
+		entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		boolean bl = this.isNoClip();
-		Vec3d vec3d = this.getVelocity();
-		if (this.prevPitch == 0.0F && this.prevYaw == 0.0F) {
-			double f = vec3d.horizontalLength();
-			this.setYaw((float) (MathHelper.atan2(vec3d.x, vec3d.z) * 57.2957763671875D));
-			this.setPitch((float) (MathHelper.atan2(vec3d.y, f) * 57.2957763671875D));
-			this.prevYaw = this.getYaw();
-			this.prevPitch = this.getPitch();
+		boolean bl = this.isNoPhysics();
+		Vec3 vec3d = this.getDeltaMovement();
+		if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
+			double f = vec3d.horizontalDistance();
+			this.setYRot((float) (Mth.atan2(vec3d.x, vec3d.z) * 57.2957763671875D));
+			this.setXRot((float) (Mth.atan2(vec3d.y, f) * 57.2957763671875D));
+			this.yRotO = this.getYRot();
+			this.xRotO = this.getXRot();
 		}
-		if (getOwner()instanceof PlayerEntity owner)
-			setYaw(dataTracker.get(FORCED_YAW));
+		if (getOwner()instanceof Player owner)
+			setYRot(entityData.get(FORCED_YAW));
 		++this.ticksInAir;
 		if (this.ticksInAir >= 40) {
 			this.explode();
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
-		if (this.age >= 80) {
+		if (this.tickCount >= 80) {
 			this.explode();
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		if (this.inAir && !bl) {
-			this.age();
+			this.tickDespawn();
 			++this.timeInAir;
 		} else {
 			this.timeInAir = 0;
-			Vec3d vec3d3 = this.getPos();
-			Vec3d vector3d3 = vec3d3.add(vec3d);
-			HitResult hitResult = this.world.raycast(new RaycastContext(vec3d3, vector3d3,
-					RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this));
+			Vec3 vec3d3 = this.position();
+			Vec3 vector3d3 = vec3d3.add(vec3d);
+			HitResult hitResult = this.level.clip(new ClipContext(vec3d3, vector3d3,
+					ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 			if (((HitResult) hitResult).getType() != HitResult.Type.MISS) {
-				vector3d3 = ((HitResult) hitResult).getPos();
+				vector3d3 = ((HitResult) hitResult).getLocation();
 			}
 			while (!this.isRemoved()) {
-				EntityHitResult entityHitResult = this.getEntityCollision(vec3d3, vector3d3);
+				EntityHitResult entityHitResult = this.findHitEntity(vec3d3, vector3d3);
 				if (entityHitResult != null) {
 					hitResult = entityHitResult;
 				}
 				if (hitResult != null && ((HitResult) hitResult).getType() == HitResult.Type.ENTITY) {
 					Entity entity = ((EntityHitResult) hitResult).getEntity();
 					Entity entity2 = this.getOwner();
-					if (entity instanceof PlayerEntity && entity2 instanceof PlayerEntity
-							&& !((PlayerEntity) entity2).shouldDamagePlayer((PlayerEntity) entity)) {
+					if (entity instanceof Player && entity2 instanceof Player
+							&& !((Player) entity2).canHarmPlayer((Player) entity)) {
 						hitResult = null;
 						entityHitResult = null;
 					}
 				}
 				if (hitResult != null && !bl) {
-					this.onCollision((HitResult) hitResult);
-					this.velocityDirty = true;
+					this.onHit((HitResult) hitResult);
+					this.hasImpulse = true;
 				}
 				if (entityHitResult == null || this.getPierceLevel() <= 0) {
 					break;
 				}
 				hitResult = null;
 			}
-			vec3d = this.getVelocity();
+			vec3d = this.getDeltaMovement();
 			double d = vec3d.x;
 			double e = vec3d.y;
 			double g = vec3d.z;
 			double h = this.getX() + d;
 			double j = this.getY() + e;
 			double k = this.getZ() + g;
-			double l = vec3d.horizontalLength();
+			double l = vec3d.horizontalDistance();
 			if (bl) {
-				this.setYaw((float) (MathHelper.atan2(-e, -g) * 57.2957763671875D));
+				this.setYRot((float) (Mth.atan2(-e, -g) * 57.2957763671875D));
 			} else {
-				this.setYaw((float) (MathHelper.atan2(e, g) * 57.2957763671875D));
+				this.setYRot((float) (Mth.atan2(e, g) * 57.2957763671875D));
 			}
-			this.setPitch((float) (MathHelper.atan2(e, l) * 57.2957763671875D));
-			this.setPitch(updateRotation(this.prevPitch, this.getPitch()));
-			this.setYaw(updateRotation(this.prevYaw, this.getYaw()));
+			this.setXRot((float) (Mth.atan2(e, l) * 57.2957763671875D));
+			this.setXRot(lerpRotation(this.xRotO, this.getXRot()));
+			this.setYRot(lerpRotation(this.yRotO, this.getYRot()));
 			float m = 0.99F;
 
-			this.setVelocity(vec3d.multiply((double) m));
-			if (!this.hasNoGravity() && !bl) {
-				Vec3d vec3d5 = this.getVelocity();
-				this.setVelocity(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
+			this.setDeltaMovement(vec3d.scale((double) m));
+			if (!this.isNoGravity() && !bl) {
+				Vec3 vec3d5 = this.getDeltaMovement();
+				this.setDeltaMovement(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
 			}
-			this.updatePosition(h, j, k);
-			this.checkBlockCollision();
+			this.absMoveTo(h, j, k);
+			this.checkInsideBlocks();
 		}
 	}
 
@@ -215,67 +215,67 @@ public class RocketEntity extends PersistentProjectileEntity implements GeoEntit
 	}
 
 	@Override
-	public boolean hasNoGravity() {
-		if (this.isSubmergedInWater()) {
+	public boolean isNoGravity() {
+		if (this.isUnderWater()) {
 			return false;
 		} else {
 			return true;
 		}
 	}
 
-	public SoundEvent hitSound = this.getHitSound();
+	public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
 	@Override
-	public void setSound(SoundEvent soundIn) {
+	public void setSoundEvent(SoundEvent soundIn) {
 		this.hitSound = soundIn;
 	}
 
 	@Override
-	protected SoundEvent getHitSound() {
-		return SoundEvents.ENTITY_GENERIC_EXPLODE;
+	protected SoundEvent getDefaultHitGroundSoundEvent() {
+		return SoundEvents.GENERIC_EXPLODE;
 	}
 
 	@Override
-	protected void onBlockHit(BlockHitResult blockHitResult) {
-		super.onBlockHit(blockHitResult);
-		if (!this.world.isClient) {
+	protected void onHitBlock(BlockHitResult blockHitResult) {
+		super.onHitBlock(blockHitResult);
+		if (!this.level.isClientSide) {
 			this.explode();
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
-		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
+		this.setSoundEvent(SoundEvents.GENERIC_EXPLODE);
 	}
 
 	@Override
-	protected void onEntityHit(EntityHitResult entityHitResult) {
-		super.onEntityHit(entityHitResult);
-		if (!this.world.isClient) {
+	protected void onHitEntity(EntityHitResult entityHitResult) {
+		super.onHitEntity(entityHitResult);
+		if (!this.level.isClientSide) {
 			this.explode();
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
 	protected void explode() {
-		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 2.0F, false,
-				HWGConfig.rocket_breaks == true ? World.ExplosionSourceType.BLOCK : World.ExplosionSourceType.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
+				HWGConfig.rocket_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 
 	@Override
-	public ItemStack asItemStack() {
+	public ItemStack getPickupItem() {
 		return new ItemStack(HWGItems.ROCKET);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public boolean shouldRender(double distance) {
+	public boolean shouldRenderAtSqrDistance(double distance) {
 		return true;
 	}
 
 	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
 		float f = 0.017453292F;
-		float x = -MathHelper.sin(yaw * f) * MathHelper.cos(pitch * f);
-		float y = -MathHelper.sin((pitch + roll) * f);
-		float z = MathHelper.cos(yaw * f) * MathHelper.cos(pitch * f);
-		this.setVelocity(x, y, z, modifierZ, 0);
+		float x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
+		float y = -Mth.sin((pitch + roll) * f);
+		float z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
+		this.shoot(x, y, z, modifierZ, 0);
 	}
 
 }

@@ -2,33 +2,33 @@ package mod.azure.hwg.util.registry;
 
 import mod.azure.hwg.HWGMod;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 
 public class HWGParticles {
 
-	public static final DefaultParticleType BRIM_RED = register(new Identifier(HWGMod.MODID, "brim_red"), false);
-	public static final DefaultParticleType RED_FLARE = register(new Identifier(HWGMod.MODID, "red_flare"), false);
-	public static final DefaultParticleType BLUE_FLARE = register(new Identifier(HWGMod.MODID, "blue_flare"), false);
-	public static final DefaultParticleType CYAN_FLARE = register(new Identifier(HWGMod.MODID, "cyan_flare"), false);
-	public static final DefaultParticleType GRAY_FLARE = register(new Identifier(HWGMod.MODID, "gray_flare"), false);
-	public static final DefaultParticleType LIME_FLARE = register(new Identifier(HWGMod.MODID, "lime_flare"), false);
-	public static final DefaultParticleType PINK_FLARE = register(new Identifier(HWGMod.MODID, "pink_flare"), false);
-	public static final DefaultParticleType BLACK_FLARE = register(new Identifier(HWGMod.MODID, "black_flare"), false);
-	public static final DefaultParticleType BRIM_ORANGE = register(new Identifier(HWGMod.MODID, "brim_orange"), false);
-	public static final DefaultParticleType BROWN_FLARE = register(new Identifier(HWGMod.MODID, "brown_flare"), false);
-	public static final DefaultParticleType GREEN_FLARE = register(new Identifier(HWGMod.MODID, "green_flare"), false);
-	public static final DefaultParticleType WHITE_FLARE = register(new Identifier(HWGMod.MODID, "white_flare"), false);
-	public static final DefaultParticleType ORANGE_FLARE = register(new Identifier(HWGMod.MODID, "orange_flare"), false);
-	public static final DefaultParticleType PURPLE_FLARE = register(new Identifier(HWGMod.MODID, "purple_flare"), false);
-	public static final DefaultParticleType YELLOW_FLARE = register(new Identifier(HWGMod.MODID, "yellow_flare"), false);
-	public static final DefaultParticleType MAGENTA_FLARE = register(new Identifier(HWGMod.MODID, "magenta_flare"), false);
-	public static final DefaultParticleType LIGHTBLUE_FLARE = register(new Identifier(HWGMod.MODID, "lightblue_flare"), false);
-	public static final DefaultParticleType LIGHTGRAY_FLARE = register(new Identifier(HWGMod.MODID, "lightgray_flare"), false);
+	public static final SimpleParticleType BRIM_RED = register(new ResourceLocation(HWGMod.MODID, "brim_red"), false);
+	public static final SimpleParticleType RED_FLARE = register(new ResourceLocation(HWGMod.MODID, "red_flare"), false);
+	public static final SimpleParticleType BLUE_FLARE = register(new ResourceLocation(HWGMod.MODID, "blue_flare"), false);
+	public static final SimpleParticleType CYAN_FLARE = register(new ResourceLocation(HWGMod.MODID, "cyan_flare"), false);
+	public static final SimpleParticleType GRAY_FLARE = register(new ResourceLocation(HWGMod.MODID, "gray_flare"), false);
+	public static final SimpleParticleType LIME_FLARE = register(new ResourceLocation(HWGMod.MODID, "lime_flare"), false);
+	public static final SimpleParticleType PINK_FLARE = register(new ResourceLocation(HWGMod.MODID, "pink_flare"), false);
+	public static final SimpleParticleType BLACK_FLARE = register(new ResourceLocation(HWGMod.MODID, "black_flare"), false);
+	public static final SimpleParticleType BRIM_ORANGE = register(new ResourceLocation(HWGMod.MODID, "brim_orange"), false);
+	public static final SimpleParticleType BROWN_FLARE = register(new ResourceLocation(HWGMod.MODID, "brown_flare"), false);
+	public static final SimpleParticleType GREEN_FLARE = register(new ResourceLocation(HWGMod.MODID, "green_flare"), false);
+	public static final SimpleParticleType WHITE_FLARE = register(new ResourceLocation(HWGMod.MODID, "white_flare"), false);
+	public static final SimpleParticleType ORANGE_FLARE = register(new ResourceLocation(HWGMod.MODID, "orange_flare"), false);
+	public static final SimpleParticleType PURPLE_FLARE = register(new ResourceLocation(HWGMod.MODID, "purple_flare"), false);
+	public static final SimpleParticleType YELLOW_FLARE = register(new ResourceLocation(HWGMod.MODID, "yellow_flare"), false);
+	public static final SimpleParticleType MAGENTA_FLARE = register(new ResourceLocation(HWGMod.MODID, "magenta_flare"), false);
+	public static final SimpleParticleType LIGHTBLUE_FLARE = register(new ResourceLocation(HWGMod.MODID, "lightblue_flare"), false);
+	public static final SimpleParticleType LIGHTGRAY_FLARE = register(new ResourceLocation(HWGMod.MODID, "lightgray_flare"), false);
 
-	private static DefaultParticleType register(Identifier identifier, boolean alwaysSpawn) {
-		return Registry.register(Registries.PARTICLE_TYPE, identifier, FabricParticleTypes.simple(alwaysSpawn));
+	private static SimpleParticleType register(ResourceLocation identifier, boolean alwaysSpawn) {
+		return Registry.register(BuiltInRegistries.PARTICLE_TYPE, identifier, FabricParticleTypes.simple(alwaysSpawn));
 	}
 }

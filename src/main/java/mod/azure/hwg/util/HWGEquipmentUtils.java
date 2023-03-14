@@ -6,21 +6,21 @@ import java.util.Map;
 import java.util.Set;
 
 import mod.azure.hwg.util.registry.HWGItems;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class HWGEquipmentUtils {
 	public static String TAG = "hwgguntag";
 
     public static boolean ruinedItemHasEnchantment(ItemStack ruinedItem, Enchantment enchantment) {
-        if (ruinedItem.getNbt() == null) return false;
-        String tagString = ruinedItem.getNbt().getString(TAG);
+        if (ruinedItem.getTag() == null) return false;
+        String tagString = ruinedItem.getTag().getString(TAG);
         Map<Enchantment, Integer> enchantMap = HWGEquipmentUtils.processEncodedEnchantments(tagString);
         if (enchantMap == null) return false;
         for (Enchantment e : enchantMap.keySet()) {
@@ -30,11 +30,11 @@ public class HWGEquipmentUtils {
     }
 
     public static int compareItemsById(Item i1, Item i2) {
-        return Registries.ITEM.getId(i1).compareTo(Registries.ITEM.getId(i2));
+        return BuiltInRegistries.ITEM.getKey(i1).compareTo(BuiltInRegistries.ITEM.getKey(i2));
     }
 
     public static int generateRepairLevelCost(ItemStack repaired, int maxLevel) {
-        int targetLevel = maxLevel * (repaired.getMaxDamage() - repaired.getDamage()) / repaired.getMaxDamage();
+        int targetLevel = maxLevel * (repaired.getMaxDamage() - repaired.getDamageValue()) / repaired.getMaxDamage();
         return Math.max(targetLevel, 1);
     }
 	
@@ -51,17 +51,17 @@ public class HWGEquipmentUtils {
             int targetDamage){
 
         ItemStack repaired = new ItemStack(HWGItems.getItemMap().get(leftStack.getItem()));
-        NbtCompound tag = leftStack.getOrCreateNbt();
+        CompoundTag tag = leftStack.getOrCreateTag();
         String encodedEnch = tag.getString(TAG);
         if (!encodedEnch.isEmpty()) tag.remove(TAG);
         Map<Enchantment, Integer> enchantMap = HWGEquipmentUtils.processEncodedEnchantments(encodedEnch);
         if (enchantMap != null) {
             for (Map.Entry<Enchantment, Integer> enchant : enchantMap.entrySet()) {
-                repaired.addEnchantment(enchant.getKey(), enchant.getValue());
+                repaired.enchant(enchant.getKey(), enchant.getValue());
             }
         }
-        repaired.setNbt(repaired.getOrCreateNbt().copyFrom(tag));
-        repaired.setDamage(targetDamage);
+        repaired.setTag(repaired.getOrCreateTag().merge(tag));
+        repaired.setDamageValue(targetDamage);
         return repaired;
     }
 
@@ -72,41 +72,41 @@ public class HWGEquipmentUtils {
             String[] enchantItem = encodedEnchant.split(">");
             String[] enchantKey = enchantItem[0].split(":");
             int enchantLevel = Integer.parseInt(enchantItem[1]);
-            enchants.put(Registries.ENCHANTMENT.get(new Identifier(enchantKey[0], enchantKey[1])), enchantLevel);
+            enchants.put(BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(enchantKey[0], enchantKey[1])), enchantLevel);
         }
         return enchants.isEmpty() ? null : enchants;
     }
 
     public static void onSendEquipmentBreakStatusImpl(
-            ServerPlayerEntity serverPlayer,
+            ServerPlayer serverPlayer,
             ItemStack breakingStack,
             boolean forceSet) {
         for (Map.Entry<Item, Item> itemMap : HWGItems.getItemMap().entrySet()) {
             if (isVanillaItemStackBreaking(breakingStack, itemMap.getValue())) {
                 // Directly copy over breaking Item's NBT, removing specific fields
                 ItemStack ruinedStack = new ItemStack(itemMap.getKey());
-                NbtCompound breakingNBT = breakingStack.getOrCreateNbt();
+                CompoundTag breakingNBT = breakingStack.getOrCreateTag();
                 if (breakingNBT.contains("Damage")) breakingNBT.remove("Damage");
                 if (breakingNBT.contains("RepairCost")) breakingNBT.remove("RepairCost");
                 // Set enchantment NBT data
-                NbtCompound enchantTag = getTagForEnchantments(breakingStack, ruinedStack);
-                if (enchantTag != null) breakingNBT.copyFrom(enchantTag);
+                CompoundTag enchantTag = getTagForEnchantments(breakingStack, ruinedStack);
+                if (enchantTag != null) breakingNBT.merge(enchantTag);
                 if (breakingNBT.contains("Enchantments")) breakingNBT.remove("Enchantments");
-                ruinedStack.setNbt(breakingNBT);
-				serverPlayer.getInventory().offerOrDrop(ruinedStack);
+                ruinedStack.setTag(breakingNBT);
+				serverPlayer.getInventory().placeItemBackInInventory(ruinedStack);
             }
         }
     }
 
-    public static NbtCompound getTagForEnchantments(ItemStack breakingStack, ItemStack ruinedStack) {
+    public static CompoundTag getTagForEnchantments(ItemStack breakingStack, ItemStack ruinedStack) {
         Set<String> enchantmentStrings = new HashSet<>();
-        for (Map.Entry<Enchantment, Integer> ench : EnchantmentHelper.get(breakingStack).entrySet()) {
-            String enchantString = Registries.ENCHANTMENT.getId(ench.getKey())+">"+ench.getValue();
+        for (Map.Entry<Enchantment, Integer> ench : EnchantmentHelper.getEnchantments(breakingStack).entrySet()) {
+            String enchantString = BuiltInRegistries.ENCHANTMENT.getKey(ench.getKey())+">"+ench.getValue();
             enchantmentStrings.add(enchantString);
         }
         if (!enchantmentStrings.isEmpty()) {
-        	NbtCompound tag = ruinedStack.getNbt();
-            if (tag == null) tag = new NbtCompound();
+        	CompoundTag tag = ruinedStack.getTag();
+            if (tag == null) tag = new CompoundTag();
             tag.putString(TAG, String.join(",", enchantmentStrings));
             return tag;
         }
@@ -114,7 +114,7 @@ public class HWGEquipmentUtils {
     }
 
     public static boolean isVanillaItemStackBreaking(ItemStack breakingStack, Item vanillaItem) {
-        return breakingStack.isItemEqual(new ItemStack(vanillaItem))
-            && breakingStack.getMaxDamage() - breakingStack.getDamage() <= 0;
+        return breakingStack.sameItem(new ItemStack(vanillaItem))
+            && breakingStack.getMaxDamage() - breakingStack.getDamageValue() <= 0;
     }
 }

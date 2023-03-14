@@ -2,22 +2,22 @@ package mod.azure.hwg.client.models.weapons;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.AnimatedItem;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import mod.azure.azurelib.model.GeoModel;
 
 public class MinigunModel extends GeoModel<AnimatedItem> {
 	@Override
-	public Identifier getModelResource(AnimatedItem object) {
-		return new Identifier(HWGMod.MODID, "geo/minigun.geo.json");
+	public ResourceLocation getModelResource(AnimatedItem object) {
+		return new ResourceLocation(HWGMod.MODID, "geo/minigun.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureResource(AnimatedItem object) {
-		return new Identifier(HWGMod.MODID, "textures/item/minigun.png");
+	public ResourceLocation getTextureResource(AnimatedItem object) {
+		return new ResourceLocation(HWGMod.MODID, "textures/item/minigun.png");
 	}
 
 	@Override
-	public Identifier getAnimationResource(AnimatedItem animatable) {
-		return new Identifier(HWGMod.MODID, "animations/minigun.animation.json");
+	public ResourceLocation getAnimationResource(AnimatedItem animatable) {
+		return new ResourceLocation(HWGMod.MODID, "animations/minigun.animation.json");
 	}
 }

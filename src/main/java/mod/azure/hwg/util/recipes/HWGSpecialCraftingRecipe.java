@@ -1,24 +1,24 @@
 package mod.azure.hwg.util.recipes;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class HWGSpecialCraftingRecipe implements GunRecipes {
-	private final Identifier id;
+	private final ResourceLocation id;
 
-	public HWGSpecialCraftingRecipe(Identifier id) {
+	public HWGSpecialCraftingRecipe(ResourceLocation id) {
 	      this.id = id;
 	   }
 
-	public Identifier getId() {
+	public ResourceLocation getId() {
 		return this.id;
 	}
 
-	public boolean isIgnoredInRecipeBook() {
+	public boolean isSpecial() {
 		return true;
 	}
 
-	public ItemStack getOutput() {
+	public ItemStack getResultItem() {
 		return ItemStack.EMPTY;
 	}
 }

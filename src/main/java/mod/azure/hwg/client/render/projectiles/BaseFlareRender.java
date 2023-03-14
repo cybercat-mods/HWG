@@ -1,39 +1,40 @@
 package mod.azure.hwg.client.render.projectiles;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import mod.azure.hwg.entity.projectiles.BaseFlareEntity;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 
 public class BaseFlareRender extends EntityRenderer<BaseFlareEntity> {
 
-	public BaseFlareRender(EntityRendererFactory.Context dispatcher) {
+	public BaseFlareRender(EntityRendererProvider.Context dispatcher) {
 		super(dispatcher);
 	}
 
-	public void render(BaseFlareEntity fireworkRocketEntity, float f, float g, MatrixStack matrixStack,
-			VertexConsumerProvider vertexConsumerProvider, int i) {
-		matrixStack.push();
-		matrixStack.multiply(this.dispatcher.getRotation());
-		matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F));
-		matrixStack.scale(fireworkRocketEntity.age > 2 ? 0.5F : 0.0F, fireworkRocketEntity.age > 2 ? 0.5F : 0.0F,
-				fireworkRocketEntity.age > 2 ? 0.5F : 0.0F);
+	public void render(BaseFlareEntity fireworkRocketEntity, float f, float g, PoseStack matrixStack,
+			MultiBufferSource vertexConsumerProvider, int i) {
+		matrixStack.pushPose();
+		matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+		matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+		matrixStack.scale(fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F, fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F,
+				fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F);
 
-		matrixStack.pop();
+		matrixStack.popPose();
 		super.render(fireworkRocketEntity, f, g, matrixStack, vertexConsumerProvider, i);
 	}
 
-	public Identifier getTexture(BaseFlareEntity fireworkRocketEntity) {
-		return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
+	@Override
+	public ResourceLocation getTextureLocation(BaseFlareEntity fireworkRocketEntity) {
+		return TextureAtlas.LOCATION_BLOCKS;
 	}
 
 	@Override
-	protected int getBlockLight(BaseFlareEntity entity, BlockPos blockPos) {
+	protected int getBlockLightLevel(BaseFlareEntity entity, BlockPos blockPos) {
 		return 15;
 	}
 }

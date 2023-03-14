@@ -13,74 +13,74 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.mixin.PointOfInterestTypesInvoker;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradeOffers;
-import net.minecraft.village.TradeOffers.Factory;
-import net.minecraft.village.VillagerProfession;
-import net.minecraft.world.poi.PointOfInterestType;
-import net.minecraft.world.poi.PointOfInterestTypes;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.VillagerTrades.ItemListing;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 
 public class GunSmithProfession {
 
-	public static final Supplier<PointOfInterestType> GUNSMITH_POI = registerPoiType("gun_smith",
-			() -> new PointOfInterestType(PointOfInterestTypesInvoker.invokeGetBlockStates(HWGBlocks.GUN_TABLE), 1, 10));
+	public static final Supplier<PoiType> GUNSMITH_POI = registerPoiType("gun_smith",
+			() -> new PoiType(PointOfInterestTypesInvoker.invokeGetBlockStates(HWGBlocks.GUN_TABLE), 1, 10));
 	public static final Supplier<VillagerProfession> GUNSMITH = registerProfession("gun_smith",
 			() -> new VillagerProfession("gun_smith", holder -> holder.value().equals(GUNSMITH_POI.get()),
 					holder -> holder.value().equals(GUNSMITH_POI.get()), ImmutableSet.of(), ImmutableSet.of(),
-					SoundEvents.ENTITY_ITEM_FRAME_REMOVE_ITEM));
+					SoundEvents.ITEM_FRAME_REMOVE_ITEM));
 
 	public static Supplier<VillagerProfession> registerProfession(String name,
 			Supplier<VillagerProfession> profession) {
-		var registry = Registry.register(Registries.VILLAGER_PROFESSION, new Identifier(HWGMod.MODID, name),
+		var registry = Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, new ResourceLocation(HWGMod.MODID, name),
 				profession.get());
 		return () -> registry;
 	}
 
-	public static Supplier<PointOfInterestType> registerPoiType(String name, Supplier<PointOfInterestType> poiType) {
-		RegistryKey<PointOfInterestType> resourceKey = RegistryKey.of(RegistryKeys.POINT_OF_INTEREST_TYPE,
-				new Identifier(HWGMod.MODID, name));
-		var registry = Registry.register(Registries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
-		PointOfInterestTypesInvoker.invokeRegisterBlockStates(Registries.POINT_OF_INTEREST_TYPE.entryOf(resourceKey),PointOfInterestTypes.getStatesOfBlock(HWGBlocks.GUN_TABLE));
+	public static Supplier<PoiType> registerPoiType(String name, Supplier<PoiType> poiType) {
+		ResourceKey<PoiType> resourceKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE,
+				new ResourceLocation(HWGMod.MODID, name));
+		var registry = Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
+		PointOfInterestTypesInvoker.invokeRegisterBlockStates(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey),PoiTypes.getBlockStates(HWGBlocks.GUN_TABLE));
 		return () -> registry;
 	}
 
 	public static void init() {
-		TradeOffers.PROFESSION_TO_LEVELED_TRADE.put(GUNSMITH.get(), copyToFastUtilMap(ImmutableMap.of(1,
-				new TradeOffers.Factory[] { new GunSmithProfession.BuyForOneEmeraldFactory(Items.GUNPOWDER, 1, 16, 2),
+		VillagerTrades.TRADES.put(GUNSMITH.get(), copyToFastUtilMap(ImmutableMap.of(1,
+				new VillagerTrades.ItemListing[] { new GunSmithProfession.BuyForOneEmeraldFactory(Items.GUNPOWDER, 1, 16, 2),
 						new GunSmithProfession.SellItemFactory(Items.IRON_NUGGET, 2, 1, 16, 1) },
 				2,
-				new TradeOffers.Factory[] {
+				new VillagerTrades.ItemListing[] {
 						new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.BULLETS, 2, 16, 10),
 						new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.PISTOL, 5, 16, 20),
 						new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.LUGER, 5, 16, 20) },
 				3,
-				new TradeOffers.Factory[] {
+				new VillagerTrades.ItemListing[] {
 						new GunSmithProfession.BuyForItemsFactory(Items.EMERALD, 2, 1, HWGItems.SHOTGUN_SHELL, 16, 16,
 								30),
 						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.SMG, 1, 16, 30),
 						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.TOMMYGUN, 1, 16, 30) },
 				4,
-				new TradeOffers.Factory[] {
+				new VillagerTrades.ItemListing[] {
 						new GunSmithProfession.BuyForItemsFactory(HWGItems.FUEL_TANK, 1, 4, HWGItems.FLAMETHROWER, 1,
 								16, 40),
 						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 6, 4, HWGItems.SHOTGUN, 1, 16, 40),
 						new GunSmithProfession.BuyForItemsFactory(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS, 48, 16,
 								50) },
 				5,
-				new TradeOffers.Factory[] {
+				new VillagerTrades.ItemListing[] {
 						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.ROCKETLAUNCHER, 1,
 								16, 60),
 						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER, 1, 16,
@@ -89,12 +89,12 @@ public class GunSmithProfession {
 								60) })));
 	}
 
-	public static Int2ObjectMap<TradeOffers.Factory[]> copyToFastUtilMap(
-			ImmutableMap<Integer, TradeOffers.Factory[]> immutableMap) {
-		return new Int2ObjectOpenHashMap<Factory[]>(immutableMap);
+	public static Int2ObjectMap<VillagerTrades.ItemListing[]> copyToFastUtilMap(
+			ImmutableMap<Integer, VillagerTrades.ItemListing[]> immutableMap) {
+		return new Int2ObjectOpenHashMap<ItemListing[]>(immutableMap);
 	}
 
-	public static class BuyForItemsFactory implements TradeOffers.Factory {
+	public static class BuyForItemsFactory implements VillagerTrades.ItemListing {
 		private final ItemStack secondBuy;
 		private final int secondCount;
 		private final int price;
@@ -104,12 +104,12 @@ public class GunSmithProfession {
 		private final int experience;
 		private final float multiplier;
 
-		public BuyForItemsFactory(ItemConvertible item, int secondCount, Item sellItem, int sellCount, int maxUses,
+		public BuyForItemsFactory(ItemLike item, int secondCount, Item sellItem, int sellCount, int maxUses,
 				int experience) {
 			this(item, secondCount, 1, sellItem, sellCount, maxUses, experience);
 		}
 
-		public BuyForItemsFactory(ItemConvertible item, int secondCount, int price, Item sellItem, int sellCount,
+		public BuyForItemsFactory(ItemLike item, int secondCount, int price, Item sellItem, int sellCount,
 				int maxUses, int experience) {
 			this.secondBuy = new ItemStack(item);
 			this.secondCount = secondCount;
@@ -122,21 +122,21 @@ public class GunSmithProfession {
 		}
 
 		@Nullable
-		public TradeOffer create(Entity entity, Random random) {
-			return new TradeOffer(new ItemStack(Items.EMERALD, this.price),
+		public MerchantOffer getOffer(Entity entity, RandomSource random) {
+			return new MerchantOffer(new ItemStack(Items.EMERALD, this.price),
 					new ItemStack(this.secondBuy.getItem(), this.secondCount),
 					new ItemStack(this.sell.getItem(), this.sellCount), this.maxUses, this.experience, this.multiplier);
 		}
 	}
 
-	static class BuyForOneEmeraldFactory implements TradeOffers.Factory {
+	static class BuyForOneEmeraldFactory implements VillagerTrades.ItemListing {
 		private final Item buy;
 		private final int price;
 		private final int maxUses;
 		private final int experience;
 		private final float multiplier;
 
-		public BuyForOneEmeraldFactory(ItemConvertible item, int price, int maxUses, int experience) {
+		public BuyForOneEmeraldFactory(ItemLike item, int price, int maxUses, int experience) {
 			this.buy = item.asItem();
 			this.price = price;
 			this.maxUses = maxUses;
@@ -144,14 +144,14 @@ public class GunSmithProfession {
 			this.multiplier = 0.05F;
 		}
 
-		public TradeOffer create(Entity entity, Random random) {
+		public MerchantOffer getOffer(Entity entity, RandomSource random) {
 			ItemStack itemStack = new ItemStack(this.buy, this.price);
-			return new TradeOffer(itemStack, new ItemStack(Items.EMERALD), this.maxUses, this.experience,
+			return new MerchantOffer(itemStack, new ItemStack(Items.EMERALD), this.maxUses, this.experience,
 					this.multiplier);
 		}
 	}
 
-	static class BuyForItemFactory implements TradeOffers.Factory {
+	static class BuyForItemFactory implements VillagerTrades.ItemListing {
 		private final Item buy;
 		private final Item sell;
 		private final int price;
@@ -159,7 +159,7 @@ public class GunSmithProfession {
 		private final int experience;
 		private final float multiplier;
 
-		public BuyForItemFactory(ItemConvertible item, ItemConvertible sell, int price, int maxUses, int experience) {
+		public BuyForItemFactory(ItemLike item, ItemLike sell, int price, int maxUses, int experience) {
 			this.buy = item.asItem();
 			this.sell = sell.asItem();
 			this.price = price;
@@ -168,14 +168,14 @@ public class GunSmithProfession {
 			this.multiplier = 0.05F;
 		}
 
-		public TradeOffer create(Entity entity, Random random) {
+		public MerchantOffer getOffer(Entity entity, RandomSource random) {
 			ItemStack itemStack = new ItemStack(this.buy, this.price);
-			return new TradeOffer(itemStack, new ItemStack(sell.asItem()), this.maxUses, this.experience,
+			return new MerchantOffer(itemStack, new ItemStack(sell.asItem()), this.maxUses, this.experience,
 					this.multiplier);
 		}
 	}
 
-	static class SellItemFactory implements TradeOffers.Factory {
+	static class SellItemFactory implements VillagerTrades.ItemListing {
 		private final ItemStack sell;
 		private final int price;
 		private final int count;
@@ -209,8 +209,8 @@ public class GunSmithProfession {
 			this.multiplier = multiplier;
 		}
 
-		public TradeOffer create(Entity entity, Random random) {
-			return new TradeOffer(new ItemStack(Items.EMERALD, this.price),
+		public MerchantOffer getOffer(Entity entity, RandomSource random) {
+			return new MerchantOffer(new ItemStack(Items.EMERALD, this.price),
 					new ItemStack(this.sell.getItem(), this.count), this.maxUses, this.experience, this.multiplier);
 		}
 	}

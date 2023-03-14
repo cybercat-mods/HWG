@@ -2,9 +2,9 @@ package mod.azure.hwg.client.models;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import mod.azure.azurelib.constant.DataTickets;
 import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
 import mod.azure.azurelib.core.animation.AnimationState;
@@ -17,24 +17,24 @@ public class TechnodemonGreaterModel extends GeoModel<TechnodemonGreaterEntity> 
 	}
 
 	@Override
-	public Identifier getModelResource(TechnodemonGreaterEntity object) {
-		return new Identifier(HWGMod.MODID, "geo/technodemon_greater_" + object.getVariant() + ".geo.json");
+	public ResourceLocation getModelResource(TechnodemonGreaterEntity object) {
+		return new ResourceLocation(HWGMod.MODID, "geo/technodemon_greater_" + object.getVariant() + ".geo.json");
 	}
 
 	@Override
-	public Identifier getTextureResource(TechnodemonGreaterEntity object) {
-		return new Identifier(HWGMod.MODID, "textures/entity/technodemon_greater_" + object.getVariant() + ".png");
+	public ResourceLocation getTextureResource(TechnodemonGreaterEntity object) {
+		return new ResourceLocation(HWGMod.MODID, "textures/entity/technodemon_greater_" + object.getVariant() + ".png");
 	}
 
 	@Override
-	public Identifier getAnimationResource(TechnodemonGreaterEntity object) {
-		return new Identifier(HWGMod.MODID,
+	public ResourceLocation getAnimationResource(TechnodemonGreaterEntity object) {
+		return new ResourceLocation(HWGMod.MODID,
 				"animations/technodemon_greater_" + object.getVariant() + ".animation.json");
 	}
 	
 	@Override
-	public RenderLayer getRenderType(TechnodemonGreaterEntity animatable, Identifier texture) {
-		return RenderLayer.getEntityTranslucent(getTextureResource(animatable));
+	public RenderType getRenderType(TechnodemonGreaterEntity animatable, ResourceLocation texture) {
+		return RenderType.entityTranslucent(getTextureResource(animatable));
 	}
 	
 	@Override
@@ -45,8 +45,8 @@ public class TechnodemonGreaterModel extends GeoModel<TechnodemonGreaterEntity> 
 
 		if (head != null) {
 			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-			head.setRotX((entityData.headPitch() - 5) * MathHelper.RADIANS_PER_DEGREE);
-			head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
+			head.setRotX((entityData.headPitch() - 5) * Mth.DEG_TO_RAD);
+			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}
 	}
 }

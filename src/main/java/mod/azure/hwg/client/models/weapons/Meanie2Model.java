@@ -2,22 +2,22 @@ package mod.azure.hwg.client.models.weapons;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.Meanie2Item;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import mod.azure.azurelib.model.GeoModel;
 
 public class Meanie2Model extends GeoModel<Meanie2Item> {
 	@Override
-	public Identifier getModelResource(Meanie2Item object) {
-		return new Identifier(HWGMod.MODID, "geo/meanie_gun_2.geo.json");
+	public ResourceLocation getModelResource(Meanie2Item object) {
+		return new ResourceLocation(HWGMod.MODID, "geo/meanie_gun_2.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureResource(Meanie2Item object) {
-		return new Identifier(HWGMod.MODID, "textures/item/meanie_gun.png");
+	public ResourceLocation getTextureResource(Meanie2Item object) {
+		return new ResourceLocation(HWGMod.MODID, "textures/item/meanie_gun.png");
 	}
 
 	@Override
-	public Identifier getAnimationResource(Meanie2Item animatable) {
-		return new Identifier(HWGMod.MODID, "animations/pistol.animation.json");
+	public ResourceLocation getAnimationResource(Meanie2Item animatable) {
+		return new ResourceLocation(HWGMod.MODID, "animations/pistol.animation.json");
 	}
 }

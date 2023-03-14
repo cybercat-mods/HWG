@@ -2,22 +2,22 @@ package mod.azure.hwg.client.models.weapons;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.GrenadeLauncherItem;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import mod.azure.azurelib.model.GeoModel;
 
 public class GrenadeLauncherModel extends GeoModel<GrenadeLauncherItem> {
 	@Override
-	public Identifier getModelResource(GrenadeLauncherItem object) {
-		return new Identifier(HWGMod.MODID, "geo/grenade_launcher.geo.json");
+	public ResourceLocation getModelResource(GrenadeLauncherItem object) {
+		return new ResourceLocation(HWGMod.MODID, "geo/grenade_launcher.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureResource(GrenadeLauncherItem object) {
-		return new Identifier(HWGMod.MODID, "textures/item/grenade_launcher.png");
+	public ResourceLocation getTextureResource(GrenadeLauncherItem object) {
+		return new ResourceLocation(HWGMod.MODID, "textures/item/grenade_launcher.png");
 	}
 
 	@Override
-	public Identifier getAnimationResource(GrenadeLauncherItem animatable) {
-		return new Identifier(HWGMod.MODID, "animations/grenade_launcher.animation.json");
+	public ResourceLocation getAnimationResource(GrenadeLauncherItem animatable) {
+		return new ResourceLocation(HWGMod.MODID, "animations/grenade_launcher.animation.json");
 	}
 }

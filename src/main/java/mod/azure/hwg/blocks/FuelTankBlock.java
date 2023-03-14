@@ -2,65 +2,65 @@ package mod.azure.hwg.blocks;
 
 import mod.azure.hwg.entity.projectiles.FuelTankEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class FuelTankBlock extends Block {
 
 	public FuelTankBlock() {
-		super(FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.METAL).nonOpaque());
+		super(FabricBlockSettings.of(Material.METAL).sound(SoundType.METAL).noOcclusion());
 	}
 
 	@Override
-	public boolean shouldDropItemsOnExplosion(Explosion explosion) {
+	public boolean dropFromExplosion(Explosion explosion) {
 		return false;
 	}
 
-	private static void primeBlock(World world, BlockPos pos, LivingEntity igniter) {
-		if (!world.isClient) {
+	private static void primeBlock(Level world, BlockPos pos, LivingEntity igniter) {
+		if (!world.isClientSide) {
 			FuelTankEntity tntEntity = new FuelTankEntity(world, (double) pos.getX() + 0.5D, (double) pos.getY(),
 					(double) pos.getZ() + 0.5D, igniter);
-			world.spawnEntity(tntEntity);
+			world.addFreshEntity(tntEntity);
 		}
 	}
 
 	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
 			BlockHitResult hit) {
-		ItemStack itemStack = player.getStackInHand(hand);
+		ItemStack itemStack = player.getItemInHand(hand);
 		Item item = itemStack.getItem();
 		if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE) {
-			return super.onUse(state, world, pos, player, hand, hit);
+			return super.use(state, world, pos, player, hand, hit);
 		} else {
 			primeBlock(world, pos, player);
-			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
-			return ActionResult.success(world.isClient);
+			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
+			return InteractionResult.sidedSuccess(world.isClientSide);
 		}
 	}
 
 	@Override
-	public void onProjectileHit(World world, BlockState state, BlockHitResult hit, ProjectileEntity projectile) {
-		if (!world.isClient) {
+	public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
+		if (!world.isClientSide) {
 			Entity entity = projectile.getOwner();
 			BlockPos blockPos = hit.getBlockPos();
 			primeBlock(world, blockPos, entity instanceof LivingEntity ? (LivingEntity) entity : null);
@@ -69,7 +69,7 @@ public class FuelTankBlock extends Block {
 	}
 
 	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
-		return VoxelShapes.cuboid(0.33f, 0f, 0.33f, 0.67f, 1.0f, 0.67f);
+	public VoxelShape getShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
+		return Shapes.box(0.33f, 0f, 0.33f, 0.67f, 1.0f, 0.67f);
 	}
 }

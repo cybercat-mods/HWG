@@ -2,9 +2,9 @@ package mod.azure.hwg.client.models;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.MercEntity;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import mod.azure.azurelib.constant.DataTickets;
 import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
 import mod.azure.azurelib.core.animation.AnimationState;
@@ -17,23 +17,23 @@ public class MercModel extends GeoModel<MercEntity> {
 	}
 
 	@Override
-	public Identifier getModelResource(MercEntity object) {
-		return new Identifier(HWGMod.MODID, "geo/merc_illager.geo.json");
+	public ResourceLocation getModelResource(MercEntity object) {
+		return new ResourceLocation(HWGMod.MODID, "geo/merc_illager.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureResource(MercEntity object) {
-		return new Identifier(HWGMod.MODID, "textures/entity/merc_" + object.getVariant() + ".png");
+	public ResourceLocation getTextureResource(MercEntity object) {
+		return new ResourceLocation(HWGMod.MODID, "textures/entity/merc_" + object.getVariant() + ".png");
 	}
 
 	@Override
-	public Identifier getAnimationResource(MercEntity object) {
-		return new Identifier(HWGMod.MODID, "animations/merc_illager.animation.json");
+	public ResourceLocation getAnimationResource(MercEntity object) {
+		return new ResourceLocation(HWGMod.MODID, "animations/merc_illager.animation.json");
 	}
 	
 	@Override
-	public RenderLayer getRenderType(MercEntity animatable, Identifier texture) {
-		return RenderLayer.getEntityTranslucent(getTextureResource(animatable));
+	public RenderType getRenderType(MercEntity animatable, ResourceLocation texture) {
+		return RenderType.entityTranslucent(getTextureResource(animatable));
 	}
 
 	@Override
@@ -48,22 +48,22 @@ public class MercModel extends GeoModel<MercEntity> {
 		EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
 		if (head != null) {
-			head.setRotX(entityData.headPitch() * MathHelper.RADIANS_PER_DEGREE);
-			head.setRotY(entityData.netHeadYaw() * MathHelper.RADIANS_PER_DEGREE);
+			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
+			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}
 		if (left_arm != null) {
-			left_arm.setRotX(MathHelper.cos(animatable.limbAngle * 0.6662F) * 2.0F * animatable.limbDistance * 0.5F);
+			left_arm.setRotX(Mth.cos(animatable.animationPosition * 0.6662F) * 2.0F * animatable.animationSpeed * 0.5F);
 		}
 		if (right_arm != null && animatable.getAttckingState() == 0) {
-			right_arm.setRotX(MathHelper.cos(animatable.limbAngle * 0.6662F + 3.1415927F) * 2.0F
-					* animatable.limbDistance * 0.5F);
+			right_arm.setRotX(Mth.cos(animatable.animationPosition * 0.6662F + 3.1415927F) * 2.0F
+					* animatable.animationSpeed * 0.5F);
 		}
 		if (left_leg != null) {
-			left_leg.setRotX(MathHelper.cos(animatable.limbAngle * 0.6662F + 3.1415927F) * 1.4F
-					* animatable.limbDistance * 0.5F);
+			left_leg.setRotX(Mth.cos(animatable.animationPosition * 0.6662F + 3.1415927F) * 1.4F
+					* animatable.animationSpeed * 0.5F);
 		}
 		if (right_leg != null) {
-			right_leg.setRotX(MathHelper.cos(animatable.limbAngle * 0.6662F) * 1.4F * animatable.limbDistance * 0.5F);
+			right_leg.setRotX(Mth.cos(animatable.animationPosition * 0.6662F) * 1.4F * animatable.animationSpeed * 0.5F);
 		}
 	}
 }

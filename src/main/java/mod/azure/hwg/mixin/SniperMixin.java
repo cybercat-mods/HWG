@@ -7,41 +7,40 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.item.weapons.SniperItem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
-@Mixin(InGameHud.class)
-public abstract class SniperMixin extends DrawableHelper {
+@Mixin(Gui.class)
+public abstract class SniperMixin extends GuiComponent {
 
-	private static final Identifier SNIPER = new Identifier("hwg", "textures/gui/pumpkinblur.png");
+	private static final ResourceLocation SNIPER = new ResourceLocation("hwg", "textures/gui/pumpkinblur.png");
 	@Shadow
-	private final MinecraftClient client;
+	private final Minecraft minecraft;
 	@Shadow
-	private int scaledWidth;
+	private int screenWidth;
 	@Shadow
-	private int scaledHeight;
+	private int screenHeight;
 	private boolean scoped = true;
 
-	public SniperMixin(MinecraftClient client) {
-		this.client = client;
+	public SniperMixin(Minecraft client) {
+		this.minecraft = client;
 	}
 
 	@Inject(at = @At("TAIL"), method = "render")
 	private void render(CallbackInfo info) {
-		ItemStack itemStack = this.client.player.getInventory().getMainHandStack();
-		if (this.client.options.getPerspective().isFirstPerson() && itemStack.getItem() instanceof SniperItem) {
-			if (ClientInit.scope.isPressed()) {
+		ItemStack itemStack = this.minecraft.player.getInventory().getSelected();
+		if (this.minecraft.options.getCameraType().isFirstPerson() && itemStack.getItem() instanceof SniperItem) {
+			if (ClientInit.scope.isDown()) {
 				if (this.scoped == true) {
 					this.scoped = false;
 				}
@@ -58,17 +57,17 @@ public abstract class SniperMixin extends DrawableHelper {
 		RenderSystem.disableDepthTest();
 		RenderSystem.depthMask(false);
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, SNIPER);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferBuilder = tessellator.getBuffer();
-		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-		bufferBuilder.vertex(0.0D, (double) this.scaledHeight, -90.0D).texture(0.0F, 1.0F).next();
-		bufferBuilder.vertex((double) this.scaledWidth, (double) this.scaledHeight, -90.0D).texture(1.0F, 1.0F).next();
-		bufferBuilder.vertex((double) this.scaledWidth, 0.0D, -90.0D).texture(1.0F, 0.0F).next();
-		bufferBuilder.vertex(0.0D, 0.0D, -90.0D).texture(0.0F, 0.0F).next();
-		tessellator.draw();
+		Tesselator tessellator = Tesselator.getInstance();
+		BufferBuilder bufferBuilder = tessellator.getBuilder();
+		bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		bufferBuilder.vertex(0.0D, (double) this.screenHeight, -90.0D).uv(0.0F, 1.0F).endVertex();
+		bufferBuilder.vertex((double) this.screenWidth, (double) this.screenHeight, -90.0D).uv(1.0F, 1.0F).endVertex();
+		bufferBuilder.vertex((double) this.screenWidth, 0.0D, -90.0D).uv(1.0F, 0.0F).endVertex();
+		bufferBuilder.vertex(0.0D, 0.0D, -90.0D).uv(0.0F, 0.0F).endVertex();
+		tessellator.end();
 		RenderSystem.depthMask(true);
 		RenderSystem.enableDepthTest();
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

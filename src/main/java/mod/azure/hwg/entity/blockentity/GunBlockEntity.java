@@ -3,52 +3,52 @@ package mod.azure.hwg.entity.blockentity;
 import mod.azure.hwg.blocks.ImplementedInventory;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import mod.azure.hwg.util.registry.HWGMobs;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
-public class GunBlockEntity extends BlockEntity implements ImplementedInventory, NamedScreenHandlerFactory {
+public class GunBlockEntity extends BlockEntity implements ImplementedInventory, MenuProvider {
 
-	private final DefaultedList<ItemStack> items = DefaultedList.ofSize(6, ItemStack.EMPTY);
+	private final NonNullList<ItemStack> items = NonNullList.withSize(6, ItemStack.EMPTY);
 
 	public GunBlockEntity(BlockPos pos, BlockState state) {
 		super(HWGMobs.GUN_TABLE_ENTITY, pos, state);
 	}
 
 	@Override
-	public void readNbt(NbtCompound nbt) {
-		super.readNbt(nbt);
-		Inventories.readNbt(nbt, items);
+	public void load(CompoundTag nbt) {
+		super.load(nbt);
+		ContainerHelper.loadAllItems(nbt, items);
 	}
 
 	@Override
-	public void writeNbt(NbtCompound nbt) {
-		super.writeNbt(nbt);
-		Inventories.writeNbt(nbt, items);
+	public void saveAdditional(CompoundTag nbt) {
+		super.saveAdditional(nbt);
+		ContainerHelper.saveAllItems(nbt, items);
 	}
 
 	@Override
-	public DefaultedList<ItemStack> getItems() {
+	public NonNullList<ItemStack> getItems() {
 		return items;
 	}
 
 	@Override
-	public Text getDisplayName() {
-		return Text.translatable(getCachedState().getBlock().getTranslationKey());
+	public Component getDisplayName() {
+		return Component.translatable(getBlockState().getBlock().getDescriptionId());
 	}
 
 	@Override
-	public ScreenHandler createMenu(int syncId, PlayerInventory inventory, PlayerEntity player) {
-		return new GunTableScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos));
+	public AbstractContainerMenu createMenu(int syncId, Inventory inventory, Player player) {
+		return new GunTableScreenHandler(syncId, inventory, ContainerLevelAccess.create(level, worldPosition));
 	}
 }

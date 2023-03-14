@@ -1,37 +1,37 @@
 package mod.azure.hwg.item.ammo;
 
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class GrenadeEmpItem extends Item {
 
 	public GrenadeEmpItem() {
-		super(new Item.Settings());
+		super(new Item.Properties());
 	}
 
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		ItemStack itemStack = user.getStackInHand(hand);
-		if (!user.getItemCooldownManager().isCoolingDown(this)) {
-			user.getItemCooldownManager().set(this, 25);
-			if (!world.isClient) {
+	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+		ItemStack itemStack = user.getItemInHand(hand);
+		if (!user.getCooldowns().isOnCooldown(this)) {
+			user.getCooldowns().addCooldown(this, 25);
+			if (!world.isClientSide) {
 				GrenadeEntity snowballEntity = new GrenadeEntity(world, user);
-				snowballEntity.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
-				snowballEntity.setDamage(0);
+				snowballEntity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 1.5F, 1.0F);
+				snowballEntity.setBaseDamage(0);
 				snowballEntity.setVariant(1);
 				snowballEntity.setState(1);
-				world.spawnEntity(snowballEntity);
+				world.addFreshEntity(snowballEntity);
 			}
-			if (!user.getAbilities().creativeMode) {
-				itemStack.decrement(1);
+			if (!user.getAbilities().instabuild) {
+				itemStack.shrink(1);
 			}
-			return TypedActionResult.success(itemStack, world.isClient());
+			return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
 		} else {
-			return TypedActionResult.fail(itemStack);
+			return InteractionResultHolder.fail(itemStack);
 		}
 	}
 

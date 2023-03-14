@@ -2,14 +2,14 @@ package mod.azure.hwg.entity.goal;
 
 import java.util.EnumSet;
 
+import mod.azure.azurelib.AzureLibMod;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.item.weapons.BalrogItem;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
-import mod.azure.hwg.util.registry.HWGBlocks;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.item.Item;
 
 public class RangedStrafeAttackGoal extends Goal {
 	private final HWGEntity entity;
@@ -32,7 +32,7 @@ public class RangedStrafeAttackGoal extends Goal {
 		this.moveSpeedAmp = moveSpeedAmpIn;
 		this.attackCooldown = attackCooldownIn;
 		this.maxAttackDistance = maxAttackDistanceIn * maxAttackDistanceIn;
-		this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+		this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 		this.attack = attack;
 		this.visibleTicksDelay = 0;
 		this.strafeTicks = strafeTicks;
@@ -42,7 +42,7 @@ public class RangedStrafeAttackGoal extends Goal {
 	public RangedStrafeAttackGoal(HWGEntity mob, AbstractRangedAttack attack, int attackCooldownIn) {
 		this.entity = mob;
 		this.attackCooldown = attackCooldownIn;
-		this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+		this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
 		this.attack = attack;
 	}
 
@@ -54,15 +54,15 @@ public class RangedStrafeAttackGoal extends Goal {
 	 * Returns whether execution should begin. You can also read and cache any state
 	 * necessary for execution in this method as well.
 	 */
-	public boolean canStart() {
+	public boolean canUse() {
 		return this.entity.getTarget() != null;
 	}
 
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
-	public boolean shouldContinue() {
-		return (this.canStart() || !this.entity.getNavigation().isIdle());
+	public boolean canContinueToUse() {
+		return (this.canUse() || !this.entity.getNavigation().isDone());
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class RangedStrafeAttackGoal extends Goal {
 	 */
 	public void start() {
 		super.start();
-		this.entity.setAttacking(true);
+		this.entity.setAggressive(true);
 	}
 
 	/**
@@ -79,11 +79,11 @@ public class RangedStrafeAttackGoal extends Goal {
 	 */
 	public void stop() {
 		super.stop();
-		this.entity.setAttacking(false);
+		this.entity.setAggressive(false);
 		this.entity.setAttackingState(0);
 		this.seeTime = 0;
 		this.attackTime = -1;
-		this.entity.stopUsingItem();
+		this.entity.releaseUsingItem();
 	}
 
 	/**
@@ -92,9 +92,9 @@ public class RangedStrafeAttackGoal extends Goal {
 	public void tick() {
 		LivingEntity livingentity = this.entity.getTarget();
 		if (livingentity != null) {
-			double distanceToTargetSq = this.entity.squaredDistanceTo(livingentity.getX(), livingentity.getY(),
+			double distanceToTargetSq = this.entity.distanceToSqr(livingentity.getX(), livingentity.getY(),
 					livingentity.getZ());
-			boolean inLineOfSight = this.entity.getVisibilityCache().canSee(livingentity);
+			boolean inLineOfSight = this.entity.getSensing().hasLineOfSight(livingentity);
 			if (inLineOfSight != this.seeTime > 0) {
 				this.seeTime = 0;
 			}
@@ -109,7 +109,7 @@ public class RangedStrafeAttackGoal extends Goal {
 				this.entity.getNavigation().stop();
 				++this.strafingTime;
 			} else {
-				this.entity.getNavigation().startMovingTo(livingentity, this.moveSpeedAmp);
+				this.entity.getNavigation().moveTo(livingentity, this.moveSpeedAmp);
 				this.strafingTime = -1;
 			}
 
@@ -132,15 +132,15 @@ public class RangedStrafeAttackGoal extends Goal {
 					this.strafingBackwards = true;
 				}
 
-				this.entity.getMoveControl().strafeTo(this.strafingBackwards ? -0.5F : 0.5F,
+				this.entity.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F,
 						this.strafingClockwise ? 0.5F : -0.5F);
-				this.entity.lookAtEntity(livingentity, 30.0F, 30.0F);
+				this.entity.lookAt(livingentity, 30.0F, 30.0F);
 			} else {
-				this.entity.getLookControl().lookAt(livingentity, 30.0F, 30.0F);
+				this.entity.getLookControl().setLookAt(livingentity, 30.0F, 30.0F);
 			}
 
 			// attack
-			Item heldItem = this.entity.getEquippedStack(EquipmentSlot.MAINHAND).getItem();
+			Item heldItem = this.entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem();
 			this.attackTime++;
 			if (this.attackTime == 1) {
 				this.entity.setAttackingState(1);
@@ -153,8 +153,8 @@ public class RangedStrafeAttackGoal extends Goal {
 				} else {
 					this.attack.shoot();
 				}
-				this.entity.world.setBlockState(this.entity.getBlockPos(),
-						HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
+				this.entity.level.setBlockAndUpdate(this.entity.blockPosition(),
+						AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 			}
 			if (this.attackTime == 8) {
 				this.entity.setAttackingState(0);

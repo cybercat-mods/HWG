@@ -9,14 +9,14 @@ import mod.azure.hwg.item.ammo.BulletAmmo;
 import mod.azure.hwg.item.weapons.SilverGunItem;
 import mod.azure.hwg.item.weapons.SilverRevolverItem;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.Item;
 
 public class BWCompat {
 
@@ -29,7 +29,7 @@ public class BWCompat {
 	public static EntityType<SBulletEntity> SILVERBULLETS = projectile(SBulletEntity::new, "silverbullets");
 
 	static <T extends Item> T item(T c, String id) {
-		Registry.register(Registries.ITEM, new Identifier(HWGMod.MODID, id), c);
+		Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
 		return c;
 	}
 
@@ -40,11 +40,11 @@ public class BWCompat {
 	private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id,
 			boolean itemRender) {
 
-		EntityType<T> type = FabricEntityTypeBuilder.<T>create(SpawnGroup.MISC, factory)
+		EntityType<T> type = FabricEntityTypeBuilder.<T>create(MobCategory.MISC, factory)
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
 				.trackRangeBlocks(90).trackedUpdateRate(4).build();
 
-		Registry.register(Registries.ENTITY_TYPE, new Identifier(HWGMod.MODID, id), type);
+		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 

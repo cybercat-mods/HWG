@@ -21,11 +21,11 @@ import mod.azure.hwg.item.weapons.SPistolItem;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 import mod.azure.hwg.item.weapons.SniperItem;
 import mod.azure.hwg.util.registry.HWGSounds;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.Item;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 
 public class WeaponGoal extends AbstractRangedAttack {
 
@@ -40,7 +40,7 @@ public class WeaponGoal extends AbstractRangedAttack {
 
 	@Override
 	public AttackSound getDefaultAttackSound() {
-		Item heldItem = this.parentEntity.getEquippedStack(EquipmentSlot.MAINHAND).getItem();
+		Item heldItem = this.parentEntity.getItemBySlot(EquipmentSlot.MAINHAND).getItem();
 		return new AttackSound(heldItem instanceof GPistolItem ? HWGSounds.SPISTOL
 				: heldItem instanceof SPistolItem ? HWGSounds.SPISTOL
 						: heldItem instanceof PistolItem ? HWGSounds.PISTOL
@@ -52,11 +52,11 @@ public class WeaponGoal extends AbstractRangedAttack {
 																		: heldItem instanceof HellhorseRevolverItem
 																				? HWGSounds.REVOLVER
 																				: heldItem instanceof FlamethrowerItem
-																						? SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR
+																						? SoundEvents.FIREWORK_ROCKET_BLAST_FAR
 																						: heldItem instanceof BrimstoneItem
-																								? SoundEvents.ITEM_FIRECHARGE_USE
+																								? SoundEvents.FIRECHARGE_USE
 																								: heldItem instanceof BalrogItem
-																										? SoundEvents.ENTITY_GENERIC_EXPLODE
+																										? SoundEvents.GENERIC_EXPLODE
 																										: heldItem instanceof Minigun
 																												? HWGSounds.MINIGUN
 																												: HWGSounds.SNIPER,
@@ -64,8 +64,8 @@ public class WeaponGoal extends AbstractRangedAttack {
 	}
 
 	@Override
-	public ProjectileEntity getProjectile(World world, double d2, double d3, double d4) {
-		Item heldItem = this.parentEntity.getEquippedStack(EquipmentSlot.MAINHAND).getItem();
+	public Projectile getProjectile(Level world, double d2, double d3, double d4) {
+		Item heldItem = this.parentEntity.getItemBySlot(EquipmentSlot.MAINHAND).getItem();
 		return (heldItem instanceof PistolItem || heldItem instanceof LugerItem || heldItem instanceof AssasultItem
 				|| heldItem instanceof Assasult1Item || heldItem instanceof GPistolItem
 				|| heldItem instanceof SPistolItem || heldItem instanceof SniperItem

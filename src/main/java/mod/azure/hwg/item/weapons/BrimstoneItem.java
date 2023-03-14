@@ -8,87 +8,87 @@ import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.FireballEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 
 public class BrimstoneItem extends HWGGunBase {
 	public BrimstoneItem() {
-		super(new Item.Settings().maxCount(1).maxDamage(186));
+		super(new Item.Properties().stacksTo(1).durability(186));
 	}
 
 	@Override
-	public void onStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-		if (entityLiving instanceof PlayerEntity) {
-			PlayerEntity playerentity = (PlayerEntity) entityLiving;
-			if (stack.getDamage() < (stack.getMaxDamage() - 6)) {
-				playerentity.getItemCooldownManager().set(this, 5);
-				if (!worldIn.isClient) {
+	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
+		if (entityLiving instanceof Player) {
+			Player playerentity = (Player) entityLiving;
+			if (stack.getDamageValue() < (stack.getMaxDamage() - 6)) {
+				playerentity.getCooldowns().addCooldown(this, 5);
+				if (!worldIn.isClientSide) {
 					FireballEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw(), 0.0F,
+					abstractarrowentity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
 							0.25F * 3.0F, 1.0F);
-					abstractarrowentity.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
+					abstractarrowentity.moveTo(entityLiving.getX(), entityLiving.getY(0.5),
 							entityLiving.getZ(), 0, 0);
-					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
-					abstractarrowentity.setFireTicks(100);
-					abstractarrowentity.setPunch(1);
+					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+					abstractarrowentity.setRemainingFireTicks(100);
+					abstractarrowentity.setKnockback(1);
 
 					FireballEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() + 5,
+					abstractarrowentity1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 5,
 							0.0F, 0.25F * 3.0F, 1.0F);
-					abstractarrowentity1.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
+					abstractarrowentity1.moveTo(entityLiving.getX(), entityLiving.getY(0.5),
 							entityLiving.getZ(), 0, 0);
-					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
-					abstractarrowentity1.setFireTicks(100);
-					abstractarrowentity1.setPunch(1);
+					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+					abstractarrowentity1.setRemainingFireTicks(100);
+					abstractarrowentity1.setKnockback(1);
 
 					FireballEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.setVelocity(playerentity, playerentity.getPitch(), playerentity.getYaw() - 5,
+					abstractarrowentity2.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 5,
 							0.0F, 0.25F * 3.0F, 1.0F);
-					abstractarrowentity2.refreshPositionAndAngles(entityLiving.getX(), entityLiving.getBodyY(0.5),
+					abstractarrowentity2.moveTo(entityLiving.getX(), entityLiving.getY(0.5),
 							entityLiving.getZ(), 0, 0);
-					stack.damage(1, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
-					abstractarrowentity2.setFireTicks(100);
-					abstractarrowentity2.setPunch(1);
+					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+					abstractarrowentity2.setRemainingFireTicks(100);
+					abstractarrowentity2.setKnockback(1);
 
-					worldIn.spawnEntity(abstractarrowentity);
-					worldIn.spawnEntity(abstractarrowentity1);
-					worldIn.spawnEntity(abstractarrowentity2);
+					worldIn.addFreshEntity(abstractarrowentity);
+					worldIn.addFreshEntity(abstractarrowentity1);
+					worldIn.addFreshEntity(abstractarrowentity2);
 
-					stack.damage(6, entityLiving, p -> p.sendToolBreakStatus(entityLiving.getActiveHand()));
+					stack.hurtAndBreak(6, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 
-					worldIn.playSound((PlayerEntity) null, playerentity.getX(), playerentity.getY(),
-							playerentity.getZ(), SoundEvents.ENTITY_FIREWORK_ROCKET_BLAST_FAR, SoundCategory.PLAYERS,
+					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(),
+							playerentity.getZ(), SoundEvents.FIREWORK_ROCKET_BLAST_FAR, SoundSource.PLAYERS,
 							1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
-				boolean isInsideWaterBlock = playerentity.world.isWater(playerentity.getBlockPos());
+				boolean isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}
 
-	public FireballEntity createArrow(World worldIn, ItemStack stack, LivingEntity shooter) {
+	public FireballEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
 		FireballEntity arrowentity = new FireballEntity(worldIn, shooter);
 		return arrowentity;
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-		if (world.isClient) {
-			if (((PlayerEntity) entity).getMainHandStack().getItem() instanceof BrimstoneItem) {
-				if (ClientInit.reload.isPressed() && selected) {
-					PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
+		if (world.isClientSide) {
+			if (((Player) entity).getMainHandItem().getItem() instanceof BrimstoneItem) {
+				if (ClientInit.reload.isDown() && selected) {
+					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.BRIMSTONE, passedData);
 				}
@@ -96,26 +96,26 @@ public class BrimstoneItem extends HWGGunBase {
 		}
 	}
 
-	public void reload(PlayerEntity user, Hand hand) {
-		if (user.getStackInHand(hand).getItem() instanceof BrimstoneItem) {
-			while (!user.isCreative() && user.getStackInHand(hand).getDamage() != 0
-					&& user.getInventory().count(HWGItems.FUEL_TANK) > 0) {
+	public void reload(Player user, InteractionHand hand) {
+		if (user.getItemInHand(hand).getItem() instanceof BrimstoneItem) {
+			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0
+					&& user.getInventory().countItem(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
-				user.getStackInHand(hand).damage(-186, user, s -> user.sendToolBreakStatus(hand));
-				user.getStackInHand(hand).setBobbingAnimationTime(3);
-				user.getEntityWorld().playSound((PlayerEntity) null, user.getX(), user.getY(), user.getZ(),
-						SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0F, 1.5F);
+				user.getItemInHand(hand).hurtAndBreak(-186, user, s -> user.broadcastBreakEvent(hand));
+				user.getItemInHand(hand).setPopTime(3);
+				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(),
+						SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 			}
 		}
 	}
 
 	@Override
-	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
-		tooltip.add(Text
+	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
+		tooltip.add(Component
 				.translatable(
-						"Fuel: " + (stack.getMaxDamage() - stack.getDamage() - 6) + " / " + (stack.getMaxDamage() - 6))
-				.formatted(Formatting.ITALIC));
-		tooltip.add(Text.translatable("hwg.ammo.reloadfuel").formatted(Formatting.ITALIC));
+						"Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 6) + " / " + (stack.getMaxDamage() - 6))
+				.withStyle(ChatFormatting.ITALIC));
+		tooltip.add(Component.translatable("hwg.ammo.reloadfuel").withStyle(ChatFormatting.ITALIC));
 	}
 
 	public static float getArrowVelocity(int charge) {
@@ -129,10 +129,10 @@ public class BrimstoneItem extends HWGGunBase {
 	}
 
 	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		ItemStack itemStack = user.getStackInHand(hand);
-		user.setCurrentHand(hand);
-		return TypedActionResult.consume(itemStack);
+	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+		ItemStack itemStack = user.getItemInHand(hand);
+		user.startUsingItem(hand);
+		return InteractionResultHolder.consume(itemStack);
 	}
 
 	public static float getPullProgress(int useTicks) {

@@ -1,23 +1,23 @@
 package mod.azure.hwg.client.gui;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
-public class GunTableInventory implements Inventory {
+public class GunTableInventory implements Container {
 	private final GunTableScreenHandler container;
 
-	private final DefaultedList<ItemStack> stacks;
+	private final NonNullList<ItemStack> stacks;
 
 
 	public GunTableInventory(GunTableScreenHandler container) {
-		this.stacks = DefaultedList.ofSize(6, ItemStack.EMPTY);
+		this.stacks = NonNullList.withSize(6, ItemStack.EMPTY);
 		this.container = container;
 	}
 
-	public int size() {
+	public int getContainerSize() {
 		return this.stacks.size();
 	}
 
@@ -30,37 +30,37 @@ public class GunTableInventory implements Inventory {
 		return true;
 	}
 
-	public ItemStack getStack(int slot) {
+	public ItemStack getItem(int slot) {
 		return this.stacks.get(slot);
 	}
 
-	public ItemStack removeStack(int slot, int amount) {
-		ItemStack itemStack = Inventories.splitStack(this.stacks, slot, amount);
+	public ItemStack removeItem(int slot, int amount) {
+		ItemStack itemStack = ContainerHelper.removeItem(this.stacks, slot, amount);
 		if (!itemStack.isEmpty() && slot != 5) {
-			this.container.onContentChanged(this);
+			this.container.slotsChanged(this);
 		}
 		return itemStack;
 	}
 
-	public ItemStack removeStack(int slot) {
-		return Inventories.removeStack(this.stacks, slot);
+	public ItemStack removeItemNoUpdate(int slot) {
+		return ContainerHelper.takeItem(this.stacks, slot);
 	}
 
-	public void setStack(int slot, ItemStack stack) {
+	public void setItem(int slot, ItemStack stack) {
 		this.stacks.set(slot, stack);
 		if (slot != 5)
-		container.onContentChanged(this);
+		container.slotsChanged(this);
 	}
 
-	public boolean canPlayerUse(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		return true;
 	}
 
-	public void markDirty() {
+	public void setChanged() {
 
 	}
 
-	public void clear() {
+	public void clearContent() {
 		this.stacks.clear();
 	}
 

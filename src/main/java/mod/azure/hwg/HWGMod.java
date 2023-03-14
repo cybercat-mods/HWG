@@ -22,16 +22,16 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.entry.ItemEntry;
-import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class HWGMod implements ModInitializer {
 
@@ -44,92 +44,93 @@ public class HWGMod implements ModInitializer {
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
 	public static ProjectilesEntityRegister PROJECTILES;
-	public static final Identifier LUGER = new Identifier(MODID, "luger");
-	public static final Identifier HELL = new Identifier(MODID, "hellgun");
-	public static final Identifier ASSASULT = new Identifier(MODID, "smg");
-	public static final Identifier BALROG = new Identifier(MODID, "balrog");
-	public static final Identifier PISTOL = new Identifier(MODID, "pistol");
-	public static final Identifier SNIPER = new Identifier(MODID, "sniper");
-	public static final Identifier ASSASULT1 = new Identifier(MODID, "smg1");
-	public static final Identifier ASSASULT2 = new Identifier(MODID, "smg2");
-	public static final Identifier MEANIE1 = new Identifier(MODID, "meanie1");
-	public static final Identifier MEANIE2 = new Identifier(MODID, "meanie2");
-	public static final Identifier MINIGUN = new Identifier(MODID, "minigun");
-	public static final Identifier SHOTGUN = new Identifier(MODID, "shotgun");
-	public static final Identifier SPISTOL = new Identifier(MODID, "spistol");
-	public static final Identifier GUNS = new Identifier(MODID, "crafting_guns");
-	public static final Identifier BRIMSTONE = new Identifier(MODID, "brimstone");
-	public static final Identifier SILVERGUN = new Identifier(MODID, "silvergun");
-	public static final Identifier SILVERHELL = new Identifier(MODID, "silverhell");
-	public static final Identifier FLAMETHOWER = new Identifier(MODID, "flamethrower");
-	public static final Identifier GUNSMITH_POI = new Identifier(MODID, "gun_smith_poi");
-	public static final Identifier GUN_TABLE_GUI = new Identifier(MODID, "gun_table_gui");
-	public static final Identifier ROCKETLAUNCHER = new Identifier(MODID, "rocketlauncher");
-	public static ScreenHandlerType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
-	public static final ItemGroup WeaponItemGroup = FabricItemGroup.builder(new Identifier(MODID, "weapons"))
-			.icon(() -> new ItemStack(HWGItems.AK47)).entries((enabledFeatures, entries, operatorEnabled) -> {
+	public static final ResourceLocation LUGER = new ResourceLocation(MODID, "luger");
+	public static final ResourceLocation HELL = new ResourceLocation(MODID, "hellgun");
+	public static final ResourceLocation ASSASULT = new ResourceLocation(MODID, "smg");
+	public static final ResourceLocation BALROG = new ResourceLocation(MODID, "balrog");
+	public static final ResourceLocation PISTOL = new ResourceLocation(MODID, "pistol");
+	public static final ResourceLocation SNIPER = new ResourceLocation(MODID, "sniper");
+	public static final ResourceLocation ASSASULT1 = new ResourceLocation(MODID, "smg1");
+	public static final ResourceLocation ASSASULT2 = new ResourceLocation(MODID, "smg2");
+	public static final ResourceLocation MEANIE1 = new ResourceLocation(MODID, "meanie1");
+	public static final ResourceLocation MEANIE2 = new ResourceLocation(MODID, "meanie2");
+	public static final ResourceLocation MINIGUN = new ResourceLocation(MODID, "minigun");
+	public static final ResourceLocation SHOTGUN = new ResourceLocation(MODID, "shotgun");
+	public static final ResourceLocation SPISTOL = new ResourceLocation(MODID, "spistol");
+	public static final ResourceLocation GUNS = new ResourceLocation(MODID, "crafting_guns");
+	public static final ResourceLocation BRIMSTONE = new ResourceLocation(MODID, "brimstone");
+	public static final ResourceLocation SILVERGUN = new ResourceLocation(MODID, "silvergun");
+	public static final ResourceLocation SILVERHELL = new ResourceLocation(MODID, "silverhell");
+	public static final ResourceLocation FLAMETHOWER = new ResourceLocation(MODID, "flamethrower");
+	public static final ResourceLocation GUNSMITH_POI = new ResourceLocation(MODID, "gun_smith_poi");
+	public static final ResourceLocation GUN_TABLE_GUI = new ResourceLocation(MODID, "gun_table_gui");
+	public static final ResourceLocation ROCKETLAUNCHER = new ResourceLocation(MODID, "rocketlauncher");
+	public static MenuType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
+	public static final CreativeModeTab WeaponItemGroup = FabricItemGroup.builder(new ResourceLocation(MODID, "weapons"))
+			.icon(() -> new ItemStack(HWGItems.AK47)).displayItems((enabledFeatures, entries, operatorEnabled) -> {
 				// Weapons
-				entries.add(HWGItems.PISTOL);
-				entries.add(HWGItems.SPISTOL);
+				entries.accept(HWGItems.PISTOL);
+				entries.accept(HWGItems.SPISTOL);
 				if (FabricLoader.getInstance().isModLoaded("bewitchment"))
-					entries.add(BWCompat.SILVERGUN);
-				entries.add(HWGItems.LUGER);
-				entries.add(HWGItems.MEANIE1);
-				entries.add(HWGItems.MEANIE2);
-				entries.add(HWGItems.GOLDEN_GUN);
-				entries.add(HWGItems.HELLHORSE);
+					entries.accept(BWCompat.SILVERGUN);
+				entries.accept(HWGItems.LUGER);
+				entries.accept(HWGItems.MEANIE1);
+				entries.accept(HWGItems.MEANIE2);
+				entries.accept(HWGItems.GOLDEN_GUN);
+				entries.accept(HWGItems.HELLHORSE);
 				if (FabricLoader.getInstance().isModLoaded("bewitchment"))
-					entries.add(BWCompat.SILVERHELLHORSE);
-				entries.add(HWGItems.AK47);
-				entries.add(HWGItems.SMG);
-				entries.add(HWGItems.TOMMYGUN);
-				entries.add(HWGItems.MINIGUN);
-				entries.add(HWGItems.SHOTGUN);
-				entries.add(HWGItems.SNIPER);
+					entries.accept(BWCompat.SILVERHELLHORSE);
+				entries.accept(HWGItems.AK47);
+				entries.accept(HWGItems.SMG);
+				entries.accept(HWGItems.TOMMYGUN);
+				entries.accept(HWGItems.MINIGUN);
+				entries.accept(HWGItems.SHOTGUN);
+				entries.accept(HWGItems.SNIPER);
 				if (FabricLoader.getInstance().isModLoaded("gigeresque"))
-					entries.add(GigCompat.INCINERATOR);
-				entries.add(HWGItems.FLAMETHROWER);
-				entries.add(HWGItems.BALROG);
-				entries.add(HWGItems.BRIMSTONE);
-				entries.add(HWGItems.ROCKETLAUNCHER);
-				entries.add(HWGItems.G_LAUNCHER);
-				entries.add(HWGItems.FLARE_GUN);
+					entries.accept(GigCompat.INCINERATOR);
+				entries.accept(HWGItems.FLAMETHROWER);
+				entries.accept(HWGItems.BALROG);
+				entries.accept(HWGItems.BRIMSTONE);
+				entries.accept(HWGItems.ROCKETLAUNCHER);
+				entries.accept(HWGItems.G_LAUNCHER);
+				entries.accept(HWGItems.FLARE_GUN);
 				// Ammo
-				entries.add(HWGItems.BULLETS);
-				entries.add(HWGItems.SNIPER_ROUND);
-				entries.add(HWGItems.ROCKET);
-				entries.add(HWGItems.G_FRAG);
-				entries.add(HWGItems.G_STUN);
-				entries.add(HWGItems.G_SMOKE);
-				entries.add(HWGItems.G_NAPALM);
-				entries.add(HWGItems.G_EMP);
-				entries.add(HWGItems.RED_FLARE);
-				entries.add(HWGItems.BLUE_FLARE);
-				entries.add(HWGItems.CYAN_FLARE);
-				entries.add(HWGItems.GRAY_FLARE);
-				entries.add(HWGItems.LIME_FLARE);
-				entries.add(HWGItems.PINK_FLARE);
-				entries.add(HWGItems.BLACK_FLARE);
-				entries.add(HWGItems.BROWN_FLARE);
-				entries.add(HWGItems.GREEN_FLARE);
-				entries.add(HWGItems.WHITE_FLARE);
-				entries.add(HWGItems.ORANGE_FLARE);
-				entries.add(HWGItems.PURPLE_FLARE);
-				entries.add(HWGItems.YELLOW_FLARE);
-				entries.add(HWGItems.MAGENTA_FLARE);
-				entries.add(HWGItems.LIGHTBLUE_FLARE);
-				entries.add(HWGItems.LIGHTGRAY_FLARE);
+				entries.accept(HWGItems.BULLETS);
+				entries.accept(HWGItems.SHOTGUN_SHELL);
+				entries.accept(HWGItems.SNIPER_ROUND);
+				entries.accept(HWGItems.ROCKET);
+				entries.accept(HWGItems.G_FRAG);
+				entries.accept(HWGItems.G_STUN);
+				entries.accept(HWGItems.G_SMOKE);
+				entries.accept(HWGItems.G_NAPALM);
+				entries.accept(HWGItems.G_EMP);
+				entries.accept(HWGItems.RED_FLARE);
+				entries.accept(HWGItems.BLUE_FLARE);
+				entries.accept(HWGItems.CYAN_FLARE);
+				entries.accept(HWGItems.GRAY_FLARE);
+				entries.accept(HWGItems.LIME_FLARE);
+				entries.accept(HWGItems.PINK_FLARE);
+				entries.accept(HWGItems.BLACK_FLARE);
+				entries.accept(HWGItems.BROWN_FLARE);
+				entries.accept(HWGItems.GREEN_FLARE);
+				entries.accept(HWGItems.WHITE_FLARE);
+				entries.accept(HWGItems.ORANGE_FLARE);
+				entries.accept(HWGItems.PURPLE_FLARE);
+				entries.accept(HWGItems.YELLOW_FLARE);
+				entries.accept(HWGItems.MAGENTA_FLARE);
+				entries.accept(HWGItems.LIGHTBLUE_FLARE);
+				entries.accept(HWGItems.LIGHTGRAY_FLARE);
 				// Blocks
-				entries.add(HWGItems.FUEL_TANK);
-				entries.add(HWGItems.GUN_TABLE);
+				entries.accept(HWGItems.FUEL_TANK);
+				entries.accept(HWGItems.GUN_TABLE);
 				// Spawn Eggs
-				entries.add(HWGItems.MERC_SPAWN_EGG);
-				entries.add(HWGItems.SPY_SPAWN_EGG);
-				entries.add(HWGItems.LESSER_SPAWN_EGG);
-				entries.add(HWGItems.GREATER_SPAWN_EGG);
+				entries.accept(HWGItems.MERC_SPAWN_EGG);
+				entries.accept(HWGItems.SPY_SPAWN_EGG);
+				entries.accept(HWGItems.LESSER_SPAWN_EGG);
+				entries.accept(HWGItems.GREATER_SPAWN_EGG);
 			}).build();
 	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(
-			Registries.RECIPE_SERIALIZER, new Identifier(MODID, "gun_table"), new GunTableRecipe.Serializer());
+			BuiltInRegistries.RECIPE_SERIALIZER, new ResourceLocation(MODID, "gun_table"), new GunTableRecipe.Serializer());
 
 	@Override
 	public void onInitialize() {
@@ -152,14 +153,14 @@ public class HWGMod implements ModInitializer {
 			if (HWGLoot.B_TREASURE.equals(id) || HWGLoot.JUNGLE.equals(id) || HWGLoot.U_BIG.equals(id)
 					|| HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id)
 					|| HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
-				LootPool poolBuilder = LootPool.builder().rolls(ConstantLootNumberProvider.create(1))
-						.with(ItemEntry.builder(HWGItems.MEANIE1).build())
-						.with(ItemEntry.builder(HWGItems.MEANIE2).build()).build();
+				LootPool poolBuilder = LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+						.with(LootItem.lootTableItem(HWGItems.MEANIE1).build())
+						.with(LootItem.lootTableItem(HWGItems.MEANIE2).build()).build();
 				supplier.pool(poolBuilder);
 			}
 		});
-		SCREEN_HANDLER_TYPE = new ScreenHandlerType<>(GunTableScreenHandler::new);
-		Registry.register(Registries.SCREEN_HANDLER, new Identifier(MODID, "guntable_screen_type"),
+		SCREEN_HANDLER_TYPE = new MenuType<>(GunTableScreenHandler::new);
+		Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "guntable_screen_type"),
 				SCREEN_HANDLER_TYPE);
 		PacketHandler.registerMessages();
 	}

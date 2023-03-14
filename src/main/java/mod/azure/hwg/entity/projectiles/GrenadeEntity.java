@@ -18,145 +18,145 @@ import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
-public class GrenadeEntity extends PersistentProjectileEntity implements GeoEntity {
+public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
 	protected int timeInAir;
 	protected boolean inAir;
 	protected String type;
 	private int ticksInAir;
-	private static final TrackedData<Integer> VARIANT = DataTracker.registerData(GrenadeEntity.class,
-			TrackedDataHandlerRegistry.INTEGER);
-	private static final TrackedData<Integer> STATE = DataTracker.registerData(GrenadeEntity.class,
-			TrackedDataHandlerRegistry.INTEGER);
+	private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GrenadeEntity.class,
+			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(GrenadeEntity.class,
+			EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(GrenadeEntity.class,
-			TrackedDataHandlerRegistry.FLOAT);
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(GrenadeEntity.class,
+			EntityDataSerializers.FLOAT);
 
-	public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, World world) {
+	public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level world) {
 		super(entityType, world);
-		this.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
+		this.pickup = AbstractArrow.Pickup.DISALLOWED;
 	}
 
-	public GrenadeEntity(World world, LivingEntity owner) {
+	public GrenadeEntity(Level world, LivingEntity owner) {
 		super(ProjectilesEntityRegister.GRENADE, owner, world);
 	}
 
-	protected GrenadeEntity(EntityType<? extends GrenadeEntity> type, double x, double y, double z, World world) {
+	protected GrenadeEntity(EntityType<? extends GrenadeEntity> type, double x, double y, double z, Level world) {
 		this(type, world);
 	}
 
-	protected GrenadeEntity(EntityType<? extends GrenadeEntity> type, LivingEntity owner, World world) {
+	protected GrenadeEntity(EntityType<? extends GrenadeEntity> type, LivingEntity owner, Level world) {
 		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
 		this.setOwner(owner);
-		this.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
+		this.pickup = AbstractArrow.Pickup.DISALLOWED;
 	}
 
-	public GrenadeEntity(World world, ItemStack stack, Entity entity, double x, double y, double z,
+	public GrenadeEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z,
 			boolean shotAtAngle) {
 		this(world, stack, x, y, z, shotAtAngle);
 		this.setOwner(entity);
 	}
 
-	public GrenadeEntity(World world, ItemStack stack, double x, double y, double z, boolean shotAtAngle) {
+	public GrenadeEntity(Level world, ItemStack stack, double x, double y, double z, boolean shotAtAngle) {
 		this(world, x, y, z, stack);
 	}
 
-	public GrenadeEntity(World world, double x, double y, double z, ItemStack stack) {
+	public GrenadeEntity(Level world, double x, double y, double z, ItemStack stack) {
 		super(ProjectilesEntityRegister.GRENADE, world);
-		this.updatePosition(x, y, z);
+		this.absMoveTo(x, y, z);
 	}
 
-	public GrenadeEntity(World world, @Nullable Entity entity, double x, double y, double z, ItemStack stack) {
+	public GrenadeEntity(Level world, @Nullable Entity entity, double x, double y, double z, ItemStack stack) {
 		this(world, x, y, z, stack);
 		this.setOwner(entity);
 	}
 
-	public GrenadeEntity(World world, double x, double y, double z) {
+	public GrenadeEntity(Level world, double x, double y, double z) {
 		super(ProjectilesEntityRegister.GRENADE, x, y, z, world);
 		this.setNoGravity(true);
-		this.setDamage(0);
+		this.setBaseDamage(0);
 	}
 
 	@Override
-	protected void initDataTracker() {
-		super.initDataTracker();
-		this.getDataTracker().startTracking(FORCED_YAW, 0f);
-		this.dataTracker.startTracking(VARIANT, 0);
-		this.dataTracker.startTracking(STATE, 0);
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.getEntityData().define(FORCED_YAW, 0f);
+		this.entityData.define(VARIANT, 0);
+		this.entityData.define(STATE, 0);
 	}
 
 	@Override
-	public void writeCustomDataToNbt(NbtCompound tag) {
-		super.writeCustomDataToNbt(tag);
+	public void addAdditionalSaveData(CompoundTag tag) {
+		super.addAdditionalSaveData(tag);
 		tag.putInt("Variant", this.getVariant());
 		tag.putInt("State", this.getVariant());
 		tag.putShort("life", (short) this.ticksInAir);
-		tag.putFloat("ForcedYaw", dataTracker.get(FORCED_YAW));
+		tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
 	}
 
 	@Override
-	public void readCustomDataFromNbt(NbtCompound tag) {
-		super.readCustomDataFromNbt(tag);
+	public void readAdditionalSaveData(CompoundTag tag) {
+		super.readAdditionalSaveData(tag);
 		this.setVariant(tag.getInt("Variant"));
 		this.setVariant(tag.getInt("State"));
 		this.ticksInAir = tag.getShort("life");
-		dataTracker.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
+		entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
 	}
 
 	@Override
 	public void tick() {
 		super.tick();
-		if (getOwner()instanceof PlayerEntity owner)
-			setYaw(dataTracker.get(FORCED_YAW));
+		if (getOwner()instanceof Player owner)
+			setYRot(entityData.get(FORCED_YAW));
 	}
 
 	public int getVariant() {
-		return MathHelper.clamp((Integer) this.dataTracker.get(VARIANT), 1, 5);
+		return Mth.clamp((Integer) this.entityData.get(VARIANT), 1, 5);
 	}
 
 	public void setVariant(int color) {
-		this.dataTracker.set(VARIANT, color);
+		this.entityData.set(VARIANT, color);
 	}
 
 	public int getState() {
-		return this.dataTracker.get(STATE);
+		return this.entityData.get(STATE);
 	}
 
 	public void setState(int color) {
-		this.dataTracker.set(STATE, color);
+		this.entityData.set(STATE, color);
 	}
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
 		controllers.add(new AnimationController<>(this, event -> {
-			if (this.dataTracker.get(STATE) == 1)
+			if (this.entityData.get(STATE) == 1)
 				return event.setAndContinue(RawAnimation.begin().thenLoop("spin"));
 			return event.setAndContinue(RawAnimation.begin().thenLoop("bullet"));
 		}));
@@ -168,16 +168,16 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 	}
 
 	@Override
-	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return EntityPacket.createPacket(this);
 	}
 
 	@Override
 	public void remove(RemovalReason reason) {
-		AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.world, this.getX(), this.getY(),
+		AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(),
 				this.getZ());
 		if (this.getVariant() == 1)
-			areaeffectcloudentity.setParticleType(this.getVariant() == 1 ? ParticleTypes.END_ROD
+			areaeffectcloudentity.setParticle(this.getVariant() == 1 ? ParticleTypes.END_ROD
 					: this.getVariant() == 2 ? ParticleTypes.EXPLOSION
 							: this.getVariant() == 3 ? ParticleTypes.EXPLOSION
 									: this.getVariant() == 4 ? ParticleTypes.LARGE_SMOKE
@@ -185,35 +185,35 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 		areaeffectcloudentity.setRadius(this.getVariant() == 4 ? 5.0F : 2.0F);
 		areaeffectcloudentity.setDuration(this.getVariant() == 4 ? 120 : 2);
 		if (this.getVariant() == 4) {
-			areaeffectcloudentity.addEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 200, 1));
+			areaeffectcloudentity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 1));
 		}
-		areaeffectcloudentity.updatePosition(this.getX(), this.getEyeY(), this.getZ());
-		this.world.spawnEntity(areaeffectcloudentity);
+		areaeffectcloudentity.absMoveTo(this.getX(), this.getEyeY(), this.getZ());
+		this.level.addFreshEntity(areaeffectcloudentity);
 		super.remove(reason);
 	}
 
 	@Override
-	public void applyDamageEffects(LivingEntity attacker, Entity target) {
+	public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {
 		if (this.getVariant() == 1) {
 			if (target instanceof TechnodemonEntity || target instanceof TechnodemonGreaterEntity)
-				super.applyDamageEffects(attacker, target);
+				super.doEnchantDamageEffects(attacker, target);
 		} else {
-			super.applyDamageEffects(attacker, target);
+			super.doEnchantDamageEffects(attacker, target);
 		}
 	}
 
 	@Override
-	protected void onHit(LivingEntity target) {
+	protected void doPostHurtEffects(LivingEntity target) {
 		if (this.getVariant() == 1) {
 			if (target instanceof TechnodemonEntity || target instanceof TechnodemonGreaterEntity)
-				super.onHit(target);
+				super.doPostHurtEffects(target);
 		} else {
-			super.onHit(target);
+			super.doPostHurtEffects(target);
 		}
 	}
 
 	@Override
-	public void age() {
+	public void tickDespawn() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
 			if (this.getVariant() == 1) {
@@ -230,8 +230,8 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 	}
 
 	@Override
-	public void setVelocity(double x, double y, double z, float speed, float divergence) {
-		super.setVelocity(x, y, z, speed, divergence);
+	public void shoot(double x, double y, double z, float speed, float divergence) {
+		super.shoot(x, y, z, speed, divergence);
 		this.ticksInAir = 0;
 	}
 
@@ -240,22 +240,22 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 		}
 	}
 
-	public SoundEvent hitSound = this.getHitSound();
+	public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
 	@Override
-	public void setSound(SoundEvent soundIn) {
+	public void setSoundEvent(SoundEvent soundIn) {
 		this.hitSound = soundIn;
 	}
 
 	@Override
-	protected SoundEvent getHitSound() {
-		return SoundEvents.ENTITY_GENERIC_EXPLODE;
+	protected SoundEvent getDefaultHitGroundSoundEvent() {
+		return SoundEvents.GENERIC_EXPLODE;
 	}
 
 	@Override
-	protected void onBlockHit(BlockHitResult blockHitResult) {
-		super.onBlockHit(blockHitResult);
-		if (!this.world.isClient) {
+	protected void onHitBlock(BlockHitResult blockHitResult) {
+		super.onHitBlock(blockHitResult);
+		if (!this.level.isClientSide) {
 			if (this.getVariant() == 1) {
 				this.emp();
 			} else if (this.getVariant() == 2) {
@@ -267,13 +267,13 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 			}
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
-		this.setSound(SoundEvents.ENTITY_GENERIC_EXPLODE);
+		this.setSoundEvent(SoundEvents.GENERIC_EXPLODE);
 	}
 
 	@Override
-	protected void onEntityHit(EntityHitResult entityHitResult) {
-		super.onEntityHit(entityHitResult);
-		if (!this.world.isClient) {
+	protected void onHitEntity(EntityHitResult entityHitResult) {
+		super.onHitEntity(entityHitResult);
+		if (!this.level.isClientSide) {
 			if (this.getVariant() == 1) {
 				this.emp();
 			} else if (this.getVariant() == 2) {
@@ -288,94 +288,94 @@ public class GrenadeEntity extends PersistentProjectileEntity implements GeoEnti
 	}
 
 	protected void stun() {
-		int k = MathHelper.floor(this.getX() - 2 - 1.0D);
-		int l = MathHelper.floor(this.getX() + 2 + 1.0D);
-		int t = MathHelper.floor(this.getY() - 2 - 1.0D);
-		int u = MathHelper.floor(this.getY() + 2 + 1.0D);
-		int v = MathHelper.floor(this.getZ() - 2 - 1.0D);
-		int w = MathHelper.floor(this.getZ() + 2 + 1.0D);
-		List<Entity> list = this.world.getOtherEntities(this,
-				new Box((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
-		Vec3d vec3d = new Vec3d(this.getX(), this.getY(), this.getZ());
+		int k = Mth.floor(this.getX() - 2 - 1.0D);
+		int l = Mth.floor(this.getX() + 2 + 1.0D);
+		int t = Mth.floor(this.getY() - 2 - 1.0D);
+		int u = Mth.floor(this.getY() + 2 + 1.0D);
+		int v = Mth.floor(this.getZ() - 2 - 1.0D);
+		int w = Mth.floor(this.getZ() + 2 + 1.0D);
+		List<Entity> list = this.level.getEntities(this,
+				new AABB((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
+		Vec3 vec3d = new Vec3(this.getX(), this.getY(), this.getZ());
 		for (int x = 0; x < list.size(); ++x) {
 			Entity entity = (Entity) list.get(x);
-			double y = (MathHelper.sqrt((float) entity.squaredDistanceTo(vec3d)) / 8);
+			double y = (Mth.sqrt((float) entity.distanceToSqr(vec3d)) / 8);
 			if (entity instanceof LivingEntity) {
 				if (y <= 1.0D) {
-					((LivingEntity) entity).addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 200, 1));
+					((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
 					((LivingEntity) entity)
-							.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 200, 1));
+							.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
 				}
 			}
 		}
 	}
 
 	protected void frag() {
-		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 2.0F, false,
-				HWGConfig.grenades_breaks == true ? World.ExplosionSourceType.BLOCK : World.ExplosionSourceType.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
+				HWGConfig.grenades_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 
 	protected void naplam() {
-		int k = MathHelper.floor(this.getX() - 2 - 1.0D);
-		int l = MathHelper.floor(this.getX() + 2 + 1.0D);
-		int t = MathHelper.floor(this.getY() - 2 - 1.0D);
-		int u = MathHelper.floor(this.getY() + 2 + 1.0D);
-		int v = MathHelper.floor(this.getZ() - 2 - 1.0D);
-		int w = MathHelper.floor(this.getZ() + 2 + 1.0D);
-		List<Entity> list = this.world.getOtherEntities(this,
-				new Box((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
-		Vec3d vec3d = new Vec3d(this.getX(), this.getY(), this.getZ());
+		int k = Mth.floor(this.getX() - 2 - 1.0D);
+		int l = Mth.floor(this.getX() + 2 + 1.0D);
+		int t = Mth.floor(this.getY() - 2 - 1.0D);
+		int u = Mth.floor(this.getY() + 2 + 1.0D);
+		int v = Mth.floor(this.getZ() - 2 - 1.0D);
+		int w = Mth.floor(this.getZ() + 2 + 1.0D);
+		List<Entity> list = this.level.getEntities(this,
+				new AABB((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
+		Vec3 vec3d = new Vec3(this.getX(), this.getY(), this.getZ());
 		for (int x = 0; x < list.size(); ++x) {
 			Entity entity = (Entity) list.get(x);
-			double y = (MathHelper.sqrt((float) entity.squaredDistanceTo(vec3d)) / 8);
+			double y = (Mth.sqrt((float) entity.distanceToSqr(vec3d)) / 8);
 			if (entity instanceof LivingEntity) {
 				if (y <= 1.0D) {
-					((LivingEntity) entity).setFireTicks(200);
+					((LivingEntity) entity).setRemainingFireTicks(200);
 				}
 			}
 		}
-		this.world.createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 1.0F, true,
-				World.ExplosionSourceType.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true,
+				Level.ExplosionInteraction.NONE);
 	}
 
 	protected void emp() {
-		int k = MathHelper.floor(this.getX() - 8 - 1.0D);
-		int l = MathHelper.floor(this.getX() + 8 + 1.0D);
-		int t = MathHelper.floor(this.getY() - 8 - 1.0D);
-		int u = MathHelper.floor(this.getY() + 8 + 1.0D);
-		int v = MathHelper.floor(this.getZ() - 8 - 1.0D);
-		int w = MathHelper.floor(this.getZ() + 8 + 1.0D);
-		List<Entity> list = this.world.getOtherEntities(this,
-				new Box((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
-		Vec3d vec3d = new Vec3d(this.getX(), this.getY(), this.getZ());
+		int k = Mth.floor(this.getX() - 8 - 1.0D);
+		int l = Mth.floor(this.getX() + 8 + 1.0D);
+		int t = Mth.floor(this.getY() - 8 - 1.0D);
+		int u = Mth.floor(this.getY() + 8 + 1.0D);
+		int v = Mth.floor(this.getZ() - 8 - 1.0D);
+		int w = Mth.floor(this.getZ() + 8 + 1.0D);
+		List<Entity> list = this.level.getEntities(this,
+				new AABB((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
+		Vec3 vec3d = new Vec3(this.getX(), this.getY(), this.getZ());
 		for (int x = 0; x < list.size(); ++x) {
 			Entity entity = (Entity) list.get(x);
-			double y = (MathHelper.sqrt((float) entity.squaredDistanceTo(vec3d)) / 8);
+			double y = (Mth.sqrt((float) entity.distanceToSqr(vec3d)) / 8);
 			if (entity instanceof TechnodemonEntity || entity instanceof TechnodemonGreaterEntity) {
 				if (y <= 1.0D) {
-					entity.damage(DamageSource.arrow(this, this), 10);
+					entity.hurt(DamageSource.arrow(this, this), 10);
 				}
 			}
 		}
 	}
 
 	@Override
-	public ItemStack asItemStack() {
+	public ItemStack getPickupItem() {
 		return new ItemStack(Items.AIR);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public boolean shouldRender(double distance) {
+	public boolean shouldRenderAtSqrDistance(double distance) {
 		return true;
 	}
 
 	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
 		float f = 0.017453292F;
-		float x = -MathHelper.sin(yaw * f) * MathHelper.cos(pitch * f);
-		float y = -MathHelper.sin((pitch + roll) * f);
-		float z = MathHelper.cos(yaw * f) * MathHelper.cos(pitch * f);
-		this.setVelocity(x, y, z, modifierZ, 0);
+		float x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
+		float y = -Mth.sin((pitch + roll) * f);
+		float z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
+		this.shoot(x, y, z, modifierZ, 0);
 	}
 
 }

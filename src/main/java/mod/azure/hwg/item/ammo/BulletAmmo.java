@@ -1,11 +1,11 @@
 package mod.azure.hwg.item.ammo;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class BulletAmmo extends Item {
 
 	public BulletAmmo() {
-		super(new Item.Settings());
+		super(new Item.Properties());
 	}
 
 }

@@ -2,22 +2,22 @@ package mod.azure.hwg.client.models.weapons;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.weapons.SPistolItem;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import mod.azure.azurelib.model.GeoModel;
 
 public class SPistolModel extends GeoModel<SPistolItem> {
 	@Override
-	public Identifier getModelResource(SPistolItem object) {
-		return new Identifier(HWGMod.MODID, "geo/spistol.geo.json");
+	public ResourceLocation getModelResource(SPistolItem object) {
+		return new ResourceLocation(HWGMod.MODID, "geo/spistol.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureResource(SPistolItem object) {
-		return new Identifier(HWGMod.MODID, "textures/item/pistol.png");
+	public ResourceLocation getTextureResource(SPistolItem object) {
+		return new ResourceLocation(HWGMod.MODID, "textures/item/pistol.png");
 	}
 
 	@Override
-	public Identifier getAnimationResource(SPistolItem animatable) {
-		return new Identifier(HWGMod.MODID, "animations/pistol.animation.json");
+	public ResourceLocation getAnimationResource(SPistolItem animatable) {
+		return new ResourceLocation(HWGMod.MODID, "animations/pistol.animation.json");
 	}
 }

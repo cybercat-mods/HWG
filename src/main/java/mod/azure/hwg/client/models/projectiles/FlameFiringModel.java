@@ -2,22 +2,22 @@ package mod.azure.hwg.client.models.projectiles;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import mod.azure.azurelib.model.GeoModel;
 
 public class FlameFiringModel extends GeoModel<FlameFiring> {
 	@Override
-	public Identifier getModelResource(FlameFiring object) {
-		return new Identifier(HWGMod.MODID, "geo/flamefiring.geo.json");
+	public ResourceLocation getModelResource(FlameFiring object) {
+		return new ResourceLocation(HWGMod.MODID, "geo/flamefiring.geo.json");
 	}
 
 	@Override
-	public Identifier getTextureResource(FlameFiring object) {
-		return new Identifier(HWGMod.MODID, "textures/item/empty.png");
+	public ResourceLocation getTextureResource(FlameFiring object) {
+		return new ResourceLocation(HWGMod.MODID, "textures/item/empty.png");
 	}
 
 	@Override
-	public Identifier getAnimationResource(FlameFiring animatable) {
-		return new Identifier(HWGMod.MODID, "animations/flamefiring.animation.json");
+	public ResourceLocation getAnimationResource(FlameFiring animatable) {
+		return new ResourceLocation(HWGMod.MODID, "animations/flamefiring.animation.json");
 	}
 }

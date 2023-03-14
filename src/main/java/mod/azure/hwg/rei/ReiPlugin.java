@@ -6,12 +6,12 @@ import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class ReiPlugin implements REIClientPlugin {
 
 	public static final CategoryIdentifier<HWGDisplay> CRAFTING = CategoryIdentifier
-			.of(new Identifier(HWGMod.MODID, "crafting"));
+			.of(new ResourceLocation(HWGMod.MODID, "crafting"));
 
 	@Override
 	public void registerCategories(CategoryRegistry registry) {

@@ -1,7 +1,7 @@
 package mod.azure.hwg.client;
 
 import org.lwjgl.glfw.GLFW;
-
+import com.mojang.blaze3d.platform.InputConstants;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.gui.GunTableScreen;
 import mod.azure.hwg.compat.BWClientCompat;
@@ -13,23 +13,22 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 public class ClientInit implements ClientModInitializer {
 
-	public static KeyBinding reload = new KeyBinding("key.hwg.reload", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R,
+	public static KeyMapping reload = new KeyMapping("key.hwg.reload", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R,
 			"category.hwg.binds");
 
-	public static KeyBinding scope = new KeyBinding("key.hwg.scope", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT,
+	public static KeyMapping scope = new KeyMapping("key.hwg.scope", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT,
 			"category.hwg.binds");
 
 	@Override
 	public void onInitializeClient() {
 		ModelProviderinit.init();
 		RenderRegistry.init();
-		HandledScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
+		MenuScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
 		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
 			BWClientCompat.onInitializeClient();
 		}

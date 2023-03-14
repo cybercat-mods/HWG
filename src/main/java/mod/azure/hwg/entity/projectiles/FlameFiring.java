@@ -1,50 +1,48 @@
 package mod.azure.hwg.entity.projectiles;
 
+import mod.azure.azurelib.AzureLibMod;
 import mod.azure.azurelib.animatable.GeoEntity;
 import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.object.PlayState;
+import mod.azure.azurelib.entities.TickingLightEntity;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.config.HWGConfig;
-import mod.azure.hwg.entity.blockentity.TickingLightEntity;
-import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 
-public class FlameFiring extends PersistentProjectileEntity implements GeoEntity {
+public class FlameFiring extends AbstractArrow implements GeoEntity {
 
 	protected int timeInAir;
 	protected boolean inAir;
@@ -53,36 +51,35 @@ public class FlameFiring extends PersistentProjectileEntity implements GeoEntity
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
-	public static final TrackedData<Float> FORCED_YAW = DataTracker.registerData(FlameFiring.class,
-			TrackedDataHandlerRegistry.FLOAT);
-	public SoundEvent hitSound = this.getHitSound();
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(FlameFiring.class,
+			EntityDataSerializers.FLOAT);
+	public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
-	public FlameFiring(EntityType<? extends FlameFiring> entityType, World world) {
+	public FlameFiring(EntityType<? extends FlameFiring> entityType, Level world) {
 		super(entityType, world);
-		this.pickupType = PersistentProjectileEntity.PickupPermission.DISALLOWED;
+		this.pickup = AbstractArrow.Pickup.DISALLOWED;
 	}
 
-	public FlameFiring(World world, LivingEntity owner) {
+	public FlameFiring(Level world, LivingEntity owner) {
 		super(ProjectilesEntityRegister.FIRING, owner, world);
 		this.shooter = owner;
 	}
 
-	protected FlameFiring(EntityType<? extends FlameFiring> type, double x, double y, double z, World world) {
+	protected FlameFiring(EntityType<? extends FlameFiring> type, double x, double y, double z, Level world) {
 		this(type, world);
 	}
 
-	protected FlameFiring(EntityType<? extends FlameFiring> type, LivingEntity owner, World world) {
+	protected FlameFiring(EntityType<? extends FlameFiring> type, LivingEntity owner, Level world) {
 		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
 		this.setOwner(owner);
-		if (owner instanceof PlayerEntity) {
-			this.pickupType = PersistentProjectileEntity.PickupPermission.ALLOWED;
-		}
+		if (owner instanceof Player) 
+			this.pickup = AbstractArrow.Pickup.ALLOWED;
 	}
 
-	public FlameFiring(World world, double x, double y, double z) {
+	public FlameFiring(Level world, double x, double y, double z) {
 		super(ProjectilesEntityRegister.FIRING, x, y, z, world);
 		this.setNoGravity(true);
-		this.setDamage(0);
+		this.setBaseDamage(0);
 	}
 
 	@Override
@@ -98,163 +95,152 @@ public class FlameFiring extends PersistentProjectileEntity implements GeoEntity
 	}
 
 	@Override
-	public Packet<ClientPlayPacketListener> createSpawnPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return EntityPacket.createPacket(this);
 	}
 
 	@Override
-	public void age() {
+	public void tickDespawn() {
 		++this.ticksInAir;
-		if (this.ticksInAir >= 40) {
+		if (this.ticksInAir >= 40) 
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
 	}
 
 	@Override
-	public void setVelocity(double x, double y, double z, float speed, float divergence) {
-		super.setVelocity(x, y, z, speed, divergence);
+	public void shoot(double x, double y, double z, float speed, float divergence) {
+		super.shoot(x, y, z, speed, divergence);
 		this.ticksInAir = 0;
 	}
 
 	@Override
-	protected void onHit(LivingEntity living) {
-		super.onHit(living);
-		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof PlayerEntity)) {
-			living.setVelocity(0, 0, 0);
-			living.timeUntilRegen = 0;
+	protected void doPostHurtEffects(LivingEntity living) {
+		super.doPostHurtEffects(living);
+		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+			living.setDeltaMovement(0, 0, 0);
+			living.invulnerableTime = 0;
 		}
 	}
 
 	@Override
-	protected void initDataTracker() {
-		super.initDataTracker();
-		this.getDataTracker().startTracking(FORCED_YAW, 0f);
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.getEntityData().define(FORCED_YAW, 0f);
 	}
 
 	@Override
-	public void writeCustomDataToNbt(NbtCompound tag) {
-		super.writeCustomDataToNbt(tag);
+	public void addAdditionalSaveData(CompoundTag tag) {
+		super.addAdditionalSaveData(tag);
 		tag.putShort("life", (short) this.ticksInAir);
-		tag.putFloat("ForcedYaw", dataTracker.get(FORCED_YAW));
+		tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
 	}
 
 	@Override
-	public void readCustomDataFromNbt(NbtCompound tag) {
-		super.readCustomDataFromNbt(tag);
+	public void readAdditionalSaveData(CompoundTag tag) {
+		super.readAdditionalSaveData(tag);
 		this.ticksInAir = tag.getShort("life");
-		dataTracker.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
+		entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
 	}
 
 	@Override
 	public void tick() {
-		int idleOpt = 100;
-		if (getVelocity().lengthSquared() < 0.01)
+		var idleOpt = 100;
+		if (getDeltaMovement().lengthSqr() < 0.01)
 			idleTicks++;
 		else
 			idleTicks = 0;
 		if (idleOpt <= 0 || idleTicks < idleOpt)
 			super.tick();
 		++this.ticksInAir;
-		if (this.ticksInAir >= 40) {
+		if (this.ticksInAir >= 40) 
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
-		boolean isInsideWaterBlock = world.isWater(getBlockPos());
+		boolean isInsideWaterBlock = level.isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
-		if (getOwner()instanceof PlayerEntity owner)
-			setYaw(dataTracker.get(FORCED_YAW));
-		if (this.age % 16 == 2)
-			this.world.playSound((PlayerEntity) null, this.getX(), this.getY(), this.getZ(),
-					SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 0.5F, 1.0F);
-		if (this.world.isClient) {
-			double d2 = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
-			double e2 = this.getY() + 0.05D + this.random.nextDouble();
-			double f2 = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getWidth() * 0.5D;
-			this.world.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
-			this.world.addParticle(HWGParticles.BRIM_ORANGE, true, d2, e2, f2, 0, 0, 0);
-			this.world.addParticle(HWGParticles.BRIM_RED, true, d2, e2, f2, 0, 0, 0);
+		if (getOwner()instanceof Player owner)
+			setYRot(entityData.get(FORCED_YAW));
+		if (this.tickCount % 16 == 2)
+			this.level.playSound((Player) null, this.getX(), this.getY(), this.getZ(), SoundEvents.FIRE_AMBIENT,
+					SoundSource.PLAYERS, 0.5F, 1.0F);
+		if (this.level.isClientSide) {
+			var x = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
+			var y = this.getY() + 0.05D + this.random.nextDouble();
+			var z = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
+			this.level.addParticle(ParticleTypes.FLAME, true, x, y, z, 0, 0, 0);
+			this.level.addParticle(HWGParticles.BRIM_ORANGE, true, x, y, z, 0, 0, 0);
+			this.level.addParticle(HWGParticles.BRIM_RED, true, x, y, z, 0, 0, 0);
 		}
-		final Box aabb = new Box(this.getBlockPos().up()).expand(1D, 5D, 1D);
-		this.getEntityWorld().getOtherEntities(this, aabb).forEach(e -> {
-			if (e.isAlive()) {
-				e.damage(DamageSource.arrow(this, this.shooter), 3);
-				if (!(e instanceof FlameFiring || this.getOwner() instanceof PlayerEntity)) {
-					e.setFireTicks(90);
-				}
+		var aabb = new AABB(this.blockPosition().above()).inflate(1D, 5D, 1D);
+		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
+			if (e.isAlive() && !(e instanceof Player)) {
+				e.hurt(DamageSource.arrow(this, this.shooter), 3);
+				if (!(e instanceof FlameFiring || this.getOwner() instanceof Player))
+					e.setRemainingFireTicks(90);
 			}
 		});
 	}
 
-	public void initFromStack(ItemStack stack) {
-		if (stack.getItem() == HWGItems.BULLETS) {
-		}
-	}
-
 	@Override
-	public boolean hasNoGravity() {
-		if (this.isSubmergedInWater()) {
+	public boolean isNoGravity() {
+		if (this.isUnderWater())
 			return false;
-		} else {
+		else
 			return true;
-		}
 	}
 
 	@Override
-	public void setSound(SoundEvent soundIn) {
+	public void setSoundEvent(SoundEvent soundIn) {
 		this.hitSound = soundIn;
 	}
 
 	@Override
-	protected SoundEvent getHitSound() {
-		return SoundEvents.BLOCK_FIRE_AMBIENT;
+	protected SoundEvent getDefaultHitGroundSoundEvent() {
+		return SoundEvents.FIRE_AMBIENT;
 	}
 
 	@Override
-	protected void onBlockHit(BlockHitResult blockHitResult) {
-		super.onBlockHit(blockHitResult);
-		if (!this.world.isClient) {
+	protected void onHitBlock(BlockHitResult blockHitResult) {
+		super.onHitBlock(blockHitResult);
+		if (!this.level.isClientSide) {
 			Entity entity = this.getOwner();
-			if (entity == null || !(entity instanceof MobEntity)
-					|| this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING)) {
-				BlockPos blockPos = blockHitResult.getBlockPos().offset(blockHitResult.getSide());
-				if (this.world.isAir(blockPos)) {
-					this.world.setBlockState(blockPos, AbstractFireBlock.getState(this.world, blockPos));
-				}
+			if (entity == null || !(entity instanceof Mob)
+					|| this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+				var blockPos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
+				if (this.level.isEmptyBlock(blockPos)) 
+					this.level.setBlockAndUpdate(blockPos, BaseFireBlock.getState(this.level, blockPos));
 			}
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
-		this.setSound(SoundEvents.BLOCK_FIRE_AMBIENT);
+		this.setSoundEvent(SoundEvents.FIRE_AMBIENT);
 	}
 
 	@Override
-	protected void onEntityHit(EntityHitResult entityHitResult) {
-		super.onEntityHit(entityHitResult);
-		if (!this.world.isClient) {
+	protected void onHitEntity(EntityHitResult entityHitResult) {
+		super.onHitEntity(entityHitResult);
+		if (!this.level.isClientSide) 
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
 	}
 
 	@Override
-	public ItemStack asItemStack() {
+	public ItemStack getPickupItem() {
 		return new ItemStack(HWGItems.BULLETS);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public boolean shouldRender(double distance) {
+	public boolean shouldRenderAtSqrDistance(double distance) {
 		return true;
 	}
 
 	private void spawnLightSource(boolean isInWaterBlock) {
 		if (lightBlockPos == null) {
-			lightBlockPos = findFreeSpace(world, getBlockPos(), 2);
+			lightBlockPos = findFreeSpace(level, blockPosition(), 2);
 			if (lightBlockPos == null)
 				return;
-			world.setBlockState(lightBlockPos, HWGBlocks.TICKING_LIGHT_BLOCK.getDefaultState());
-		} else if (checkDistance(lightBlockPos, getBlockPos(), 2)) {
-			BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
-			if (blockEntity instanceof TickingLightEntity) {
+			level.setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
+		} else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
+			var blockEntity = level.getBlockEntity(lightBlockPos);
+			if (blockEntity instanceof TickingLightEntity) 
 				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
-			} else
+			else
 				lightBlockPos = null;
 		} else
 			lightBlockPos = null;
@@ -266,11 +252,11 @@ public class FlameFiring extends PersistentProjectileEntity implements GeoEntity
 				&& Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
 	}
 
-	private BlockPos findFreeSpace(World world, BlockPos blockPos, int maxDistance) {
+	private BlockPos findFreeSpace(Level world, BlockPos blockPos, int maxDistance) {
 		if (blockPos == null)
 			return null;
 
-		int[] offsets = new int[maxDistance * 2 + 1];
+		var offsets = new int[maxDistance * 2 + 1];
 		offsets[0] = 0;
 		for (int i = 2; i <= maxDistance * 2; i += 2) {
 			offsets[i - 1] = i / 2;
@@ -279,9 +265,9 @@ public class FlameFiring extends PersistentProjectileEntity implements GeoEntity
 		for (int x : offsets)
 			for (int y : offsets)
 				for (int z : offsets) {
-					BlockPos offsetPos = blockPos.add(x, y, z);
-					BlockState state = world.getBlockState(offsetPos);
-					if (state.isAir() || state.getBlock().equals(HWGBlocks.TICKING_LIGHT_BLOCK))
+					var offsetPos = blockPos.offset(x, y, z);
+					var state = world.getBlockState(offsetPos);
+					if (state.isAir() || state.getBlock().equals(AzureLibMod.TICKING_LIGHT_BLOCK))
 						return offsetPos;
 				}
 
@@ -289,11 +275,11 @@ public class FlameFiring extends PersistentProjectileEntity implements GeoEntity
 	}
 
 	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
-		float f = 0.017453292F;
-		float x = -MathHelper.sin(yaw * f) * MathHelper.cos(pitch * f);
-		float y = -MathHelper.sin((pitch + roll) * f);
-		float z = MathHelper.cos(yaw * f) * MathHelper.cos(pitch * f);
-		this.setVelocity(x, y, z, modifierZ, 0);
+		var f = 0.017453292F;
+		var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
+		var y = -Mth.sin((pitch + roll) * f);
+		var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
+		this.shoot(x, y, z, modifierZ, 0);
 	}
 
 }
