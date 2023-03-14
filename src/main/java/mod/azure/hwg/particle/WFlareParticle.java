@@ -29,19 +29,14 @@ public class WFlareParticle extends TextureSheetParticle {
 		this.yo = this.y;
 		this.zo = this.z;
 		if (this.age++ < this.lifetime && this.alpha > 0.0F) {
-			this.xd += (double) (this.random.nextFloat() / 5000.0F
-					* (float) (this.random.nextBoolean() ? 1 : -1));
-			this.zd += (double) (this.random.nextFloat() / 5000.0F
-					* (float) (this.random.nextBoolean() ? 1 : -1));
+			this.xd += (double) (this.random.nextFloat() / 5000.0F * (float) (this.random.nextBoolean() ? 1 : -1));
+			this.zd += (double) (this.random.nextFloat() / 5000.0F * (float) (this.random.nextBoolean() ? 1 : -1));
 			this.yd -= (double) this.gravity;
 			this.move(this.xd, this.yd, this.zd);
-			if (this.age >= this.lifetime - 60 && this.alpha > 0.01F) {
+			if (this.age >= this.lifetime - 60 && this.alpha > 0.01F)
 				this.alpha -= 0.015F;
-			}
-
-		} else {
+		} else
 			this.remove();
-		}
 	}
 
 	public ParticleRenderType getRenderType() {
@@ -58,7 +53,7 @@ public class WFlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			WFlareParticle campfireSmokeParticle = new WFlareParticle(clientWorld, d, e, f, g, h, i);
+			var campfireSmokeParticle = new WFlareParticle(clientWorld, d, e, f, g, h, i);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}

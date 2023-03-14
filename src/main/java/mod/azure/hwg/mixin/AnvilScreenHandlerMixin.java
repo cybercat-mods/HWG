@@ -26,11 +26,11 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
 
 	@Inject(method = "createResult", at = @At(value = "RETURN"))
 	private void updateRuinedRepair(CallbackInfo ci) {
-		ItemStack leftStack = this.inputSlots.getItem(0).copy();
-		ItemStack rightStack = this.inputSlots.getItem(1).copy();
+		var leftStack = this.inputSlots.getItem(0).copy();
+		var rightStack = this.inputSlots.getItem(1).copy();
 		if ((leftStack.getItem() instanceof HWGGunBase || leftStack.getItem() instanceof HWGGunLoadedBase)
 				&& rightStack.getItem() == Items.ENCHANTED_BOOK) {
-			ItemStack repaired = ItemStack.EMPTY;
+			var repaired = ItemStack.EMPTY;
 			this.resultSlots.setItem(0, repaired);
 			this.broadcastChanges();
 		}

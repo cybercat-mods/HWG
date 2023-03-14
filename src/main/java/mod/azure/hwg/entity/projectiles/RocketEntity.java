@@ -32,7 +32,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 
 public class RocketEntity extends AbstractArrow implements GeoEntity {
 
@@ -59,10 +58,8 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	protected RocketEntity(EntityType<? extends RocketEntity> type, LivingEntity owner, Level world) {
 		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
 		this.setOwner(owner);
-		if (owner instanceof Player) {
+		if (owner instanceof Player)
 			this.pickup = AbstractArrow.Pickup.ALLOWED;
-		}
-
 	}
 
 	public RocketEntity(Level world, double x, double y, double z) {
@@ -126,8 +123,8 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		boolean bl = this.isNoPhysics();
-		Vec3 vec3d = this.getDeltaMovement();
+		var bl = this.isNoPhysics();
+		var vec3d = this.getDeltaMovement();
 		if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
 			double f = vec3d.horizontalDistance();
 			this.setYRot((float) (Mth.atan2(vec3d.x, vec3d.z) * 57.2957763671875D));
@@ -138,10 +135,6 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 		if (getOwner()instanceof Player owner)
 			setYRot(entityData.get(FORCED_YAW));
 		++this.ticksInAir;
-		if (this.ticksInAir >= 40) {
-			this.explode();
-			this.remove(Entity.RemovalReason.DISCARDED);
-		}
 		if (this.tickCount >= 80) {
 			this.explode();
 			this.remove(Entity.RemovalReason.DISCARDED);
@@ -151,21 +144,20 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 			++this.timeInAir;
 		} else {
 			this.timeInAir = 0;
-			Vec3 vec3d3 = this.position();
-			Vec3 vector3d3 = vec3d3.add(vec3d);
-			HitResult hitResult = this.level.clip(new ClipContext(vec3d3, vector3d3,
-					ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-			if (((HitResult) hitResult).getType() != HitResult.Type.MISS) {
+			var vec3d3 = this.position();
+			var vector3d3 = vec3d3.add(vec3d);
+			HitResult hitResult = this.level
+					.clip(new ClipContext(vec3d3, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+			if (((HitResult) hitResult).getType() != HitResult.Type.MISS)
 				vector3d3 = ((HitResult) hitResult).getLocation();
-			}
 			while (!this.isRemoved()) {
-				EntityHitResult entityHitResult = this.findHitEntity(vec3d3, vector3d3);
+				var entityHitResult = this.findHitEntity(vec3d3, vector3d3);
 				if (entityHitResult != null) {
 					hitResult = entityHitResult;
 				}
 				if (hitResult != null && ((HitResult) hitResult).getType() == HitResult.Type.ENTITY) {
-					Entity entity = ((EntityHitResult) hitResult).getEntity();
-					Entity entity2 = this.getOwner();
+					var entity = ((EntityHitResult) hitResult).getEntity();
+					var entity2 = this.getOwner();
 					if (entity instanceof Player && entity2 instanceof Player
 							&& !((Player) entity2).canHarmPlayer((Player) entity)) {
 						hitResult = null;
@@ -176,9 +168,8 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 					this.onHit((HitResult) hitResult);
 					this.hasImpulse = true;
 				}
-				if (entityHitResult == null || this.getPierceLevel() <= 0) {
+				if (entityHitResult == null || this.getPierceLevel() <= 0)
 					break;
-				}
 				hitResult = null;
 			}
 			vec3d = this.getDeltaMovement();
@@ -189,38 +180,29 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 			double j = this.getY() + e;
 			double k = this.getZ() + g;
 			double l = vec3d.horizontalDistance();
-			if (bl) {
+			if (bl)
 				this.setYRot((float) (Mth.atan2(-e, -g) * 57.2957763671875D));
-			} else {
+			else
 				this.setYRot((float) (Mth.atan2(e, g) * 57.2957763671875D));
-			}
 			this.setXRot((float) (Mth.atan2(e, l) * 57.2957763671875D));
 			this.setXRot(lerpRotation(this.xRotO, this.getXRot()));
 			this.setYRot(lerpRotation(this.yRotO, this.getYRot()));
-			float m = 0.99F;
-
+			var m = 0.99F;
 			this.setDeltaMovement(vec3d.scale((double) m));
-			if (!this.isNoGravity() && !bl) {
-				Vec3 vec3d5 = this.getDeltaMovement();
-				this.setDeltaMovement(vec3d5.x, vec3d5.y - 0.05000000074505806D, vec3d5.z);
-			}
+			if (!this.isNoGravity() && !bl)
+				this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.05000000074505806D,
+						this.getDeltaMovement().z);
 			this.absMoveTo(h, j, k);
 			this.checkInsideBlocks();
 		}
 	}
 
-	public void initFromStack(ItemStack stack) {
-		if (stack.getItem() == HWGItems.ROCKET) {
-		}
-	}
-
 	@Override
 	public boolean isNoGravity() {
-		if (this.isUnderWater()) {
+		if (this.isUnderWater())
 			return false;
-		} else {
+		else
 			return true;
-		}
 	}
 
 	public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
@@ -271,10 +253,10 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
-		float f = 0.017453292F;
-		float x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
-		float y = -Mth.sin((pitch + roll) * f);
-		float z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
+		var f = 0.017453292F;
+		var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
+		var y = -Mth.sin((pitch + roll) * f);
+		var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
 		this.shoot(x, y, z, modifierZ, 0);
 	}
 

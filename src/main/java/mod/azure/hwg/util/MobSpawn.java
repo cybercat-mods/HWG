@@ -42,12 +42,11 @@ public class MobSpawn {
 				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TechnodemonGreaterEntity::canNetherSpawn);
 		SpawnPlacements.register(HWGMobs.MERC, SpawnPlacements.Type.ON_GROUND,
 				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MercEntity::canSpawn);
-		SpawnPlacements.register(HWGMobs.SPY, SpawnPlacements.Type.ON_GROUND,
-				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SpyEntity::canSpawn);
+		SpawnPlacements.register(HWGMobs.SPY, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+				SpyEntity::canSpawn);
 	}
 
 	private static boolean parseBiomes(List<String> biomes, BiomeSelectionContext biomeContext) {
-		return biomes.contains(biomeContext.getBiomeKey().location().toString())
-				|| biomes.contains("#" + biomeContext.getBiomeRegistryEntry().toString());
+		return biomes.contains(biomeContext.getBiomeKey().location().toString());
 	}
 }

@@ -31,54 +31,52 @@ public class FlamethrowerItem extends HWGGunBase {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-		if (!world.isClientSide) {
-			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(),
-					SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
-		}
+		if (!world.isClientSide)
+			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FLINTANDSTEEL_USE,
+					SoundSource.PLAYERS, 1.0F, 1.0F);
 		return super.use(world, user, hand);
 	}
 
 	@Override
 	public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
 		if (entityLiving instanceof Player) {
-			Player playerentity = (Player) entityLiving;
+			var playerentity = (Player) entityLiving;
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 3)) {
 				playerentity.getCooldowns().addCooldown(this, 5);
 				if (!worldIn.isClientSide) {
-					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity.getXRot(), playerentity.getYRot(), 0f, 1.5f);
-					abstractarrowentity.getEntityData().set(FlameFiring.FORCED_YAW, playerentity.getYRot());
-					abstractarrowentity.moveTo(
-							entityLiving.getX() + (switch (playerentity.getDirection()) {
-							case WEST -> -0.5F;
-							case EAST -> 0.5F;
-							default -> 0.0F;
-							}), entityLiving.getY() + (switch (playerentity.getDirection()) {
-							case DOWN -> 0.5F;
-							case UP -> -1.85F;
-							default -> 0.75F;
-							}), entityLiving.getZ() + (switch (playerentity.getDirection()) {
-							case NORTH -> -0.5F;
-							case SOUTH -> 0.5F;
-							default -> 0.0F;
-							}), 0, 0);
-					worldIn.addFreshEntity(abstractarrowentity);
+					var flames = createArrow(worldIn, stack, playerentity);
+					flames.setProperties(playerentity.getXRot(), playerentity.getYRot(), 0f, 1.5f);
+					flames.getEntityData().set(FlameFiring.FORCED_YAW, playerentity.getYRot());
+					flames.moveTo(entityLiving.getX() + (switch (playerentity.getDirection()) {
+					case WEST -> -0.5F;
+					case EAST -> 0.5F;
+					default -> 0.0F;
+					}), entityLiving.getY() + (switch (playerentity.getDirection()) {
+					case DOWN -> 0.5F;
+					case UP -> -1.85F;
+					default -> 0.75F;
+					}), entityLiving.getZ() + (switch (playerentity.getDirection()) {
+					case NORTH -> -0.5F;
+					case SOUTH -> 0.5F;
+					default -> 0.0F;
+					}), 0, 0);
+					worldIn.addFreshEntity(flames);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 				}
-				boolean isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}
 
 	public FlameFiring createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		FlameFiring arrowentity = new FlameFiring(worldIn, shooter);
-		return arrowentity;
+		var flames = new FlameFiring(worldIn, shooter);
+		return flames;
 	}
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-		if (world.isClientSide) {
+		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof FlamethrowerItem) {
 				if (ClientInit.reload.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
@@ -88,7 +86,6 @@ public class FlamethrowerItem extends HWGGunBase {
 							SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 				}
 			}
-		}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
@@ -104,30 +101,9 @@ public class FlamethrowerItem extends HWGGunBase {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
-		tooltip.add(Component
-				.translatable(
-						"Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1))
+		tooltip.add(Component.translatable(
+				"Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1))
 				.withStyle(ChatFormatting.ITALIC));
 		tooltip.add(Component.translatable("hwg.ammo.reloadfuel").withStyle(ChatFormatting.ITALIC));
-	}
-
-	public static float getArrowVelocity(int charge) {
-		float f = (float) charge / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
-	}
-
-	public static float getPullProgress(int useTicks) {
-		float f = (float) useTicks / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
 	}
 }

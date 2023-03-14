@@ -14,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
@@ -77,10 +76,10 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 				return;
 			entity.level.setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 		} else if (checkDistance(lightBlockPos, entity.blockPosition(), 2)) {
-			BlockEntity blockEntity = entity.level.getBlockEntity(lightBlockPos);
-			if (blockEntity instanceof TickingLightEntity) {
+			var blockEntity = entity.level.getBlockEntity(lightBlockPos);
+			if (blockEntity instanceof TickingLightEntity) 
 				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
-			} else
+			else
 				lightBlockPos = null;
 		} else
 			lightBlockPos = null;
@@ -96,7 +95,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 		if (blockPos == null)
 			return null;
 
-		int[] offsets = new int[maxDistance * 2 + 1];
+		var offsets = new int[maxDistance * 2 + 1];
 		offsets[0] = 0;
 		for (int i = 2; i <= maxDistance * 2; i += 2) {
 			offsets[i - 1] = i / 2;
@@ -112,6 +111,24 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 				}
 
 		return null;
+	}
+
+	public static float getArrowVelocity(int charge) {
+		var f = (float) charge / 20.0F;
+		f = (f * f + f * 2.0F) / 3.0F;
+		if (f > 1.0F) 
+			f = 1.0F;
+
+		return f;
+	}
+
+	public static float getPullProgress(int useTicks) {
+		var f = (float) useTicks / 20.0F;
+		f = (f * f + f * 2.0F) / 3.0F;
+		if (f > 1.0F) 
+			f = 1.0F;
+
+		return f;
 	}
 
 }

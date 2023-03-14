@@ -31,7 +31,7 @@ public class FuelTankEntity extends Entity {
 	public FuelTankEntity(Level worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
 		this(HWGMobs.FUELTANK, worldIn);
 		this.absMoveTo(x, y, z);
-		double d = level.random.nextDouble() * 6.2831854820251465D;
+		var d = level.random.nextDouble() * 6.2831854820251465D;
 		this.setDeltaMovement(-Math.sin(d) * 0.02D, 0.20000000298023224D, -Math.cos(d) * 0.02D);
 		this.xo = x;
 		this.yo = y;
@@ -50,9 +50,8 @@ public class FuelTankEntity extends Entity {
 
 	public void tick() {
 		this.remove(Entity.RemovalReason.DISCARDED);
-		if (!this.level.isClientSide) {
+		if (!this.level.isClientSide) 
 			this.explode();
-		}
 	}
 
 	@Override

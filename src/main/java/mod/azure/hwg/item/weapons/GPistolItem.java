@@ -48,21 +48,21 @@ public class GPistolItem extends AnimatedItem {
 	@Override
 	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
 		if (entityLiving instanceof Player) {
-			Player playerentity = (Player) entityLiving;
+			var playerentity = (Player) entityLiving;
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
 				playerentity.getCooldowns().addCooldown(this, 5);
 				if (!worldIn.isClientSide) {
-					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
+					var bullet = createArrow(worldIn, stack, playerentity);
+					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
 							1.0F * 3.0F, 1.0F);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					worldIn.addFreshEntity(abstractarrowentity);
+					worldIn.addFreshEntity(bullet);
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), HWGSounds.PISTOL, SoundSource.PLAYERS, 6.75F,1.0F);
 					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller",
 							"golden");
 				}
-				boolean isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
@@ -76,7 +76,7 @@ public class GPistolItem extends AnimatedItem {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-		if (world.isClientSide) {
+		if (world.isClientSide) 
 			if (((Player) entity).getMainHandItem().getItem() instanceof GPistolItem) {
 				if (ClientInit.reload.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
@@ -84,7 +84,6 @@ public class GPistolItem extends AnimatedItem {
 					ClientPlayNetworking.send(HWGMod.PISTOL, passedData);
 				}
 			}
-		}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
@@ -101,8 +100,8 @@ public class GPistolItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, HWGConfig.golden_pistol_damage);
-		return arrowentity;
+		var bullet = new BulletEntity(worldIn, shooter, HWGConfig.golden_pistol_damage);
+		return bullet;
 	}
 
 	public static float getArrowVelocity(int charge) {

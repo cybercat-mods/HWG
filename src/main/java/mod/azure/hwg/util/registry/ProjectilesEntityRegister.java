@@ -52,9 +52,8 @@ public class ProjectilesEntityRegister {
 
 		ENTITY_TYPES.add(type);
 
-		if (itemRender) {
+		if (itemRender) 
 			ENTITY_THAT_USE_ITEM_RENDERS.add(type);
-		}
 
 		return type;
 	}
@@ -74,9 +73,8 @@ public class ProjectilesEntityRegister {
 
 		ENTITY_TYPES.add(type);
 
-		if (itemRender) {
+		if (itemRender) 
 			ENTITY_THAT_USE_ITEM_RENDERS.add(type);
-		}
 
 		return type;
 	}

@@ -44,49 +44,53 @@ public class GunSmithProfession {
 
 	public static Supplier<VillagerProfession> registerProfession(String name,
 			Supplier<VillagerProfession> profession) {
-		var registry = Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, new ResourceLocation(HWGMod.MODID, name),
-				profession.get());
+		var registry = Registry.register(BuiltInRegistries.VILLAGER_PROFESSION,
+				new ResourceLocation(HWGMod.MODID, name), profession.get());
 		return () -> registry;
 	}
 
 	public static Supplier<PoiType> registerPoiType(String name, Supplier<PoiType> poiType) {
-		ResourceKey<PoiType> resourceKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE,
+		var resourceKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE,
 				new ResourceLocation(HWGMod.MODID, name));
 		var registry = Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
-		PointOfInterestTypesInvoker.invokeRegisterBlockStates(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey),PoiTypes.getBlockStates(HWGBlocks.GUN_TABLE));
+		PointOfInterestTypesInvoker.invokeRegisterBlockStates(
+				BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey),
+				PoiTypes.getBlockStates(HWGBlocks.GUN_TABLE));
 		return () -> registry;
 	}
 
 	public static void init() {
-		VillagerTrades.TRADES.put(GUNSMITH.get(), copyToFastUtilMap(ImmutableMap.of(1,
-				new VillagerTrades.ItemListing[] { new GunSmithProfession.BuyForOneEmeraldFactory(Items.GUNPOWDER, 1, 16, 2),
-						new GunSmithProfession.SellItemFactory(Items.IRON_NUGGET, 2, 1, 16, 1) },
-				2,
-				new VillagerTrades.ItemListing[] {
-						new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.BULLETS, 2, 16, 10),
-						new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.PISTOL, 5, 16, 20),
-						new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.LUGER, 5, 16, 20) },
-				3,
-				new VillagerTrades.ItemListing[] {
-						new GunSmithProfession.BuyForItemsFactory(Items.EMERALD, 2, 1, HWGItems.SHOTGUN_SHELL, 16, 16,
-								30),
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.SMG, 1, 16, 30),
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.TOMMYGUN, 1, 16, 30) },
-				4,
-				new VillagerTrades.ItemListing[] {
-						new GunSmithProfession.BuyForItemsFactory(HWGItems.FUEL_TANK, 1, 4, HWGItems.FLAMETHROWER, 1,
-								16, 40),
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 6, 4, HWGItems.SHOTGUN, 1, 16, 40),
-						new GunSmithProfession.BuyForItemsFactory(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS, 48, 16,
-								50) },
-				5,
-				new VillagerTrades.ItemListing[] {
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.ROCKETLAUNCHER, 1,
-								16, 60),
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER, 1, 16,
-								60),
-						new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.SNIPER, 1, 16,
-								60) })));
+		VillagerTrades.TRADES.put(GUNSMITH.get(),
+				copyToFastUtilMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[] {
+						new GunSmithProfession.BuyForOneEmeraldFactory(Items.GUNPOWDER, 1, 16, 2),
+						new GunSmithProfession.SellItemFactory(Items.IRON_NUGGET, 2, 1, 16, 1) }, 2,
+						new VillagerTrades.ItemListing[] {
+								new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.BULLETS, 2, 16, 10),
+								new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.PISTOL, 5, 16, 20),
+								new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.LUGER, 5, 16, 20) },
+						3,
+						new VillagerTrades.ItemListing[] {
+								new GunSmithProfession.BuyForItemsFactory(Items.EMERALD, 2, 1, HWGItems.SHOTGUN_SHELL,
+										16, 16, 30),
+								new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.SMG, 1, 16, 30),
+								new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.TOMMYGUN, 1, 16,
+										30) },
+						4,
+						new VillagerTrades.ItemListing[] {
+								new GunSmithProfession.BuyForItemsFactory(HWGItems.FUEL_TANK, 1, 4,
+										HWGItems.FLAMETHROWER, 1, 16, 40),
+								new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 6, 4, HWGItems.SHOTGUN, 1,
+										16, 40),
+								new GunSmithProfession.BuyForItemsFactory(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS, 48,
+										16, 50) },
+						5,
+						new VillagerTrades.ItemListing[] {
+								new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8,
+										HWGItems.ROCKETLAUNCHER, 1, 16, 60),
+								new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER,
+										1, 16, 60),
+								new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.SNIPER, 1,
+										16, 60) })));
 	}
 
 	public static Int2ObjectMap<VillagerTrades.ItemListing[]> copyToFastUtilMap(
@@ -109,8 +113,8 @@ public class GunSmithProfession {
 			this(item, secondCount, 1, sellItem, sellCount, maxUses, experience);
 		}
 
-		public BuyForItemsFactory(ItemLike item, int secondCount, int price, Item sellItem, int sellCount,
-				int maxUses, int experience) {
+		public BuyForItemsFactory(ItemLike item, int secondCount, int price, Item sellItem, int sellCount, int maxUses,
+				int experience) {
 			this.secondBuy = new ItemStack(item);
 			this.secondCount = secondCount;
 			this.price = price;

@@ -11,6 +11,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.item.weapons.SniperItem;
 import net.minecraft.client.Minecraft;
@@ -18,7 +19,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
 @Mixin(Gui.class)
 public abstract class SniperMixin extends GuiComponent {
@@ -38,18 +38,14 @@ public abstract class SniperMixin extends GuiComponent {
 
 	@Inject(at = @At("TAIL"), method = "render")
 	private void render(CallbackInfo info) {
-		ItemStack itemStack = this.minecraft.player.getInventory().getSelected();
+		var itemStack = this.minecraft.player.getInventory().getSelected();
 		if (this.minecraft.options.getCameraType().isFirstPerson() && itemStack.getItem() instanceof SniperItem) {
 			if (ClientInit.scope.isDown()) {
-				if (this.scoped == true) {
+				if (this.scoped == true)
 					this.scoped = false;
-				}
 				this.renderSniperOverlay();
-			} else {
-				if (!this.scoped) {
-					this.scoped = true;
-				}
-			}
+			} else if (!this.scoped)
+				this.scoped = true;
 		}
 	}
 

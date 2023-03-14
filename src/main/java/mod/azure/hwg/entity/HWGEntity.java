@@ -4,6 +4,29 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
+import mod.azure.azurelib.animatable.GeoEntity;
+import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.util.AzureLibUtil;
+import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.entity.projectiles.BlazeRodEntity;
+import mod.azure.hwg.entity.projectiles.BulletEntity;
+import mod.azure.hwg.entity.projectiles.FireballEntity;
+import mod.azure.hwg.entity.projectiles.FlameFiring;
+import mod.azure.hwg.entity.projectiles.ShellEntity;
+import mod.azure.hwg.item.weapons.Assasult1Item;
+import mod.azure.hwg.item.weapons.AssasultItem;
+import mod.azure.hwg.item.weapons.BalrogItem;
+import mod.azure.hwg.item.weapons.BrimstoneItem;
+import mod.azure.hwg.item.weapons.FlamethrowerItem;
+import mod.azure.hwg.item.weapons.GPistolItem;
+import mod.azure.hwg.item.weapons.HellhorseRevolverItem;
+import mod.azure.hwg.item.weapons.LugerItem;
+import mod.azure.hwg.item.weapons.Minigun;
+import mod.azure.hwg.item.weapons.PistolItem;
+import mod.azure.hwg.item.weapons.SPistolItem;
+import mod.azure.hwg.item.weapons.ShotgunItem;
+import mod.azure.hwg.item.weapons.SniperItem;
+import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -11,32 +34,27 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.npc.AbstractVillager;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.util.AzureLibUtil;
 
 public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob, Enemy {
 
@@ -59,17 +77,6 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
-	}
-
-	@Override
-	protected void registerGoals() {
-		this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(9, new FloatGoal(this));
-		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
-		this.targetSelector.addGoal(2, new HurtByTargetGoal(this).setAlertOthers());
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, true));
 	}
 
 	public static boolean canNetherSpawn(EntityType<? extends HWGEntity> type, LevelAccessor serverWorldAccess,
@@ -122,8 +129,8 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason,
-			SpawnGroupData entityData, CompoundTag entityTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty,
+			MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
 		return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityTag);
 	}
 
@@ -161,5 +168,65 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 	}
 
 	public abstract int getVariants();
+
+	public Projectile getProjectile(Item item) {
+		return (item instanceof PistolItem
+				|| item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item
+				|| item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem
+				|| item instanceof HellhorseRevolverItem || item instanceof Minigun) ? new BulletEntity(
+						level, this,
+						(item instanceof PistolItem ? HWGConfig.pistol_damage
+								: item instanceof LugerItem ? HWGConfig.luger_damage
+										: item instanceof AssasultItem ? HWGConfig.ak47_damage
+												: item instanceof Assasult1Item ? HWGConfig.smg_damage
+														: item instanceof GPistolItem ? HWGConfig.golden_pistol_damage
+																: item instanceof SPistolItem
+																		? HWGConfig.silenced_pistol_damage
+																		: item instanceof HellhorseRevolverItem
+																				? HWGConfig.hellhorse_damage
+																				: item instanceof Minigun
+																						? HWGConfig.minigun_damage
+																						: HWGConfig.sniper_damage))
+						: item instanceof FlamethrowerItem ? new FlameFiring(level, this)
+								: item instanceof BrimstoneItem ? new BlazeRodEntity(level, this)
+										: item instanceof BalrogItem ? new FireballEntity(level, this)
+												: new ShellEntity(level, this);
+	}
+
+	public void shoot() {
+		if (!this.level.isClientSide) {
+			var world = this.getCommandSenderWorld();
+			var vector3d = this.getViewVector(1.0F);
+			var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());
+			bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);
+			bullet.shootFromRotation(this, this.getXRot(), this.getYRot(), 0.0F, 1.0F * 3.0F, 1.0F);
+			world.playSound(this, blockPosition(),
+					getDefaultAttackSound(getItemBySlot(EquipmentSlot.MAINHAND).getItem()), SoundSource.HOSTILE, 1.0F,
+					1.0f);
+			world.addFreshEntity(bullet);
+		}
+	}
+
+	public SoundEvent getDefaultAttackSound(Item item) {
+		return item instanceof GPistolItem ? HWGSounds.SPISTOL
+				: item instanceof SPistolItem ? HWGSounds.SPISTOL
+						: item instanceof PistolItem ? HWGSounds.PISTOL
+								: item instanceof LugerItem ? HWGSounds.LUGER
+										: item instanceof AssasultItem ? HWGSounds.AK
+												: item instanceof Assasult1Item ? HWGSounds.SMG
+														: item instanceof ShotgunItem ? HWGSounds.SHOTGUN
+																: item instanceof ShotgunItem ? HWGSounds.SHOTGUN
+																		: item instanceof HellhorseRevolverItem
+																				? HWGSounds.REVOLVER
+																				: item instanceof FlamethrowerItem
+																						? SoundEvents.FIREWORK_ROCKET_BLAST_FAR
+																						: item instanceof BrimstoneItem
+																								? SoundEvents.FIRECHARGE_USE
+																								: item instanceof BalrogItem
+																										? SoundEvents.GENERIC_EXPLODE
+																										: item instanceof Minigun
+																												? HWGSounds.MINIGUN
+																												: HWGSounds.SNIPER;
+	}
 
 }

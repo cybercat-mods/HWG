@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -35,85 +34,64 @@ public class BalrogItem extends HWGGunBase {
 	@Override
 	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
 		if (entityLiving instanceof Player) {
-			Player playerentity = (Player) entityLiving;
+			var playerentity = (Player) entityLiving;
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 4)
 					&& !playerentity.getCooldowns().isOnCooldown(this)) {
 				playerentity.getCooldowns().addCooldown(this, 25);
 				if (!worldIn.isClientSide) {
-					BlazeRodEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
+					var rod = createArrow(worldIn, stack, playerentity);
+					rod.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
 							1.0F * 3.0F, 1.0F);
-					abstractarrowentity.moveTo(entityLiving.getX(), entityLiving.getY(0.85),
-							entityLiving.getZ(), 0, 0);
+					rod.moveTo(entityLiving.getX(), entityLiving.getY(0.85), entityLiving.getZ(), 0, 0);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					abstractarrowentity.isNoGravity();
+					rod.isNoGravity();
 					double r = worldIn.random.nextDouble();
 					if (r < 0.1)
-						abstractarrowentity.isOnFire();
+						rod.isOnFire();
 
-					BlazeRodEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.shootFromRotation(playerentity, playerentity.getXRot() + 2, playerentity.getYRot(),
-							0.0F, 1.0F * 3.0F, 1.0F);
-					abstractarrowentity1.moveTo(entityLiving.getX(), entityLiving.getY(0.85),
-							entityLiving.getZ(), 0, 0);
+					var rod1 = createArrow(worldIn, stack, playerentity);
+					rod1.shootFromRotation(playerentity, playerentity.getXRot() + 2, playerentity.getYRot(), 0.0F,
+							1.0F * 3.0F, 1.0F);
+					rod1.moveTo(entityLiving.getX(), entityLiving.getY(0.85), entityLiving.getZ(), 0, 0);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					abstractarrowentity1.isNoGravity();
+					rod1.isNoGravity();
 					double a = worldIn.random.nextDouble();
 					if (a < 0.1)
-						abstractarrowentity1.isOnFire();
+						rod1.isOnFire();
 
-					BlazeRodEntity abstractarrowentity2 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity2.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 2,
-							0.0F, 1.0F * 3.0F, 1.0F);
-					abstractarrowentity2.moveTo(entityLiving.getX(), entityLiving.getY(0.85),
-							entityLiving.getZ(), 0, 0);
+					var rod2 = createArrow(worldIn, stack, playerentity);
+					rod2.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 2, 0.0F,
+							1.0F * 3.0F, 1.0F);
+					rod2.moveTo(entityLiving.getX(), entityLiving.getY(0.85), entityLiving.getZ(), 0, 0);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					abstractarrowentity2.isNoGravity();
+					rod2.isNoGravity();
 					double b = worldIn.random.nextDouble();
 					if (b < 0.1)
-						abstractarrowentity2.isOnFire();
+						rod2.isOnFire();
 
-					BlazeRodEntity abstractarrowentity3 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity3.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 2,
-							0.0F, 1.0F * 3.0F, 1.0F);
-					abstractarrowentity3.moveTo(entityLiving.getX(), entityLiving.getY(0.85),
-							entityLiving.getZ(), 0, 0);
+					var rod3 = createArrow(worldIn, stack, playerentity);
+					rod3.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 2, 0.0F,
+							1.0F * 3.0F, 1.0F);
+					rod3.moveTo(entityLiving.getX(), entityLiving.getY(0.85), entityLiving.getZ(), 0, 0);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					abstractarrowentity3.isNoGravity();
+					rod3.isNoGravity();
 					double c = worldIn.random.nextDouble();
 					if (c < 0.1)
-						abstractarrowentity3.isOnFire();
+						rod3.isOnFire();
 
-					worldIn.addFreshEntity(abstractarrowentity);
-					worldIn.addFreshEntity(abstractarrowentity1);
-					worldIn.addFreshEntity(abstractarrowentity2);
-					worldIn.addFreshEntity(abstractarrowentity3);
+					worldIn.addFreshEntity(rod);
+					worldIn.addFreshEntity(rod1);
+					worldIn.addFreshEntity(rod2);
+					worldIn.addFreshEntity(rod3);
 					stack.hurtAndBreak(4, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(),
-							playerentity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1.0F,
+					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
+							SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1.0F,
 							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
-				boolean isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
-	}
-
-	public static float getArrowVelocity(int charge) {
-		float f = (float) charge / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
-	}
-
-	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-		ItemStack itemStack = user.getItemInHand(hand);
-		user.startUsingItem(hand);
-		return InteractionResultHolder.consume(itemStack);
 	}
 
 	public void reload(Player user, InteractionHand hand) {
@@ -131,35 +109,23 @@ public class BalrogItem extends HWGGunBase {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-		if (world.isClientSide) {
-			if (((Player) entity).getMainHandItem().getItem() instanceof BalrogItem
-					&& ClientInit.reload.isDown() && selected) {
+		if (world.isClientSide)
+			if (((Player) entity).getMainHandItem().getItem() instanceof BalrogItem && ClientInit.reload.isDown()
+					&& selected) {
 				FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 				passedData.writeBoolean(true);
 				ClientPlayNetworking.send(HWGMod.BALROG, passedData);
-				world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(),
-						SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+				world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE,
+						SoundSource.PLAYERS, 1.0F, 1.5F);
 			}
-		}
-		if (!(entity instanceof HWGEntity) && selected) {
+		if (!(entity instanceof HWGEntity) && selected)
 			((LivingEntity) entity)
 					.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1, 1, false, false, false));
-		}
 	}
 
 	public BlazeRodEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		BlazeRodEntity arrowentity = new BlazeRodEntity(worldIn, shooter);
-		return arrowentity;
-	}
-
-	public static float getPullProgress(int useTicks) {
-		float f = (float) useTicks / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
+		var rod = new BlazeRodEntity(worldIn, shooter);
+		return rod;
 	}
 
 	@Override

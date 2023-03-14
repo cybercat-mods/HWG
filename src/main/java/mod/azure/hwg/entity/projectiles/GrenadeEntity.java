@@ -1,7 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
 
 import mod.azure.azurelib.animatable.GeoEntity;
@@ -14,7 +12,6 @@ import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
-import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -43,7 +40,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 
 public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
@@ -174,8 +170,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
 	@Override
 	public void remove(RemovalReason reason) {
-		AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(),
-				this.getZ());
+		var areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
 		if (this.getVariant() == 1)
 			areaeffectcloudentity.setParticle(this.getVariant() == 1 ? ParticleTypes.END_ROD
 					: this.getVariant() == 2 ? ParticleTypes.EXPLOSION
@@ -184,9 +179,8 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 											: this.getVariant() == 5 ? ParticleTypes.FLASH : ParticleTypes.END_ROD);
 		areaeffectcloudentity.setRadius(this.getVariant() == 4 ? 5.0F : 2.0F);
 		areaeffectcloudentity.setDuration(this.getVariant() == 4 ? 120 : 2);
-		if (this.getVariant() == 4) {
+		if (this.getVariant() == 4) 
 			areaeffectcloudentity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 1));
-		}
 		areaeffectcloudentity.absMoveTo(this.getX(), this.getEyeY(), this.getZ());
 		this.level.addFreshEntity(areaeffectcloudentity);
 		super.remove(reason);
@@ -194,37 +188,34 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
 	@Override
 	public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {
-		if (this.getVariant() == 1) {
+		if (this.getVariant() == 1) 
 			if (target instanceof TechnodemonEntity || target instanceof TechnodemonGreaterEntity)
 				super.doEnchantDamageEffects(attacker, target);
-		} else {
+		else 
 			super.doEnchantDamageEffects(attacker, target);
-		}
 	}
 
 	@Override
 	protected void doPostHurtEffects(LivingEntity target) {
-		if (this.getVariant() == 1) {
+		if (this.getVariant() == 1) 
 			if (target instanceof TechnodemonEntity || target instanceof TechnodemonGreaterEntity)
 				super.doPostHurtEffects(target);
-		} else {
+		else 
 			super.doPostHurtEffects(target);
-		}
 	}
 
 	@Override
 	public void tickDespawn() {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 80) {
-			if (this.getVariant() == 1) {
+			if (this.getVariant() == 1)
 				this.emp();
-			} else if (this.getVariant() == 2) {
+			else if (this.getVariant() == 2)
 				this.frag();
-			} else if (this.getVariant() == 3) {
+			else if (this.getVariant() == 3)
 				this.naplam();
-			} else if (this.getVariant() == 5) {
+			else if (this.getVariant() == 5)
 				this.stun();
-			}
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
@@ -233,11 +224,6 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	public void shoot(double x, double y, double z, float speed, float divergence) {
 		super.shoot(x, y, z, speed, divergence);
 		this.ticksInAir = 0;
-	}
-
-	public void initFromStack(ItemStack stack) {
-		if (stack.getItem() == HWGItems.G_EMP) {
-		}
 	}
 
 	public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
@@ -256,15 +242,14 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	protected void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
 		if (!this.level.isClientSide) {
-			if (this.getVariant() == 1) {
+			if (this.getVariant() == 1)
 				this.emp();
-			} else if (this.getVariant() == 2) {
+			else if (this.getVariant() == 2)
 				this.frag();
-			} else if (this.getVariant() == 3) {
+			else if (this.getVariant() == 3)
 				this.naplam();
-			} else if (this.getVariant() == 5) {
+			else if (this.getVariant() == 5)
 				this.stun();
-			}
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 		this.setSoundEvent(SoundEvents.GENERIC_EXPLODE);
@@ -274,40 +259,26 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
 		if (!this.level.isClientSide) {
-			if (this.getVariant() == 1) {
+			if (this.getVariant() == 1)
 				this.emp();
-			} else if (this.getVariant() == 2) {
+			else if (this.getVariant() == 2)
 				this.frag();
-			} else if (this.getVariant() == 3) {
+			else if (this.getVariant() == 3)
 				this.naplam();
-			} else if (this.getVariant() == 5) {
+			else if (this.getVariant() == 5)
 				this.stun();
-			}
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
 	protected void stun() {
-		int k = Mth.floor(this.getX() - 2 - 1.0D);
-		int l = Mth.floor(this.getX() + 2 + 1.0D);
-		int t = Mth.floor(this.getY() - 2 - 1.0D);
-		int u = Mth.floor(this.getY() + 2 + 1.0D);
-		int v = Mth.floor(this.getZ() - 2 - 1.0D);
-		int w = Mth.floor(this.getZ() + 2 + 1.0D);
-		List<Entity> list = this.level.getEntities(this,
-				new AABB((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
-		Vec3 vec3d = new Vec3(this.getX(), this.getY(), this.getZ());
-		for (int x = 0; x < list.size(); ++x) {
-			Entity entity = (Entity) list.get(x);
-			double y = (Mth.sqrt((float) entity.distanceToSqr(vec3d)) / 8);
-			if (entity instanceof LivingEntity) {
-				if (y <= 1.0D) {
-					((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
-					((LivingEntity) entity)
-							.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
-				}
+		var aabb = new AABB(this.blockPosition().above()).inflate(3D, 3D, 3D);
+		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
+			if (e.isAlive()) {
+				((LivingEntity) e).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
+				((LivingEntity) e).addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
 			}
-		}
+		});
 	}
 
 	protected void frag() {
@@ -316,47 +287,26 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void naplam() {
-		int k = Mth.floor(this.getX() - 2 - 1.0D);
-		int l = Mth.floor(this.getX() + 2 + 1.0D);
-		int t = Mth.floor(this.getY() - 2 - 1.0D);
-		int u = Mth.floor(this.getY() + 2 + 1.0D);
-		int v = Mth.floor(this.getZ() - 2 - 1.0D);
-		int w = Mth.floor(this.getZ() + 2 + 1.0D);
-		List<Entity> list = this.level.getEntities(this,
-				new AABB((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
-		Vec3 vec3d = new Vec3(this.getX(), this.getY(), this.getZ());
-		for (int x = 0; x < list.size(); ++x) {
-			Entity entity = (Entity) list.get(x);
-			double y = (Mth.sqrt((float) entity.distanceToSqr(vec3d)) / 8);
-			if (entity instanceof LivingEntity) {
-				if (y <= 1.0D) {
-					((LivingEntity) entity).setRemainingFireTicks(200);
-				}
+		var aabb = new AABB(this.blockPosition().above()).inflate(3D, 3D, 3D);
+		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
+			if (e.isAlive()) {
+				((LivingEntity) e).setRemainingFireTicks(200);
 			}
-		}
+		});
 		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true,
 				Level.ExplosionInteraction.NONE);
 	}
 
 	protected void emp() {
-		int k = Mth.floor(this.getX() - 8 - 1.0D);
-		int l = Mth.floor(this.getX() + 8 + 1.0D);
-		int t = Mth.floor(this.getY() - 8 - 1.0D);
-		int u = Mth.floor(this.getY() + 8 + 1.0D);
-		int v = Mth.floor(this.getZ() - 8 - 1.0D);
-		int w = Mth.floor(this.getZ() + 8 + 1.0D);
-		List<Entity> list = this.level.getEntities(this,
-				new AABB((double) k, (double) t, (double) v, (double) l, (double) u, (double) w));
-		Vec3 vec3d = new Vec3(this.getX(), this.getY(), this.getZ());
-		for (int x = 0; x < list.size(); ++x) {
-			Entity entity = (Entity) list.get(x);
-			double y = (Mth.sqrt((float) entity.distanceToSqr(vec3d)) / 8);
-			if (entity instanceof TechnodemonEntity || entity instanceof TechnodemonGreaterEntity) {
-				if (y <= 1.0D) {
-					entity.hurt(DamageSource.arrow(this, this), 10);
-				}
-			}
-		}
+		var aabb = new AABB(this.blockPosition().above()).inflate(8D, 8D, 8D);
+		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
+			if (e.isAlive() && (e instanceof TechnodemonEntity || e instanceof TechnodemonGreaterEntity)) 
+				e.hurt(DamageSource.arrow(this, this), 10);
+		});
+//		this.getCommandSenderWorld().getBlockStatesIfLoaded(aabb).forEach(state -> {
+//			if (state.is(Blocks.REDSTONE_WIRE))
+//				this.level.destroyBlock(portalEntrancePos, true);
+//		});
 	}
 
 	@Override
@@ -371,10 +321,10 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
-		float f = 0.017453292F;
-		float x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
-		float y = -Mth.sin((pitch + roll) * f);
-		float z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
+		var f = 0.017453292F;
+		var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
+		var y = -Mth.sin((pitch + roll) * f);
+		var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
 		this.shoot(x, y, z, modifierZ, 0);
 	}
 

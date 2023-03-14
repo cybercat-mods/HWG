@@ -29,10 +29,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 
 public class BaseFlareEntity extends AbstractArrow {
 
@@ -107,28 +104,26 @@ public class BaseFlareEntity extends AbstractArrow {
 
 	@Override
 	public void tick() {
-		int idleOpt = 100;
+		var idleOpt = 100;
 		if (getDeltaMovement().lengthSqr() < 0.01)
 			idleTicks++;
 		else
 			idleTicks = 0;
 		if (idleOpt <= 0 || idleTicks < idleOpt)
 			super.tick();
-		if (this.tickCount >= 800 || this.isInWater()) {
+		if (this.tickCount >= 800 || this.isInWater())
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
-		if (this.life == 0 && !this.isSilent()) {
+		if (this.life == 0 && !this.isSilent())
 			this.level.playSound((Player) null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN_SHOOT,
 					SoundSource.PLAYERS, 6.0F, 1.0F);
-		}
 		setNoGravity(false);
 		++this.life;
-		Vec3 vec3d = this.getDeltaMovement();
+		var vec3d = this.getDeltaMovement();
 		vec3d = this.getDeltaMovement();
 		this.setDeltaMovement(vec3d.scale((double) 0.99F));
 		if (this.tickCount > 25)
 			this.setDeltaMovement(0.0, -0.1, 0.0);
-		boolean isInsideWaterBlock = level.isWaterAt(blockPosition());
+		var isInsideWaterBlock = level.isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
 		if (this.level.isClientSide) {
 			this.level.addParticle(this.getColor() == 16 ? HWGParticles.WHITE_FLARE
@@ -187,9 +182,8 @@ public class BaseFlareEntity extends AbstractArrow {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-		if (!this.level.isClientSide) {
+		if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
 		this.setSoundEvent(HWGSounds.FLAREGUN);
 	}
 
@@ -221,10 +215,10 @@ public class BaseFlareEntity extends AbstractArrow {
 				return;
 			level.setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 		} else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
-			BlockEntity blockEntity = level.getBlockEntity(lightBlockPos);
-			if (blockEntity instanceof TickingLightEntity) {
+			var blockEntity = level.getBlockEntity(lightBlockPos);
+			if (blockEntity instanceof TickingLightEntity)
 				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
-			} else
+			else
 				lightBlockPos = null;
 		} else
 			lightBlockPos = null;
@@ -240,7 +234,7 @@ public class BaseFlareEntity extends AbstractArrow {
 		if (blockPos == null)
 			return null;
 
-		int[] offsets = new int[maxDistance * 2 + 1];
+		var offsets = new int[maxDistance * 2 + 1];
 		offsets[0] = 0;
 		for (int i = 2; i <= maxDistance * 2; i += 2) {
 			offsets[i - 1] = i / 2;
@@ -249,8 +243,8 @@ public class BaseFlareEntity extends AbstractArrow {
 		for (int x : offsets)
 			for (int y : offsets)
 				for (int z : offsets) {
-					BlockPos offsetPos = blockPos.offset(x, y, z);
-					BlockState state = world.getBlockState(offsetPos);
+					var offsetPos = blockPos.offset(x, y, z);
+					var state = world.getBlockState(offsetPos);
 					if (state.isAir() || state.getBlock().equals(AzureLibMod.TICKING_LIGHT_BLOCK))
 						return offsetPos;
 				}

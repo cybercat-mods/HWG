@@ -1,7 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import java.util.List;
-
 import mod.azure.azurelib.AzureLibMod;
 import mod.azure.azurelib.animatable.GeoEntity;
 import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
@@ -38,9 +36,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -72,10 +67,8 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	protected BlazeRodEntity(EntityType<? extends BlazeRodEntity> type, LivingEntity owner, Level world) {
 		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
 		this.setOwner(owner);
-		if (owner instanceof Player) {
+		if (owner instanceof Player) 
 			this.pickup = AbstractArrow.Pickup.ALLOWED;
-		}
-
 	}
 
 	public BlazeRodEntity(Level world, double x, double y, double z) {
@@ -145,7 +138,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 
 	@Override
 	public void tick() {
-		int idleOpt = 100;
+		var idleOpt = 100;
 		if (getDeltaMovement().lengthSqr() < 0.01)
 			idleTicks++;
 		else
@@ -154,45 +147,27 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 			super.tick();
 
 		++this.ticksInAir;
-		if (this.ticksInAir >= 40) {
+		if (this.ticksInAir >= 40) 
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
-		boolean isInsideWaterBlock = level.isWaterAt(blockPosition());
+		var isInsideWaterBlock = level.isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
-		float q = 4.0F;
-		int k2 = Mth.floor(this.getX() - (double) q - 1.0D);
-		int l2 = Mth.floor(this.getX() + (double) q + 1.0D);
-		int t = Mth.floor(this.getY() - (double) q - 1.0D);
-		int u = Mth.floor(this.getY() + (double) q + 1.0D);
-		int v = Mth.floor(this.getZ() - (double) q - 1.0D);
-		int w = Mth.floor(this.getZ() + (double) q + 1.0D);
-		List<Entity> list = this.level.getEntities(this,
-				new AABB((double) k2, (double) t, (double) v, (double) l2, (double) u, (double) w));
-		for (int x = 0; x < list.size(); ++x) {
-			if (this.level.isClientSide) {
-				double d2 = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth();
-				double e2 = this.getY() + 0.05D + this.random.nextDouble();
-				double f2 = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth();
-				this.level.addParticle(ParticleTypes.FLAME, true, d2, e2, f2, 0, 0, 0);
-				this.level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, d2, e2, f2, 0, 0, 0);
-			}
+		if (this.level.isClientSide) {
+			var x = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
+			var y = this.getY() + 0.05D + this.random.nextDouble();
+			var z = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
+			this.level.addParticle(ParticleTypes.FLAME, true, x, y, z, 0, 0, 0);
+			this.level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, x, y, z, 0, 0, 0);
 		}
 		if (getOwner()instanceof Player owner)
 			setYRot(entityData.get(FORCED_YAW));
 	}
 
-	public void initFromStack(ItemStack stack) {
-		if (stack.getItem() == HWGItems.ROCKET) {
-		}
-	}
-
 	@Override
 	public boolean isNoGravity() {
-		if (this.isUnderWater()) {
+		if (this.isUnderWater()) 
 			return false;
-		} else {
+		else 
 			return true;
-		}
 	}
 
 	public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
@@ -219,26 +194,23 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
-		Entity entity = entityHitResult.getEntity();
+		var entity = entityHitResult.getEntity();
 		if (entityHitResult.getType() != HitResult.Type.ENTITY
-				|| !((EntityHitResult) entityHitResult).getEntity().is(entity)) {
-			if (!this.level.isClientSide) {
+				|| !((EntityHitResult) entityHitResult).getEntity().is(entity))
+			if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
-			}
-		}
-		Entity entity2 = this.getOwner();
+		var entity2 = this.getOwner();
 		DamageSource damageSource2;
-		if (entity2 == null) {
+		if (entity2 == null)
 			damageSource2 = DamageSource.arrow(this, this);
-		} else {
+		else {
 			damageSource2 = DamageSource.arrow(this, entity2);
-			if (entity2 instanceof LivingEntity) {
+			if (entity2 instanceof LivingEntity)
 				((LivingEntity) entity2).setLastHurtMob(entity);
-			}
 		}
 		if (entity.hurt(damageSource2, HWGConfig.balrog_damage)) {
 			if (entity instanceof LivingEntity) {
-				LivingEntity livingEntity = (LivingEntity) entity;
+				var livingEntity = (LivingEntity) entity;
 				if (!this.level.isClientSide && entity2 instanceof LivingEntity) {
 					EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
 					EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
@@ -247,16 +219,12 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 
 				this.doPostHurtEffects(livingEntity);
 				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player
-						&& entity2 instanceof ServerPlayer && !this.isSilent()) {
-					((ServerPlayer) entity2).connection.send(
-							new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
-				}
+						&& entity2 instanceof ServerPlayer && !this.isSilent())
+					((ServerPlayer) entity2).connection
+							.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 			}
-		} else {
-			if (!this.level.isClientSide) {
-				this.remove(Entity.RemovalReason.DISCARDED);
-			}
-		}
+		} else if (!this.level.isClientSide)
+			this.remove(Entity.RemovalReason.DISCARDED);
 	}
 
 	protected void explode() {
@@ -282,10 +250,10 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 				return;
 			level.setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 		} else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
-			BlockEntity blockEntity = level.getBlockEntity(lightBlockPos);
-			if (blockEntity instanceof TickingLightEntity) {
+			var blockEntity = level.getBlockEntity(lightBlockPos);
+			if (blockEntity instanceof TickingLightEntity)
 				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
-			} else
+			else
 				lightBlockPos = null;
 		} else
 			lightBlockPos = null;
@@ -301,7 +269,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 		if (blockPos == null)
 			return null;
 
-		int[] offsets = new int[maxDistance * 2 + 1];
+		var offsets = new int[maxDistance * 2 + 1];
 		offsets[0] = 0;
 		for (int i = 2; i <= maxDistance * 2; i += 2) {
 			offsets[i - 1] = i / 2;
@@ -310,8 +278,8 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 		for (int x : offsets)
 			for (int y : offsets)
 				for (int z : offsets) {
-					BlockPos offsetPos = blockPos.offset(x, y, z);
-					BlockState state = world.getBlockState(offsetPos);
+					var offsetPos = blockPos.offset(x, y, z);
+					var state = world.getBlockState(offsetPos);
 					if (state.isAir() || state.getBlock().equals(AzureLibMod.TICKING_LIGHT_BLOCK))
 						return offsetPos;
 				}
@@ -320,10 +288,10 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
-		float f = 0.017453292F;
-		float x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
-		float y = -Mth.sin((pitch + roll) * f);
-		float z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
+		var f = 0.017453292F;
+		var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
+		var y = -Mth.sin((pitch + roll) * f);
+		var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
 		this.shoot(x, y, z, modifierZ, 0);
 	}
 

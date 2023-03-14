@@ -5,7 +5,6 @@ import java.util.List;
 
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.SBulletEntity;
-import mod.azure.hwg.item.ammo.BulletAmmo;
 import mod.azure.hwg.item.weapons.SilverGunItem;
 import mod.azure.hwg.item.weapons.SilverRevolverItem;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -24,7 +23,7 @@ public class BWCompat {
 	public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList();
 
 	public static SilverGunItem SILVERGUN = item(new SilverGunItem(), "silvergun");
-	public static BulletAmmo SILVERBULLET = item(new BulletAmmo(), "silver_bullet");
+	public static Item SILVERBULLET = item(new Item(new Item.Properties()), "silver_bullet");
 	public static SilverRevolverItem SILVERHELLHORSE = item(new SilverRevolverItem(), "shellhorse_revolver");
 	public static EntityType<SBulletEntity> SILVERBULLETS = projectile(SBulletEntity::new, "silverbullets");
 
@@ -42,15 +41,14 @@ public class BWCompat {
 
 		EntityType<T> type = FabricEntityTypeBuilder.<T>create(MobCategory.MISC, factory)
 				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
-				.trackRangeBlocks(90).trackedUpdateRate(4).build();
+				.trackRangeBlocks(90).trackedUpdateRate(1).build();
 
 		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 
-		if (itemRender) {
+		if (itemRender) 
 			ENTITY_THAT_USE_ITEM_RENDERS.add(type);
-		}
 
 		return type;
 	}

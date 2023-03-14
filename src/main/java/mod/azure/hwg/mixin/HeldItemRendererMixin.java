@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import mod.azure.hwg.item.weapons.HWGGunBase;
 import mod.azure.hwg.item.weapons.HWGGunLoadedBase;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.world.item.ItemStack;
 
@@ -35,10 +34,11 @@ public abstract class HeldItemRendererMixin {
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void fguns$cancelAnimation(CallbackInfo ci) {
-		LocalPlayer clientPlayerEntity = this.minecraft.player;
-		ItemStack itemStack = clientPlayerEntity.getMainHandItem();
-		ItemStack itemStack2 = clientPlayerEntity.getOffhandItem();
-		if ((this.mainHandItem.getItem() instanceof HWGGunBase || this.mainHandItem.getItem() instanceof HWGGunLoadedBase)
+		var clientPlayerEntity = this.minecraft.player;
+		var itemStack = clientPlayerEntity.getMainHandItem();
+		var itemStack2 = clientPlayerEntity.getOffhandItem();
+		if ((this.mainHandItem.getItem() instanceof HWGGunBase
+				|| this.mainHandItem.getItem() instanceof HWGGunLoadedBase)
 				&& (itemStack.getItem() instanceof HWGGunBase || itemStack.getItem() instanceof HWGGunLoadedBase)
 				&& ItemStack.isSame(mainHandItem, itemStack)) {
 			this.mainHandHeight = 1;

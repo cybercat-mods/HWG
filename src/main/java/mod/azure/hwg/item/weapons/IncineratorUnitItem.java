@@ -42,14 +42,14 @@ public class IncineratorUnitItem extends HWGGunBase {
 	@Override
 	public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
 		if (entityLiving instanceof Player) {
-			Player playerentity = (Player) entityLiving;
+			var playerentity = (Player) entityLiving;
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 3)) {
 				playerentity.getCooldowns().addCooldown(this, 5);
 				if (!worldIn.isClientSide) {
-					FlameFiring abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.setProperties(playerentity.getXRot(), playerentity.getYRot(), 0f, 1.0f);
-					abstractarrowentity.getEntityData().set(FlameFiring.FORCED_YAW, playerentity.getYRot());
-					abstractarrowentity.moveTo(
+					var flames = createArrow(worldIn, stack, playerentity);
+					flames.setProperties(playerentity.getXRot(), playerentity.getYRot(), 0f, 1.0f);
+					flames.getEntityData().set(FlameFiring.FORCED_YAW, playerentity.getYRot());
+					flames.moveTo(
 							entityLiving.getX() + (switch (playerentity.getDirection()) {
 							case WEST -> -0.75F;
 							case EAST -> 0.75F;
@@ -63,23 +63,23 @@ public class IncineratorUnitItem extends HWGGunBase {
 							case SOUTH -> 0.75F;
 							default -> 0.0F;
 							}), 0, 0);
-					worldIn.addFreshEntity(abstractarrowentity);
+					worldIn.addFreshEntity(flames);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 				}
-				boolean isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}
 
 	public FlameFiring createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		FlameFiring arrowentity = new FlameFiring(worldIn, shooter);
-		return arrowentity;
+		var flames = new FlameFiring(worldIn, shooter);
+		return flames;
 	}
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-		if (world.isClientSide) {
+		if (world.isClientSide) 
 			if (((Player) entity).getMainHandItem().getItem() instanceof IncineratorUnitItem) {
 				if (ClientInit.reload.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
@@ -89,7 +89,6 @@ public class IncineratorUnitItem extends HWGGunBase {
 							SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 				}
 			}
-		}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
@@ -111,28 +110,8 @@ public class IncineratorUnitItem extends HWGGunBase {
 				.withStyle(ChatFormatting.ITALIC));
 	}
 
-	public static float getArrowVelocity(int charge) {
-		float f = (float) charge / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
-	}
-
 	@Override
 	public int getUseDuration(ItemStack stack) {
 		return 72000;
-	}
-
-	public static float getPullProgress(int useTicks) {
-		float f = (float) useTicks / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
 	}
 }

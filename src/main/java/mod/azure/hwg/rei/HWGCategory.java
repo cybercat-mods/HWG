@@ -47,8 +47,8 @@ public class HWGCategory implements DisplayCategory<HWGDisplay> {
 
 	@Override
 	public List<Widget> setupDisplay(HWGDisplay display, Rectangle bounds) {
-		Point startPoint = new Point(bounds.getCenterX() - 64, bounds.getCenterY() - 16);
-		Point outputPoint = new Point(startPoint.x + 100, startPoint.y + 20);
+		var startPoint = new Point(bounds.getCenterX() - 64, bounds.getCenterY() - 16);
+		var outputPoint = new Point(startPoint.x + 100, startPoint.y + 20);
 		List<Widget> widgets = new ArrayList<>();
 		widgets.add(Widgets.createRecipeBase(bounds));
 		if (display.count.get(0).intValue() > 0) {

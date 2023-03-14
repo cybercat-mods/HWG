@@ -7,10 +7,19 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import com.google.common.collect.Lists;
 
+import mod.azure.azurelib.animatable.GeoItem;
+import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
+import mod.azure.azurelib.animatable.client.RenderProvider;
+import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
+import mod.azure.azurelib.core.animation.Animation.LoopType;
+import mod.azure.azurelib.core.animation.AnimationController;
+import mod.azure.azurelib.core.animation.RawAnimation;
+import mod.azure.azurelib.core.object.PlayState;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.client.render.weapons.GrenadeLauncherRender;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
@@ -40,17 +49,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.animatable.client.RenderProvider;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.Animation.LoopType;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.azurelib.util.AzureLibUtil;
 
 public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
@@ -109,41 +107,41 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 		return Tiers.IRON.getRepairIngredient().test(ingredient) || super.isValidRepairItem(stack, ingredient);
 	}
 
-	private static void shoot(Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack, ItemStack projectile,
-			float soundPitch, boolean creative, float speed, float divergence, float simulated) {
+	private static void shoot(Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack,
+			ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
 		if (!world.isClientSide) {
-			boolean bl = projectile.getItem() == HWGItems.G_EMP;
-			boolean b2 = projectile.getItem() == HWGItems.G_FRAG;
-			boolean b3 = projectile.getItem() == HWGItems.G_NAPALM;
-			boolean b4 = projectile.getItem() == HWGItems.G_STUN;
-			GrenadeEntity projectileEntity2 = new GrenadeEntity(world, projectile, shooter, shooter.getX(),
+			var emp = projectile.getItem() == HWGItems.G_EMP;
+			var frag = projectile.getItem() == HWGItems.G_FRAG;
+			var napalm = projectile.getItem() == HWGItems.G_NAPALM;
+			var stun = projectile.getItem() == HWGItems.G_STUN;
+			var nade = new GrenadeEntity(world, projectile, shooter, shooter.getX(),
 					shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
-			projectileEntity2.setState(0);
-			if (bl) {
-				projectileEntity2.setVariant(1);
-			} else if (b2) {
-				projectileEntity2.setVariant(2);
-			} else if (b3) {
-				projectileEntity2.setVariant(3);
-			} else if (b4) {
-				projectileEntity2.setVariant(5);
+			nade.setState(0);
+			if (emp) {
+				nade.setVariant(1);
+			} else if (frag) {
+				nade.setVariant(2);
+			} else if (napalm) {
+				nade.setVariant(3);
+			} else if (stun) {
+				nade.setVariant(5);
 			} else {
-				projectileEntity2.setVariant(4);
+				nade.setVariant(4);
 			}
-			Vec3 vec3d = shooter.getUpVector(1.0F);
-			Quaternionf quaternionf = new Quaternionf().setAngleAxis((double) (simulated * ((float) Math.PI / 180)),
-					vec3d.x, vec3d.y, vec3d.z);
-			Vec3 vec3d2 = shooter.getViewVector(1.0f);
-			Vector3f vector3f = vec3d2.toVector3f().rotate(quaternionf);
+			var vec3d = shooter.getUpVector(1.0F);
+			var quaternionf = new Quaternionf().setAngleAxis((double) (simulated * ((float) Math.PI / 180)), vec3d.x,
+					vec3d.y, vec3d.z);
+			var vec3d2 = shooter.getViewVector(1.0f);
+			var vector3f = vec3d2.toVector3f().rotate(quaternionf);
 			vector3f.rotate(quaternionf);
-			((AbstractArrow) projectileEntity2).shoot((double) vector3f.x, (double) vector3f.y,
-					(double) vector3f.z, speed, divergence);
+			((AbstractArrow) nade).shoot((double) vector3f.x, (double) vector3f.y, (double) vector3f.z, speed,
+					divergence);
 
 			stack.hurtAndBreak(1, shooter, p -> p.broadcastBreakEvent(shooter.getUsedItemHand()));
-			world.addFreshEntity((Entity) projectileEntity2);
+			world.addFreshEntity((Entity) nade);
 
-			world.playSound((Player) null, shooter.getX(), shooter.getY(), shooter.getZ(),
-					HWGSounds.GLAUNCHERFIRE, SoundSource.PLAYERS, 1.0F, 0.9F);
+			world.playSound((Player) null, shooter.getX(), shooter.getY(), shooter.getZ(), HWGSounds.GLAUNCHERFIRE,
+					SoundSource.PLAYERS, 1.0F, 0.9F);
 		}
 	}
 
@@ -153,16 +151,15 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 	}
 
 	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-		ItemStack itemStack = user.getItemInHand(hand);
+		var itemStack = user.getItemInHand(hand);
 		if (isCharged(itemStack) && itemStack.getDamageValue() < (itemStack.getMaxDamage() - 1)
 				&& !user.getCooldowns().isOnCooldown(this)) {
 			shootAll(world, user, hand, itemStack, getSpeed(itemStack), 1.0F);
 			user.getCooldowns().addCooldown(this, 25);
 			setCharged(itemStack, false);
-			if (!world.isClientSide) {
+			if (!world.isClientSide)
 				triggerAnim(user, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "shoot_controller", "firing");
-			}
-			boolean isInsideWaterBlock = user.level.isWaterAt(user.blockPosition());
+			var isInsideWaterBlock = user.level.isWaterAt(user.blockPosition());
 			spawnLightSource(user, isInsideWaterBlock);
 			return InteractionResultHolder.consume(itemStack);
 		} else if (!user.getProjectile(itemStack).isEmpty()) {
@@ -172,64 +169,58 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 				user.startUsingItem(hand);
 			}
 			return InteractionResultHolder.consume(itemStack);
-		} else {
+		} else
 			return InteractionResultHolder.fail(itemStack);
-		}
 	}
 
 	public void releaseUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
 		if (!isCharged(stack) && loadProjectiles(user, stack)) {
 			setCharged(stack, true);
-			SoundSource soundCategory = user instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE;
+			var soundCategory = user instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE;
 			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD,
 					soundCategory, 0.5F, 1.0F);
-			if (!world.isClientSide) {
+			if (!world.isClientSide)
 				triggerAnim((Player) user, GeoItem.getOrAssignId(stack, (ServerLevel) world), "shoot_controller",
 						"loading");
-			}
 			((Player) user).getCooldowns().addCooldown(this, 15);
 		}
 	}
 
 	private static boolean loadProjectiles(LivingEntity shooter, ItemStack projectile) {
-		int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MULTISHOT, projectile);
-		int j = i == 0 ? 1 : 3;
-		boolean bl = shooter instanceof Player && ((Player) shooter).getAbilities().instabuild;
-		ItemStack itemStack = shooter.getProjectile(projectile);
-		ItemStack itemStack2 = itemStack.copy();
+		var i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MULTISHOT, projectile);
+		var j = i == 0 ? 1 : 3;
+		var bl = shooter instanceof Player && ((Player) shooter).getAbilities().instabuild;
+		var itemStack = shooter.getProjectile(projectile);
+		var itemStack2 = itemStack.copy();
 
 		for (int k = 0; k < j; ++k) {
-			if (k > 0) {
+			if (k > 0)
 				itemStack = itemStack2.copy();
-			}
 
 			if (itemStack.isEmpty() && bl) {
 				itemStack = new ItemStack(HWGItems.G_SMOKE);
 				itemStack2 = itemStack.copy();
 			}
 
-			if (!loadProjectile(shooter, projectile, itemStack, k > 0, bl)) {
+			if (!loadProjectile(shooter, projectile, itemStack, k > 0, bl))
 				return false;
-			}
 		}
 		return true;
 	}
 
 	private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile,
 			boolean simulated, boolean creative) {
-		if (projectile.isEmpty()) {
+		if (projectile.isEmpty())
 			return false;
-		} else {
-			boolean bl = creative && projectile.getItem() instanceof GrenadeEmpItem;
+		else {
+			var bl = creative && projectile.getItem() instanceof GrenadeEmpItem;
 			ItemStack itemStack2;
 			if (!bl && !creative && !simulated) {
 				itemStack2 = projectile.split(1);
-				if (projectile.isEmpty() && shooter instanceof Player) {
+				if (projectile.isEmpty() && shooter instanceof Player)
 					((Player) shooter).getInventory().removeItem(projectile);
-				}
-			} else {
+			} else
 				itemStack2 = projectile.copy();
-			}
 
 			putProjectile(crossbow, itemStack2);
 			return true;
@@ -237,25 +228,24 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 	}
 
 	public static boolean isCharged(ItemStack stack) {
-		CompoundTag NbtCompound = stack.getTag();
+		var NbtCompound = stack.getTag();
 		return NbtCompound != null && NbtCompound.getBoolean("Charged");
 	}
 
 	public static void setCharged(ItemStack stack, boolean charged) {
-		CompoundTag NbtCompound = stack.getOrCreateTag();
+		var NbtCompound = stack.getOrCreateTag();
 		NbtCompound.putBoolean("Charged", charged);
 	}
 
 	private static void putProjectile(ItemStack crossbow, ItemStack projectile) {
-		CompoundTag NbtCompound = crossbow.getOrCreateTag();
+		var NbtCompound = crossbow.getOrCreateTag();
 		ListTag NbtList2;
-		if (NbtCompound.contains("ChargedProjectiles", 9)) {
+		if (NbtCompound.contains("ChargedProjectiles", 9))
 			NbtList2 = NbtCompound.getList("ChargedProjectiles", 10);
-		} else {
+		else
 			NbtList2 = new ListTag();
-		}
 
-		CompoundTag NbtCompound2 = new CompoundTag();
+		var NbtCompound2 = new CompoundTag();
 		projectile.save(NbtCompound2);
 		NbtList2.add(NbtCompound2);
 		NbtCompound.put("ChargedProjectiles", NbtList2);
@@ -263,23 +253,22 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
 	private static List<ItemStack> getProjectiles(ItemStack crossbow) {
 		List<ItemStack> list = Lists.newArrayList();
-		CompoundTag NbtCompound = crossbow.getTag();
+		var NbtCompound = crossbow.getTag();
 		if (NbtCompound != null && NbtCompound.contains("ChargedProjectiles", 9)) {
-			ListTag NbtList = NbtCompound.getList("ChargedProjectiles", 10);
-			if (NbtList != null) {
+			var NbtList = NbtCompound.getList("ChargedProjectiles", 10);
+			if (NbtList != null)
 				for (int i = 0; i < NbtList.size(); ++i) {
-					CompoundTag NbtCompound2 = NbtList.getCompound(i);
+					var NbtCompound2 = NbtList.getCompound(i);
 					list.add(ItemStack.of(NbtCompound2));
 				}
-			}
 		}
 		return list;
 	}
 
 	private static void clearProjectiles(ItemStack crossbow) {
-		CompoundTag NbtCompound = crossbow.getTag();
+		var NbtCompound = crossbow.getTag();
 		if (NbtCompound != null) {
-			ListTag NbtList = NbtCompound.getList("ChargedProjectiles", 9);
+			var NbtList = NbtCompound.getList("ChargedProjectiles", 9);
 			NbtList.clear();
 			NbtCompound.put("ChargedProjectiles", NbtList);
 		}
@@ -293,32 +282,31 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
 	public static void shootAll(Level world, LivingEntity entity, InteractionHand hand, ItemStack stack, float speed,
 			float divergence) {
-		List<ItemStack> list = getProjectiles(stack);
-		float[] fs = getSoundPitches(entity.level.random);
+		var list = getProjectiles(stack);
+		var fs = getSoundPitches(entity.level.random);
 
 		for (int i = 0; i < list.size(); ++i) {
-			ItemStack itemStack = (ItemStack) list.get(i);
-			boolean bl = entity instanceof Player && ((Player) entity).getAbilities().instabuild;
+			var itemStack = (ItemStack) list.get(i);
+			var bl = entity instanceof Player && ((Player) entity).getAbilities().instabuild;
 			if (!itemStack.isEmpty()) {
-				if (i == 0) {
+				if (i == 0)
 					shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 0.0F);
-				} else if (i == 1) {
+				else if (i == 1)
 					shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, -10.0F);
-				} else if (i == 2) {
+				else if (i == 2)
 					shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 10.0F);
-				}
 			}
 		}
 		postShoot(world, entity, stack);
 	}
 
 	private static float[] getSoundPitches(RandomSource random) {
-		boolean bl = random.nextBoolean();
+		var bl = random.nextBoolean();
 		return new float[] { 1.0F, getSoundPitch(bl, random), getSoundPitch(!bl, random) };
 	}
 
 	private static float getSoundPitch(boolean flag, RandomSource random) {
-		float f = flag ? 0.63F : 0.43F;
+		var f = flag ? 0.63F : 0.43F;
 		return 1.0F / (random.nextFloat() * 0.5F + 1.8F) + f;
 	}
 
@@ -328,19 +316,17 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
 	public void onUseTick(Level world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
 		if (!world.isClientSide) {
-			float f = (float) (stack.getUseDuration() - remainingUseTicks) / (float) getPullTime(stack);
+			var f = (float) (stack.getUseDuration() - remainingUseTicks) / (float) getPullTime(stack);
 			if (f < 0.2F) {
 				this.charged = false;
 				this.loaded = false;
 			}
 
-			if (f >= 0.2F && !this.charged) {
+			if (f >= 0.2F && !this.charged)
 				this.charged = true;
-			}
 
-			if (f >= 0.5F && !this.loaded) {
+			if (f >= 0.5F && !this.loaded)
 				this.loaded = true;
-			}
 		}
 	}
 
@@ -349,23 +335,23 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 	}
 
 	public static int getPullTime(ItemStack stack) {
-		int i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
+		var i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
 		return 25 - 5 * i;
 	}
 
 	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
-		List<ItemStack> list = getProjectiles(stack);
+		var list = getProjectiles(stack);
 		if (isCharged(stack) && !list.isEmpty()) {
-			ItemStack itemStack = (ItemStack) list.get(0);
+			var itemStack = (ItemStack) list.get(0);
 			tooltip.add((Component.translatable("Ammo")).append(" ").append(itemStack.getDisplayName()));
 			if (context.isAdvanced() && itemStack.getItem() == GRENADES) {
 				List<Component> list2 = Lists.newArrayList();
 				HWGItems.G_EMP.appendHoverText(itemStack, world, list2, context);
 				if (!list2.isEmpty()) {
-					for (int i = 0; i < list2.size(); ++i) {
-						list2.set(i, (Component.literal("  ")).append((Component) list2.get(i)).withStyle(ChatFormatting.GRAY));
-					}
+					for (int i = 0; i < list2.size(); ++i)
+						list2.set(i, (Component.literal("  ")).append((Component) list2.get(i))
+								.withStyle(ChatFormatting.GRAY));
 					tooltip.addAll(list2);
 				}
 			}

@@ -13,12 +13,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntityMixin extends Player {
-
 
 	public AbstractClientPlayerEntityMixin(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
 		super(world, pos, yaw, gameProfile);
@@ -26,11 +24,9 @@ public abstract class AbstractClientPlayerEntityMixin extends Player {
 
 	@Inject(at = @At("HEAD"), method = "getFieldOfViewModifier", cancellable = true)
 	private void render(CallbackInfoReturnable<Float> ci) {
-		ItemStack itemStack = this.getMainHandItem();
-		if (Minecraft.getInstance().options.getCameraType().isFirstPerson()) {
-			if (itemStack.is(HWGItems.SNIPER)) {
+		var itemStack = this.getMainHandItem();
+		if (Minecraft.getInstance().options.getCameraType().isFirstPerson())
+			if (itemStack.is(HWGItems.SNIPER))
 				ci.setReturnValue(ClientInit.scope.isDown() ? 0.1F : 1.0F);
-			}
-		}
 	}
 }

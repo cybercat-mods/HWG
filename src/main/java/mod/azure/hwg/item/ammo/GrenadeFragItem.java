@@ -19,15 +19,14 @@ public class GrenadeFragItem extends Item {
 		if (!user.getCooldowns().isOnCooldown(this)) {
 			user.getCooldowns().addCooldown(this, 25);
 			if (!world.isClientSide) {
-				GrenadeEntity snowballEntity = new GrenadeEntity(world, user);
-				snowballEntity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 1.5F, 1.0F);
-				snowballEntity.setVariant(2);
-				snowballEntity.setState(1);
-				world.addFreshEntity(snowballEntity);
+				var nadeEntity = new GrenadeEntity(world, user);
+				nadeEntity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 1.5F, 1.0F);
+				nadeEntity.setVariant(2);
+				nadeEntity.setState(1);
+				world.addFreshEntity(nadeEntity);
 			}
-			if (!user.getAbilities().instabuild) {
+			if (!user.getAbilities().instabuild) 
 				itemStack.shrink(1);
-			}
 			return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
 		} else {
 			return InteractionResultHolder.fail(itemStack);

@@ -10,6 +10,7 @@ import mod.azure.azurelib.entities.TickingLightEntity;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
@@ -153,7 +154,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 40) 
 			this.remove(Entity.RemovalReason.DISCARDED);
-		boolean isInsideWaterBlock = level.isWaterAt(blockPosition());
+		var isInsideWaterBlock = level.isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
 		if (getOwner()instanceof Player owner)
 			setYRot(entityData.get(FORCED_YAW));
@@ -170,7 +171,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 		}
 		var aabb = new AABB(this.blockPosition().above()).inflate(1D, 5D, 1D);
 		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
-			if (e.isAlive() && !(e instanceof Player)) {
+			if (e.isAlive() && !(e instanceof Player || e instanceof HWGEntity)) {
 				e.hurt(DamageSource.arrow(this, this.shooter), 3);
 				if (!(e instanceof FlameFiring || this.getOwner() instanceof Player))
 					e.setRemainingFireTicks(90);

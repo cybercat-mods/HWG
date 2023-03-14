@@ -33,19 +33,14 @@ public class FlareParticle extends TextureSheetParticle {
 		this.yo = this.y;
 		this.zo = this.z;
 		if (this.age++ < this.lifetime && this.alpha > 0.0F) {
-			this.xd += (double) (this.random.nextFloat() / 5000.0F
-					* (float) (this.random.nextBoolean() ? 1 : -1));
-			this.zd += (double) (this.random.nextFloat() / 5000.0F
-					* (float) (this.random.nextBoolean() ? 1 : -1));
+			this.xd += (double) (this.random.nextFloat() / 5000.0F * (float) (this.random.nextBoolean() ? 1 : -1));
+			this.zd += (double) (this.random.nextFloat() / 5000.0F * (float) (this.random.nextBoolean() ? 1 : -1));
 			this.yd -= (double) this.gravity;
 			this.move(this.xd, this.yd, this.zd);
-			if (this.age >= this.lifetime && this.alpha > 0.01F) {
+			if (this.age >= this.lifetime && this.alpha > 0.01F)
 				this.alpha -= 0.015F;
-			}
-
-		} else {
+		} else
 			this.remove();
-		}
 	}
 
 	public ParticleRenderType getRenderType() {
@@ -62,7 +57,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 0, 0, 0);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 0, 0, 0);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -78,7 +73,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 22, 156, 156);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 22, 156, 156);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -94,7 +89,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 199, 78, 189);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 199, 78, 189);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -110,7 +105,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 71, 79, 82);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 71, 79, 82);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -142,7 +137,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 128, 199, 31);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 128, 199, 31);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -174,7 +169,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 131, 84, 50);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 131, 84, 50);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -206,7 +201,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 10, 150, 156);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 10, 150, 156);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			campfireSmokeParticle.setAlpha(0.4F);
 			return campfireSmokeParticle;
@@ -223,7 +218,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 137, 50, 184);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 137, 50, 184);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -239,7 +234,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 60, 68, 170);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 60, 68, 170);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -255,7 +250,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 249, 128, 29);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 249, 128, 29);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -271,7 +266,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 94, 124, 22);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 94, 124, 22);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -287,7 +282,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 58, 179, 216);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 58, 179, 216);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}
@@ -303,7 +298,7 @@ public class FlareParticle extends TextureSheetParticle {
 
 		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
 				double e, double f, double g, double h, double i) {
-			FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 249, 255, 254);
+			var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 249, 255, 254);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
 		}

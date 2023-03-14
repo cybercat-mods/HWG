@@ -66,23 +66,23 @@ public class Assasult2Item extends AnimatedItem {
 	@Override
 	public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
 		if (entityLiving instanceof Player) {
-			Player playerentity = (Player) entityLiving;
+			var playerentity = (Player) entityLiving;
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1)
 					&& !playerentity.getCooldowns().isOnCooldown(this)) {
 				playerentity.getCooldowns().addCooldown(this, this.cooldown);
 				if (!worldIn.isClientSide) {
-					BulletEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
+					var bullet = createArrow(worldIn, stack, playerentity);
+					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
 							1.0F * 3.0F, 1.0F);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					worldIn.addFreshEntity(abstractarrowentity);
+					worldIn.addFreshEntity(bullet);
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(),
 							playerentity.getZ(), HWGSounds.TOMMY, SoundSource.PLAYERS, 0.25F,
 							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller",
 							this.animation);
 				}
-				boolean isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
@@ -96,7 +96,7 @@ public class Assasult2Item extends AnimatedItem {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-		if (world.isClientSide) {
+		if (world.isClientSide) 
 			if (((Player) entity).getMainHandItem().getItem() instanceof Assasult2Item) {
 				if (ClientInit.reload.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
@@ -104,7 +104,6 @@ public class Assasult2Item extends AnimatedItem {
 					ClientPlayNetworking.send(HWGMod.ASSASULT2, passedData);
 				}
 			}
-		}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
@@ -123,26 +122,6 @@ public class Assasult2Item extends AnimatedItem {
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
 		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, HWGConfig.tommy_damage);
 		return arrowentity;
-	}
-
-	public static float getArrowVelocity(int charge) {
-		float f = (float) charge / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
-	}
-
-	public static float getPullProgress(int useTicks) {
-		float f = (float) useTicks / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
 	}
 
 	@Override

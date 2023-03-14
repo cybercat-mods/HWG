@@ -5,6 +5,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import io.netty.buffer.Unpooled;
+import mod.azure.azurelib.animatable.GeoItem;
+import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
+import mod.azure.azurelib.animatable.client.RenderProvider;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.ShotgunRender;
@@ -26,9 +29,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.animatable.client.RenderProvider;
 
 public class ShotgunItem extends AnimatedItem {
 
@@ -42,25 +42,25 @@ public class ShotgunItem extends AnimatedItem {
 	@Override
 	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
 		if (entityLiving instanceof Player) {
-			Player playerentity = (Player) entityLiving;
+			var playerentity = (Player) entityLiving;
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
 				playerentity.getCooldowns().addCooldown(this, 18);
 				if (!worldIn.isClientSide) {
-					ShellEntity abstractarrowentity = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 1,
-							0.5F, 1.0F * 3.0F, 1.0F);
-					ShellEntity abstractarrowentity1 = createArrow(worldIn, stack, playerentity);
-					abstractarrowentity1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1,
-							0.5F, 1.0F * 3.0F, 1.0F);
+					var bullet = createArrow(worldIn, stack, playerentity);
+					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 1, 0.5F,
+							1.0F * 3.0F, 1.0F);
+					var bullet1 = createArrow(worldIn, stack, playerentity);
+					bullet1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1, 0.5F,
+							1.0F * 3.0F, 1.0F);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					worldIn.addFreshEntity(abstractarrowentity);
-					worldIn.addFreshEntity(abstractarrowentity1);
-					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(),
-							playerentity.getZ(), HWGSounds.SHOTGUN, SoundSource.PLAYERS, 1.25F, 1.3F);
+					worldIn.addFreshEntity(bullet);
+					worldIn.addFreshEntity(bullet1);
+					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
+							HWGSounds.SHOTGUN, SoundSource.PLAYERS, 1.25F, 1.3F);
 					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller",
 							"firing");
 				}
-				boolean isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
@@ -68,7 +68,7 @@ public class ShotgunItem extends AnimatedItem {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-		if (world.isClientSide) {
+		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof ShotgunItem) {
 				if (ClientInit.reload.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
@@ -76,7 +76,6 @@ public class ShotgunItem extends AnimatedItem {
 					ClientPlayNetworking.send(HWGMod.SHOTGUN, passedData);
 				}
 			}
-		}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
@@ -93,28 +92,8 @@ public class ShotgunItem extends AnimatedItem {
 	}
 
 	public ShellEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		ShellEntity arrowentity = new ShellEntity(worldIn, shooter);
-		return arrowentity;
-	}
-
-	public static float getArrowVelocity(int charge) {
-		float f = (float) charge / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
-	}
-
-	public static float getPullProgress(int useTicks) {
-		float f = (float) useTicks / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) {
-			f = 1.0F;
-		}
-
-		return f;
+		var bullet = new ShellEntity(worldIn, shooter);
+		return bullet;
 	}
 
 	@Override

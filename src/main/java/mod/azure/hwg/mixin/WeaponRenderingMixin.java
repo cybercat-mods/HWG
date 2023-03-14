@@ -11,7 +11,6 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.ItemStack;
 
 @Mixin(PlayerRenderer.class)
 public class WeaponRenderingMixin {
@@ -19,9 +18,8 @@ public class WeaponRenderingMixin {
 	@Inject(method = "getArmPose", at = @At(value = "TAIL"), cancellable = true)
 	private static void tryItemPose(AbstractClientPlayer player, InteractionHand hand,
 			CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
-		ItemStack itemstack = player.getItemInHand(hand);
-		if (itemstack.getItem() instanceof HWGGunLoadedBase || itemstack.getItem() instanceof HWGGunBase) {
+		var itemstack = player.getItemInHand(hand);
+		if (itemstack.getItem() instanceof HWGGunLoadedBase || itemstack.getItem() instanceof HWGGunBase)
 			ci.setReturnValue(HumanoidModel.ArmPose.BOW_AND_ARROW);
-		}
 	}
 }

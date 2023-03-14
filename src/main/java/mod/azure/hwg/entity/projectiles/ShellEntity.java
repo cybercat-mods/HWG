@@ -63,10 +63,8 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	protected ShellEntity(EntityType<? extends ShellEntity> type, LivingEntity owner, Level world) {
 		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
 		this.setOwner(owner);
-		if (owner instanceof Player) {
+		if (owner instanceof Player)
 			this.pickup = AbstractArrow.Pickup.ALLOWED;
-		}
-
 	}
 
 	public ShellEntity(Level world, double x, double y, double z) {
@@ -90,9 +88,8 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	public void tickDespawn() {
 		++this.ticksInAir;
-		if (this.ticksInAir >= 40) {
+		if (this.ticksInAir >= 40)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
 	}
 
 	@Override
@@ -103,9 +100,8 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof Player))
 			living.invulnerableTime = 0;
-		}
 	}
 
 	@Override
@@ -138,9 +134,8 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	public void tick() {
 		super.tick();
 		++this.ticksInAir;
-		if (this.ticksInAir >= 40) {
+		if (this.ticksInAir >= 40)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
 		if (this.level.isClientSide) {
 			double d2 = this.getX() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
 			double f2 = this.getZ() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
@@ -150,18 +145,12 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 			setYRot(entityData.get(FORCED_YAW));
 	}
 
-	public void initFromStack(ItemStack stack) {
-		if (stack.getItem() == HWGItems.SHOTGUN_SHELL) {
-		}
-	}
-
 	@Override
 	public boolean isNoGravity() {
-		if (this.isUnderWater()) {
+		if (this.isUnderWater())
 			return false;
-		} else {
+		else
 			return true;
-		}
 	}
 
 	public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
@@ -179,55 +168,45 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
-		if (!this.level.isClientSide) {
+		if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		}
 		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock
-				&& HWGConfig.bullets_breakdripstone == true) {
+				&& HWGConfig.bullets_breakdripstone == true)
 			level.destroyBlock(blockHitResult.getBlockPos(), true);
-		}
 		this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON);
 	}
 
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
-		Entity entity = entityHitResult.getEntity();
+		var entity = entityHitResult.getEntity();
 		if (entityHitResult.getType() != HitResult.Type.ENTITY
-				|| !((EntityHitResult) entityHitResult).getEntity().is(entity)) {
-			if (!this.level.isClientSide) {
+				|| !((EntityHitResult) entityHitResult).getEntity().is(entity))
+			if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
-			}
-		}
-		Entity entity2 = this.getOwner();
+		var entity2 = this.getOwner();
 		DamageSource damageSource2;
 		if (entity2 == null) {
 			damageSource2 = DamageSource.arrow(this, this);
 		} else {
 			damageSource2 = DamageSource.arrow(this, entity2);
-			if (entity2 instanceof LivingEntity) {
+			if (entity2 instanceof LivingEntity)
 				((LivingEntity) entity2).setLastHurtMob(entity);
-			}
 		}
 		if (entity.hurt(damageSource2, HWGConfig.shotgun_damage)) {
 			if (entity instanceof LivingEntity) {
-				LivingEntity livingEntity = (LivingEntity) entity;
+				var livingEntity = (LivingEntity) entity;
 				if (!this.level.isClientSide && entity2 instanceof LivingEntity) {
 					EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
 					EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
 				}
-
 				this.doPostHurtEffects(livingEntity);
 				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player
-						&& entity2 instanceof ServerPlayer && !this.isSilent()) {
-					((ServerPlayer) entity2).connection.send(
-							new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
-				}
+						&& entity2 instanceof ServerPlayer && !this.isSilent())
+					((ServerPlayer) entity2).connection
+							.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 			}
-		} else {
-			if (!this.level.isClientSide) {
-				this.remove(Entity.RemovalReason.DISCARDED);
-			}
-		}
+		} else if (!this.level.isClientSide)
+			this.remove(Entity.RemovalReason.DISCARDED);
 	}
 
 	@Override
@@ -242,10 +221,10 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
-		float f = 0.017453292F;
-		float x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
-		float y = -Mth.sin((pitch + roll) * f);
-		float z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
+		var f = 0.017453292F;
+		var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
+		var y = -Mth.sin((pitch + roll) * f);
+		var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
 		this.shoot(x, y, z, modifierZ, 0);
 	}
 

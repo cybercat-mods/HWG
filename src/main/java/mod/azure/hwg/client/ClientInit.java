@@ -1,7 +1,9 @@
 package mod.azure.hwg.client;
 
 import org.lwjgl.glfw.GLFW;
+
 import com.mojang.blaze3d.platform.InputConstants;
+
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.gui.GunTableScreen;
 import mod.azure.hwg.compat.BWClientCompat;
@@ -29,9 +31,8 @@ public class ClientInit implements ClientModInitializer {
 		ModelProviderinit.init();
 		RenderRegistry.init();
 		MenuScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
-		if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
+		if (FabricLoader.getInstance().isModLoaded("bewitchment"))
 			BWClientCompat.onInitializeClient();
-		}
 		KeyBindingHelper.registerKeyBinding(reload);
 		KeyBindingHelper.registerKeyBinding(scope);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BLACK_FLARE, FlareParticle.BlackSmokeFactory::new);
