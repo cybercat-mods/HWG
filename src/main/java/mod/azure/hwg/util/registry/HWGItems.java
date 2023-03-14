@@ -3,8 +3,8 @@ package mod.azure.hwg.util.registry;
 import java.util.HashMap;
 import java.util.Map;
 
-import mod.azure.azurelib.items.AzureSpawnEgg;
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.item.HWGSpawnEgg;
 import mod.azure.hwg.item.ammo.FlareItem;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
 import mod.azure.hwg.item.ammo.GrenadeFragItem;
@@ -83,10 +83,10 @@ public class HWGItems {
 	public static HellhorseRevolverItem HELLHORSE = item(new HellhorseRevolverItem(), "hellhorse_revolver");
 	public static BlockItem FUEL_TANK = item(new BlockItem(HWGBlocks.FUEL_TANK, new Item.Properties().tab(HWGMod.WeaponItemGroup)), "fuel_tank");
 	public static BlockItem GUN_TABLE = item(new BlockItem(HWGBlocks.GUN_TABLE, new Item.Properties().tab(HWGMod.WeaponItemGroup)), "gun_table");
-	public static AzureSpawnEgg SPY_SPAWN_EGG = item(new AzureSpawnEgg(HWGMobs.SPY, 11022961, 11035249), "spy_spawn_egg");
-	public static AzureSpawnEgg MERC_SPAWN_EGG = item(new AzureSpawnEgg(HWGMobs.MERC, 11022961, 11035249), "merc_spawn_egg");
-	public static AzureSpawnEgg LESSER_SPAWN_EGG = item(new AzureSpawnEgg(HWGMobs.TECHNOLESSER, 11022961, 11035249), "lesser_spawn_egg");
-	public static AzureSpawnEgg GREATER_SPAWN_EGG = item(new AzureSpawnEgg(HWGMobs.TECHNOGREATER, 11022961, 11035249), "greater_spawn_egg");
+	public static HWGSpawnEgg SPY_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.SPY, 11022961, 11035249), "spy_spawn_egg");
+	public static HWGSpawnEgg MERC_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.MERC, 11022961, 11035249), "merc_spawn_egg");
+	public static HWGSpawnEgg LESSER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOLESSER, 11022961, 11035249), "lesser_spawn_egg");
+	public static HWGSpawnEgg GREATER_SPAWN_EGG = item(new HWGSpawnEgg(HWGMobs.TECHNOGREATER, 11022961, 11035249), "greater_spawn_egg");
 
 	static <T extends Item> T item(T c, String id) {
 		Registry.register(Registry.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
