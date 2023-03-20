@@ -1,4 +1,3 @@
-v.1.4.1
+v.1.4.2
 
-- Adds SmartBrainLib to required mods in fabric.mod.json
-- Bumps AzureLib required version to newest.
+- Fixes crash with Stun and Naplam Grenades
