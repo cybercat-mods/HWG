@@ -140,7 +140,6 @@ if (file('key.properties').exists()) {
             	requiredDependency 'azurelib'  
             	requiredDependency 'smartbrainlib'  
             	optionalDependency 'modmenu' 
-            	optionalDependency 'roughly-enough-items' 
         	}
         	mainArtifact(remapJar)
 
@@ -174,7 +173,6 @@ if (file('key.properties').exists()) {
         	required.project "smartbrainlib"
         	required.project "fabric-api"
             optional.project "modmenu"
-            optional.project "roughly-enough-items"
    		}
 	}
 }
