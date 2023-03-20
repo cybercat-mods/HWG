@@ -274,7 +274,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	protected void stun() {
 		var aabb = new AABB(this.blockPosition().above()).inflate(3D, 3D, 3D);
 		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
-			if (e.isAlive()) {
+			if (e.isAlive() && e instanceof LivingEntity) {
 				((LivingEntity) e).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
 				((LivingEntity) e).addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
 			}
@@ -289,7 +289,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	protected void naplam() {
 		var aabb = new AABB(this.blockPosition().above()).inflate(3D, 3D, 3D);
 		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
-			if (e.isAlive()) {
+			if (e.isAlive() && e instanceof LivingEntity) {
 				((LivingEntity) e).setRemainingFireTicks(200);
 			}
 		});
