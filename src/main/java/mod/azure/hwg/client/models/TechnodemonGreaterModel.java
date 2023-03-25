@@ -1,15 +1,15 @@
 package mod.azure.hwg.client.models;
 
-import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.entity.TechnodemonGreaterEntity;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import mod.azure.azurelib.constant.DataTickets;
 import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
 import mod.azure.azurelib.core.animation.AnimationState;
 import mod.azure.azurelib.model.GeoModel;
 import mod.azure.azurelib.model.data.EntityModelData;
+import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.entity.TechnodemonGreaterEntity;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class TechnodemonGreaterModel extends GeoModel<TechnodemonGreaterEntity> {
 
@@ -28,15 +28,14 @@ public class TechnodemonGreaterModel extends GeoModel<TechnodemonGreaterEntity> 
 
 	@Override
 	public ResourceLocation getAnimationResource(TechnodemonGreaterEntity object) {
-		return new ResourceLocation(HWGMod.MODID,
-				"animations/technodemon_greater_" + object.getVariant() + ".animation.json");
+		return new ResourceLocation(HWGMod.MODID, "animations/technodemon_greater_" + object.getVariant() + ".animation.json");
 	}
-	
+
 	@Override
 	public RenderType getRenderType(TechnodemonGreaterEntity animatable, ResourceLocation texture) {
 		return RenderType.entityTranslucent(getTextureResource(animatable));
 	}
-	
+
 	@Override
 	public void setCustomAnimations(TechnodemonGreaterEntity animatable, long instanceId, AnimationState<TechnodemonGreaterEntity> animationState) {
 		super.setCustomAnimations(animatable, instanceId, animationState);

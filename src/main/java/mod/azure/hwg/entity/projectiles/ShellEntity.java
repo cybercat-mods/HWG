@@ -44,8 +44,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	protected boolean inAir;
 	private int ticksInAir;
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(ShellEntity.class,
-			EntityDataSerializers.FLOAT);
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(ShellEntity.class, EntityDataSerializers.FLOAT);
 
 	public ShellEntity(EntityType<? extends ShellEntity> entityType, Level world) {
 		super(entityType, world);
@@ -170,8 +169,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 		super.onHitBlock(blockHitResult);
 		if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock
-				&& HWGConfig.bullets_breakdripstone == true)
+		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGConfig.bullets_breakdripstone == true)
 			level.destroyBlock(blockHitResult.getBlockPos(), true);
 		this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON);
 	}
@@ -179,16 +177,15 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		var entity = entityHitResult.getEntity();
-		if (entityHitResult.getType() != HitResult.Type.ENTITY
-				|| !((EntityHitResult) entityHitResult).getEntity().is(entity))
+		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
 			if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		var entity2 = this.getOwner();
 		DamageSource damageSource2;
 		if (entity2 == null) {
-			damageSource2 = DamageSource.arrow(this, this);
+			damageSource2 = damageSources().arrow(this, this);
 		} else {
-			damageSource2 = DamageSource.arrow(this, entity2);
+			damageSource2 = damageSources().arrow(this, entity2);
 			if (entity2 instanceof LivingEntity)
 				((LivingEntity) entity2).setLastHurtMob(entity);
 		}
@@ -200,10 +197,8 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 					EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
 				}
 				this.doPostHurtEffects(livingEntity);
-				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player
-						&& entity2 instanceof ServerPlayer && !this.isSilent())
-					((ServerPlayer) entity2).connection
-							.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+					((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 			}
 		} else if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);

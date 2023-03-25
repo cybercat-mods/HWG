@@ -58,32 +58,28 @@ import net.minecraft.world.level.block.Blocks;
 
 public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob, Enemy {
 
-	private static final EntityDataAccessor<Integer> ANGER_TIME = SynchedEntityData.defineId(HWGEntity.class,
-			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> ANGER_TIME = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
 	private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
-	public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(HWGEntity.class,
-			EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(HWGEntity.class,
-			EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
 	private UUID targetUuid;
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
 
 	protected HWGEntity(EntityType<? extends Monster> type, Level worldIn) {
 		super(type, worldIn);
-		this.getNavigation().setCanFloat(true);
-		this.noCulling = true;
+		getNavigation().setCanFloat(true);
+		noCulling = true;
 	}
 
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
+		return cache;
 	}
 
-	public static boolean canNetherSpawn(EntityType<? extends HWGEntity> type, LevelAccessor serverWorldAccess,
-			MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+	public static boolean canNetherSpawn(EntityType<? extends HWGEntity> type, LevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
 		if (serverWorldAccess.getDifficulty() == Difficulty.PEACEFUL)
 			return false;
-		if ((spawnReason != MobSpawnType.CHUNK_GENERATION && spawnReason != MobSpawnType.NATURAL))
+		if (spawnReason != MobSpawnType.CHUNK_GENERATION && spawnReason != MobSpawnType.NATURAL)
 			return !serverWorldAccess.getBlockState(pos.below()).is(Blocks.NETHER_WART_BLOCK);
 		return !serverWorldAccess.getBlockState(pos.below()).is(Blocks.NETHER_WART_BLOCK);
 	}
@@ -124,85 +120,66 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ANGER_TIME, 0);
-		this.entityData.define(STATE, 0);
+		entityData.define(ANGER_TIME, 0);
+		entityData.define(STATE, 0);
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty,
-			MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
 		return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityTag);
 	}
 
 	@Override
 	public int getRemainingPersistentAngerTime() {
-		return this.entityData.get(ANGER_TIME);
+		return entityData.get(ANGER_TIME);
 	}
 
 	@Override
 	public void setRemainingPersistentAngerTime(int ticks) {
-		this.entityData.set(ANGER_TIME, ticks);
+		entityData.set(ANGER_TIME, ticks);
 	}
 
 	public int getAttckingState() {
-		return this.entityData.get(STATE);
+		return entityData.get(STATE);
 	}
 
 	public void setAttackingState(int time) {
-		this.entityData.set(STATE, time);
+		entityData.set(STATE, time);
 	}
 
 	@Override
 	public UUID getPersistentAngerTarget() {
-		return this.targetUuid;
+		return targetUuid;
 	}
 
 	@Override
 	public void setPersistentAngerTarget(@Nullable UUID uuid) {
-		this.targetUuid = uuid;
+		targetUuid = uuid;
 	}
 
 	@Override
 	public void startPersistentAngerTimer() {
-		this.setRemainingPersistentAngerTime(ANGER_TIME_RANGE.sample(this.random));
+		setRemainingPersistentAngerTime(ANGER_TIME_RANGE.sample(random));
 	}
 
 	public abstract int getVariants();
 
 	public Projectile getProjectile(Item item) {
-		return (item instanceof PistolItem
-				|| item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item
-				|| item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem
-				|| item instanceof HellhorseRevolverItem || item instanceof Minigun) ? new BulletEntity(
-						level, this,
-						(item instanceof PistolItem ? HWGConfig.pistol_damage
-								: item instanceof LugerItem ? HWGConfig.luger_damage
-										: item instanceof AssasultItem ? HWGConfig.ak47_damage
-												: item instanceof Assasult1Item ? HWGConfig.smg_damage
-														: item instanceof GPistolItem ? HWGConfig.golden_pistol_damage
-																: item instanceof SPistolItem
-																		? HWGConfig.silenced_pistol_damage
-																		: item instanceof HellhorseRevolverItem
-																				? HWGConfig.hellhorse_damage
-																				: item instanceof Minigun
-																						? HWGConfig.minigun_damage
-																						: HWGConfig.sniper_damage))
-						: item instanceof FlamethrowerItem ? new FlameFiring(level, this)
-								: item instanceof BrimstoneItem ? new BlazeRodEntity(level, this)
-										: item instanceof BalrogItem ? new FireballEntity(level, this)
-												: new ShellEntity(level, this);
+		return item instanceof PistolItem || item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item || item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem || item instanceof HellhorseRevolverItem || item instanceof Minigun
+				? new BulletEntity(level, this,
+						item instanceof PistolItem ? HWGConfig.pistol_damage
+								: item instanceof LugerItem ? HWGConfig.luger_damage : item instanceof AssasultItem ? HWGConfig.ak47_damage : item instanceof Assasult1Item ? HWGConfig.smg_damage : item instanceof GPistolItem ? HWGConfig.golden_pistol_damage : item instanceof SPistolItem ? HWGConfig.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGConfig.hellhorse_damage : item instanceof Minigun ? HWGConfig.minigun_damage : HWGConfig.sniper_damage)
+				: item instanceof FlamethrowerItem ? new FlameFiring(level, this) : item instanceof BrimstoneItem ? new BlazeRodEntity(level, this) : item instanceof BalrogItem ? new FireballEntity(level, this) : new ShellEntity(level, this);
 	}
 
 	public void shoot() {
-		if (!this.level.isClientSide) {
-			var world = this.getCommandSenderWorld();
-			var vector3d = this.getViewVector(1.0F);
-			var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());
+		if (!level.isClientSide) {
+			final var world = getCommandSenderWorld();
+			final var vector3d = getViewVector(1.0F);
+			final var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());
 			bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);
-			bullet.shootFromRotation(this, this.getXRot(), this.getYRot(), 0.0F, 1.0F * 3.0F, 1.0F);
-			world.playSound(this, blockPosition(),
-					getDefaultAttackSound(getItemBySlot(EquipmentSlot.MAINHAND).getItem()), SoundSource.HOSTILE, 1.0F,
-					1.0f);
+			bullet.shootFromRotation(this, getXRot(), getYRot(), 0.0F, 1.0F * 3.0F, 1.0F);
+			world.playSound(this, blockPosition(), getDefaultAttackSound(getItemBySlot(EquipmentSlot.MAINHAND).getItem()), SoundSource.HOSTILE, 1.0F, 1.0f);
 			world.addFreshEntity(bullet);
 		}
 	}
@@ -214,19 +191,7 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 								: item instanceof LugerItem ? HWGSounds.LUGER
 										: item instanceof AssasultItem ? HWGSounds.AK
 												: item instanceof Assasult1Item ? HWGSounds.SMG
-														: item instanceof ShotgunItem ? HWGSounds.SHOTGUN
-																: item instanceof ShotgunItem ? HWGSounds.SHOTGUN
-																		: item instanceof HellhorseRevolverItem
-																				? HWGSounds.REVOLVER
-																				: item instanceof FlamethrowerItem
-																						? SoundEvents.FIREWORK_ROCKET_BLAST_FAR
-																						: item instanceof BrimstoneItem
-																								? SoundEvents.FIRECHARGE_USE
-																								: item instanceof BalrogItem
-																										? SoundEvents.GENERIC_EXPLODE
-																										: item instanceof Minigun
-																												? HWGSounds.MINIGUN
-																												: HWGSounds.SNIPER;
+														: item instanceof ShotgunItem ? HWGSounds.SHOTGUN : item instanceof ShotgunItem ? HWGSounds.SHOTGUN : item instanceof HellhorseRevolverItem ? HWGSounds.REVOLVER : item instanceof FlamethrowerItem ? SoundEvents.FIREWORK_ROCKET_BLAST_FAR : item instanceof BrimstoneItem ? SoundEvents.FIRECHARGE_USE : item instanceof BalrogItem ? SoundEvents.GENERIC_EXPLODE : item instanceof Minigun ? HWGSounds.MINIGUN : HWGSounds.SNIPER;
 	}
 
 }

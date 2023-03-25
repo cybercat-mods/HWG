@@ -11,7 +11,6 @@ public class GunTableInventory implements Container {
 
 	private final NonNullList<ItemStack> stacks;
 
-
 	public GunTableInventory(GunTableScreenHandler container) {
 		this.stacks = NonNullList.withSize(6, ItemStack.EMPTY);
 		this.container = container;
@@ -23,9 +22,8 @@ public class GunTableInventory implements Container {
 
 	public boolean isEmpty() {
 		for (ItemStack stack : stacks) {
-			if (!stack.isEmpty()) {
+			if (!stack.isEmpty())
 				return false;
-			}
 		}
 		return true;
 	}
@@ -35,10 +33,9 @@ public class GunTableInventory implements Container {
 	}
 
 	public ItemStack removeItem(int slot, int amount) {
-		ItemStack itemStack = ContainerHelper.removeItem(this.stacks, slot, amount);
-		if (!itemStack.isEmpty() && slot != 5) {
+		var itemStack = ContainerHelper.removeItem(this.stacks, slot, amount);
+		if (!itemStack.isEmpty() && slot != 5)
 			this.container.slotsChanged(this);
-		}
 		return itemStack;
 	}
 
@@ -49,7 +46,7 @@ public class GunTableInventory implements Container {
 	public void setItem(int slot, ItemStack stack) {
 		this.stacks.set(slot, stack);
 		if (slot != 5)
-		container.slotsChanged(this);
+			container.slotsChanged(this);
 	}
 
 	public boolean stillValid(Player player) {

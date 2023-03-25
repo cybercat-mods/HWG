@@ -33,22 +33,13 @@ public class BWCompat {
 	}
 
 	private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id) {
-		return projectile(factory, id, true);
-	}
 
-	private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id,
-			boolean itemRender) {
-
-		EntityType<T> type = FabricEntityTypeBuilder.<T>create(MobCategory.MISC, factory)
-				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
-				.trackRangeBlocks(90).trackedUpdateRate(1).build();
+		EntityType<T> type = FabricEntityTypeBuilder.<T>create(MobCategory.MISC, factory).dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer().trackRangeBlocks(90).trackedUpdateRate(1).build();
 
 		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
-
-		if (itemRender) 
-			ENTITY_THAT_USE_ITEM_RENDERS.add(type);
+		ENTITY_THAT_USE_ITEM_RENDERS.add(type);
 
 		return type;
 	}

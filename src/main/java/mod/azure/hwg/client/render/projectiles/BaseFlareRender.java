@@ -16,13 +16,11 @@ public class BaseFlareRender extends EntityRenderer<BaseFlareEntity> {
 		super(dispatcher);
 	}
 
-	public void render(BaseFlareEntity fireworkRocketEntity, float f, float g, PoseStack matrixStack,
-			MultiBufferSource vertexConsumerProvider, int i) {
+	public void render(BaseFlareEntity fireworkRocketEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
 		matrixStack.pushPose();
 		matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 		matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-		matrixStack.scale(fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F, fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F,
-				fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F);
+		matrixStack.scale(fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F, fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F, fireworkRocketEntity.tickCount > 2 ? 0.5F : 0.0F);
 
 		matrixStack.popPose();
 		super.render(fireworkRocketEntity, f, g, matrixStack, vertexConsumerProvider, i);

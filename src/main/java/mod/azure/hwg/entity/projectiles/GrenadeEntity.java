@@ -25,7 +25,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
@@ -47,13 +46,10 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	protected boolean inAir;
 	protected String type;
 	private int ticksInAir;
-	private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GrenadeEntity.class,
-			EntityDataSerializers.INT);
-	private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(GrenadeEntity.class,
-			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(GrenadeEntity.class,
-			EntityDataSerializers.FLOAT);
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.FLOAT);
 
 	public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level world) {
 		super(entityType, world);
@@ -74,8 +70,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 		this.pickup = AbstractArrow.Pickup.DISALLOWED;
 	}
 
-	public GrenadeEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z,
-			boolean shotAtAngle) {
+	public GrenadeEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
 		this(world, stack, x, y, z, shotAtAngle);
 		this.setOwner(entity);
 	}
@@ -172,14 +167,10 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	public void remove(RemovalReason reason) {
 		var areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
 		if (this.getVariant() == 1)
-			areaeffectcloudentity.setParticle(this.getVariant() == 1 ? ParticleTypes.END_ROD
-					: this.getVariant() == 2 ? ParticleTypes.EXPLOSION
-							: this.getVariant() == 3 ? ParticleTypes.EXPLOSION
-									: this.getVariant() == 4 ? ParticleTypes.LARGE_SMOKE
-											: this.getVariant() == 5 ? ParticleTypes.FLASH : ParticleTypes.END_ROD);
+			areaeffectcloudentity.setParticle(this.getVariant() == 1 ? ParticleTypes.END_ROD : this.getVariant() == 2 ? ParticleTypes.EXPLOSION : this.getVariant() == 3 ? ParticleTypes.EXPLOSION : this.getVariant() == 4 ? ParticleTypes.LARGE_SMOKE : this.getVariant() == 5 ? ParticleTypes.FLASH : ParticleTypes.END_ROD);
 		areaeffectcloudentity.setRadius(this.getVariant() == 4 ? 5.0F : 2.0F);
 		areaeffectcloudentity.setDuration(this.getVariant() == 4 ? 120 : 2);
-		if (this.getVariant() == 4) 
+		if (this.getVariant() == 4)
 			areaeffectcloudentity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 1));
 		areaeffectcloudentity.absMoveTo(this.getX(), this.getEyeY(), this.getZ());
 		this.level.addFreshEntity(areaeffectcloudentity);
@@ -188,20 +179,20 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
 	@Override
 	public void doEnchantDamageEffects(LivingEntity attacker, Entity target) {
-		if (this.getVariant() == 1) 
+		if (this.getVariant() == 1)
 			if (target instanceof TechnodemonEntity || target instanceof TechnodemonGreaterEntity)
 				super.doEnchantDamageEffects(attacker, target);
-		else 
-			super.doEnchantDamageEffects(attacker, target);
+			else
+				super.doEnchantDamageEffects(attacker, target);
 	}
 
 	@Override
 	protected void doPostHurtEffects(LivingEntity target) {
-		if (this.getVariant() == 1) 
+		if (this.getVariant() == 1)
 			if (target instanceof TechnodemonEntity || target instanceof TechnodemonGreaterEntity)
 				super.doPostHurtEffects(target);
-		else 
-			super.doPostHurtEffects(target);
+			else
+				super.doPostHurtEffects(target);
 	}
 
 	@Override
@@ -282,8 +273,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void frag() {
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
-				HWGConfig.grenades_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGConfig.grenades_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 
 	protected void naplam() {
@@ -293,15 +283,14 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 				((LivingEntity) e).setRemainingFireTicks(200);
 			}
 		});
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true,
-				Level.ExplosionInteraction.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true, Level.ExplosionInteraction.NONE);
 	}
 
 	protected void emp() {
 		var aabb = new AABB(this.blockPosition().above()).inflate(8D, 8D, 8D);
 		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
-			if (e.isAlive() && (e instanceof TechnodemonEntity || e instanceof TechnodemonGreaterEntity)) 
-				e.hurt(DamageSource.arrow(this, this), 10);
+			if (e.isAlive() && (e instanceof TechnodemonEntity || e instanceof TechnodemonGreaterEntity))
+				e.hurt(damageSources().arrow(this, this), 10);
 		});
 //		this.getCommandSenderWorld().getBlockStatesIfLoaded(aabb).forEach(state -> {
 //			if (state.is(Blocks.REDSTONE_WIRE))

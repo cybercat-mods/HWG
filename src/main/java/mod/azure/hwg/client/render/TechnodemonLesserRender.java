@@ -12,9 +12,9 @@ import mod.azure.hwg.client.models.TechnodemonLesserModel;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
 public class TechnodemonLesserRender extends GeoEntityRenderer<TechnodemonEntity> {
@@ -33,27 +33,22 @@ public class TechnodemonLesserRender extends GeoEntityRenderer<TechnodemonEntity
 			}
 
 			@Override
-			protected ItemTransforms.TransformType getTransformTypeForStack(GeoBone bone, ItemStack stack,
-					TechnodemonEntity animatable) {
+			protected ItemDisplayContext getTransformTypeForStack(GeoBone bone, ItemStack stack, TechnodemonEntity animatable) {
 				return switch (bone.getName()) {
-				default -> ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
+				default -> ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
 				};
 			}
 
 			@Override
-			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack,
-					TechnodemonEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight,
-					int packedOverlay) {
+			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, TechnodemonEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
 				poseStack.mulPose(Axis.XP.rotationDegrees(-90));
-				poseStack.mulPose(Axis.YP
-						.rotationDegrees(animatable.getMainHandItem().getItem() instanceof BrimstoneItem ? 0 : 8));
+				poseStack.mulPose(Axis.YP.rotationDegrees(animatable.getMainHandItem().getItem() instanceof BrimstoneItem ? 0 : 8));
 				poseStack.mulPose(Axis.ZP.rotationDegrees(0));
 				if (animatable.getMainHandItem().getItem() instanceof BrimstoneItem)
 					poseStack.translate(0.0D, 0.15D, -0.7D);
 				else
 					poseStack.translate(0.2D, 0.15D, -0.65D);
-				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight,
-						packedOverlay);
+				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
 			}
 		});
 	}
