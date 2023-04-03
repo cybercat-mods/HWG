@@ -101,6 +101,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 		super.doPostHurtEffects(living);
 		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof Player))
 			living.invulnerableTime = 0;
+		living.setDeltaMovement(0, 0, 0);
 	}
 
 	@Override

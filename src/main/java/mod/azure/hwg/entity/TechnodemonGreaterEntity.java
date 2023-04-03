@@ -141,8 +141,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
-		final var r = random.nextInt(0, 3);
-		setVariant(r);
+		setVariant( random.nextInt(0, 3));
 		setUUID(UUID.randomUUID());
 		setItemSlot(EquipmentSlot.MAINHAND, makeInitialWeapon());
 		return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityTag);

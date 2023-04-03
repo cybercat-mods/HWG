@@ -41,18 +41,15 @@ public class ProjectilesEntityRegister {
 		return projectile(factory, id, true);
 	}
 
-	private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id,
-			boolean itemRender) {
+	private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id, boolean itemRender) {
 
-		EntityType<T> type = FabricEntityTypeBuilder.<T>create(MobCategory.MISC, factory)
-				.dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer()
-				.trackRangeBlocks(90).trackedUpdateRate(1).build();
+		EntityType<T> type = FabricEntityTypeBuilder.<T>create(MobCategory.MISC, factory).dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer().trackRangeBlocks(90).trackedUpdateRate(1).build();
 
 		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 
-		if (itemRender) 
+		if (itemRender)
 			ENTITY_THAT_USE_ITEM_RENDERS.add(type);
 
 		return type;
@@ -62,18 +59,15 @@ public class ProjectilesEntityRegister {
 		return projectile1(factory, id, true);
 	}
 
-	private static <T extends Entity> EntityType<T> projectile1(EntityType.EntityFactory<T> factory, String id,
-			boolean itemRender) {
+	private static <T extends Entity> EntityType<T> projectile1(EntityType.EntityFactory<T> factory, String id, boolean itemRender) {
 
-		EntityType<T> type = FabricEntityTypeBuilder.<T>create(MobCategory.MISC, factory)
-				.dimensions(new EntityDimensions(1.5F, 1.5F, false)).disableSummon().spawnableFarFromPlayer()
-				.fireImmune().trackRangeBlocks(90).trackedUpdateRate(40).build();
+		EntityType<T> type = FabricEntityTypeBuilder.<T>create(MobCategory.MISC, factory).dimensions(new EntityDimensions(1.5F, 1.5F, false)).disableSummon().spawnableFarFromPlayer().fireImmune().trackRangeBlocks(90).trackedUpdateRate(40).build();
 
 		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
 
 		ENTITY_TYPES.add(type);
 
-		if (itemRender) 
+		if (itemRender)
 			ENTITY_THAT_USE_ITEM_RENDERS.add(type);
 
 		return type;

@@ -10,8 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ReiPlugin implements REIClientPlugin {
 
-	public static final CategoryIdentifier<HWGDisplay> CRAFTING = CategoryIdentifier
-			.of(new ResourceLocation(HWGMod.MODID, "crafting"));
+	public static final CategoryIdentifier<HWGDisplay> CRAFTING = CategoryIdentifier.of(new ResourceLocation(HWGMod.MODID, "crafting"));
 
 	@Override
 	public void registerCategories(CategoryRegistry registry) {

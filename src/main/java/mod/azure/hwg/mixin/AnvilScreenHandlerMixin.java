@@ -19,8 +19,7 @@ import net.minecraft.world.item.Items;
 @Mixin(value = AnvilMenu.class)
 public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
 
-	public AnvilScreenHandlerMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory,
-			ContainerLevelAccess context) {
+	public AnvilScreenHandlerMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory, ContainerLevelAccess context) {
 		super(type, syncId, playerInventory, context);
 	}
 
@@ -28,8 +27,7 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
 	private void updateRuinedRepair(CallbackInfo ci) {
 		var leftStack = this.inputSlots.getItem(0).copy();
 		var rightStack = this.inputSlots.getItem(1).copy();
-		if ((leftStack.getItem() instanceof HWGGunBase || leftStack.getItem() instanceof HWGGunLoadedBase)
-				&& rightStack.getItem() == Items.ENCHANTED_BOOK) {
+		if ((leftStack.getItem() instanceof HWGGunBase || leftStack.getItem() instanceof HWGGunLoadedBase) && rightStack.getItem() == Items.ENCHANTED_BOOK) {
 			var repaired = ItemStack.EMPTY;
 			this.resultSlots.setItem(0, repaired);
 			this.broadcastChanges();

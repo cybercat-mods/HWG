@@ -24,15 +24,9 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.tslat.smartbrainlib.util.BrainUtils;
 
 public class RangedShootingAttack<E extends HWGEntity> extends CustomDelayedBehaviour<E> {
-	private static final List<Pair<MemoryModuleType<?>, MemoryStatus>> MEMORY_REQUIREMENTS = ObjectArrayList.of(
-			Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT),
-			Pair.of(MemoryModuleType.ATTACK_COOLING_DOWN, MemoryStatus.VALUE_ABSENT));
+	private static final List<Pair<MemoryModuleType<?>, MemoryStatus>> MEMORY_REQUIREMENTS = ObjectArrayList.of(Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT), Pair.of(MemoryModuleType.ATTACK_COOLING_DOWN, MemoryStatus.VALUE_ABSENT));
 
-	protected Function<E, Integer> attackIntervalSupplier = entity -> (entity.getItemBySlot(EquipmentSlot.MAINHAND)
-			.getItem() instanceof AssasultItem
-			|| entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Assasult1Item
-			|| entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Assasult2Item) ? 1
-					: entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof FlamethrowerItem ? 3 : 20;
+	protected Function<E, Integer> attackIntervalSupplier = entity -> (entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof AssasultItem || entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Assasult1Item || entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Assasult2Item) ? 1 : entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof FlamethrowerItem ? 3 : 20;
 
 	@Nullable
 	protected LivingEntity target = null;
@@ -74,8 +68,7 @@ public class RangedShootingAttack<E extends HWGEntity> extends CustomDelayedBeha
 
 	@Override
 	protected void doDelayedAction(E entity) {
-		BrainUtils.setForgettableMemory(entity, MemoryModuleType.ATTACK_COOLING_DOWN, true,
-				this.attackIntervalSupplier.apply(entity));
+		BrainUtils.setForgettableMemory(entity, MemoryModuleType.ATTACK_COOLING_DOWN, true, this.attackIntervalSupplier.apply(entity));
 
 		if (this.target == null)
 			return;

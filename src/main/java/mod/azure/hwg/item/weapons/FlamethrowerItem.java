@@ -32,8 +32,7 @@ public class FlamethrowerItem extends HWGGunBase {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
 		if (!world.isClientSide)
-			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FLINTANDSTEEL_USE,
-					SoundSource.PLAYERS, 1.0F, 1.0F);
+			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 		return super.use(world, user, hand);
 	}
 
@@ -82,16 +81,14 @@ public class FlamethrowerItem extends HWGGunBase {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.FLAMETHOWER, passedData);
-					world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(),
-							SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+					world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 				}
 			}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof FlamethrowerItem) {
-			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0
-					&& user.getInventory().countItem(HWGItems.FUEL_TANK) > 0) {
+			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getItemInHand(hand).hurtAndBreak(-501, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
@@ -101,9 +98,7 @@ public class FlamethrowerItem extends HWGGunBase {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
-		tooltip.add(Component.translatable(
-				"Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1))
-				.withStyle(ChatFormatting.ITALIC));
+		tooltip.add(Component.translatable("Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)).withStyle(ChatFormatting.ITALIC));
 		tooltip.add(Component.translatable("hwg.ammo.reloadfuel").withStyle(ChatFormatting.ITALIC));
 	}
 }

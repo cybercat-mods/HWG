@@ -69,14 +69,12 @@ public class HWGEquipmentUtils {
 			var enchantItem = encodedEnchant.split(">");
 			var enchantKey = enchantItem[0].split(":");
 			var enchantLevel = Integer.parseInt(enchantItem[1]);
-			enchants.put(BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(enchantKey[0], enchantKey[1])),
-					enchantLevel);
+			enchants.put(BuiltInRegistries.ENCHANTMENT.get(new ResourceLocation(enchantKey[0], enchantKey[1])), enchantLevel);
 		}
 		return enchants.isEmpty() ? null : enchants;
 	}
 
-	public static void onSendEquipmentBreakStatusImpl(ServerPlayer serverPlayer, ItemStack breakingStack,
-			boolean forceSet) {
+	public static void onSendEquipmentBreakStatusImpl(ServerPlayer serverPlayer, ItemStack breakingStack, boolean forceSet) {
 		for (Map.Entry<Item, Item> itemMap : HWGItems.getItemMap().entrySet()) {
 			if (isVanillaItemStackBreaking(breakingStack, itemMap.getValue())) {
 				var ruinedStack = new ItemStack(itemMap.getKey());
@@ -113,7 +111,6 @@ public class HWGEquipmentUtils {
 	}
 
 	public static boolean isVanillaItemStackBreaking(ItemStack breakingStack, Item vanillaItem) {
-		return breakingStack.sameItem(new ItemStack(vanillaItem))
-				&& breakingStack.getMaxDamage() - breakingStack.getDamageValue() <= 0;
+		return breakingStack.sameItem(new ItemStack(vanillaItem)) && breakingStack.getMaxDamage() - breakingStack.getDamageValue() <= 0;
 	}
 }

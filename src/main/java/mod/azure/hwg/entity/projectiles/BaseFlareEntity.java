@@ -36,8 +36,7 @@ public class BaseFlareEntity extends AbstractArrow {
 	public int life;
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
-	private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(BaseFlareEntity.class,
-			EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(BaseFlareEntity.class, EntityDataSerializers.INT);
 
 	public BaseFlareEntity(EntityType<? extends AbstractArrow> entityType, Level world) {
 		super(ProjectilesEntityRegister.FLARE, world);
@@ -61,8 +60,7 @@ public class BaseFlareEntity extends AbstractArrow {
 		this(world, x, y, z, stack);
 	}
 
-	public BaseFlareEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z,
-			boolean shotAtAngle) {
+	public BaseFlareEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
 		this(world, stack, x, y, z, shotAtAngle);
 		this.setOwner(entity);
 	}
@@ -114,8 +112,7 @@ public class BaseFlareEntity extends AbstractArrow {
 		if (this.tickCount >= 800 || this.isInWater())
 			this.remove(Entity.RemovalReason.DISCARDED);
 		if (this.life == 0 && !this.isSilent())
-			this.level.playSound((Player) null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN_SHOOT,
-					SoundSource.PLAYERS, 6.0F, 1.0F);
+			this.level.playSound((Player) null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN_SHOOT, SoundSource.PLAYERS, 6.0F, 1.0F);
 		setNoGravity(false);
 		++this.life;
 		var vec3d = this.getDeltaMovement();
@@ -126,31 +123,17 @@ public class BaseFlareEntity extends AbstractArrow {
 		var isInsideWaterBlock = level.isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
 		if (this.level.isClientSide) {
-			this.level.addParticle(this.getColor() == 16 ? HWGParticles.WHITE_FLARE
-					: this.getColor() == 15 ? HWGParticles.YELLOW_FLARE
-							: this.getColor() == 14 ? HWGParticles.RED_FLARE
-									: this.getColor() == 13 ? HWGParticles.PURPLE_FLARE
-											: this.getColor() == 12 ? HWGParticles.PINK_FLARE
-													: this.getColor() == 11 ? HWGParticles.ORANGE_FLARE
-															: this.getColor() == 10 ? HWGParticles.MAGENTA_FLARE
-																	: this.getColor() == 9 ? HWGParticles.LIME_FLARE
-																			: this.getColor() == 8
-																					? HWGParticles.LIGHTGRAY_FLARE
-																					: this.getColor() == 7
-																							? HWGParticles.LIGHTBLUE_FLARE
-																							: this.getColor() == 6
-																									? HWGParticles.GREEN_FLARE
-																									: this.getColor() == 5
-																											? HWGParticles.GRAY_FLARE
-																											: this.getColor() == 4
-																													? HWGParticles.CYAN_FLARE
-																													: this.getColor() == 3
-																															? HWGParticles.BROWN_FLARE
-																															: this.getColor() == 2
-																																	? HWGParticles.BLUE_FLARE
-																																	: this.getColor() == 1
-																																			? HWGParticles.BLACK_FLARE
-																																			: HWGParticles.WHITE_FLARE,
+			this.level.addParticle(
+					this.getColor() == 16 ? HWGParticles.WHITE_FLARE
+							: this.getColor() == 15 ? HWGParticles.YELLOW_FLARE
+									: this.getColor() == 14 ? HWGParticles.RED_FLARE
+											: this.getColor() == 13 ? HWGParticles.PURPLE_FLARE
+													: this.getColor() == 12 ? HWGParticles.PINK_FLARE
+															: this.getColor() == 11 ? HWGParticles.ORANGE_FLARE
+																	: this.getColor() == 10 ? HWGParticles.MAGENTA_FLARE
+																			: this.getColor() == 9 ? HWGParticles.LIME_FLARE
+																					: this.getColor() == 8 ? HWGParticles.LIGHTGRAY_FLARE
+																							: this.getColor() == 7 ? HWGParticles.LIGHTBLUE_FLARE : this.getColor() == 6 ? HWGParticles.GREEN_FLARE : this.getColor() == 5 ? HWGParticles.GRAY_FLARE : this.getColor() == 4 ? HWGParticles.CYAN_FLARE : this.getColor() == 3 ? HWGParticles.BROWN_FLARE : this.getColor() == 2 ? HWGParticles.BLUE_FLARE : this.getColor() == 1 ? HWGParticles.BLACK_FLARE : HWGParticles.WHITE_FLARE,
 					true, this.getX(), this.getY() - 0.3D, this.getZ(), 0, -this.getDeltaMovement().y * 0.17D, 0);
 		}
 	}
@@ -225,9 +208,7 @@ public class BaseFlareEntity extends AbstractArrow {
 	}
 
 	private boolean checkDistance(BlockPos blockPosA, BlockPos blockPosB, int distance) {
-		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance
-				&& Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance
-				&& Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
+		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance && Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance && Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
 	}
 
 	private BlockPos findFreeSpace(Level world, BlockPos blockPos, int maxDistance) {
@@ -236,13 +217,13 @@ public class BaseFlareEntity extends AbstractArrow {
 
 		var offsets = new int[maxDistance * 2 + 1];
 		offsets[0] = 0;
-		for (int i = 2; i <= maxDistance * 2; i += 2) {
+		for (var i = 2; i <= maxDistance * 2; i += 2) {
 			offsets[i - 1] = i / 2;
 			offsets[i] = -i / 2;
 		}
-		for (int x : offsets)
-			for (int y : offsets)
-				for (int z : offsets) {
+		for (var x : offsets)
+			for (var y : offsets)
+				for (var z : offsets) {
 					var offsetPos = blockPos.offset(x, y, z);
 					var state = world.getBlockState(offsetPos);
 					if (state.isAir() || state.getBlock().equals(AzureLibMod.TICKING_LIGHT_BLOCK))

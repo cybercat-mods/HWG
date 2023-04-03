@@ -16,8 +16,7 @@ import net.minecraft.world.InteractionHand;
 public class WeaponRenderingMixin {
 
 	@Inject(method = "getArmPose", at = @At(value = "TAIL"), cancellable = true)
-	private static void tryItemPose(AbstractClientPlayer player, InteractionHand hand,
-			CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
+	private static void tryItemPose(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
 		var itemstack = player.getItemInHand(hand);
 		if (itemstack.getItem() instanceof HWGGunLoadedBase || itemstack.getItem() instanceof HWGGunBase)
 			ci.setReturnValue(HumanoidModel.ArmPose.BOW_AND_ARROW);

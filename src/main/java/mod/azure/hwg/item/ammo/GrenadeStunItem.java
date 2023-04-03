@@ -25,7 +25,7 @@ public class GrenadeStunItem extends Item {
 				nadeEntity.setState(1);
 				world.addFreshEntity(nadeEntity);
 			}
-			if (!user.getAbilities().instabuild) 
+			if (!user.getAbilities().instabuild)
 				itemStack.shrink(1);
 			return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
 		} else {

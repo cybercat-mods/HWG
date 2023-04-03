@@ -44,7 +44,6 @@ public class FireballEntity extends AbstractArrow {
 	protected int timeInAir;
 	protected boolean inAir;
 	private int ticksInAir;
-	private LivingEntity shooter;
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
 	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(FireballEntity.class, EntityDataSerializers.FLOAT);
@@ -56,7 +55,6 @@ public class FireballEntity extends AbstractArrow {
 
 	public FireballEntity(Level world, LivingEntity owner) {
 		super(ProjectilesEntityRegister.FIREBALL, owner, world);
-		this.shooter = owner;
 	}
 
 	protected FireballEntity(EntityType<? extends FireballEntity> type, double x, double y, double z, Level world) {

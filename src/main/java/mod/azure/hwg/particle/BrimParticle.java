@@ -12,8 +12,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 
 @Environment(EnvType.CLIENT)
 public class BrimParticle extends TextureSheetParticle {
-	private BrimParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY,
-			double velocityZ, float red, float green, float blue) {
+	private BrimParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, float red, float green, float blue) {
 		super(world, x, y, z);
 		this.scale(3.0F);
 		this.setSize(0.25F, 0.25F);
@@ -55,8 +54,7 @@ public class BrimParticle extends TextureSheetParticle {
 			this.spriteProvider = spriteProvider;
 		}
 
-		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
-				double e, double f, double g, double h, double i) {
+		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
 			var campfireSmokeParticle = new BrimParticle(clientWorld, d, e, f, g, h, i, 60, 68, 170);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;
@@ -71,8 +69,7 @@ public class BrimParticle extends TextureSheetParticle {
 			this.spriteProvider = spriteProvider;
 		}
 
-		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d,
-				double e, double f, double g, double h, double i) {
+		public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
 			var campfireSmokeParticle = new BrimParticle(clientWorld, d, e, f, g, h, i, 58, 179, 216);
 			campfireSmokeParticle.pickSprite(this.spriteProvider);
 			return campfireSmokeParticle;

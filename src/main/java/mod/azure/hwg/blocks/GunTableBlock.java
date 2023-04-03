@@ -67,11 +67,10 @@ public class GunTableBlock extends Block implements EntityBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
-			BlockHitResult hit) {
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		if (!world.isClientSide) {
 			var screenHandlerFactory = state.getMenuProvider(world, pos);
-			if (screenHandlerFactory != null) 
+			if (screenHandlerFactory != null)
 				player.openMenu(screenHandlerFactory);
 		}
 		return InteractionResult.SUCCESS;

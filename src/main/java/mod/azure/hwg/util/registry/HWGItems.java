@@ -94,14 +94,12 @@ public class HWGItems {
 		return c;
 	}
 
-	public static Item[] ITEMS = { HELLHORSE, G_LAUNCHER, ROCKETLAUNCHER, FLAMETHROWER, TOMMYGUN, BRIMSTONE, GOLDEN_GUN,
-			AK47, FLARE_GUN, SMG, SNIPER, MEANIE1, MEANIE2, SPISTOL, SHOTGUN, BALROG, PISTOL, LUGER, MINIGUN };
+	public static Item[] ITEMS = { HELLHORSE, G_LAUNCHER, ROCKETLAUNCHER, FLAMETHROWER, TOMMYGUN, BRIMSTONE, GOLDEN_GUN, AK47, FLARE_GUN, SMG, SNIPER, MEANIE1, MEANIE2, SPISTOL, SHOTGUN, BALROG, PISTOL, LUGER, MINIGUN };
 
 	public static Map<Item, Item> getItemMap() {
 		Map<Item, Item> vanillaItemMap = new HashMap<>();
 		for (Item i : HWGItems.ITEMS) {
-			vanillaItemMap.put(BuiltInRegistries.ITEM.get(new ResourceLocation(HWGMod.MODID, BuiltInRegistries.ITEM.getKey(i).getPath())),
-					i);
+			vanillaItemMap.put(BuiltInRegistries.ITEM.get(new ResourceLocation(HWGMod.MODID, BuiltInRegistries.ITEM.getKey(i).getPath())), i);
 		}
 		return vanillaItemMap;
 	}

@@ -11,6 +11,7 @@ import mod.azure.azurelib.animatable.client.RenderProvider;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.ShotgunRender;
+import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.ShellEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -46,19 +47,29 @@ public class ShotgunItem extends AnimatedItem {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
 				playerentity.getCooldowns().addCooldown(this, 18);
 				if (!worldIn.isClientSide) {
-					var bullet = createArrow(worldIn, stack, playerentity);
-					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 1, 0.5F,
-							1.0F * 3.0F, 1.0F);
-					var bullet1 = createArrow(worldIn, stack, playerentity);
-					bullet1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1, 0.5F,
-							1.0F * 3.0F, 1.0F);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					worldIn.addFreshEntity(bullet);
-					worldIn.addFreshEntity(bullet1);
-					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-							HWGSounds.SHOTGUN, SoundSource.PLAYERS, 1.25F, 1.3F);
-					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller",
-							"firing");
+					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
+					if (result != null) {
+						if (result.getEntity()instanceof LivingEntity livingEntity) {
+							livingEntity.invulnerableTime = 0;
+							livingEntity.setDeltaMovement(0, 0, 0);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGConfig.shotgun_damage);
+							livingEntity.invulnerableTime = 0;
+							livingEntity.setDeltaMovement(0, 0, 0);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGConfig.shotgun_damage);
+						}
+					} else {
+						var bullet = createArrow(worldIn, stack, playerentity);
+						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 1, 0.5F, 20.0F * 3.0F, 1.0F);
+						var bullet1 = createArrow(worldIn, stack, playerentity);
+						bullet1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1, 0.5F, 20.0F * 3.0F, 1.0F);
+						bullet.tickCount = -15;
+						bullet1.tickCount = -15;
+						worldIn.addFreshEntity(bullet);
+						worldIn.addFreshEntity(bullet1);
+					}
+					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.SHOTGUN, SoundSource.PLAYERS, 1.25F, 1.3F);
+					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
 				}
 				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
@@ -80,13 +91,11 @@ public class ShotgunItem extends AnimatedItem {
 
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof ShotgunItem) {
-			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0
-					&& user.getInventory().countItem(HWGItems.SHOTGUN_SHELL) > 0) {
+			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.SHOTGUN_SHELL) > 0) {
 				removeAmmo(HWGItems.SHOTGUN_SHELL, user);
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(),
-						HWGSounds.SHOTGUNRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.SHOTGUNRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
 			}
 		}
 	}
