@@ -7,8 +7,8 @@ public abstract class HWGSpecialCraftingRecipe implements GunRecipes {
 	private final ResourceLocation id;
 
 	public HWGSpecialCraftingRecipe(ResourceLocation id) {
-	      this.id = id;
-	   }
+		this.id = id;
+	}
 
 	public ResourceLocation getId() {
 		return this.id;

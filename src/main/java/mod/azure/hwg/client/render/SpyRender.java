@@ -31,22 +31,19 @@ public class SpyRender extends GeoEntityRenderer<SpyEntity> {
 			}
 
 			@Override
-			protected ItemTransforms.TransformType getTransformTypeForStack(GeoBone bone, ItemStack stack,
-					SpyEntity animatable) {
+			protected ItemTransforms.TransformType getTransformTypeForStack(GeoBone bone, ItemStack stack, SpyEntity animatable) {
 				return switch (bone.getName()) {
 				default -> ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
 				};
 			}
 
 			@Override
-			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, SpyEntity animatable,
-					MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
+			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, SpyEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
 				poseStack.mulPose(Vector3f.XP.rotationDegrees(-90));
 				poseStack.mulPose(Vector3f.YP.rotationDegrees(0));
 				poseStack.mulPose(Vector3f.ZP.rotationDegrees(0));
 				poseStack.translate(0.0D, 0.1D, -0.1D);
-				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight,
-						packedOverlay);
+				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
 			}
 		});
 		this.shadowRadius = 0.7F;

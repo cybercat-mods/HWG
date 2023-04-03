@@ -21,7 +21,7 @@ public class ShellModel extends GeoModel<ShellEntity> {
 	public ResourceLocation getAnimationResource(ShellEntity animatable) {
 		return new ResourceLocation(HWGMod.MODID, "animations/bullet.animation.json");
 	}
-	
+
 	@Override
 	public RenderType getRenderType(ShellEntity animatable, ResourceLocation texture) {
 		return RenderType.entityTranslucent(getTextureResource(animatable));

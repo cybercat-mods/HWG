@@ -40,8 +40,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	protected boolean inAir;
 	private int ticksInAir;
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(RocketEntity.class,
-			EntityDataSerializers.FLOAT);
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(RocketEntity.class, EntityDataSerializers.FLOAT);
 
 	public RocketEntity(EntityType<? extends RocketEntity> entityType, Level world) {
 		super(entityType, world);
@@ -147,8 +146,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 			this.timeInAir = 0;
 			var vec3d3 = this.position();
 			var vector3d3 = vec3d3.add(vec3d);
-			HitResult hitResult = this.level
-					.clip(new ClipContext(vec3d3, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+			HitResult hitResult = this.level.clip(new ClipContext(vec3d3, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 			if (((HitResult) hitResult).getType() != HitResult.Type.MISS)
 				vector3d3 = ((HitResult) hitResult).getLocation();
 			while (!this.isRemoved()) {
@@ -159,8 +157,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 				if (hitResult != null && ((HitResult) hitResult).getType() == HitResult.Type.ENTITY) {
 					var entity = ((EntityHitResult) hitResult).getEntity();
 					var entity2 = this.getOwner();
-					if (entity instanceof Player && entity2 instanceof Player
-							&& !((Player) entity2).canHarmPlayer((Player) entity)) {
+					if (entity instanceof Player && entity2 instanceof Player && !((Player) entity2).canHarmPlayer((Player) entity)) {
 						hitResult = null;
 						entityHitResult = null;
 					}
@@ -191,8 +188,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 			var m = 0.99F;
 			this.setDeltaMovement(vec3d.scale((double) m));
 			if (!this.isNoGravity() && !bl)
-				this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.05000000074505806D,
-						this.getDeltaMovement().z);
+				this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.05000000074505806D, this.getDeltaMovement().z);
 			this.absMoveTo(h, j, k);
 			this.checkInsideBlocks();
 		}
@@ -238,8 +234,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void explode() {
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
-				HWGConfig.rocket_breaks == true ? Explosion.BlockInteraction.BREAK  : Explosion.BlockInteraction.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGConfig.rocket_breaks == true ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE);
 	}
 
 	@Override

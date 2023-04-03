@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 
 	private BlockPos lightBlockPos = null;
-	
+
 	public HWGGunLoadedBase(Properties settings) {
 		super(settings);
 	}
@@ -58,10 +58,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
-		tooltip.add(Component
-				.translatable(
-				"Ammo: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1))
-						.withStyle(ChatFormatting.ITALIC));
+		tooltip.add(Component.translatable("Ammo: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)).withStyle(ChatFormatting.ITALIC));
 	}
 
 	@Override
@@ -77,7 +74,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 			entity.level.setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 		} else if (checkDistance(lightBlockPos, entity.blockPosition(), 2)) {
 			var blockEntity = entity.level.getBlockEntity(lightBlockPos);
-			if (blockEntity instanceof TickingLightEntity) 
+			if (blockEntity instanceof TickingLightEntity)
 				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
 			else
 				lightBlockPos = null;
@@ -86,9 +83,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 	}
 
 	private boolean checkDistance(BlockPos blockPosA, BlockPos blockPosB, int distance) {
-		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance
-				&& Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance
-				&& Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
+		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance && Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance && Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
 	}
 
 	private BlockPos findFreeSpace(Level world, BlockPos blockPos, int maxDistance) {
@@ -116,7 +111,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 	public static float getArrowVelocity(int charge) {
 		var f = (float) charge / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) 
+		if (f > 1.0F)
 			f = 1.0F;
 
 		return f;
@@ -125,7 +120,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 	public static float getPullProgress(int useTicks) {
 		var f = (float) useTicks / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
-		if (f > 1.0F) 
+		if (f > 1.0F)
 			f = 1.0F;
 
 		return f;

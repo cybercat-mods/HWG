@@ -47,8 +47,7 @@ public class FireballEntity extends AbstractArrow {
 	private LivingEntity shooter;
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
-	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(FireballEntity.class,
-			EntityDataSerializers.FLOAT);
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(FireballEntity.class, EntityDataSerializers.FLOAT);
 
 	public FireballEntity(EntityType<? extends FireballEntity> entityType, Level world) {
 		super(entityType, world);
@@ -180,9 +179,7 @@ public class FireballEntity extends AbstractArrow {
 	}
 
 	private boolean checkDistance(BlockPos blockPosA, BlockPos blockPosB, int distance) {
-		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance
-				&& Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance
-				&& Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
+		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance && Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance && Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
 	}
 
 	private BlockPos findFreeSpace(Level world, BlockPos blockPos, int maxDistance) {
@@ -231,8 +228,7 @@ public class FireballEntity extends AbstractArrow {
 		super.onHitBlock(blockHitResult);
 		if (!this.level.isClientSide) {
 			var entity = this.getOwner();
-			if (entity == null || !(entity instanceof Mob)
-					|| this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+			if (entity == null || !(entity instanceof Mob) || this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 				var blockPos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
 				if (this.level.isEmptyBlock(blockPos))
 					this.level.setBlockAndUpdate(blockPos, BaseFireBlock.getState(this.level, blockPos));
@@ -245,8 +241,7 @@ public class FireballEntity extends AbstractArrow {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		var entity = entityHitResult.getEntity();
-		if (entityHitResult.getType() != HitResult.Type.ENTITY
-				|| !((EntityHitResult) entityHitResult).getEntity().is(entity))
+		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
 			if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		var entity2 = this.getOwner();
@@ -266,10 +261,8 @@ public class FireballEntity extends AbstractArrow {
 					EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
 				}
 				this.doPostHurtEffects(livingEntity);
-				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player
-						&& entity2 instanceof ServerPlayer && !this.isSilent())
-					((ServerPlayer) entity2).connection
-							.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+					((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 			}
 		} else if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);

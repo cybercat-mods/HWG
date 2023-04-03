@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -48,19 +49,19 @@ public class SPistolItem extends AnimatedItem {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
 				playerentity.getCooldowns().addCooldown(this, 5);
 				if (!worldIn.isClientSide) {
-					var bullet = createArrow(worldIn, stack, playerentity);
-					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
-							1.0F * 3.0F, 1.0F);
-					bullet.setBaseDamage(0.6);
-					bullet.tickCount = 25;
-
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					worldIn.addFreshEntity(bullet);
-					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(),
-							playerentity.getZ(), HWGSounds.SPISTOL, SoundSource.PLAYERS, 0.5F,
-							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller",
-							"firing2");
+					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
+					if (result != null) {
+						if (result.getEntity()instanceof LivingEntity livingEntity)
+							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGConfig.silenced_pistol_damage);
+					} else {
+						var bullet = createArrow(worldIn, stack, playerentity);
+						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+						bullet.tickCount = -15;
+						worldIn.addFreshEntity(bullet);
+					}
+					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.SPISTOL, SoundSource.PLAYERS, 0.5F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing2");
 				}
 				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
@@ -70,27 +71,24 @@ public class SPistolItem extends AnimatedItem {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-		if (world.isClientSide) 
+		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof SPistolItem) {
 				if (ClientInit.reload.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.SPISTOL, passedData);
-					world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(),
-							SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 3.0F, 1.5F);
+					world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 3.0F, 1.5F);
 				}
 			}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof SPistolItem) {
-			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0
-					&& user.getInventory().countItem(HWGItems.BULLETS) > 0) {
+			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.BULLETS) > 0) {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(),
-						HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
 			}
 		}
 	}

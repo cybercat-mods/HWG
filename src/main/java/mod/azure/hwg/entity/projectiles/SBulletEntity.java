@@ -39,7 +39,7 @@ public class SBulletEntity extends BulletEntity {
 	protected SBulletEntity(EntityType<? extends BulletEntity> type, LivingEntity owner, Level world) {
 		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
 		this.setOwner(owner);
-		if (owner instanceof Player) 
+		if (owner instanceof Player)
 			this.pickup = AbstractArrow.Pickup.ALLOWED;
 	}
 
@@ -52,8 +52,7 @@ public class SBulletEntity extends BulletEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		var entity = entityHitResult.getEntity();
-		if (entityHitResult.getType() != HitResult.Type.ENTITY
-				|| !((EntityHitResult) entityHitResult).getEntity().is(entity))
+		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
 			if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		var entity2 = this.getOwner();
@@ -65,8 +64,7 @@ public class SBulletEntity extends BulletEntity {
 			if (entity2 instanceof LivingEntity)
 				((LivingEntity) entity2).setLastHurtMob(entity);
 		}
-		if (entity.getType().is(
-				TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(HWGMod.MODID, "vulnerable_to_silver")))) {
+		if (entity.getType().is(TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(HWGMod.MODID, "vulnerable_to_silver")))) {
 			if (entity.hurt(damageSource2, bulletdamage * 3)) {
 				if (entity instanceof LivingEntity) {
 					var livingEntity = (LivingEntity) entity;
@@ -76,10 +74,8 @@ public class SBulletEntity extends BulletEntity {
 					}
 
 					this.doPostHurtEffects(livingEntity);
-					if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player
-							&& entity2 instanceof ServerPlayer && !this.isSilent())
-						((ServerPlayer) entity2).connection.send(
-								new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+					if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+						((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 				}
 			} else if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
@@ -92,10 +88,8 @@ public class SBulletEntity extends BulletEntity {
 						EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
 					}
 					this.doPostHurtEffects(livingEntity);
-					if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player
-							&& entity2 instanceof ServerPlayer && !this.isSilent())
-						((ServerPlayer) entity2).connection.send(
-								new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+					if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+						((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 				}
 			} else if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);

@@ -74,8 +74,7 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 		controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
 			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
 		})).add(new AnimationController<>(this, event -> {
-			if ((this.entityData.get(STATE) == 1 || this.swinging) && !isDead
-					&& !(this.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
+			if ((this.entityData.get(STATE) == 1 || this.swinging) && !isDead && !(this.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
 				return event.setAndContinue(RawAnimation.begin().thenLoop("attacking"));
 			return PlayState.STOP;
 		}));
@@ -93,10 +92,7 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 
 	@Override
 	public List<ExtendedSensor<SpyEntity>> getSensors() {
-		return ObjectArrayList.of(new NearbyPlayersSensor<>(),
-				new NearbyLivingEntitySensor<SpyEntity>()
-						.setPredicate((target, entity) -> target instanceof Player || target instanceof Villager),
-				new HurtBySensor<>(), new UnreachableTargetSensor<SpyEntity>());
+		return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<SpyEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<SpyEntity>());
 	}
 
 	@Override
@@ -106,26 +102,12 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 
 	@Override
 	public BrainActivityGroup<SpyEntity> getIdleTasks() {
-		return BrainActivityGroup
-				.idleTasks(
-						new FirstApplicableBehaviour<SpyEntity>(new TargetOrRetaliate<>(),
-								new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive()
-										|| target instanceof Player && ((Player) target).isCreative()),
-								new SetRandomLookTarget<>()),
-						new OneRandomBehaviour<>(
-								new SetRandomWalkTarget<>().speedModifier(1)
-										.startCondition(entity -> !entity.isAggressive()),
-								new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
+		return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<SpyEntity>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()), new SetRandomLookTarget<>()), new OneRandomBehaviour<>(new SetRandomWalkTarget<>().speedModifier(1).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
 	}
 
 	@Override
 	public BrainActivityGroup<SpyEntity> getFightTasks() {
-		return BrainActivityGroup.fightTasks(
-				new InvalidateAttackTarget<>().stopIf(
-						target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()),
-				new RangedShootingAttack<>(20).whenStarting(entity -> setAggressive(true))
-						.whenStarting(entity -> setAggressive(false)),
-				new AnimatableMeleeAttack<>(0));
+		return BrainActivityGroup.fightTasks(new InvalidateAttackTarget<>().stopIf(target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()), new RangedShootingAttack<>(20).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)), new AnimatableMeleeAttack<>(0));
 	}
 
 	@Override
@@ -151,22 +133,15 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return Mob.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D)
-				.add(Attributes.MAX_HEALTH, HWGConfig.spy_health).add(Attributes.ARMOR, 3)
-				.add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_DAMAGE, 10D)
-				.add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return Mob.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGConfig.spy_health).add(Attributes.ARMOR, 3).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
-	public static boolean canSpawn(EntityType<? extends HWGEntity> type, LevelAccessor world, MobSpawnType spawnReason,
-			BlockPos pos, RandomSource random) {
-		return world.getBrightness(LightLayer.BLOCK, pos) > 8 && world.getDifficulty() != Difficulty.PEACEFUL ? false
-				: checkAnyLightMonsterSpawnRules(type, world, spawnReason, pos, random);
+	public static boolean canSpawn(EntityType<? extends HWGEntity> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+		return world.getBrightness(LightLayer.BLOCK, pos) > 8 && world.getDifficulty() != Difficulty.PEACEFUL ? false : checkAnyLightMonsterSpawnRules(type, world, spawnReason, pos, random);
 	}
 
-	public static boolean canSpawnIgnoreLightLevel(EntityType<? extends HWGEntity> type, ServerLevelAccessor world,
-			MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-		return world.getDifficulty() != Difficulty.PEACEFUL
-				&& Monster.checkMonsterSpawnRules(type, world, spawnReason, pos, random);
+	public static boolean canSpawnIgnoreLightLevel(EntityType<? extends HWGEntity> type, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
+		return world.getDifficulty() != Difficulty.PEACEFUL && Monster.checkMonsterSpawnRules(type, world, spawnReason, pos, random);
 	}
 
 	@Override
@@ -175,8 +150,7 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty,
-			MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
 		this.setItemSlot(EquipmentSlot.MAINHAND, this.makeInitialWeapon());
 		this.setVariant(generateVariants(this.getRandom()));
 		return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityTag);

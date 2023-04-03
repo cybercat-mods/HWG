@@ -59,13 +59,11 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
 
 	}
 
-	protected static void updateResult(int syncId, Level world, Player player,
-			GunTableInventory craftingInventory) {
+	protected static void updateResult(int syncId, Level world, Player player, GunTableInventory craftingInventory) {
 		if (!world.isClientSide) {
 			ServerPlayer serverPlayerEntity = (ServerPlayer) player;
 			ItemStack itemStack = ItemStack.EMPTY;
-			Optional<GunTableRecipe> optional = world.getServer().getRecipeManager()
-					.getRecipeFor(Type.INSTANCE, craftingInventory, world);
+			Optional<GunTableRecipe> optional = world.getServer().getRecipeManager().getRecipeFor(Type.INSTANCE, craftingInventory, world);
 			if (optional.isPresent()) {
 				GunTableRecipe craftingRecipe = optional.get();
 				itemStack = craftingRecipe.assemble(craftingInventory);
@@ -132,8 +130,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
 	}
 
 	public List<GunTableRecipe> getRecipes() {
-		List<GunTableRecipe> list = new ArrayList<>(
-				playerInventory.player.level.getRecipeManager().getAllRecipesFor(Type.INSTANCE));
+		List<GunTableRecipe> list = new ArrayList<>(playerInventory.player.level.getRecipeManager().getAllRecipesFor(Type.INSTANCE));
 		list.sort(null);
 		return list;
 	}
@@ -199,8 +196,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
 	public void removed(Player player) {
 		super.removed(player);
 		if (!this.playerInventory.player.level.isClientSide) {
-			if (player.isAlive()
-					&& (!(player instanceof ServerPlayer) || !((ServerPlayer) player).hasDisconnected())) {
+			if (player.isAlive() && (!(player instanceof ServerPlayer) || !((ServerPlayer) player).hasDisconnected())) {
 				player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(0));
 				player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(1));
 				player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(2));

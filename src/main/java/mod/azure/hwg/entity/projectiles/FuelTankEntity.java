@@ -25,8 +25,7 @@ public class FuelTankEntity extends Entity {
 	}
 
 	protected void explode() {
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 4.0F, true,
-				Explosion.BlockInteraction.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 4.0F, true, Explosion.BlockInteraction.NONE);
 	}
 
 	public FuelTankEntity(Level worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
@@ -51,7 +50,7 @@ public class FuelTankEntity extends Entity {
 
 	public void tick() {
 		this.remove(Entity.RemovalReason.DISCARDED);
-		if (!this.level.isClientSide) 
+		if (!this.level.isClientSide)
 			this.explode();
 	}
 

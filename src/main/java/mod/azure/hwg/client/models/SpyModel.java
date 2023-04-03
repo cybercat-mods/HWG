@@ -30,7 +30,7 @@ public class SpyModel extends GeoModel<SpyEntity> {
 	public ResourceLocation getAnimationResource(SpyEntity object) {
 		return new ResourceLocation(HWGMod.MODID, "animations/merc_illager.animation.json");
 	}
-	
+
 	@Override
 	public RenderType getRenderType(SpyEntity animatable, ResourceLocation texture) {
 		return RenderType.entityTranslucent(getTextureResource(animatable));
@@ -55,12 +55,10 @@ public class SpyModel extends GeoModel<SpyEntity> {
 			left_arm.setRotX(Mth.cos(animatable.animationPosition * 0.6662F) * 2.0F * animatable.animationSpeed * 0.5F);
 		}
 		if (right_arm != null && animatable.getAttckingState() == 0) {
-			right_arm.setRotX(Mth.cos(animatable.animationPosition * 0.6662F + 3.1415927F) * 2.0F
-					* animatable.animationSpeed * 0.5F);
+			right_arm.setRotX(Mth.cos(animatable.animationPosition * 0.6662F + 3.1415927F) * 2.0F * animatable.animationSpeed * 0.5F);
 		}
 		if (left_leg != null) {
-			left_leg.setRotX(Mth.cos(animatable.animationPosition * 0.6662F + 3.1415927F) * 1.4F
-					* animatable.animationSpeed * 0.5F);
+			left_leg.setRotX(Mth.cos(animatable.animationPosition * 0.6662F + 3.1415927F) * 1.4F * animatable.animationSpeed * 0.5F);
 		}
 		if (right_leg != null) {
 			right_leg.setRotX(Mth.cos(animatable.animationPosition * 0.6662F) * 1.4F * animatable.animationSpeed * 0.5F);

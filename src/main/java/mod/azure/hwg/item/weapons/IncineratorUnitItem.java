@@ -32,12 +32,10 @@ public class IncineratorUnitItem extends HWGGunBase {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
 		if (!world.isClientSide) {
-			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(),
-					SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
+			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 		}
 		return super.use(world, user, hand);
 	}
-
 
 	@Override
 	public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
@@ -49,20 +47,19 @@ public class IncineratorUnitItem extends HWGGunBase {
 					var flames = createArrow(worldIn, stack, playerentity);
 					flames.setProperties(playerentity.getXRot(), playerentity.getYRot(), 0f, 1.0f);
 					flames.getEntityData().set(FlameFiring.FORCED_YAW, playerentity.getYRot());
-					flames.moveTo(
-							entityLiving.getX() + (switch (playerentity.getDirection()) {
-							case WEST -> -0.75F;
-							case EAST -> 0.75F;
-							default -> 0.0F;
-							}), entityLiving.getY() + (switch (playerentity.getDirection()) {
-							case DOWN -> 0.5F;
-							case UP -> -1.85F;
-							default -> 0.75F;
-							}), entityLiving.getZ() + (switch (playerentity.getDirection()) {
-							case NORTH -> -0.75F;
-							case SOUTH -> 0.75F;
-							default -> 0.0F;
-							}), 0, 0);
+					flames.moveTo(entityLiving.getX() + (switch (playerentity.getDirection()) {
+					case WEST -> -0.75F;
+					case EAST -> 0.75F;
+					default -> 0.0F;
+					}), entityLiving.getY() + (switch (playerentity.getDirection()) {
+					case DOWN -> 0.5F;
+					case UP -> -1.85F;
+					default -> 0.75F;
+					}), entityLiving.getZ() + (switch (playerentity.getDirection()) {
+					case NORTH -> -0.75F;
+					case SOUTH -> 0.75F;
+					default -> 0.0F;
+					}), 0, 0);
 					worldIn.addFreshEntity(flames);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 				}
@@ -79,22 +76,20 @@ public class IncineratorUnitItem extends HWGGunBase {
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-		if (world.isClientSide) 
+		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof IncineratorUnitItem) {
 				if (ClientInit.reload.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.FLAMETHOWER, passedData);
-					world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(),
-							SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+					world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 				}
 			}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof IncineratorUnitItem) {
-			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0
-					&& user.getInventory().countItem(HWGItems.FUEL_TANK) > 0) {
+			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.FUEL_TANK) > 0) {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getItemInHand(hand).hurtAndBreak(-501, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
@@ -104,10 +99,7 @@ public class IncineratorUnitItem extends HWGGunBase {
 
 	@Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
-		tooltip.add(Component
-				.translatable(
-						"Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1))
-				.withStyle(ChatFormatting.ITALIC));
+		tooltip.add(Component.translatable("Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)).withStyle(ChatFormatting.ITALIC));
 	}
 
 	@Override

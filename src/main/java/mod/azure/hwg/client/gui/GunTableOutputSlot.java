@@ -44,8 +44,7 @@ public class GunTableOutputSlot extends Slot {
 
 	public void onTake(Player player, ItemStack stack) {
 		this.checkTakeAchievements(stack);
-		Optional<GunTableRecipe> optionalGunTableRecipe = player.level.getRecipeManager()
-				.getRecipeFor(Type.INSTANCE, gunTableInventory, player.level);
+		Optional<GunTableRecipe> optionalGunTableRecipe = player.level.getRecipeManager().getRecipeFor(Type.INSTANCE, gunTableInventory, player.level);
 		if (optionalGunTableRecipe.isPresent()) {
 			GunTableRecipe gunTableRecipe = optionalGunTableRecipe.get();
 			NonNullList<ItemStack> defaultedList = gunTableRecipe.getRemainingItems(gunTableInventory);
@@ -61,8 +60,7 @@ public class GunTableOutputSlot extends Slot {
 				if (!itemStack2.isEmpty()) {
 					if (itemStack.isEmpty()) {
 						this.gunTableInventory.setItem(i, itemStack2);
-					} else if (ItemStack.isSame(itemStack, itemStack2)
-							&& ItemStack.tagMatches(itemStack, itemStack2)) {
+					} else if (ItemStack.isSame(itemStack, itemStack2) && ItemStack.tagMatches(itemStack, itemStack2)) {
 						itemStack2.grow(itemStack.getCount());
 						this.gunTableInventory.setItem(i, itemStack2);
 					} else if (!this.player.getInventory().add(itemStack2)) {

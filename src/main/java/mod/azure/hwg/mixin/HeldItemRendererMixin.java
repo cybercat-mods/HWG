@@ -37,16 +37,11 @@ public abstract class HeldItemRendererMixin {
 		var clientPlayerEntity = this.minecraft.player;
 		var itemStack = clientPlayerEntity.getMainHandItem();
 		var itemStack2 = clientPlayerEntity.getOffhandItem();
-		if ((this.mainHandItem.getItem() instanceof HWGGunBase
-				|| this.mainHandItem.getItem() instanceof HWGGunLoadedBase)
-				&& (itemStack.getItem() instanceof HWGGunBase || itemStack.getItem() instanceof HWGGunLoadedBase)
-				&& ItemStack.isSame(mainHandItem, itemStack)) {
+		if ((this.mainHandItem.getItem() instanceof HWGGunBase || this.mainHandItem.getItem() instanceof HWGGunLoadedBase) && (itemStack.getItem() instanceof HWGGunBase || itemStack.getItem() instanceof HWGGunLoadedBase) && ItemStack.isSame(mainHandItem, itemStack)) {
 			this.mainHandHeight = 1;
 			this.mainHandItem = itemStack;
 		}
-		if ((this.offHandItem.getItem() instanceof HWGGunBase || this.offHandItem.getItem() instanceof HWGGunLoadedBase)
-				&& (itemStack2.getItem() instanceof HWGGunBase || itemStack2.getItem() instanceof HWGGunLoadedBase)
-				&& ItemStack.isSame(offHandItem, itemStack2)) {
+		if ((this.offHandItem.getItem() instanceof HWGGunBase || this.offHandItem.getItem() instanceof HWGGunLoadedBase) && (itemStack2.getItem() instanceof HWGGunBase || itemStack2.getItem() instanceof HWGGunLoadedBase) && ItemStack.isSame(offHandItem, itemStack2)) {
 			this.offHandHeight = 1;
 			this.offHandItem = itemStack2;
 		}

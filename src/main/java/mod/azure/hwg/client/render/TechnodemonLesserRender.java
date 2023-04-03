@@ -33,27 +33,22 @@ public class TechnodemonLesserRender extends GeoEntityRenderer<TechnodemonEntity
 			}
 
 			@Override
-			protected ItemTransforms.TransformType getTransformTypeForStack(GeoBone bone, ItemStack stack,
-					TechnodemonEntity animatable) {
+			protected ItemTransforms.TransformType getTransformTypeForStack(GeoBone bone, ItemStack stack, TechnodemonEntity animatable) {
 				return switch (bone.getName()) {
 				default -> ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
 				};
 			}
 
 			@Override
-			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack,
-					TechnodemonEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight,
-					int packedOverlay) {
+			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, TechnodemonEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
 				poseStack.mulPose(Vector3f.XP.rotationDegrees(-90));
-				poseStack.mulPose(Vector3f.YP
-						.rotationDegrees(animatable.getMainHandItem().getItem() instanceof BrimstoneItem ? 0 : 8));
+				poseStack.mulPose(Vector3f.YP.rotationDegrees(animatable.getMainHandItem().getItem() instanceof BrimstoneItem ? 0 : 8));
 				poseStack.mulPose(Vector3f.ZP.rotationDegrees(0));
 				if (animatable.getMainHandItem().getItem() instanceof BrimstoneItem)
 					poseStack.translate(0.0D, 0.15D, -0.7D);
 				else
 					poseStack.translate(0.2D, 0.15D, -0.65D);
-				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight,
-						packedOverlay);
+				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
 			}
 		});
 	}

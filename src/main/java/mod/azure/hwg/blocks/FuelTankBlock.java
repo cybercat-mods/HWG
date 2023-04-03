@@ -35,18 +35,16 @@ public class FuelTankBlock extends Block {
 
 	private static void primeBlock(Level world, BlockPos pos, LivingEntity igniter) {
 		if (!world.isClientSide) {
-			var tntEntity = new FuelTankEntity(world, (double) pos.getX() + 0.5D, (double) pos.getY(),
-					(double) pos.getZ() + 0.5D, igniter);
+			var tntEntity = new FuelTankEntity(world, (double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D, igniter);
 			world.addFreshEntity(tntEntity);
 		}
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
-			BlockHitResult hit) {
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
 		var itemStack = player.getItemInHand(hand);
 		var item = itemStack.getItem();
-		if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE) 
+		if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE)
 			return super.use(state, world, pos, player, hand, hit);
 		else {
 			primeBlock(world, pos, player);

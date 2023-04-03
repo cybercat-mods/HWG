@@ -79,9 +79,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE)
-				.triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE))
-				.triggerableAnim("loading", RawAnimation.begin().then("loading", LoopType.PLAY_ONCE)));
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE)).triggerableAnim("loading", RawAnimation.begin().then("loading", LoopType.PLAY_ONCE)));
 	}
 
 	@Override
@@ -109,15 +107,13 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 		return Tiers.IRON.getRepairIngredient().test(ingredient) || super.isValidRepairItem(stack, ingredient);
 	}
 
-	private static void shoot(Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack,
-			ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
+	private static void shoot(Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
 		if (!world.isClientSide) {
 			var emp = projectile.getItem() == HWGItems.G_EMP;
 			var frag = projectile.getItem() == HWGItems.G_FRAG;
 			var napalm = projectile.getItem() == HWGItems.G_NAPALM;
 			var stun = projectile.getItem() == HWGItems.G_STUN;
-			var nade = new GrenadeEntity(world, projectile, shooter, shooter.getX(),
-					shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			var nade = new GrenadeEntity(world, projectile, shooter, shooter.getX(), shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
 			nade.setState(0);
 			if (emp) {
 				nade.setVariant(1);
@@ -135,14 +131,12 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 			var vec3d2 = shooter.getViewVector(1.0f);
 			var vector3f = new Vector3f(vec3d2);
 			vector3f.transform(quaternion);
-			((Projectile) nade).shoot((double) vector3f.x(), (double) vector3f.y(), (double) vector3f.z(), speed,
-					divergence);
+			((Projectile) nade).shoot((double) vector3f.x(), (double) vector3f.y(), (double) vector3f.z(), speed, divergence);
 
 			stack.hurtAndBreak(1, shooter, p -> p.broadcastBreakEvent(shooter.getUsedItemHand()));
 			world.addFreshEntity((Entity) nade);
 
-			world.playSound((Player) null, shooter.getX(), shooter.getY(), shooter.getZ(), HWGSounds.GLAUNCHERFIRE,
-					SoundSource.PLAYERS, 1.0F, 0.9F);
+			world.playSound((Player) null, shooter.getX(), shooter.getY(), shooter.getZ(), HWGSounds.GLAUNCHERFIRE, SoundSource.PLAYERS, 1.0F, 0.9F);
 		}
 	}
 
@@ -153,8 +147,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
 	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
 		var itemStack = user.getItemInHand(hand);
-		if (isCharged(itemStack) && itemStack.getDamageValue() < (itemStack.getMaxDamage() - 1)
-				&& !user.getCooldowns().isOnCooldown(this)) {
+		if (isCharged(itemStack) && itemStack.getDamageValue() < (itemStack.getMaxDamage() - 1) && !user.getCooldowns().isOnCooldown(this)) {
 			shootAll(world, user, hand, itemStack, getSpeed(itemStack), 1.0F);
 			user.getCooldowns().addCooldown(this, 25);
 			setCharged(itemStack, false);
@@ -178,11 +171,9 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 		if (!isCharged(stack) && loadProjectiles(user, stack)) {
 			setCharged(stack, true);
 			var soundCategory = user instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE;
-			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD,
-					soundCategory, 0.5F, 1.0F);
+			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD, soundCategory, 0.5F, 1.0F);
 			if (!world.isClientSide)
-				triggerAnim((Player) user, GeoItem.getOrAssignId(stack, (ServerLevel) world), "shoot_controller",
-						"loading");
+				triggerAnim((Player) user, GeoItem.getOrAssignId(stack, (ServerLevel) world), "shoot_controller", "loading");
 			((Player) user).getCooldowns().addCooldown(this, 15);
 		}
 	}
@@ -209,8 +200,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 		return true;
 	}
 
-	private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile,
-			boolean simulated, boolean creative) {
+	private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
 		if (projectile.isEmpty())
 			return false;
 		else {
@@ -281,8 +271,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 		});
 	}
 
-	public static void shootAll(Level world, LivingEntity entity, InteractionHand hand, ItemStack stack, float speed,
-			float divergence) {
+	public static void shootAll(Level world, LivingEntity entity, InteractionHand hand, ItemStack stack, float speed, float divergence) {
 		var list = getProjectiles(stack);
 		var fs = getSoundPitches(entity.level.random);
 
@@ -351,8 +340,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 				HWGItems.G_EMP.appendHoverText(itemStack, world, list2, context);
 				if (!list2.isEmpty()) {
 					for (int i = 0; i < list2.size(); ++i)
-						list2.set(i, (Component.literal("  ")).append((Component) list2.get(i))
-								.withStyle(ChatFormatting.GRAY));
+						list2.set(i, (Component.literal("  ")).append((Component) list2.get(i)).withStyle(ChatFormatting.GRAY));
 					tooltip.addAll(list2);
 				}
 			}

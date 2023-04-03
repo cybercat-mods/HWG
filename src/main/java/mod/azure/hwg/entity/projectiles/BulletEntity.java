@@ -45,8 +45,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 	protected int ticksInAir;
 	protected static float bulletdamage;
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BulletEntity.class,
-			EntityDataSerializers.FLOAT);
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.FLOAT);
 
 	public BulletEntity(EntityType<? extends BulletEntity> entityType, Level world) {
 		super(entityType, world);
@@ -174,8 +173,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 		super.onHitBlock(blockHitResult);
 		if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock
-				&& HWGConfig.bullets_breakdripstone == true)
+		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGConfig.bullets_breakdripstone == true)
 			level.destroyBlock(blockHitResult.getBlockPos(), true);
 		this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON);
 	}
@@ -183,8 +181,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		var entity = entityHitResult.getEntity();
-		if (entityHitResult.getType() != HitResult.Type.ENTITY
-				|| !((EntityHitResult) entityHitResult).getEntity().is(entity))
+		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
 			if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		var entity2 = this.getOwner();
@@ -204,10 +201,8 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 					EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
 				}
 				this.doPostHurtEffects(livingEntity);
-				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player
-						&& entity2 instanceof ServerPlayer && !this.isSilent())
-					((ServerPlayer) entity2).connection
-							.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+					((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 			}
 		} else if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);

@@ -11,7 +11,6 @@ public class GunTableInventory implements Container {
 
 	private final NonNullList<ItemStack> stacks;
 
-
 	public GunTableInventory(GunTableScreenHandler container) {
 		this.stacks = NonNullList.withSize(6, ItemStack.EMPTY);
 		this.container = container;
@@ -49,7 +48,7 @@ public class GunTableInventory implements Container {
 	public void setItem(int slot, ItemStack stack) {
 		this.stacks.set(slot, stack);
 		if (slot != 5)
-		container.slotsChanged(this);
+			container.slotsChanged(this);
 	}
 
 	public boolean stillValid(Player player) {

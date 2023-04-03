@@ -71,8 +71,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 				return event.setAndContinue(RawAnimation.begin().thenLoop("walking"));
 			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
 		})).add(new AnimationController<>(this, event -> {
-			if ((this.entityData.get(STATE) == 1 || this.swinging) && !isDead
-					&& !(this.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
+			if ((this.entityData.get(STATE) == 1 || this.swinging) && !isDead && !(this.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
 				return event.setAndContinue(RawAnimation.begin().thenLoop("attacking"));
 			return PlayState.STOP;
 		}));
@@ -90,10 +89,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 
 	@Override
 	public List<ExtendedSensor<TechnodemonEntity>> getSensors() {
-		return ObjectArrayList.of(new NearbyPlayersSensor<>(),
-				new NearbyLivingEntitySensor<TechnodemonEntity>()
-						.setPredicate((target, entity) -> target instanceof Player || target instanceof Villager),
-				new HurtBySensor<>(), new UnreachableTargetSensor<TechnodemonEntity>());
+		return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<TechnodemonEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<TechnodemonEntity>());
 	}
 
 	@Override
@@ -103,24 +99,12 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 
 	@Override
 	public BrainActivityGroup<TechnodemonEntity> getIdleTasks() {
-		return BrainActivityGroup.idleTasks(
-				new FirstApplicableBehaviour<TechnodemonEntity>(new TargetOrRetaliate<>(),
-						new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive()
-								|| target instanceof Player && ((Player) target).isCreative()),
-						new SetRandomLookTarget<>()),
-				new OneRandomBehaviour<>(
-						new SetRandomWalkTarget<>().speedModifier(0.85F).startCondition(entity -> !entity.isAggressive()),
-						new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
+		return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<TechnodemonEntity>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()), new SetRandomLookTarget<>()), new OneRandomBehaviour<>(new SetRandomWalkTarget<>().speedModifier(0.85F).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
 	}
 
 	@Override
 	public BrainActivityGroup<TechnodemonEntity> getFightTasks() {
-		return BrainActivityGroup.fightTasks(
-				new InvalidateAttackTarget<>().stopIf(
-						target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()),
-				new RangedShootingAttack<>(20).whenStarting(entity -> setAggressive(true))
-						.whenStarting(entity -> setAggressive(false)),
-				new AnimatableMeleeAttack<>(0));
+		return BrainActivityGroup.fightTasks(new InvalidateAttackTarget<>().stopIf(target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()), new RangedShootingAttack<>(20).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)), new AnimatableMeleeAttack<>(0));
 	}
 
 	@Override
@@ -146,10 +130,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D)
-				.add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ARMOR, 4)
-				.add(Attributes.MAX_HEALTH, HWGConfig.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D)
-				.add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ARMOR, 4).add(Attributes.MAX_HEALTH, HWGConfig.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override
@@ -158,8 +139,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty,
-			MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
 		var var = this.getRandom().nextInt(0, 5);
 		this.setVariant(var);
 		this.setItemSlot(EquipmentSlot.MAINHAND, this.makeInitialWeapon());

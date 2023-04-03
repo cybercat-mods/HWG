@@ -34,29 +34,21 @@ public class TechnodemonGreaterRender extends GeoEntityRenderer<TechnodemonGreat
 			}
 
 			@Override
-			protected ItemTransforms.TransformType getTransformTypeForStack(GeoBone bone, ItemStack stack,
-					TechnodemonGreaterEntity animatable) {
+			protected ItemTransforms.TransformType getTransformTypeForStack(GeoBone bone, ItemStack stack, TechnodemonGreaterEntity animatable) {
 				return switch (bone.getName()) {
 				default -> ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND;
 				};
 			}
 
 			@Override
-			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack,
-					TechnodemonGreaterEntity animatable, MultiBufferSource bufferSource, float partialTick,
-					int packedLight, int packedOverlay) {
-				poseStack.mulPose(Vector3f.XP
-						.rotationDegrees(animatable.getMainHandItem().getItem() instanceof Minigun ? -15 : -90));
-				poseStack.mulPose(Vector3f.YP
-						.rotationDegrees(animatable.getMainHandItem().getItem() instanceof Minigun ? -15 : 0));
+			protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, TechnodemonGreaterEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
+				poseStack.mulPose(Vector3f.XP.rotationDegrees(animatable.getMainHandItem().getItem() instanceof Minigun ? -15 : -90));
+				poseStack.mulPose(Vector3f.YP.rotationDegrees(animatable.getMainHandItem().getItem() instanceof Minigun ? -15 : 0));
 				poseStack.mulPose(Vector3f.ZP.rotationDegrees(0f));
-				poseStack.translate(animatable.getMainHandItem().getItem() instanceof Minigun ? 0.10D : 0.1D,
-						animatable.getMainHandItem().getItem() instanceof Minigun ? 0.1D : 0.15D,
-						animatable.getMainHandItem().getItem() instanceof Minigun ? -0.5D : -0.1D);
+				poseStack.translate(animatable.getMainHandItem().getItem() instanceof Minigun ? 0.10D : 0.1D, animatable.getMainHandItem().getItem() instanceof Minigun ? 0.1D : 0.15D, animatable.getMainHandItem().getItem() instanceof Minigun ? -0.5D : -0.1D);
 				if (animatable.getMainHandItem().getItem() instanceof BrimstoneItem)
 					poseStack.scale(1.1F, 1.1F, 1.1F);
-				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight,
-						packedOverlay);
+				super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
 			}
 		});
 	}

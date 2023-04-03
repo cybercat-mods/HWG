@@ -125,8 +125,7 @@ public class GunTableRecipe implements Recipe<GunTableInventory>, Comparable<Gun
 			}
 		}
 
-		private static List<Pair<Ingredient, Integer>> getIngredients(String pattern,
-				Map<String, Pair<Ingredient, Integer>> keys, int width) {
+		private static List<Pair<Ingredient, Integer>> getIngredients(String pattern, Map<String, Pair<Ingredient, Integer>> keys, int width) {
 			List<Pair<Ingredient, Integer>> pairList = new ArrayList<>();
 			for (int i = 0; i < 5; i++)
 				pairList.add(Pair.of(Ingredient.EMPTY, 0));
@@ -137,8 +136,7 @@ public class GunTableRecipe implements Recipe<GunTableInventory>, Comparable<Gun
 				var key = pattern.substring(i, i + 1);
 				var ingredient = keys.get(key).getKey();
 				if (ingredient == null)
-					throw new JsonSyntaxException(
-							"Pattern references symbol '" + key + "' but it's not defined in the key");
+					throw new JsonSyntaxException("Pattern references symbol '" + key + "' but it's not defined in the key");
 
 				set.remove(key);
 				pairList.set(i, Pair.of(ingredient, keys.get(key).getRight()));
@@ -182,14 +180,12 @@ public class GunTableRecipe implements Recipe<GunTableInventory>, Comparable<Gun
 				var key = entry.getKey();
 				var jsonElement = entry.getValue();
 				if (key.length() != 1)
-					throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey()
-							+ "' is an invalid symbol (must be 1 String only).");
+					throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 String only).");
 
 				if (" ".equals(key))
 					throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
 
-				map.put(key, Pair.of(Ingredient.fromJson(jsonElement),
-						GsonHelper.getAsInt(jsonElement.getAsJsonObject(), "count", 1)));
+				map.put(key, Pair.of(Ingredient.fromJson(jsonElement), GsonHelper.getAsInt(jsonElement.getAsJsonObject(), "count", 1)));
 			}
 
 			map.put(" ", Pair.of(Ingredient.EMPTY, 0));

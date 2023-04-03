@@ -57,8 +57,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 	}
 
 	protected void renderLabels(PoseStack matrices, int mouseX, int mouseY) {
-		this.font.draw(matrices, this.title,
-				(float) (49 + this.imageWidth / 2 - this.font.width(this.title) / 2), 6.0F, 4210752);
+		this.font.draw(matrices, this.title, (float) (49 + this.imageWidth / 2 - this.font.width(this.title) / 2), 6.0F, 4210752);
 	}
 
 	protected void renderBg(PoseStack matrices, float delta, int mouseX, int mouseY) {
@@ -67,8 +66,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		int i = ((this.width - this.imageWidth) / 2) - 5;
 		int j = (this.height - this.imageHeight) / 2;
-		blit(matrices, i, j, this.getBlitOffset(), 0.0F, 0.0F, this.imageWidth, this.imageHeight, 512,
-				256);
+		blit(matrices, i, j, this.getBlitOffset(), 0.0F, 0.0F, this.imageWidth, this.imageHeight, 512, 256);
 
 	}
 
@@ -105,8 +103,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
 			while (true) {
 				for (GunTableRecipe gunTableRecipe : tradeOfferList)
-					if (this.canScroll(tradeOfferList.size())
-							&& (m < this.indexStartOffset || m >= 7 + this.indexStartOffset)) {
+					if (this.canScroll(tradeOfferList.size()) && (m < this.indexStartOffset || m >= 7 + this.indexStartOffset)) {
 						++m;
 					} else {
 						ItemStack output = gunTableRecipe.getResultItem();
@@ -194,9 +191,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 		this.scrolling = false;
 		int i = (this.width - this.imageWidth) / 2;
 		int j = (this.height - this.imageHeight) / 2;
-		if (this.canScroll(this.menu.getRecipes().size()) && mouseX > (double) (i + 94)
-				&& mouseX < (double) (i + 94 + 6) && mouseY > (double) (j + 18)
-				&& mouseY <= (double) (j + 18 + 139 + 1)) {
+		if (this.canScroll(this.menu.getRecipes().size()) && mouseX > (double) (i + 94) && mouseX < (double) (i + 94 + 6) && mouseY > (double) (j + 18) && mouseY <= (double) (j + 18 + 139 + 1)) {
 			this.scrolling = true;
 		}
 
@@ -205,7 +200,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
 	@Environment(EnvType.CLIENT)
 	class WidgetButtonPage extends Button {
-		
+
 		final int index;
 
 		public WidgetButtonPage(int x, int y, int index, Button.OnPress onPress) {

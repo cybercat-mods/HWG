@@ -21,7 +21,7 @@ public class RocketModel extends GeoModel<RocketEntity> {
 	public ResourceLocation getAnimationResource(RocketEntity animatable) {
 		return new ResourceLocation(HWGMod.MODID, "animations/rocket.animation.json");
 	}
-	
+
 	@Override
 	public RenderType getRenderType(RocketEntity animatable, ResourceLocation texture) {
 		return RenderType.entityTranslucent(getTextureResource(animatable));

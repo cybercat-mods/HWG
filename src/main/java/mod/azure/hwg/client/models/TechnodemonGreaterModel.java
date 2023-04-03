@@ -28,15 +28,14 @@ public class TechnodemonGreaterModel extends GeoModel<TechnodemonGreaterEntity> 
 
 	@Override
 	public ResourceLocation getAnimationResource(TechnodemonGreaterEntity object) {
-		return new ResourceLocation(HWGMod.MODID,
-				"animations/technodemon_greater_" + object.getVariant() + ".animation.json");
+		return new ResourceLocation(HWGMod.MODID, "animations/technodemon_greater_" + object.getVariant() + ".animation.json");
 	}
-	
+
 	@Override
 	public RenderType getRenderType(TechnodemonGreaterEntity animatable, ResourceLocation texture) {
 		return RenderType.entityTranslucent(getTextureResource(animatable));
 	}
-	
+
 	@Override
 	public void setCustomAnimations(TechnodemonGreaterEntity animatable, long instanceId, AnimationState<TechnodemonGreaterEntity> animationState) {
 		super.setCustomAnimations(animatable, instanceId, animationState);

@@ -49,8 +49,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	private BlockPos lightBlockPos = null;
 	private int idleTicks = 0;
 	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BlazeRodEntity.class,
-			EntityDataSerializers.FLOAT);
+	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BlazeRodEntity.class, EntityDataSerializers.FLOAT);
 
 	public BlazeRodEntity(EntityType<? extends BlazeRodEntity> entityType, Level world) {
 		super(entityType, world);
@@ -68,7 +67,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	protected BlazeRodEntity(EntityType<? extends BlazeRodEntity> type, LivingEntity owner, Level world) {
 		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
 		this.setOwner(owner);
-		if (owner instanceof Player) 
+		if (owner instanceof Player)
 			this.pickup = AbstractArrow.Pickup.ALLOWED;
 	}
 
@@ -148,7 +147,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 			super.tick();
 
 		++this.ticksInAir;
-		if (this.ticksInAir >= 40) 
+		if (this.ticksInAir >= 40)
 			this.remove(Entity.RemovalReason.DISCARDED);
 		var isInsideWaterBlock = level.isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
@@ -165,9 +164,9 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 
 	@Override
 	public boolean isNoGravity() {
-		if (this.isUnderWater()) 
+		if (this.isUnderWater())
 			return false;
-		else 
+		else
 			return true;
 	}
 
@@ -196,8 +195,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		var entity = entityHitResult.getEntity();
-		if (entityHitResult.getType() != HitResult.Type.ENTITY
-				|| !((EntityHitResult) entityHitResult).getEntity().is(entity))
+		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
 			if (!this.level.isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		var entity2 = this.getOwner();
@@ -219,18 +217,15 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 				this.explode();
 
 				this.doPostHurtEffects(livingEntity);
-				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player
-						&& entity2 instanceof ServerPlayer && !this.isSilent())
-					((ServerPlayer) entity2).connection
-							.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+					((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 			}
 		} else if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
 	}
 
 	protected void explode() {
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, false,
-				HWGConfig.balrog_breaks == true ? Explosion.BlockInteraction.BREAK  : Explosion.BlockInteraction.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, false, HWGConfig.balrog_breaks == true ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE);
 	}
 
 	@Override
@@ -261,9 +256,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	private boolean checkDistance(BlockPos blockPosA, BlockPos blockPosB, int distance) {
-		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance
-				&& Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance
-				&& Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
+		return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance && Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance && Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
 	}
 
 	private BlockPos findFreeSpace(Level world, BlockPos blockPos, int maxDistance) {

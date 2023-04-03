@@ -8,16 +8,14 @@ import net.minecraft.world.item.ItemStack;
 public class ModelProviderinit {
 
 	public static void init() {
-		ItemProperties.register(HWGItems.ROCKETLAUNCHER, new ResourceLocation("broken"),
-				(itemStack, clientWorld, livingEntity, seed) -> {
-					return isUsable(itemStack) ? 0.0F : 1.0F;
-				});
-		ItemProperties.register(HWGItems.SNIPER, new ResourceLocation("scoped"),
-				(itemStack, clientWorld, livingEntity, seed) -> {
-					if (livingEntity != null)
-						return isScoped() ? 1.0F : 0.0F;
-					return 0.0F;
-				});
+		ItemProperties.register(HWGItems.ROCKETLAUNCHER, new ResourceLocation("broken"), (itemStack, clientWorld, livingEntity, seed) -> {
+			return isUsable(itemStack) ? 0.0F : 1.0F;
+		});
+		ItemProperties.register(HWGItems.SNIPER, new ResourceLocation("scoped"), (itemStack, clientWorld, livingEntity, seed) -> {
+			if (livingEntity != null)
+				return isScoped() ? 1.0F : 0.0F;
+			return 0.0F;
+		});
 	}
 
 	private static boolean isUsable(ItemStack stack) {

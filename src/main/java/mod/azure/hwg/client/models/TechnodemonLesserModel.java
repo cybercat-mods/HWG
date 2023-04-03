@@ -30,12 +30,12 @@ public class TechnodemonLesserModel extends GeoModel<TechnodemonEntity> {
 	public ResourceLocation getAnimationResource(TechnodemonEntity object) {
 		return new ResourceLocation(HWGMod.MODID, "animations/technodemon_lesser_" + object.getVariant() + ".animation.json");
 	}
-	
+
 	@Override
 	public RenderType getRenderType(TechnodemonEntity animatable, ResourceLocation texture) {
 		return RenderType.entityTranslucent(getTextureResource(animatable));
 	}
-	
+
 	@Override
 	public void setCustomAnimations(TechnodemonEntity animatable, long instanceId, AnimationState<TechnodemonEntity> animationState) {
 		super.setCustomAnimations(animatable, instanceId, animationState);

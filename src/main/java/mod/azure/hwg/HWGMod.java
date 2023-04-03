@@ -65,10 +65,8 @@ public class HWGMod implements ModInitializer {
 	public static final ResourceLocation GUN_TABLE_GUI = new ResourceLocation(MODID, "gun_table_gui");
 	public static final ResourceLocation ROCKETLAUNCHER = new ResourceLocation(MODID, "rocketlauncher");
 	public static MenuType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
-	public static final CreativeModeTab WeaponItemGroup = FabricItemGroupBuilder
-			.build(new ResourceLocation(MODID, "weapons"), () -> new ItemStack(HWGItems.AK47));
-	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(
-			Registry.RECIPE_SERIALIZER, new ResourceLocation(MODID, "gun_table"), new GunTableRecipe.Serializer());
+	public static final CreativeModeTab WeaponItemGroup = FabricItemGroupBuilder.build(new ResourceLocation(MODID, "weapons"), () -> new ItemStack(HWGItems.AK47));
+	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(Registry.RECIPE_SERIALIZER, new ResourceLocation(MODID, "gun_table"), new GunTableRecipe.Serializer());
 
 	@Override
 	public void onInitialize() {
@@ -88,12 +86,8 @@ public class HWGMod implements ModInitializer {
 		MobSpawn.addSpawnEntries();
 		MobAttributes.init();
 		LootTableEvents.MODIFY.register((resourceManager, lootManager, id, supplier, setter) -> {
-			if (HWGLoot.B_TREASURE.equals(id) || HWGLoot.JUNGLE.equals(id) || HWGLoot.U_BIG.equals(id)
-					|| HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id)
-					|| HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
-				LootPool poolBuilder = LootPool.lootPool().setRolls(ConstantValue.exactly(1))
-						.with(LootItem.lootTableItem(HWGItems.MEANIE1).build())
-						.with(LootItem.lootTableItem(HWGItems.MEANIE2).build()).build();
+			if (HWGLoot.B_TREASURE.equals(id) || HWGLoot.JUNGLE.equals(id) || HWGLoot.U_BIG.equals(id) || HWGLoot.S_LIBRARY.equals(id) || HWGLoot.U_SMALL.equals(id) || HWGLoot.S_CORRIDOR.equals(id) || HWGLoot.S_CROSSING.equals(id) || HWGLoot.SPAWN_BONUS_CHEST.equals(id)) {
+				LootPool poolBuilder = LootPool.lootPool().setRolls(ConstantValue.exactly(1)).with(LootItem.lootTableItem(HWGItems.MEANIE1).build()).with(LootItem.lootTableItem(HWGItems.MEANIE2).build()).build();
 				supplier.pool(poolBuilder);
 			}
 		});

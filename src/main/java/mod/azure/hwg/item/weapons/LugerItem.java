@@ -28,6 +28,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -52,16 +53,19 @@ public class LugerItem extends AnimatedItem {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
 				playerentity.getCooldowns().addCooldown(this, 5);
 				if (!worldIn.isClientSide) {
-					var bullet = createArrow(worldIn, stack, playerentity);
-					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
-							1.0F * 3.0F, 1.0F);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					worldIn.addFreshEntity(bullet);
-					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-							HWGSounds.LUGER, SoundSource.PLAYERS, 0.5F,
-							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller",
-							"luger");
+					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
+					if (result != null) {
+						if (result.getEntity()instanceof LivingEntity livingEntity)
+							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGConfig.luger_damage);
+					} else {
+						var bullet = createArrow(worldIn, stack, playerentity);
+						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+						bullet.tickCount = -15;
+						worldIn.addFreshEntity(bullet);
+					}
+					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.LUGER, SoundSource.PLAYERS, 0.5F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "luger");
 				}
 				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
@@ -71,8 +75,7 @@ public class LugerItem extends AnimatedItem {
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE)
-				.triggerableAnim("luger", RawAnimation.begin().then("luger", LoopType.PLAY_ONCE)));
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim("luger", RawAnimation.begin().then("luger", LoopType.PLAY_ONCE)));
 	}
 
 	@Override
@@ -89,13 +92,11 @@ public class LugerItem extends AnimatedItem {
 
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof LugerItem) {
-			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0
-					&& user.getInventory().countItem(HWGItems.BULLETS) > 0) {
+			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.BULLETS) > 0) {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(),
-						HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
 			}
 		}
 	}

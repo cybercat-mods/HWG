@@ -108,9 +108,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE)
-				.triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE))
-				.triggerableAnim("loading", RawAnimation.begin().then("loading", LoopType.PLAY_ONCE)));
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE)).triggerableAnim("loading", RawAnimation.begin().then("loading", LoopType.PLAY_ONCE)));
 	}
 
 	@Override
@@ -133,11 +131,9 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 		return FLARE;
 	}
 
-	private static void shoot(Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack,
-			ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
+	private static void shoot(Level world, LivingEntity shooter, InteractionHand hand, ItemStack stack, ItemStack projectile, float soundPitch, boolean creative, float speed, float divergence, float simulated) {
 		if (!world.isClientSide) {
-			var flareEntity = new BaseFlareEntity(world, projectile, shooter, shooter.getX(),
-					shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
+			var flareEntity = new BaseFlareEntity(world, projectile, shooter, shooter.getX(), shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), true);
 			var black = projectile.getItem() == HWGItems.BLACK_FLARE;
 			var blue = projectile.getItem() == HWGItems.BLUE_FLARE;
 			var brown = projectile.getItem() == HWGItems.BROWN_FLARE;
@@ -191,8 +187,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 			var vec3d2 = shooter.getViewVector(1.0f);
 			var vector3f = new Vector3f(vec3d2);
 			vector3f.transform(quaternion);
-			((Projectile) flareEntity).shoot((double) vector3f.x(), (double) vector3f.y(), (double) vector3f.z(), speed,
-					divergence);
+			((Projectile) flareEntity).shoot((double) vector3f.x(), (double) vector3f.y(), (double) vector3f.z(), speed, divergence);
 			((AbstractArrow) flareEntity).setBaseDamage(0.3D);
 			((AbstractArrow) flareEntity).pickup = AbstractArrow.Pickup.DISALLOWED;
 			stack.hurtAndBreak(1, shooter, p -> p.broadcastBreakEvent(shooter.getUsedItemHand()));
@@ -207,8 +202,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 
 	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
 		var itemStack = user.getItemInHand(hand);
-		if (isCharged(itemStack) && itemStack.getDamageValue() < (itemStack.getMaxDamage() - 1)
-				&& !user.getCooldowns().isOnCooldown(this)) {
+		if (isCharged(itemStack) && itemStack.getDamageValue() < (itemStack.getMaxDamage() - 1) && !user.getCooldowns().isOnCooldown(this)) {
 			shootAll(world, user, hand, itemStack, 2.6F, 1.0F);
 			user.getCooldowns().addCooldown(this, 25);
 			setCharged(itemStack, false);
@@ -229,11 +223,9 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 	public void releaseUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
 		if (!isCharged(stack) && loadProjectiles(user, stack)) {
 			setCharged(stack, true);
-			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.CHAIN_BREAK,
-					SoundSource.PLAYERS, 1.0F, 1.5F);
+			world.playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.CHAIN_BREAK, SoundSource.PLAYERS, 1.0F, 1.5F);
 			if (!world.isClientSide)
-				triggerAnim((Player) user, GeoItem.getOrAssignId(stack, (ServerLevel) world), "shoot_controller",
-						"loading");
+				triggerAnim((Player) user, GeoItem.getOrAssignId(stack, (ServerLevel) world), "shoot_controller", "loading");
 			((Player) user).getCooldowns().addCooldown(this, 15);
 		}
 	}
@@ -260,8 +252,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 		return true;
 	}
 
-	private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile,
-			boolean simulated, boolean creative) {
+	private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
 		if (projectile.isEmpty())
 			return false;
 		else {
@@ -332,8 +323,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 		});
 	}
 
-	public static void shootAll(Level world, LivingEntity entity, InteractionHand hand, ItemStack stack, float speed,
-			float divergence) {
+	public static void shootAll(Level world, LivingEntity entity, InteractionHand hand, ItemStack stack, float speed, float divergence) {
 		var list = getProjectiles(stack);
 		var fs = getSoundPitches(entity.level.random);
 
@@ -395,8 +385,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 				HWGItems.G_EMP.appendHoverText(itemStack, world, list2, context);
 				if (!list2.isEmpty()) {
 					for (int i = 0; i < list2.size(); ++i)
-						list2.set(i, (Component.literal("  ")).append((Component) list2.get(i))
-								.withStyle(ChatFormatting.GRAY));
+						list2.set(i, (Component.literal("  ")).append((Component) list2.get(i)).withStyle(ChatFormatting.GRAY));
 					tooltip.addAll(list2);
 				}
 			}

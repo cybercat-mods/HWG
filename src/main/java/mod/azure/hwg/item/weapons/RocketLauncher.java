@@ -37,17 +37,12 @@ public class RocketLauncher extends HWGGunBase {
 				playerentity.getCooldowns().addCooldown(this, 15);
 				if (!worldIn.isClientSide) {
 					var rocket = createArrow(worldIn, stack, playerentity);
-					rocket.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F,
-							0.5F * 3.0F, 1.0F);
+					rocket.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 0.5F * 3.0F, 1.0F);
 					rocket.moveTo(entityLiving.getX(), entityLiving.getY(0.95), entityLiving.getZ(), 0, 0);
-
 					rocket.setBaseDamage(2.5);
-
-					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					worldIn.addFreshEntity(rocket);
-					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-							HWGSounds.RPG, SoundSource.PLAYERS, 1.0F,
-							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.RPG, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
 				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
@@ -57,13 +52,11 @@ public class RocketLauncher extends HWGGunBase {
 
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof RocketLauncher) {
-			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0
-					&& user.getInventory().countItem(HWGItems.ROCKET) > 0) {
+			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.ROCKET) > 0) {
 				removeAmmo(HWGItems.ROCKET, user);
 				user.getItemInHand(hand).hurtAndBreak(-2, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(),
-						HWGSounds.GLAUNCHERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
+				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
 			}
 		}
 	}
@@ -71,8 +64,7 @@ public class RocketLauncher extends HWGGunBase {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof RocketLauncher && ClientInit.reload.isDown()
-					&& selected) {
+			if (((Player) entity).getMainHandItem().getItem() instanceof RocketLauncher && ClientInit.reload.isDown() && selected) {
 				FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 				passedData.writeBoolean(true);
 				ClientPlayNetworking.send(HWGMod.ROCKETLAUNCHER, passedData);

@@ -21,7 +21,7 @@ public class SBulletModel extends GeoModel<SBulletEntity> {
 	public ResourceLocation getAnimationResource(SBulletEntity animatable) {
 		return new ResourceLocation(HWGMod.MODID, "animations/bullet.animation.json");
 	}
-	
+
 	@Override
 	public RenderType getRenderType(SBulletEntity animatable, ResourceLocation texture) {
 		return RenderType.entityTranslucent(getTextureResource(animatable));
