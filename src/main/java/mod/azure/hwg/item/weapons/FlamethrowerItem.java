@@ -38,8 +38,7 @@ public class FlamethrowerItem extends HWGGunBase {
 
 	@Override
 	public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
-		if (entityLiving instanceof Player) {
-			var playerentity = (Player) entityLiving;
+		if (entityLiving instanceof Player playerentity) {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 3)) {
 				playerentity.getCooldowns().addCooldown(this, 5);
 				if (!worldIn.isClientSide) {

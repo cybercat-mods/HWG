@@ -45,8 +45,7 @@ public class Minigun extends AnimatedItem {
 
 	@Override
 	public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
-		if (entityLiving instanceof Player) {
-			var playerentity = (Player) entityLiving;
+		if (entityLiving instanceof Player playerentity) {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1) && !playerentity.getCooldowns().isOnCooldown(this)) {
 				playerentity.getCooldowns().addCooldown(this, 0);
 				if (!worldIn.isClientSide) {

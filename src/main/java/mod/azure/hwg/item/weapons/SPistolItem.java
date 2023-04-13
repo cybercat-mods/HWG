@@ -43,8 +43,7 @@ public class SPistolItem extends AnimatedItem {
 
 	@Override
 	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-		if (entityLiving instanceof Player) {
-			var playerentity = (Player) entityLiving;
+		if (entityLiving instanceof Player playerentity) {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
 				playerentity.getCooldowns().addCooldown(this, 5);
 				if (!worldIn.isClientSide) {

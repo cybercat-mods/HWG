@@ -29,8 +29,7 @@ public class BrimstoneItem extends HWGGunBase {
 
 	@Override
 	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-		if (entityLiving instanceof Player) {
-			var playerentity = (Player) entityLiving;
+		if (entityLiving instanceof Player playerentity) {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 6)) {
 				playerentity.getCooldowns().addCooldown(this, 5);
 				if (!worldIn.isClientSide) {

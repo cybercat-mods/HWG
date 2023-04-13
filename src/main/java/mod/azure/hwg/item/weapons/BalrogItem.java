@@ -33,8 +33,7 @@ public class BalrogItem extends HWGGunBase {
 
 	@Override
 	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-		if (entityLiving instanceof Player) {
-			var playerentity = (Player) entityLiving;
+		if (entityLiving instanceof Player playerentity) {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 4) && !playerentity.getCooldowns().isOnCooldown(this)) {
 				playerentity.getCooldowns().addCooldown(this, 25);
 				if (!worldIn.isClientSide) {
