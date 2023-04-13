@@ -56,7 +56,6 @@ public class SniperItem extends AnimatedItem {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
 						bullet.tickCount = -15;
-						bullet.setPierceLevel((byte) 3);
 						worldIn.addFreshEntity(bullet);
 					}
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.SNIPER, SoundSource.PLAYERS, 0.25F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
