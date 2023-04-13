@@ -1,4 +1,3 @@
-v.1.4.3
+v.1.4.4
 
-- Cleaned up code.
-- Made SMG, AK-47, Tommy Gun, Golden Pistol, Hellhorse Revolver, Luger, Meanies, Minigun, Pistol, Shotgun, Silver Pistol, Silver Revolver, Sniper, and Silenced Pistol do hitscan damage where possible.
+- Fixes crash with Ender Dragon and Sniper
