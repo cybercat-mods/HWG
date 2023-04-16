@@ -7,6 +7,7 @@ import mod.azure.hwg.item.weapons.AssasultItem;
 import mod.azure.hwg.item.weapons.BalrogItem;
 import mod.azure.hwg.item.weapons.BrimstoneItem;
 import mod.azure.hwg.item.weapons.FlamethrowerItem;
+import mod.azure.hwg.item.weapons.GPistolItem;
 import mod.azure.hwg.item.weapons.HellhorseRevolverItem;
 import mod.azure.hwg.item.weapons.LugerItem;
 import mod.azure.hwg.item.weapons.Meanie1Item;
@@ -33,6 +34,10 @@ public class PacketHandler {
 		ServerPlayNetworking.registerGlobalReceiver(HWGMod.PISTOL, (server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
 			if (player.getMainHandItem().getItem() instanceof PistolItem)
 				((PistolItem) player.getMainHandItem().getItem()).reload(player, InteractionHand.MAIN_HAND);
+		});
+		ServerPlayNetworking.registerGlobalReceiver(HWGMod.GPISTOL, (server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
+			if (player.getMainHandItem().getItem() instanceof GPistolItem)
+				((GPistolItem) player.getMainHandItem().getItem()).reload(player, InteractionHand.MAIN_HAND);
 		});
 		ServerPlayNetworking.registerGlobalReceiver(HWGMod.SILVERGUN, (server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
 			if (player.getMainHandItem().getItem() instanceof SilverGunItem)
