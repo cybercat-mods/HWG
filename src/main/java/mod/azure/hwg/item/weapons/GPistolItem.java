@@ -85,7 +85,7 @@ public class GPistolItem extends AnimatedItem {
 				if (ClientInit.reload.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
-					ClientPlayNetworking.send(HWGMod.PISTOL, passedData);
+					ClientPlayNetworking.send(HWGMod.GPISTOL, passedData);
 				}
 			}
 	}

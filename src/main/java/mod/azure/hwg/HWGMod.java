@@ -51,6 +51,7 @@ public class HWGMod implements ModInitializer {
 	public static final ResourceLocation SNIPER = new ResourceLocation(MODID, "sniper");
 	public static final ResourceLocation ASSASULT1 = new ResourceLocation(MODID, "smg1");
 	public static final ResourceLocation ASSASULT2 = new ResourceLocation(MODID, "smg2");
+	public static final ResourceLocation GPISTOL = new ResourceLocation(MODID, "gpistol");
 	public static final ResourceLocation MEANIE1 = new ResourceLocation(MODID, "meanie1");
 	public static final ResourceLocation MEANIE2 = new ResourceLocation(MODID, "meanie2");
 	public static final ResourceLocation MINIGUN = new ResourceLocation(MODID, "minigun");
