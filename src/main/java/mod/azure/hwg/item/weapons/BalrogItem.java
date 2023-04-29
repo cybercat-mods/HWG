@@ -41,7 +41,6 @@ public class BalrogItem extends HWGGunBase {
 					var rod = createArrow(worldIn, stack, playerentity);
 					rod.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 1.0F * 3.0F, 1.0F);
 					rod.moveTo(entityLiving.getX(), entityLiving.getY(0.85), entityLiving.getZ(), 0, 0);
-					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					rod.isNoGravity();
 					double r = worldIn.random.nextDouble();
 					if (r < 0.1)
@@ -50,7 +49,6 @@ public class BalrogItem extends HWGGunBase {
 					var rod1 = createArrow(worldIn, stack, playerentity);
 					rod1.shootFromRotation(playerentity, playerentity.getXRot() + 2, playerentity.getYRot(), 0.0F, 1.0F * 3.0F, 1.0F);
 					rod1.moveTo(entityLiving.getX(), entityLiving.getY(0.85), entityLiving.getZ(), 0, 0);
-					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					rod1.isNoGravity();
 					double a = worldIn.random.nextDouble();
 					if (a < 0.1)
@@ -59,7 +57,6 @@ public class BalrogItem extends HWGGunBase {
 					var rod2 = createArrow(worldIn, stack, playerentity);
 					rod2.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 2, 0.0F, 1.0F * 3.0F, 1.0F);
 					rod2.moveTo(entityLiving.getX(), entityLiving.getY(0.85), entityLiving.getZ(), 0, 0);
-					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					rod2.isNoGravity();
 					double b = worldIn.random.nextDouble();
 					if (b < 0.1)
@@ -68,7 +65,6 @@ public class BalrogItem extends HWGGunBase {
 					var rod3 = createArrow(worldIn, stack, playerentity);
 					rod3.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 2, 0.0F, 1.0F * 3.0F, 1.0F);
 					rod3.moveTo(entityLiving.getX(), entityLiving.getY(0.85), entityLiving.getZ(), 0, 0);
-					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					rod3.isNoGravity();
 					double c = worldIn.random.nextDouble();
 					if (c < 0.1)
