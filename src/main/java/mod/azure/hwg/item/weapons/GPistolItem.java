@@ -5,10 +5,17 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import io.netty.buffer.Unpooled;
+import mod.azure.azurelib.animatable.GeoItem;
+import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
+import mod.azure.azurelib.animatable.client.RenderProvider;
+import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
+import mod.azure.azurelib.core.animation.Animation.LoopType;
+import mod.azure.azurelib.core.animation.AnimationController;
+import mod.azure.azurelib.core.animation.RawAnimation;
+import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.GPistolRender;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -27,14 +34,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.animatable.client.RenderProvider;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.Animation.LoopType;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
 
 public class GPistolItem extends AnimatedItem {
 
@@ -55,7 +54,7 @@ public class GPistolItem extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity()instanceof LivingEntity livingEntity)
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGConfig.golden_pistol_damage);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.golden_pistol_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
@@ -105,7 +104,7 @@ public class GPistolItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new BulletEntity(worldIn, shooter, HWGConfig.golden_pistol_damage);
+		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.golden_pistol_damage);
 		return bullet;
 	}
 

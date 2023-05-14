@@ -8,7 +8,7 @@ import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.tasks.RangedShootingAttack;
 import mod.azure.hwg.item.weapons.Minigun;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -65,7 +65,7 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 
 	public SpyEntity(EntityType<SpyEntity> entityType, Level worldIn) {
 		super(entityType, worldIn);
-		xpReward = HWGConfig.spy_exp;
+		xpReward = HWGMod.config.spy_exp;
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGConfig.spy_health).add(Attributes.ARMOR, 3).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGMod.config.spy_health).add(Attributes.ARMOR, 3).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	public static boolean canSpawn(EntityType<? extends HWGEntity> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {

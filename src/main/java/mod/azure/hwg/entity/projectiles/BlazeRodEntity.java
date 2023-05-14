@@ -9,7 +9,7 @@ import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.entities.TickingLightEntity;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
@@ -91,7 +91,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
 			living.invulnerableTime = 0;
 		}
 	}
@@ -206,7 +206,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 			if (entity2 instanceof LivingEntity)
 				((LivingEntity) entity2).setLastHurtMob(entity);
 		}
-		if (entity.hurt(damageSource2, HWGConfig.balrog_damage)) {
+		if (entity.hurt(damageSource2, HWGMod.config.balrog_damage)) {
 			if (entity instanceof LivingEntity) {
 				var livingEntity = (LivingEntity) entity;
 				if (!this.level.isClientSide && entity2 instanceof LivingEntity) {
@@ -224,7 +224,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void explode() {
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, false, HWGConfig.balrog_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, false, HWGMod.config.balrog_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 
 	@Override

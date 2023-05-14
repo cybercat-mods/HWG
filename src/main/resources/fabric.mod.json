@@ -22,9 +22,6 @@
 		"client": [
 			"mod.azure.hwg.client.ClientInit"
 		],
-		"modmenu": [
-			"mod.azure.hwg.config.ModMenuHWG"
-		],
 		"rei_client": [
 			"mod.azure.hwg.rei.ReiPlugin"
 		]

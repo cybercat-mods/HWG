@@ -1,8 +1,9 @@
 package mod.azure.hwg.util;
 
+import java.util.Arrays;
 import java.util.List;
 
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.MercEntity;
 import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
@@ -18,13 +19,13 @@ import net.minecraft.world.level.levelgen.Heightmap;
 public class MobSpawn {
 
 	public static void addSpawnEntries() {
-		BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld().and(context -> parseBiomes(HWGConfig.merc_biomes, context)), MobCategory.MONSTER, HWGMobs.MERC, HWGConfig.merc_spawn_weight, HWGConfig.merc_min_group, HWGConfig.merc_max_group);
+		BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld().and(context -> parseBiomes(HWGMod.config.merc_biomes, context)), MobCategory.MONSTER, HWGMobs.MERC, HWGMod.config.merc_spawn_weight, HWGMod.config.merc_min_group, HWGMod.config.merc_max_group);
 
-		BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld().and(context -> parseBiomes(HWGConfig.spy_biomes, context)), MobCategory.MONSTER, HWGMobs.SPY, HWGConfig.spy_spawn_weight, HWGConfig.spy_min_group, HWGConfig.spy_max_group);
+		BiomeModifications.addSpawn(BiomeSelectors.foundInOverworld().and(context -> parseBiomes(HWGMod.config.spy_biomes, context)), MobCategory.MONSTER, HWGMobs.SPY, HWGMod.config.spy_spawn_weight, HWGMod.config.spy_min_group, HWGMod.config.spy_max_group);
 
-		BiomeModifications.addSpawn(BiomeSelectors.all().and(context -> parseBiomes(HWGConfig.lesser_biomes, context)), MobCategory.MONSTER, HWGMobs.TECHNOLESSER, HWGConfig.lesser_spawn_weight, HWGConfig.lesser_min_group, HWGConfig.lesser_max_group);
+		BiomeModifications.addSpawn(BiomeSelectors.all().and(context -> parseBiomes(HWGMod.config.lesser_biomes, context)), MobCategory.MONSTER, HWGMobs.TECHNOLESSER, HWGMod.config.lesser_spawn_weight, HWGMod.config.lesser_min_group, HWGMod.config.lesser_max_group);
 
-		BiomeModifications.addSpawn(BiomeSelectors.all().and(context -> parseBiomes(HWGConfig.greater_biomes, context)), MobCategory.MONSTER, HWGMobs.TECHNOGREATER, HWGConfig.greater_spawn_weight, HWGConfig.greater_min_group, HWGConfig.greater_max_group);
+		BiomeModifications.addSpawn(BiomeSelectors.all().and(context -> parseBiomes(HWGMod.config.greater_biomes, context)), MobCategory.MONSTER, HWGMobs.TECHNOGREATER, HWGMod.config.greater_spawn_weight, HWGMod.config.greater_min_group, HWGMod.config.greater_max_group);
 
 		SpawnPlacements.register(HWGMobs.TECHNOLESSER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TechnodemonEntity::canNetherSpawn);
 		SpawnPlacements.register(HWGMobs.TECHNOGREATER, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TechnodemonGreaterEntity::canNetherSpawn);
@@ -32,7 +33,8 @@ public class MobSpawn {
 		SpawnPlacements.register(HWGMobs.SPY, SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, SpyEntity::canSpawn);
 	}
 
-	private static boolean parseBiomes(List<String> biomes, BiomeSelectionContext biomeContext) {
-		return biomes.contains(biomeContext.getBiomeKey().location().toString());
+	private static boolean parseBiomes(String[] biomes, BiomeSelectionContext biomeContext) {
+		List<String> biomelist = Arrays.asList(biomes);
+		return biomelist.contains(biomeContext.getBiomeKey().location().toString());
 	}
 }

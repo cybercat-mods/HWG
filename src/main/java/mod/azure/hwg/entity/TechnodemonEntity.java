@@ -8,7 +8,7 @@ import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.tasks.RangedShootingAttack;
 import mod.azure.hwg.item.weapons.Minigun;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -60,7 +60,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 
 	public TechnodemonEntity(EntityType<TechnodemonEntity> entityType, Level worldIn) {
 		super(entityType, worldIn);
-		xpReward = HWGConfig.lesser_exp;
+		xpReward = HWGMod.config.lesser_exp;
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ARMOR, 4).add(Attributes.MAX_HEALTH, HWGConfig.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ARMOR, 4).add(Attributes.MAX_HEALTH, HWGMod.config.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override

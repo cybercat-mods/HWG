@@ -16,7 +16,6 @@ import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.TommyGunRender;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -73,7 +72,7 @@ public class Assasult2Item extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity()instanceof LivingEntity livingEntity)
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGConfig.tommy_damage);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.tommy_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
@@ -118,7 +117,7 @@ public class Assasult2Item extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, HWGConfig.tommy_damage);
+		BulletEntity arrowentity = new BulletEntity(worldIn, shooter, HWGMod.config.tommy_damage);
 		return arrowentity;
 	}
 

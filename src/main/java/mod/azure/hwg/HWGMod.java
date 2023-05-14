@@ -1,6 +1,7 @@
 package mod.azure.hwg;
 
-import eu.midnightdust.lib.config.MidnightConfig;
+import dev.toma.configuration.Configuration;
+import dev.toma.configuration.config.format.ConfigFormats;
 import mod.azure.azurelib.AzureLib;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import mod.azure.hwg.compat.BWCompat;
@@ -39,6 +40,7 @@ public class HWGMod implements ModInitializer {
 	public static HWGMobs MOBS;
 	public static HWGItems ITEMS;
 	public static HWGBlocks BLOCKS;
+	public static HWGConfig config;
 	public static HWGSounds SOUNDS;
 	public static BWCompat BW_ITEMS;
 	public static GigCompat GIG_ITEMS;
@@ -134,7 +136,7 @@ public class HWGMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		MidnightConfig.init(MODID, HWGConfig.class);
+		config = Configuration.registerConfig(HWGConfig.class, ConfigFormats.json()).getConfigInstance();
 		ITEMS = new HWGItems();
 		if (FabricLoader.getInstance().isModLoaded("gigeresque"))
 			GIG_ITEMS = new GigCompat();

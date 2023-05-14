@@ -12,7 +12,6 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.SilverGunRender;
 import mod.azure.hwg.compat.BWCompat;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.SBulletEntity;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -50,18 +49,15 @@ public class SilverGunItem extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity()instanceof LivingEntity livingEntity)
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGConfig.pistol_damage);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.pistol_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
 						bullet.tickCount = -15;
 						worldIn.addFreshEntity(bullet);
 					}
-					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-							HWGSounds.PISTOL, SoundSource.PLAYERS, 0.5F,
-							1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
-					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller",
-							"firing");
+					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.PISTOL, SoundSource.PLAYERS, 0.5F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
+					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
 				}
 				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
@@ -83,19 +79,17 @@ public class SilverGunItem extends AnimatedItem {
 
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof SilverGunItem) {
-			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0
-					&& user.getInventory().countItem(BWCompat.SILVERBULLET) > 0) {
+			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(BWCompat.SILVERBULLET) > 0) {
 				removeAmmo(BWCompat.SILVERBULLET, user);
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(),
-						HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
 			}
 		}
 	}
 
 	public SBulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new SBulletEntity(worldIn, shooter, HWGConfig.pistol_damage);
+		var bullet = new SBulletEntity(worldIn, shooter, HWGMod.config.pistol_damage);
 		return bullet;
 	}
 

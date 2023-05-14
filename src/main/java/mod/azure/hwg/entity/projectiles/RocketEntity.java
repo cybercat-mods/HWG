@@ -7,7 +7,7 @@ import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
@@ -238,7 +238,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 
 	protected void explode() {
 		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
-				HWGConfig.rocket_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+				HWGMod.config.rocket_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.entities.TickingLightEntity;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
@@ -114,7 +114,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
 			living.setDeltaMovement(0, 0, 0);
 			living.invulnerableTime = 0;
 		}

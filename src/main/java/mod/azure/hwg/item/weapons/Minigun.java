@@ -11,7 +11,6 @@ import mod.azure.azurelib.animatable.client.RenderProvider;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.MinigunRender;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -55,7 +54,7 @@ public class Minigun extends AnimatedItem {
 						if (result.getEntity()instanceof LivingEntity livingEntity) {
 							livingEntity.invulnerableTime = 0;
 							livingEntity.setDeltaMovement(0, 0, 0);
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGConfig.minigun_damage);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.minigun_damage);
 						}
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
@@ -96,7 +95,7 @@ public class Minigun extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new BulletEntity(worldIn, shooter, HWGConfig.minigun_damage);
+		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.minigun_damage);
 		return bullet;
 	}
 

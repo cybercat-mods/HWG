@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import mod.azure.azurelib.animatable.GeoEntity;
 import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.BlazeRodEntity;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.entity.projectiles.FireballEntity;
@@ -167,8 +167,8 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 	public Projectile getProjectile(Item item) {
 		return item instanceof PistolItem || item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item || item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem || item instanceof HellhorseRevolverItem || item instanceof Minigun
 				? new BulletEntity(level, this,
-						item instanceof PistolItem ? HWGConfig.pistol_damage
-								: item instanceof LugerItem ? HWGConfig.luger_damage : item instanceof AssasultItem ? HWGConfig.ak47_damage : item instanceof Assasult1Item ? HWGConfig.smg_damage : item instanceof GPistolItem ? HWGConfig.golden_pistol_damage : item instanceof SPistolItem ? HWGConfig.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGConfig.hellhorse_damage : item instanceof Minigun ? HWGConfig.minigun_damage : HWGConfig.sniper_damage)
+						item instanceof PistolItem ? HWGMod.config.pistol_damage
+								: item instanceof LugerItem ? HWGMod.config.luger_damage : item instanceof AssasultItem ? HWGMod.config.ak47_damage : item instanceof Assasult1Item ? HWGMod.config.smg_damage : item instanceof GPistolItem ? HWGMod.config.golden_pistol_damage : item instanceof SPistolItem ? HWGMod.config.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGMod.config.hellhorse_damage : item instanceof Minigun ? HWGMod.config.minigun_damage : HWGMod.config.sniper_damage)
 				: item instanceof FlamethrowerItem ? new FlameFiring(level, this) : item instanceof BrimstoneItem ? new BlazeRodEntity(level, this) : item instanceof BalrogItem ? new FireballEntity(level, this) : new ShellEntity(level, this);
 	}
 
