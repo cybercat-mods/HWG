@@ -1,7 +1,7 @@
 package mod.azure.hwg.config;
 
-import dev.toma.configuration.config.Config;
-import dev.toma.configuration.config.Configurable;
+import mod.azure.azurelib.config.Config;
+import mod.azure.azurelib.config.Configurable;
 import mod.azure.hwg.HWGMod;
 
 @Config(id = HWGMod.MODID)

@@ -35,7 +35,7 @@
 		"minecraft": "1.19.4",
 		"java": ">=17",
 		"smartbrainlib": ">=1.9",
-		"azurelib": ">=1.0.6"
+		"azurelib": ">=1.0.13"
 	},
 	"accessWidener": "hwg.accesswidener"
 }

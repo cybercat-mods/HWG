@@ -1,8 +1,8 @@
 package mod.azure.hwg;
 
-import dev.toma.configuration.Configuration;
-import dev.toma.configuration.config.format.ConfigFormats;
 import mod.azure.azurelib.AzureLib;
+import mod.azure.azurelib.AzureLibMod;
+import mod.azure.azurelib.config.format.ConfigFormats;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import mod.azure.hwg.compat.BWCompat;
 import mod.azure.hwg.compat.GigCompat;
@@ -136,7 +136,7 @@ public class HWGMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		config = Configuration.registerConfig(HWGConfig.class, ConfigFormats.json()).getConfigInstance();
+		config = AzureLibMod.registerConfig(HWGConfig.class, ConfigFormats.json()).getConfigInstance();
 		ITEMS = new HWGItems();
 		if (FabricLoader.getInstance().isModLoaded("gigeresque"))
 			GIG_ITEMS = new GigCompat();
