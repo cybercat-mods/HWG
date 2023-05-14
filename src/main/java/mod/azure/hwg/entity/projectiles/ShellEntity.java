@@ -7,7 +7,7 @@ import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
@@ -99,7 +99,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof Player))
+		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player))
 			living.invulnerableTime = 0;
 	}
 
@@ -169,7 +169,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 		super.onHitBlock(blockHitResult);
 		if (!this.level.isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGConfig.bullets_breakdripstone == true)
+		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.bullets_breakdripstone == true)
 			level.destroyBlock(blockHitResult.getBlockPos(), true);
 		this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON);
 	}
@@ -189,7 +189,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 			if (entity2 instanceof LivingEntity)
 				((LivingEntity) entity2).setLastHurtMob(entity);
 		}
-		if (entity.hurt(damageSource2, HWGConfig.shotgun_damage)) {
+		if (entity.hurt(damageSource2, HWGMod.config.shotgun_damage)) {
 			if (entity instanceof LivingEntity) {
 				var livingEntity = (LivingEntity) entity;
 				if (!this.level.isClientSide && entity2 instanceof LivingEntity) {

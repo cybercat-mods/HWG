@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import mod.azure.azurelib.AzureLibMod;
 import mod.azure.azurelib.entities.TickingLightEntity;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGSounds;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
@@ -68,7 +68,7 @@ public class BaseFlareEntity extends AbstractArrow {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGConfig.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
 			living.invulnerableTime = 0;
 			living.setDeltaMovement(0, 0, 0);
 		}

@@ -11,7 +11,6 @@ import mod.azure.azurelib.animatable.client.RenderProvider;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.ShotgunRender;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.ShellEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -54,10 +53,10 @@ public class ShotgunItem extends AnimatedItem {
 						if (result.getEntity()instanceof LivingEntity livingEntity) {
 							livingEntity.invulnerableTime = 0;
 							livingEntity.setDeltaMovement(0, 0, 0);
-							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGConfig.shotgun_damage);
+							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGMod.config.shotgun_damage);
 							livingEntity.invulnerableTime = 0;
 							livingEntity.setDeltaMovement(0, 0, 0);
-							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGConfig.shotgun_damage);
+							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGMod.config.shotgun_damage);
 						}
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);

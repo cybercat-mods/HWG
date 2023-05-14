@@ -12,7 +12,6 @@ import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.SilverGunRender;
 import mod.azure.hwg.compat.BWCompat;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.SBulletEntity;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -52,7 +51,7 @@ public class SilverGunItem extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity()instanceof LivingEntity livingEntity)
-							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGConfig.pistol_damage);
+							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGMod.config.pistol_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
@@ -92,7 +91,7 @@ public class SilverGunItem extends AnimatedItem {
 	}
 
 	public SBulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new SBulletEntity(worldIn, shooter, HWGConfig.pistol_damage);
+		var bullet = new SBulletEntity(worldIn, shooter, HWGMod.config.pistol_damage);
 		return bullet;
 	}
 

@@ -16,7 +16,6 @@ import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.Meanie2Render;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.MBulletEntity;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -58,7 +57,7 @@ public class Meanie2Item extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity()instanceof LivingEntity livingEntity)
-							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGConfig.meanie_damage);
+							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGMod.config.meanie_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);

@@ -9,7 +9,7 @@ import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.hwg.config.HWGConfig;
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
@@ -275,7 +275,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void frag() {
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGConfig.grenades_breaks == true ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE);
+		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGMod.config.grenades_breaks == true ? Explosion.BlockInteraction.BREAK : Explosion.BlockInteraction.NONE);
 	}
 
 	protected void naplam() {

@@ -16,7 +16,6 @@ import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.LugerRender;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -57,7 +56,7 @@ public class LugerItem extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity()instanceof LivingEntity livingEntity)
-							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGConfig.luger_damage);
+							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGMod.config.luger_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
@@ -102,7 +101,7 @@ public class LugerItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new BulletEntity(worldIn, shooter, HWGConfig.luger_damage);
+		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.luger_damage);
 		return bullet;
 	}
 

@@ -16,7 +16,6 @@ import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.SMGRender;
-import mod.azure.hwg.config.HWGConfig;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -76,7 +75,7 @@ public class Assasult1Item extends AnimatedItem {
 						if (result.getEntity()instanceof LivingEntity livingEntity) {
 							livingEntity.invulnerableTime = 0;
 							livingEntity.setDeltaMovement(0, 0, 0);
-							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGConfig.smg_damage);
+							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGMod.config.smg_damage);
 						}
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
@@ -122,7 +121,7 @@ public class Assasult1Item extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new BulletEntity(worldIn, shooter, HWGConfig.smg_damage);
+		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.smg_damage);
 		return bullet;
 	}
 
