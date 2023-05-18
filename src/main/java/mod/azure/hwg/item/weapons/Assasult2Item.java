@@ -73,9 +73,11 @@ public class Assasult2Item extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity()instanceof LivingEntity livingEntity) {
-							livingEntity.invulnerableTime = 0;
-							livingEntity.setDeltaMovement(0, 0, 0);
 							livingEntity.hurt(DamageSource.playerAttack(playerentity), HWGMod.config.tommy_damage);
+							if (HWGMod.config.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
+								livingEntity.invulnerableTime = 0;
+								livingEntity.setDeltaMovement(0, 0, 0);
+							}
 						}
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
