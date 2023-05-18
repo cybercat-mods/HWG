@@ -81,7 +81,7 @@ public class ShotgunItem extends AnimatedItem {
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof ShotgunItem) {
-				if (ClientInit.reload.isDown() && selected) {
+				if (ClientInit.reload.isDown() && selected && !((Player) entity).getCooldowns().isOnCooldown(stack.getItem())) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.SHOTGUN, passedData);
@@ -91,8 +91,9 @@ public class ShotgunItem extends AnimatedItem {
 
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof ShotgunItem) {
-			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.SHOTGUN_SHELL) > 0) {
+			if (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.SHOTGUN_SHELL) > 0) {
 				removeAmmo(HWGItems.SHOTGUN_SHELL, user);
+				user.getCooldowns().addCooldown(this, 16);
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
 				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.SHOTGUNRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
