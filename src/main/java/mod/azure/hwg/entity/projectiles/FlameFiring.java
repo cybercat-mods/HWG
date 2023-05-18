@@ -11,7 +11,6 @@ import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.HWGEntity;
-import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
@@ -35,6 +34,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
@@ -218,7 +218,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 
 	@Override
 	public ItemStack getPickupItem() {
-		return new ItemStack(HWGItems.BULLETS);
+		return new ItemStack(Items.AIR);
 	}
 
 	@Override
