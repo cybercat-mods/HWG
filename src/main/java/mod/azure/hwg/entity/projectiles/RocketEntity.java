@@ -12,6 +12,7 @@ import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -123,6 +124,11 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	public void tick() {
 		super.tick();
+		if (this.level.isClientSide) {
+			double x = this.getX() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
+			double z = this.getZ() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
+			this.level.addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
+		}
 		var bl = this.isNoPhysics();
 		var vec3d = this.getDeltaMovement();
 		if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
