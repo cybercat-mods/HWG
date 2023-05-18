@@ -45,7 +45,7 @@ dependencies {
     mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.2:1.0.9'
+  	modImplementation 'mod.azure.azurelib:azurelib-fabric-1.19.2:1.0.18'
 	modImplementation "curse.maven:SBL-661293:4312490-sources-4312491"
     modImplementation "maven.modrinth:configuration:nGocYE6n"
     shade group: 'maven.modrinth', name: 'configuration', version: 'nGocYE6n'
