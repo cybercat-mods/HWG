@@ -30,9 +30,7 @@ public class RocketLauncher extends HWGGunBase {
 
 	@Override
 	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-		if (entityLiving instanceof Player) {
-			var playerentity = (Player) entityLiving;
-
+		if (entityLiving instanceof Player playerentity) {
 			if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
 				playerentity.getCooldowns().addCooldown(this, 15);
 				if (!worldIn.isClientSide) {
@@ -44,8 +42,6 @@ public class RocketLauncher extends HWGGunBase {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.RPG, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
-				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
-				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
 	}
