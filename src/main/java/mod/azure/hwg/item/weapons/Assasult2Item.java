@@ -94,7 +94,7 @@ public class Assasult2Item extends AnimatedItem {
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim(this.animation, RawAnimation.begin().then(this.animation, LoopType.PLAY_ONCE)));
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim(this.animation, RawAnimation.begin().then(this.animation, LoopType.PLAY_ONCE)).triggerableAnim("tommyreload", RawAnimation.begin().then("tommyreload", LoopType.PLAY_ONCE)).triggerableAnim("tommyreload2", RawAnimation.begin().then("tommyreload2", LoopType.PLAY_ONCE)));
 	}
 
 	@Override
@@ -116,6 +116,12 @@ public class Assasult2Item extends AnimatedItem {
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
 				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.CLIPRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				if (!user.getLevel().isClientSide) {
+					if (user.getRandom().nextInt(0, 100) >= 95)
+						triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "tommyreload2");
+					else
+						triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "tommyreload");
+				}
 			}
 		}
 	}

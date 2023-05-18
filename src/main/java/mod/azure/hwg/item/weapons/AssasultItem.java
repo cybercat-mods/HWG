@@ -94,7 +94,7 @@ public class AssasultItem extends AnimatedItem {
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim(this.animation, RawAnimation.begin().then(this.animation, LoopType.PLAY_ONCE)));
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim(this.animation, RawAnimation.begin().then(this.animation, LoopType.PLAY_ONCE)).triggerableAnim("akreload", RawAnimation.begin().then("akreload", LoopType.PLAY_ONCE)));
 	}
 
 	@Override
@@ -116,6 +116,8 @@ public class AssasultItem extends AnimatedItem {
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
 				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.CLIPRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				if (!user.getLevel().isClientSide)
+					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "akreload");
 			}
 		}
 	}

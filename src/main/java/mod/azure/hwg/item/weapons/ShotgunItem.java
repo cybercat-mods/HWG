@@ -96,6 +96,9 @@ public class ShotgunItem extends AnimatedItem {
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
 				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.SHOTGUNRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				if (!user.getLevel().isClientSide)
+					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "reload");
+				return;
 			}
 		}
 	}
