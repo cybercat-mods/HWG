@@ -71,8 +71,13 @@ public class AssasultItem extends AnimatedItem {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
-						if (result.getEntity()instanceof LivingEntity livingEntity)
+						if (result.getEntity()instanceof LivingEntity livingEntity) {
 							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.ak47_damage);
+							if (HWGMod.config.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
+								livingEntity.invulnerableTime = 0;
+								livingEntity.setDeltaMovement(0, 0, 0);
+							}
+						}
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
