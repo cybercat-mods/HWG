@@ -74,14 +74,14 @@ public class GPistolItem extends AnimatedItem {
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim("golden", RawAnimation.begin().then("golden", LoopType.PLAY_ONCE)));
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim("goldenreload", RawAnimation.begin().then("goldenreload", LoopType.PLAY_ONCE)).triggerableAnim("golden", RawAnimation.begin().then("golden", LoopType.PLAY_ONCE)));
 	}
 
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof GPistolItem) {
-				if (ClientInit.reload.isDown() && selected) {
+				if (ClientInit.reload.isDown() && selected && !((Player) entity).getCooldowns().isOnCooldown(stack.getItem())) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.GPISTOL, passedData);
@@ -92,10 +92,12 @@ public class GPistolItem extends AnimatedItem {
 	public void reload(Player user, InteractionHand hand) {
 		if (user.getItemInHand(hand).getItem() instanceof GPistolItem) {
 			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.BULLETS) > 0) {
+				user.getCooldowns().addCooldown(this, 30);
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				if (!user.getLevel().isClientSide)
+					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "goldenreload");
 			}
 		}
 	}

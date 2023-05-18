@@ -210,6 +210,28 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "bone2",
+					"parent": "pistol",
+					"pivot": [2, 5, 7.5],
+					"cubes": [
+						{
+							"origin": [1.1, 0.8, 6.1],
+							"size": [1.8, 5.8, 2.8],
+							"inflate": -0.2,
+							"pivot": [2, 5, 7.5],
+							"rotation": [22.5, 0, 0],
+							"uv": {
+								"north": {"uv": [12, 4], "uv_size": [2, 6]},
+								"east": {"uv": [15, 4], "uv_size": [-3, 6]},
+								"south": {"uv": [14, 4], "uv_size": [-2, 6]},
+								"west": {"uv": [12, 4], "uv_size": [3, 6]},
+								"up": {"uv": [2, 3], "uv_size": [-2, -3]},
+								"down": {"uv": [3, 15], "uv_size": [-2, -3]}
+							}
+						}
+					]
 				}
 			]
 		}
