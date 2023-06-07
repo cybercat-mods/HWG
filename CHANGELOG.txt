@@ -1,27 +1,3 @@
-v.1.4.10
+v.1.4.11
 
-## The Animation Update ##
-
-- Adds reload animations to :
-	- SMG
-	- Tommy Gun
-	- AK-47
-	- Luger
-	- Shotgun
-	- Hellhorse Revolver
-	- Silver Revolver
-	- Sniper Rifle
-	- Golden Pistol
-	- Pistol
-	- Silenced Pistol
-	- Silver Pistol
-	- Minigun
-- Fixed #86, Flame Throw gave bullets when firing against wall.
-- Adds iframe bypass for auto weapons.
-- Shotguns now reload 1 shell at a time when reloading.
-- Guns can break glass panes.
-- Fixed texture glitch with Luger.
-- Added smoke trail to Rockets.
-- Removed light from Rocket Launcher use.
-- Fixed texture glitch with Meanie 1.
-- Fixed texture glitch with Meanie 2.
+- Adds empty click sound to guns that need it.
