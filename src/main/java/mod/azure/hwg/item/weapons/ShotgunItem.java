@@ -70,7 +70,7 @@ public class ShotgunItem extends AnimatedItem {
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.SHOTGUN, SoundSource.PLAYERS, 1.25F, 1.3F);
 					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
 				}
-				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			} else
 				worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 1.0F, 1.5F);
@@ -97,7 +97,7 @@ public class ShotgunItem extends AnimatedItem {
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
 				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.SHOTGUNRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
-				if (!user.getLevel().isClientSide)
+				if (!user.level().isClientSide)
 					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "reload");
 				return;
 			}

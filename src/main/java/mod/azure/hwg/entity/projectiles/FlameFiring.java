@@ -152,19 +152,19 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 40)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		var isInsideWaterBlock = level.isWaterAt(blockPosition());
+		var isInsideWaterBlock = level().isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
 		if (getOwner()instanceof Player owner)
 			setYRot(entityData.get(FORCED_YAW));
 		if (this.tickCount % 16 == 2)
-			this.level.playSound((Player) null, this.getX(), this.getY(), this.getZ(), SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS, 0.5F, 1.0F);
-		if (this.level.isClientSide) {
+			this.level().playSound((Player) null, this.getX(), this.getY(), this.getZ(), SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS, 0.5F, 1.0F);
+		if (this.level().isClientSide) {
 			var x = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
 			var y = this.getY() + 0.05D + this.random.nextDouble();
 			var z = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
-			this.level.addParticle(ParticleTypes.FLAME, true, x, y, z, 0, 0, 0);
-			this.level.addParticle(HWGParticles.BRIM_ORANGE, true, x, y, z, 0, 0, 0);
-			this.level.addParticle(HWGParticles.BRIM_RED, true, x, y, z, 0, 0, 0);
+			this.level().addParticle(ParticleTypes.FLAME, true, x, y, z, 0, 0, 0);
+			this.level().addParticle(HWGParticles.BRIM_ORANGE, true, x, y, z, 0, 0, 0);
+			this.level().addParticle(HWGParticles.BRIM_RED, true, x, y, z, 0, 0, 0);
 		}
 		var aabb = new AABB(this.blockPosition().above()).inflate(1D, 5D, 1D);
 		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
@@ -197,12 +197,12 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			Entity entity = this.getOwner();
-			if (entity == null || !(entity instanceof Mob) || this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+			if (entity == null || !(entity instanceof Mob) || this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
 				var blockPos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
-				if (this.level.isEmptyBlock(blockPos))
-					this.level.setBlockAndUpdate(blockPos, BaseFireBlock.getState(this.level, blockPos));
+				if (this.level().isEmptyBlock(blockPos))
+					this.level().setBlockAndUpdate(blockPos, BaseFireBlock.getState(this.level(), blockPos));
 			}
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
@@ -212,7 +212,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-		if (!this.level.isClientSide)
+		if (!this.level().isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
 	}
 
@@ -229,12 +229,12 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 
 	private void spawnLightSource(boolean isInWaterBlock) {
 		if (lightBlockPos == null) {
-			lightBlockPos = findFreeSpace(level, blockPosition(), 2);
+			lightBlockPos = findFreeSpace(level(), blockPosition(), 2);
 			if (lightBlockPos == null)
 				return;
-			level.setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
+			level().setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 		} else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
-			var blockEntity = level.getBlockEntity(lightBlockPos);
+			var blockEntity = level().getBlockEntity(lightBlockPos);
 			if (blockEntity instanceof TickingLightEntity)
 				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
 			else

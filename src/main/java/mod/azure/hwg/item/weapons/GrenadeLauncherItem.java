@@ -151,7 +151,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 			setCharged(itemStack, false);
 			if (!world.isClientSide)
 				triggerAnim(user, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "shoot_controller", "firing");
-			var isInsideWaterBlock = user.level.isWaterAt(user.blockPosition());
+			var isInsideWaterBlock = user.level().isWaterAt(user.blockPosition());
 			spawnLightSource(user, isInsideWaterBlock);
 			return InteractionResultHolder.consume(itemStack);
 		} else if (!user.getProjectile(itemStack).isEmpty()) {
@@ -271,7 +271,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
 	public static void shootAll(Level world, LivingEntity entity, InteractionHand hand, ItemStack stack, float speed, float divergence) {
 		var list = getProjectiles(stack);
-		var fs = getSoundPitches(entity.level.random);
+		var fs = getSoundPitches(entity.level().random);
 
 		for (int i = 0; i < list.size(); ++i) {
 			var itemStack = (ItemStack) list.get(i);

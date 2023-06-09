@@ -165,7 +165,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
 	@Override
 	public void remove(RemovalReason reason) {
-		var areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+		var areaeffectcloudentity = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
 		if (this.getVariant() == 1)
 			areaeffectcloudentity.setParticle(this.getVariant() == 1 ? ParticleTypes.END_ROD : this.getVariant() == 2 ? ParticleTypes.EXPLOSION : this.getVariant() == 3 ? ParticleTypes.EXPLOSION : this.getVariant() == 4 ? ParticleTypes.LARGE_SMOKE : this.getVariant() == 5 ? ParticleTypes.FLASH : ParticleTypes.END_ROD);
 		areaeffectcloudentity.setRadius(this.getVariant() == 4 ? 5.0F : 2.0F);
@@ -173,7 +173,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 		if (this.getVariant() == 4)
 			areaeffectcloudentity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 1));
 		areaeffectcloudentity.absMoveTo(this.getX(), this.getEyeY(), this.getZ());
-		this.level.addFreshEntity(areaeffectcloudentity);
+		this.level().addFreshEntity(areaeffectcloudentity);
 		super.remove(reason);
 	}
 
@@ -232,7 +232,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			if (this.getVariant() == 1)
 				this.emp();
 			else if (this.getVariant() == 2)
@@ -249,7 +249,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			if (this.getVariant() == 1)
 				this.emp();
 			else if (this.getVariant() == 2)
@@ -273,7 +273,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void frag() {
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGMod.config.grenades_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+		this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGMod.config.grenades_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 
 	protected void naplam() {
@@ -283,7 +283,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 				((LivingEntity) e).setRemainingFireTicks(200);
 			}
 		});
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true, Level.ExplosionInteraction.NONE);
+		this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true, Level.ExplosionInteraction.NONE);
 	}
 
 	protected void emp() {
@@ -294,7 +294,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 		});
 //		this.getCommandSenderWorld().getBlockStatesIfLoaded(aabb).forEach(state -> {
 //			if (state.is(Blocks.REDSTONE_WIRE))
-//				this.level.destroyBlock(portalEntrancePos, true);
+//				this.level().destroyBlock(portalEntrancePos, true);
 //		});
 	}
 

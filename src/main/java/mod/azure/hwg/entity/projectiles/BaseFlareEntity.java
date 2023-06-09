@@ -112,7 +112,7 @@ public class BaseFlareEntity extends AbstractArrow {
 		if (this.tickCount >= 800 || this.isInWater())
 			this.remove(Entity.RemovalReason.DISCARDED);
 		if (this.life == 0 && !this.isSilent())
-			this.level.playSound((Player) null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN_SHOOT, SoundSource.PLAYERS, 6.0F, 1.0F);
+			this.level().playSound((Player) null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN_SHOOT, SoundSource.PLAYERS, 6.0F, 1.0F);
 		setNoGravity(false);
 		++this.life;
 		var vec3d = this.getDeltaMovement();
@@ -120,10 +120,10 @@ public class BaseFlareEntity extends AbstractArrow {
 		this.setDeltaMovement(vec3d.scale((double) 0.99F));
 		if (this.tickCount > 25)
 			this.setDeltaMovement(0.0, -0.1, 0.0);
-		var isInsideWaterBlock = level.isWaterAt(blockPosition());
+		var isInsideWaterBlock = level().isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
-		if (this.level.isClientSide) {
-			this.level.addParticle(
+		if (this.level().isClientSide) {
+			this.level().addParticle(
 					this.getColor() == 16 ? HWGParticles.WHITE_FLARE
 							: this.getColor() == 15 ? HWGParticles.YELLOW_FLARE
 									: this.getColor() == 14 ? HWGParticles.RED_FLARE
@@ -165,7 +165,7 @@ public class BaseFlareEntity extends AbstractArrow {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-		if (!this.level.isClientSide)
+		if (!this.level().isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
 		this.setSoundEvent(HWGSounds.FLAREGUN);
 	}
@@ -193,12 +193,12 @@ public class BaseFlareEntity extends AbstractArrow {
 
 	private void spawnLightSource(boolean isInWaterBlock) {
 		if (lightBlockPos == null) {
-			lightBlockPos = findFreeSpace(level, blockPosition(), 2);
+			lightBlockPos = findFreeSpace(level(), blockPosition(), 2);
 			if (lightBlockPos == null)
 				return;
-			level.setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
+			level().setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 		} else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
-			var blockEntity = level.getBlockEntity(lightBlockPos);
+			var blockEntity = level().getBlockEntity(lightBlockPos);
 			if (blockEntity instanceof TickingLightEntity)
 				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
 			else

@@ -141,10 +141,10 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 40)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			double x = this.getX() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
 			double z = this.getZ() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
-			this.level.addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
+			this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
 		}
 		if (getOwner()instanceof Player owner)
 			setYRot(entityData.get(FORCED_YAW));
@@ -173,12 +173,12 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
-		if (!this.level.isClientSide)
+		if (!this.level().isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.bullets_breakdripstone == true)
-			level.destroyBlock(blockHitResult.getBlockPos(), true);
-		if (level.getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level.getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
-			level.destroyBlock(blockHitResult.getBlockPos(), true);
+		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.bullets_breakdripstone == true)
+			level().destroyBlock(blockHitResult.getBlockPos(), true);
+		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
+			level().destroyBlock(blockHitResult.getBlockPos(), true);
 		this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON);
 	}
 
@@ -186,7 +186,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		var entity = entityHitResult.getEntity();
 		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
-			if (!this.level.isClientSide)
+			if (!this.level().isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		var entity2 = this.getOwner();
 		DamageSource damageSource2;
@@ -200,7 +200,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 		if (entity.hurt(damageSource2, bulletdamage)) {
 			if (entity instanceof LivingEntity) {
 				var livingEntity = (LivingEntity) entity;
-				if (!this.level.isClientSide && entity2 instanceof LivingEntity) {
+				if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
 					EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
 					EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
 				}
@@ -208,7 +208,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
 					((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 			}
-		} else if (!this.level.isClientSide)
+		} else if (!this.level().isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
 	}
 

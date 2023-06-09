@@ -124,10 +124,10 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			double x = this.getX() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
 			double z = this.getZ() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
-			this.level.addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
+			this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
 		}
 		var bl = this.isNoPhysics();
 		var vec3d = this.getDeltaMovement();
@@ -152,7 +152,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 			this.timeInAir = 0;
 			var vec3d3 = this.position();
 			var vector3d3 = vec3d3.add(vec3d);
-			HitResult hitResult = this.level
+			HitResult hitResult = this.level()
 					.clip(new ClipContext(vec3d3, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 			if (((HitResult) hitResult).getType() != HitResult.Type.MISS)
 				vector3d3 = ((HitResult) hitResult).getLocation();
@@ -226,7 +226,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitBlock(BlockHitResult blockHitResult) {
 		super.onHitBlock(blockHitResult);
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.explode();
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
@@ -236,14 +236,14 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.explode();
 			this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
 
 	protected void explode() {
-		this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
+		this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
 				HWGMod.config.rocket_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 

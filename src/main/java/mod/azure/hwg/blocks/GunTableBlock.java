@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -34,7 +33,7 @@ public class GunTableBlock extends Block implements EntityBlock {
 	private static final VoxelShape Y_LENGTH1 = Block.box(1, 0, 0, 16, 17, 16);
 
 	public GunTableBlock() {
-		super(FabricBlockSettings.of(Material.METAL).strength(4.0f).noOcclusion());
+		super(FabricBlockSettings.of().strength(4.0f).noOcclusion());
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.SOUTH));
 	}
 

@@ -76,7 +76,7 @@ public class BalrogItem extends HWGGunBase {
 					stack.hurtAndBreak(4, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
-				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}

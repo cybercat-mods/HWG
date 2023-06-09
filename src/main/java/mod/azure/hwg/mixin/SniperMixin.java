@@ -16,12 +16,11 @@ import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.item.weapons.SniperItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 @Mixin(Gui.class)
-public abstract class SniperMixin extends GuiComponent {
+public abstract class SniperMixin {
 
 	private static final ResourceLocation SNIPER = new ResourceLocation("hwg", "textures/gui/pumpkinblur.png");
 	@Shadow

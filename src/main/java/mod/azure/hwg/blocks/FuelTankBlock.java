@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -25,7 +24,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class FuelTankBlock extends Block {
 
 	public FuelTankBlock() {
-		super(FabricBlockSettings.of(Material.METAL).sound(SoundType.METAL).noOcclusion());
+		super(FabricBlockSettings.of().sound(SoundType.METAL).noOcclusion());
 	}
 
 	@Override

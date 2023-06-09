@@ -2,6 +2,7 @@ package mod.azure.hwg.item.weapons;
 
 import mod.azure.azurelib.AzureLibMod;
 import mod.azure.azurelib.animatable.GeoItem;
+import mod.azure.azurelib.constant.DataTickets;
 import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
 import mod.azure.azurelib.core.animation.Animation.LoopType;
@@ -15,6 +16,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -35,9 +37,13 @@ public abstract class AnimatedItem extends HWGGunBase implements GeoItem {
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE)).triggerableAnim("reload", RawAnimation.begin().then("reload", LoopType.PLAY_ONCE)));
+		controllers.add(new AnimationController<>(this, "shoot_controller", event -> {
+			if (event.getData(DataTickets.ITEM_RENDER_PERSPECTIVE) == ItemDisplayContext.GUI)
+				return PlayState.STOP;
+			return PlayState.CONTINUE;
+		}).triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE)).triggerableAnim("reload", RawAnimation.begin().then("reload", LoopType.PLAY_ONCE)));
 	}
-
+	
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
@@ -45,12 +51,12 @@ public abstract class AnimatedItem extends HWGGunBase implements GeoItem {
 
 	protected void spawnLightSource(Entity entity, boolean isInWaterBlock) {
 		if (lightBlockPos == null) {
-			lightBlockPos = findFreeSpace(entity.level, entity.blockPosition(), 2);
+			lightBlockPos = findFreeSpace(entity.level(), entity.blockPosition(), 2);
 			if (lightBlockPos == null)
 				return;
-			entity.level.setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
+			entity.level().setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 		} else if (checkDistance(lightBlockPos, entity.blockPosition(), 2)) {
-			var blockEntity = entity.level.getBlockEntity(lightBlockPos);
+			var blockEntity = entity.level().getBlockEntity(lightBlockPos);
 			if (blockEntity instanceof TickingLightEntity)
 				((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
 			else

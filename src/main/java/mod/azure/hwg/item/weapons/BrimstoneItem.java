@@ -62,7 +62,7 @@ public class BrimstoneItem extends HWGGunBase {
 
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.FIREWORK_ROCKET_BLAST_FAR, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 				}
-				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}

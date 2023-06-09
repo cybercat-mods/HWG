@@ -111,6 +111,6 @@ public class HWGEquipmentUtils {
 	}
 
 	public static boolean isVanillaItemStackBreaking(ItemStack breakingStack, Item vanillaItem) {
-		return breakingStack.sameItem(new ItemStack(vanillaItem)) && breakingStack.getMaxDamage() - breakingStack.getDamageValue() <= 0;
+		return !new ItemStack(vanillaItem).isEmpty() && breakingStack.is(vanillaItem.asItem()) && breakingStack.getMaxDamage() - breakingStack.getDamageValue() <= 0;
 	}
 }

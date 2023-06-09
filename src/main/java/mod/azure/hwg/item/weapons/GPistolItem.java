@@ -64,7 +64,7 @@ public class GPistolItem extends AnimatedItem {
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.PISTOL, SoundSource.PLAYERS, 6.75F, 1.0F);
 					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "golden");
 				}
-				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
@@ -94,7 +94,7 @@ public class GPistolItem extends AnimatedItem {
 				user.getCooldowns().addCooldown(this, 30);
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				if (!user.getLevel().isClientSide)
+				if (!user.level().isClientSide)
 					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "goldenreload");
 			}
 		}

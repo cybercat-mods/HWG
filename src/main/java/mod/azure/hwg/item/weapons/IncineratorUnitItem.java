@@ -62,7 +62,7 @@ public class IncineratorUnitItem extends HWGGunBase {
 					worldIn.addFreshEntity(flames);
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 				}
-				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}

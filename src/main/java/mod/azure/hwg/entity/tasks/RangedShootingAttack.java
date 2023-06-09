@@ -77,7 +77,7 @@ public class RangedShootingAttack<E extends HWGEntity> extends CustomDelayedBeha
 			return;
 
 		entity.shoot();
-		entity.level.setBlockAndUpdate(entity.blockPosition(), AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
+		entity.level().setBlockAndUpdate(entity.blockPosition(), AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
 	}
 
 }

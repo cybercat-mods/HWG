@@ -323,7 +323,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 
 	public static void shootAll(Level world, LivingEntity entity, InteractionHand hand, ItemStack stack, float speed, float divergence) {
 		var list = getProjectiles(stack);
-		var fs = getSoundPitches(entity.level.random);
+		var fs = getSoundPitches(entity.level().random);
 
 		for (int i = 0; i < list.size(); ++i) {
 			var itemStack = (ItemStack) list.get(i);

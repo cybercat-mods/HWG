@@ -67,7 +67,7 @@ public class Minigun extends AnimatedItem {
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.MINIGUN, SoundSource.PLAYERS, 0.25F, 1.0F);
 					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
 				}
-				var isInsideWaterBlock = playerentity.level.isWaterAt(playerentity.blockPosition());
+				var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
 				spawnLightSource(entityLiving, isInsideWaterBlock);
 			}
 		}
@@ -80,7 +80,7 @@ public class Minigun extends AnimatedItem {
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
 				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.CLIPRELOAD, SoundSource.PLAYERS, 1.00F, 0.3F);
-				if (!user.getLevel().isClientSide)
+				if (!user.level().isClientSide)
 					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "reload");
 			}
 		}

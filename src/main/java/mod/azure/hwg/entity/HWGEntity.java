@@ -166,14 +166,14 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 
 	public Projectile getProjectile(Item item) {
 		return item instanceof PistolItem || item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item || item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem || item instanceof HellhorseRevolverItem || item instanceof Minigun
-				? new BulletEntity(level, this,
+				? new BulletEntity(level(), this,
 						item instanceof PistolItem ? HWGMod.config.pistol_damage
 								: item instanceof LugerItem ? HWGMod.config.luger_damage : item instanceof AssasultItem ? HWGMod.config.ak47_damage : item instanceof Assasult1Item ? HWGMod.config.smg_damage : item instanceof GPistolItem ? HWGMod.config.golden_pistol_damage : item instanceof SPistolItem ? HWGMod.config.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGMod.config.hellhorse_damage : item instanceof Minigun ? HWGMod.config.minigun_damage : HWGMod.config.sniper_damage)
-				: item instanceof FlamethrowerItem ? new FlameFiring(level, this) : item instanceof BrimstoneItem ? new BlazeRodEntity(level, this) : item instanceof BalrogItem ? new FireballEntity(level, this) : new ShellEntity(level, this);
+				: item instanceof FlamethrowerItem ? new FlameFiring(level(), this) : item instanceof BrimstoneItem ? new BlazeRodEntity(level(), this) : item instanceof BalrogItem ? new FireballEntity(level(), this) : new ShellEntity(level(), this);
 	}
 
 	public void shoot() {
-		if (!level.isClientSide) {
+		if (!level().isClientSide) {
 			final var world = getCommandSenderWorld();
 			final var vector3d = getViewVector(1.0F);
 			final var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());

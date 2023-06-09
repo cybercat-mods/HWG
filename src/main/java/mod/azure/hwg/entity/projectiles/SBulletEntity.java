@@ -53,7 +53,7 @@ public class SBulletEntity extends BulletEntity {
 	protected void onHitEntity(EntityHitResult entityHitResult) {
 		var entity = entityHitResult.getEntity();
 		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
-			if (!this.level.isClientSide)
+			if (!this.level().isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		var entity2 = this.getOwner();
 		DamageSource damageSource2;
@@ -68,7 +68,7 @@ public class SBulletEntity extends BulletEntity {
 			if (entity.hurt(damageSource2, bulletdamage * 3)) {
 				if (entity instanceof LivingEntity) {
 					var livingEntity = (LivingEntity) entity;
-					if (!this.level.isClientSide && entity2 instanceof LivingEntity) {
+					if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
 						EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
 						EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
 					}
@@ -77,13 +77,13 @@ public class SBulletEntity extends BulletEntity {
 					if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
 						((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 				}
-			} else if (!this.level.isClientSide)
+			} else if (!this.level().isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		} else {
 			if (entity.hurt(damageSource2, bulletdamage)) {
 				if (entity instanceof LivingEntity) {
 					var livingEntity = (LivingEntity) entity;
-					if (!this.level.isClientSide && entity2 instanceof LivingEntity) {
+					if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
 						EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
 						EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
 					}
@@ -91,7 +91,7 @@ public class SBulletEntity extends BulletEntity {
 					if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
 						((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
 				}
-			} else if (!this.level.isClientSide)
+			} else if (!this.level().isClientSide)
 				this.remove(Entity.RemovalReason.DISCARDED);
 		}
 	}
