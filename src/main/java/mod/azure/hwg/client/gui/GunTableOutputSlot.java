@@ -55,7 +55,7 @@ public class GunTableOutputSlot extends Slot {
 				if (!itemStack2.isEmpty())
 					if (itemStack.isEmpty())
 						this.gunTableInventory.setItem(i, itemStack2);
-					else if (ItemStack.isSameItem(itemStack, itemStack2) && ItemStack.matches(itemStack, itemStack2)) {
+					else if (ItemStack.isSameItem(itemStack, itemStack2) && ItemStack.isSameItemSameTags(itemStack, itemStack2)) {
 						itemStack2.grow(itemStack.getCount());
 						this.gunTableInventory.setItem(i, itemStack2);
 					} else if (!this.player.getInventory().add(itemStack2))
