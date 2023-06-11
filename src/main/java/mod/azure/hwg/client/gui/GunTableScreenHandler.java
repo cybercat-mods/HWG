@@ -25,6 +25,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
 	private final ContainerLevelAccess context;
 	@SuppressWarnings("unused")
 	private int recipeIndex;
+	@SuppressWarnings("unused")
 	private static Level level;
 
 	// client
