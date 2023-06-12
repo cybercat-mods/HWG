@@ -32,10 +32,10 @@
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"fabric": "*",
-		"minecraft": "1.20",
+		"minecraft": "1.20.1",
 		"java": ">=17",
 		"smartbrainlib": ">=1.11",
-		"azurelib": ">=1.0.9"
+		"azurelib": ">=1.0.15"
 	},
 	"accessWidener": "hwg.accesswidener"
 }
