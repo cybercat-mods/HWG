@@ -8,18 +8,12 @@ import mod.azure.hwg.HWGMod;
 public class HWGConfig {
 
 	@Configurable
-	public String[] merc_biomes = { "minecraft:forest", "minecraft:flower_forest", "minecraft:birch_forest", "minecraft:old_growth_birch_forest", "minecraft:dark_forest", "minecraft:grove", "minecraft:plains", "minecraft:snowy_plains", "minecraft:taiga", "minecraft:snowy_taiga", "minecraft:old_growth_pine_taiga", "minecraft:old_growth_spruce_taiga", "minecraft:bamboo_jungle", "minecraft:jungle", "minecraft:sparse_jungle", "minecraft:desert", "minecraft:desert_hills", "minecraft:desert_lakes",
-			"minecraft:badlands", "minecraft:eroded_badlands", "minecraft:wooded_badlands" };
-	@Configurable
 	public int merc_spawn_weight = 5;
 	@Configurable
 	public int merc_min_group = 1;
 	@Configurable
 	public int merc_max_group = 2;
 
-	@Configurable
-	public String[] spy_biomes = { "minecraft:forest", "minecraft:flower_forest", "minecraft:birch_forest", "minecraft:old_growth_birch_forest", "minecraft:dark_forest", "minecraft:grove", "minecraft:plains", "minecraft:snowy_plains", "minecraft:taiga", "minecraft:snowy_taiga", "minecraft:old_growth_pine_taiga", "minecraft:old_growth_spruce_taiga", "minecraft:bamboo_jungle", "minecraft:jungle", "minecraft:sparse_jungle", "minecraft:desert", "minecraft:desert_hills", "minecraft:desert_lakes",
-			"minecraft:badlands", "minecraft:eroded_badlands", "minecraft:wooded_badlands" };
 	@Configurable
 	public int spy_spawn_weight = 5;
 	@Configurable
@@ -28,16 +22,12 @@ public class HWGConfig {
 	public int spy_max_group = 2;
 
 	@Configurable
-	public String[] lesser_biomes = { "minecraft:nether_wastes", "minecraft:soul_sand_valley", "minecraft:crimson_forest", "minecraft:warped_forest", "minecraft:basalt_deltas" };
-	@Configurable
 	public int lesser_spawn_weight = 2;
 	@Configurable
 	public int lesser_min_group = 1;
 	@Configurable
 	public int lesser_max_group = 2;
 
-	@Configurable
-	public String[] greater_biomes = { "minecraft:nether_wastes", "minecraft:soul_sand_valley", "minecraft:crimson_forest", "minecraft:warped_forest", "minecraft:basalt_deltas" };
 	@Configurable
 	public int greater_spawn_weight = 1;
 	@Configurable
