@@ -29,11 +29,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -50,6 +52,7 @@ public class HWGMod implements ModInitializer {
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
 	public static ProjectilesEntityRegister PROJECTILES;
+	public static MenuType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
 	public static final ResourceLocation LUGER = new ResourceLocation(MODID, "luger");
 	public static final ResourceLocation HELL = new ResourceLocation(MODID, "hellgun");
 	public static final ResourceLocation ASSASULT = new ResourceLocation(MODID, "smg");
@@ -72,7 +75,10 @@ public class HWGMod implements ModInitializer {
 	public static final ResourceLocation GUNSMITH_POI = new ResourceLocation(MODID, "gun_smith_poi");
 	public static final ResourceLocation GUN_TABLE_GUI = new ResourceLocation(MODID, "gun_table_gui");
 	public static final ResourceLocation ROCKETLAUNCHER = new ResourceLocation(MODID, "rocketlauncher");
-	public static MenuType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
+	public static final TagKey<Biome> SPY_BIOMES = TagKey.create(Registries.BIOME, HWGMod.modResource("spy_biomes"));
+	public static final TagKey<Biome> MERC_BIOMES = TagKey.create(Registries.BIOME, HWGMod.modResource("merc_biomes"));
+	public static final TagKey<Biome> TECHNOLESSER_BIOMES = TagKey.create(Registries.BIOME, HWGMod.modResource("technolesser_biomes"));
+	public static final TagKey<Biome> TECHNOGREATER_BIOMES = TagKey.create(Registries.BIOME, HWGMod.modResource("technogreater_biomes"));
 	public static final ResourceKey<CreativeModeTab> WeaponItemGroup = ResourceKey.create(Registries.CREATIVE_MODE_TAB, new ResourceLocation(MODID, "weapons"));
 	public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, new ResourceLocation(MODID, "gun_table"), new GunTableRecipe.Serializer());
 
@@ -166,5 +172,9 @@ public class HWGMod implements ModInitializer {
 		SCREEN_HANDLER_TYPE = new MenuType<>(GunTableScreenHandler::new, FeatureFlags.VANILLA_SET);
 		Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "guntable_screen_type"), SCREEN_HANDLER_TYPE);
 		PacketHandler.registerMessages();
+	}
+
+	public static final ResourceLocation modResource(String name) {
+		return new ResourceLocation(MODID, name);
 	}
 }
