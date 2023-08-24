@@ -1,3 +1,4 @@
-v.1.4.11
+v.1.4.13
 
-- Adds empty click sound to guns that need it.
+- Moved Spawn configs to tags.
+- Switched Reload to AzureLib keybind. Requires AzureLib 1.0.26
