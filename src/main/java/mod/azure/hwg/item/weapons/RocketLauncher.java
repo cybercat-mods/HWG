@@ -3,8 +3,8 @@ package mod.azure.hwg.item.weapons;
 import java.util.List;
 
 import io.netty.buffer.Unpooled;
+import mod.azure.azurelib.Keybindings;
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.RocketEntity;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -60,7 +60,7 @@ public class RocketLauncher extends HWGGunBase {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof RocketLauncher && ClientInit.reload.isDown() && selected) {
+			if (((Player) entity).getMainHandItem().getItem() instanceof RocketLauncher && Keybindings.RELOAD.isDown() && selected) {
 				FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 				passedData.writeBoolean(true);
 				ClientPlayNetworking.send(HWGMod.ROCKETLAUNCHER, passedData);

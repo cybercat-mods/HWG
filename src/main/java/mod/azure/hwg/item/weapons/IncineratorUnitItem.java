@@ -3,8 +3,8 @@ package mod.azure.hwg.item.weapons;
 import java.util.List;
 
 import io.netty.buffer.Unpooled;
+import mod.azure.azurelib.Keybindings;
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -77,7 +77,7 @@ public class IncineratorUnitItem extends HWGGunBase {
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof IncineratorUnitItem)
-				if (ClientInit.reload.isDown() && selected) {
+				if (Keybindings.RELOAD.isDown() && selected) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.FLAMETHOWER, passedData);
