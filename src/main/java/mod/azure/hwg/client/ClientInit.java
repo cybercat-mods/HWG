@@ -20,8 +20,6 @@ import net.minecraft.client.gui.screens.MenuScreens;
 
 public class ClientInit implements ClientModInitializer {
 
-	public static KeyMapping reload = new KeyMapping("key.hwg.reload", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, "category.hwg.binds");
-
 	public static KeyMapping scope = new KeyMapping("key.hwg.scope", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, "category.hwg.binds");
 
 	@Override
@@ -31,7 +29,6 @@ public class ClientInit implements ClientModInitializer {
 		MenuScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
 		if (FabricLoader.getInstance().isModLoaded("bewitchment"))
 			BWClientCompat.onInitializeClient();
-		KeyBindingHelper.registerKeyBinding(reload);
 		KeyBindingHelper.registerKeyBinding(scope);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BLACK_FLARE, FlareParticle.BlackSmokeFactory::new);
 		ParticleFactoryRegistry.getInstance().register(HWGParticles.BLUE_FLARE, FlareParticle.BlueSmokeFactory::new);

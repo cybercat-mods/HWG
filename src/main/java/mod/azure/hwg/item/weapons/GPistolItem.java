@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import io.netty.buffer.Unpooled;
+import mod.azure.azurelib.Keybindings;
 import mod.azure.azurelib.animatable.GeoItem;
 import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
 import mod.azure.azurelib.animatable.client.RenderProvider;
@@ -14,7 +15,6 @@ import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.GPistolRender;
 import mod.azure.hwg.entity.projectiles.BulletEntity;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -79,7 +79,7 @@ public class GPistolItem extends AnimatedItem {
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof GPistolItem) {
-				if (ClientInit.reload.isDown() && selected && !((Player) entity).getCooldowns().isOnCooldown(stack.getItem())) {
+				if (Keybindings.RELOAD.isDown() && selected && !((Player) entity).getCooldowns().isOnCooldown(stack.getItem())) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.GPISTOL, passedData);

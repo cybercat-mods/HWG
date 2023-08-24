@@ -5,11 +5,11 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import io.netty.buffer.Unpooled;
+import mod.azure.azurelib.Keybindings;
 import mod.azure.azurelib.animatable.GeoItem;
 import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
 import mod.azure.azurelib.animatable.client.RenderProvider;
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.client.ClientInit;
 import mod.azure.hwg.client.render.weapons.ShotgunRender;
 import mod.azure.hwg.entity.projectiles.ShellEntity;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -81,7 +81,7 @@ public class ShotgunItem extends AnimatedItem {
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
 			if (((Player) entity).getMainHandItem().getItem() instanceof ShotgunItem) {
-				if (ClientInit.reload.isDown() && selected && !((Player) entity).getCooldowns().isOnCooldown(stack.getItem())) {
+				if (Keybindings.RELOAD.isDown() && selected && !((Player) entity).getCooldowns().isOnCooldown(stack.getItem())) {
 					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
 					passedData.writeBoolean(true);
 					ClientPlayNetworking.send(HWGMod.SHOTGUN, passedData);

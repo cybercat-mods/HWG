@@ -1,41 +1,31 @@
 {
-	"schemaVersion": 1,
-	"id": "hwg",
-	"version": "${version}",
-	"name": "Happiness is a Warm Gun",
-	"description": "Inspired by the likes of Techguns, Team Fortress 2, Doom, and a few other oddities, Happiness (is a) Warm Gun is a simple-yet-detailed gun mod for Fabric 1.16+",
-	"authors": [
-		"AzureDoom, cybercat5555"
-	],
-	"contact": {
-		"homepage": "https://www.curseforge.com/minecraft/mc-mods/happiness-is-a-warm-gun",
-		"issues": "https://github.com/AzureDoom/HWG/issues",
-		"sources": "https://github.com/AzureDoom/HWG"
-	},
-	"license": "CC BY-NC-ND 4.0",
-	"icon": "assets/hwg/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"mod.azure.hwg.HWGMod"
-		],
-		"client": [
-			"mod.azure.hwg.client.ClientInit"
-		],
-		"rei_client": [
-			"mod.azure.hwg.rei.ReiPlugin"
-		]
-	},
-	"mixins": [
-		"hwg.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.14.11",
-		"fabric": "*",
-		"minecraft": "1.19.4",
-		"java": ">=17",
-		"smartbrainlib": ">=1.9",
-		"azurelib": ">=1.0.13"
-	},
-	"accessWidener": "hwg.accesswidener"
+  "schemaVersion" : 1,
+  "id" : "hwg",
+  "version" : "${version}",
+  "name" : "Happiness is a Warm Gun",
+  "description" : "Inspired by the likes of Techguns, Team Fortress 2, Doom, and a few other oddities, Happiness (is a) Warm Gun is a simple-yet-detailed gun mod for Fabric 1.16+",
+  "authors" : [ "AzureDoom, cybercat5555" ],
+  "contact" : {
+    "homepage" : "https://www.curseforge.com/minecraft/mc-mods/happiness-is-a-warm-gun",
+    "issues" : "https://github.com/AzureDoom/HWG/issues",
+    "sources" : "https://github.com/AzureDoom/HWG"
+  },
+  "license" : "CC BY-NC-ND 4.0",
+  "icon" : "assets/hwg/icon.png",
+  "environment" : "*",
+  "entrypoints" : {
+    "main" : [ "mod.azure.hwg.HWGMod" ],
+    "client" : [ "mod.azure.hwg.client.ClientInit" ],
+    "rei_client" : [ "mod.azure.hwg.rei.ReiPlugin" ]
+  },
+  "mixins" : [ "hwg.mixins.json" ],
+  "depends" : {
+    "fabricloader" : ">=0.14.11",
+    "fabric" : "*",
+    "minecraft" : "1.19.4",
+    "java" : ">=17",
+    "smartbrainlib" : ">=1.9",
+    "azurelib" : ">=1.0.26"
+  },
+  "accessWidener" : "hwg.accesswidener"
 }
