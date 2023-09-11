@@ -1,3 +1,8 @@
-v.1.4.16
+v.1.4.17
 
-- Switched Reload to AzureLib keybind. Requires AzureLib 1.0.25
+- Rewrote ranged and melee animations to use the trigger animation system.
+- Added check for cool downs on playing reload sounds.
+- EMP Granades now break Redstone Torches and disable Levers, Lamps, Repeaters, Comparators, and Redstone Wire
+- Revolvers now reload bullets 1 by 1.
+- Configs rewrote, they will reset upon update.
+	- Configs for gun capacity added
