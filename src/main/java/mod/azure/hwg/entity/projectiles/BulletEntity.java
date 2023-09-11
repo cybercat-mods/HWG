@@ -96,7 +96,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
 			living.invulnerableTime = 0;
 			living.setDeltaMovement(0, 0, 0);
 		}
@@ -175,7 +175,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 		super.onHitBlock(blockHitResult);
 		if (!this.level().isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.bullets_breakdripstone == true)
+		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.gunconfigs.bullets_breakdripstone == true)
 			level().destroyBlock(blockHitResult.getBlockPos(), true);
 		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
 			level().destroyBlock(blockHitResult.getBlockPos(), true);

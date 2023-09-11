@@ -66,7 +66,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 
 	public MercEntity(EntityType<MercEntity> entityType, Level worldIn) {
 		super(entityType, worldIn);
-		xpReward = HWGMod.config.mercconfigs.merc_exp;
+		xpReward = HWGMod.config.mobconfigs.mercconfigs.merc_exp;
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGMod.config.mercconfigs.merc_health).add(Attributes.ARMOR, 3).add(Attributes.ATTACK_DAMAGE, 2D).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGMod.config.mobconfigs.mercconfigs.merc_health).add(Attributes.ARMOR, 3).add(Attributes.ATTACK_DAMAGE, 2D).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override

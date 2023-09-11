@@ -28,7 +28,7 @@ import net.minecraft.world.level.Level;
 public class BalrogItem extends HWGGunBase {
 
 	public BalrogItem() {
-		super(new Item.Properties().stacksTo(1).durability(5));
+		super(new Item.Properties().stacksTo(1).durability(HWGMod.config.gunconfigs.balrogconfigs.balrog_cap + 1));
 	}
 
 	@Override

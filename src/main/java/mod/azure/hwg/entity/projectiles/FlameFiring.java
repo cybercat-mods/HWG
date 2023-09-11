@@ -113,7 +113,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
 			living.setDeltaMovement(0, 0, 0);
 			living.invulnerableTime = 0;
 		}

@@ -61,7 +61,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
 	public TechnodemonGreaterEntity(EntityType<TechnodemonGreaterEntity> entityType, Level worldIn) {
 		super(entityType, worldIn);
-		xpReward = HWGMod.config.greatconfigs.greater_exp;
+		xpReward = HWGMod.config.mobconfigs.greatconfigs.greater_exp;
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.MAX_HEALTH, HWGMod.config.greatconfigs.greater_health).add(Attributes.ARMOR, 5).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.MAX_HEALTH, HWGMod.config.mobconfigs.greatconfigs.greater_health).add(Attributes.ARMOR, 5).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 
 	public TechnodemonEntity(EntityType<TechnodemonEntity> entityType, Level worldIn) {
 		super(entityType, worldIn);
-		xpReward = HWGMod.config.lesserconfigs.lesser_exp;
+		xpReward = HWGMod.config.mobconfigs.lesserconfigs.lesser_exp;
 	}
 
 	@Override
@@ -133,7 +133,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ARMOR, 4).add(Attributes.MAX_HEALTH, HWGMod.config.lesserconfigs.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ARMOR, 4).add(Attributes.MAX_HEALTH, HWGMod.config.mobconfigs.lesserconfigs.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override

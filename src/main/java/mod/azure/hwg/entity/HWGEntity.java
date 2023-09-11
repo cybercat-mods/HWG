@@ -169,9 +169,10 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 	public Projectile getProjectile(Item item) {
 		return item instanceof PistolItem || item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item || item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem || item instanceof HellhorseRevolverItem || item instanceof Minigun
 				? new BulletEntity(level(), this,
-						item instanceof PistolItem ? HWGMod.config.pistol_damage
-								: item instanceof LugerItem ? HWGMod.config.luger_damage
-										: item instanceof AssasultItem ? HWGMod.config.ak47_damage : item instanceof Assasult1Item ? HWGMod.config.smg_damage : item instanceof GPistolItem ? HWGMod.config.golden_pistol_damage : item instanceof SPistolItem ? HWGMod.config.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGMod.config.hellhorse_damage : item instanceof Minigun ? HWGMod.config.minigun_damage : HWGMod.config.sniper_damage)
+						item instanceof PistolItem ? HWGMod.config.gunconfigs.pistolconfigs.pistol_damage
+								: item instanceof LugerItem ? HWGMod.config.gunconfigs.lugerconfigs.luger_damage
+										: item instanceof AssasultItem ? HWGMod.config.gunconfigs.ak47configs.ak47_damage
+												: item instanceof Assasult1Item ? HWGMod.config.gunconfigs.smgconfigs.smg_damage : item instanceof GPistolItem ? HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_damage : item instanceof SPistolItem ? HWGMod.config.gunconfigs.silencedpistolconfigs.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage : item instanceof Minigun ? HWGMod.config.gunconfigs.minigunconfigs.minigun_damage : HWGMod.config.gunconfigs.sniperconfigs.sniper_damage)
 				: item instanceof FlamethrowerItem ? new FlameFiring(level(), this) : item instanceof BrimstoneItem ? new BlazeRodEntity(level(), this) : item instanceof BalrogItem ? new FireballEntity(level(), this) : new ShellEntity(level(), this);
 	}
 

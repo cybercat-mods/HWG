@@ -72,8 +72,8 @@ public class AssasultItem extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity() instanceof LivingEntity livingEntity) {
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.ak47_damage);
-							if (HWGMod.config.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.ak47configs.ak47_damage);
+							if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
 								livingEntity.invulnerableTime = 0;
 								livingEntity.setDeltaMovement(0, 0, 0);
 							}
@@ -126,7 +126,7 @@ public class AssasultItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.ak47_damage);
+		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.ak47configs.ak47_damage);
 		return bullet;
 	}
 

@@ -36,7 +36,7 @@ public class ShotgunItem extends AnimatedItem {
 	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public ShotgunItem() {
-		super(new Item.Properties().stacksTo(1).durability(3));
+		super(new Item.Properties().stacksTo(1).durability(HWGMod.config.gunconfigs.shotgunconfigs.shotgun_cap + 1));
 		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
@@ -52,10 +52,10 @@ public class ShotgunItem extends AnimatedItem {
 						if (result.getEntity() instanceof LivingEntity livingEntity) {
 							livingEntity.invulnerableTime = 0;
 							livingEntity.setDeltaMovement(0, 0, 0);
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.shotgun_damage);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.shotgunconfigs.shotgun_damage);
 							livingEntity.invulnerableTime = 0;
 							livingEntity.setDeltaMovement(0, 0, 0);
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.shotgun_damage);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.shotgunconfigs.shotgun_damage);
 						}
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);

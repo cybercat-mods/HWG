@@ -36,7 +36,7 @@ public class PistolItem extends AnimatedItem {
 	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public PistolItem() {
-		super(new Item.Properties().stacksTo(1).durability(7));
+		super(new Item.Properties().stacksTo(1).durability(HWGMod.config.gunconfigs.pistolconfigs.pistol_cap + 1));
 		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
@@ -50,7 +50,7 @@ public class PistolItem extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity() instanceof LivingEntity livingEntity)
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.pistol_damage);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.pistolconfigs.pistol_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
 						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
@@ -94,7 +94,7 @@ public class PistolItem extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.pistol_damage);
+		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.pistolconfigs.pistol_damage);
 		return bullet;
 	}
 

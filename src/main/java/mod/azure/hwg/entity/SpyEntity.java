@@ -65,7 +65,7 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 
 	public SpyEntity(EntityType<SpyEntity> entityType, Level worldIn) {
 		super(entityType, worldIn);
-		xpReward = HWGMod.config.spyconfigs.spy_exp;
+		xpReward = HWGMod.config.mobconfigs.spyconfigs.spy_exp;
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGMod.config.spyconfigs.spy_health).add(Attributes.ARMOR, 3).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_DAMAGE, 2D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGMod.config.mobconfigs.spyconfigs.spy_health).add(Attributes.ARMOR, 3).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_DAMAGE, 2D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	public static boolean canSpawn(EntityType<? extends HWGEntity> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {

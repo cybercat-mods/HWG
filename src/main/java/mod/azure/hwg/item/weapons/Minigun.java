@@ -38,7 +38,7 @@ public class Minigun extends AnimatedItem {
 	private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
 	public Minigun() {
-		super(new Item.Properties().stacksTo(1).durability(101));
+		super(new Item.Properties().stacksTo(1).durability(HWGMod.config.gunconfigs.minigunconfigs.minigun_cap + 1));
 		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 
@@ -52,8 +52,8 @@ public class Minigun extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity() instanceof LivingEntity livingEntity) {
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.minigun_damage);
-							if (HWGMod.config.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.minigunconfigs.minigun_damage);
+							if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
 								livingEntity.invulnerableTime = 0;
 								livingEntity.setDeltaMovement(0, 0, 0);
 							}
@@ -103,7 +103,7 @@ public class Minigun extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.minigun_damage);
+		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.minigunconfigs.minigun_damage);
 		return bullet;
 	}
 

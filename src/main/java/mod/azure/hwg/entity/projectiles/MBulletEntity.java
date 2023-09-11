@@ -81,7 +81,7 @@ public class MBulletEntity extends AbstractArrow implements GeoEntity {
 		super.doPostHurtEffects(living);
 		living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 45, 1));
 		living.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 45, 1));
-		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
 			living.setDeltaMovement(0, 0, 0);
 			living.invulnerableTime = 0;
 		}
@@ -177,7 +177,7 @@ public class MBulletEntity extends AbstractArrow implements GeoEntity {
 		super.onHitBlock(blockHitResult);
 		if (!this.level().isClientSide)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.bullets_breakdripstone == true)
+		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.gunconfigs.bullets_breakdripstone == true)
 			level().destroyBlock(blockHitResult.getBlockPos(), true);
 		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
 			level().destroyBlock(blockHitResult.getBlockPos(), true);
@@ -201,7 +201,7 @@ public class MBulletEntity extends AbstractArrow implements GeoEntity {
 			if (entity2 instanceof LivingEntity)
 				((LivingEntity) entity2).setLastHurtMob(entity);
 		}
-		if (entity.hurt(damageSource2, HWGMod.config.meanie_damage)) {
+		if (entity.hurt(damageSource2, HWGMod.config.gunconfigs.meanieconfigs.meanie_damage)) {
 			if (entity instanceof LivingEntity) {
 				var livingEntity = (LivingEntity) entity;
 				if (!this.level().isClientSide && entity2 instanceof LivingEntity) {

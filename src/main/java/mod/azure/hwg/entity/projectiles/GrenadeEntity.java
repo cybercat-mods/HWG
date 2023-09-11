@@ -278,7 +278,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void frag() {
-		this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGMod.config.grenades_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+		this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGMod.config.gunconfigs.grenades_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 
 	protected void naplam() {

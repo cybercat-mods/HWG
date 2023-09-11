@@ -68,7 +68,7 @@ public class BaseFlareEntity extends AbstractArrow {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
 			living.invulnerableTime = 0;
 			living.setDeltaMovement(0, 0, 0);
 		}

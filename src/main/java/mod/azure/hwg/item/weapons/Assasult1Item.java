@@ -72,8 +72,8 @@ public class Assasult1Item extends AnimatedItem {
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
 						if (result.getEntity() instanceof LivingEntity livingEntity) {
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.smg_damage);
-							if (HWGMod.config.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.smgconfigs.smg_damage);
+							if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
 								livingEntity.invulnerableTime = 0;
 								livingEntity.setDeltaMovement(0, 0, 0);
 							}
@@ -125,7 +125,7 @@ public class Assasult1Item extends AnimatedItem {
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.smg_damage);
+		var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.smgconfigs.smg_damage);
 		return bullet;
 	}
 

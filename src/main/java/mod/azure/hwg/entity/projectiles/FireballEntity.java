@@ -81,7 +81,7 @@ public class FireballEntity extends AbstractArrow {
 	@Override
 	protected void doPostHurtEffects(LivingEntity living) {
 		super.doPostHurtEffects(living);
-		if (HWGMod.config.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
+		if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
 			living.invulnerableTime = 0;
 			living.setDeltaMovement(0, 0, 0);
 		}
@@ -247,7 +247,7 @@ public class FireballEntity extends AbstractArrow {
 			if (entity2 instanceof LivingEntity)
 				((LivingEntity) entity2).setLastHurtMob(entity);
 		}
-		if (entity.hurt(damageSource2, HWGMod.config.brimstone_damage)) {
+		if (entity.hurt(damageSource2, HWGMod.config.gunconfigs.brimstoneconfigs.brimstone_damage)) {
 			if (entity instanceof LivingEntity) {
 				var livingEntity = (LivingEntity) entity;
 				if (!this.level().isClientSide && entity2 instanceof LivingEntity) {

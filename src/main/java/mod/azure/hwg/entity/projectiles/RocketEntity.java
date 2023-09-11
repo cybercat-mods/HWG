@@ -244,7 +244,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 
 	protected void explode() {
 		this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
-				HWGMod.config.rocket_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+				HWGMod.config.gunconfigs.rocket_breaks == true ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
 	}
 
 	@Override
