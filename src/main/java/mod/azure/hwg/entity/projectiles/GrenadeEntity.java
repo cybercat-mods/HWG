@@ -39,6 +39,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DiodeBlock;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.level.block.RedstoneTorchBlock;
@@ -304,6 +305,18 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 			for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
 				if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_WIRE))
 					this.level().setBlockAndUpdate(testPos, state.setValue(RedStoneWireBlock.POWER, 0));
+			}
+		});
+		this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.COMPARATOR)).forEach(state -> {
+			for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
+				if (this.level().getBlockState(testPos).is(Blocks.COMPARATOR))
+					this.level().setBlockAndUpdate(testPos, state.setValue(DiodeBlock.POWERED, false));
+			}
+		});
+		this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REPEATER)).forEach(state -> {
+			for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
+				if (this.level().getBlockState(testPos).is(Blocks.REPEATER))
+					this.level().setBlockAndUpdate(testPos, state.setValue(DiodeBlock.POWERED, false));
 			}
 		});
 		this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_TORCH)).forEach(state -> {
