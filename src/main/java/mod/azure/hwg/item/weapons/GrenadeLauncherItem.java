@@ -275,7 +275,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
 		for (int i = 0; i < list.size(); ++i) {
 			var itemStack = (ItemStack) list.get(i);
-			var bl = entity instanceof Player && ((Player) entity).getAbilities().instabuild;
+			var bl = entity instanceof Player player && player.getAbilities().instabuild;
 			if (!itemStack.isEmpty()) {
 				if (i == 0)
 					shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 0.0F);

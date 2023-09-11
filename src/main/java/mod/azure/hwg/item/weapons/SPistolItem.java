@@ -49,7 +49,7 @@ public class SPistolItem extends AnimatedItem {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
-						if (result.getEntity()instanceof LivingEntity livingEntity)
+						if (result.getEntity() instanceof LivingEntity livingEntity)
 							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.silenced_pistol_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
@@ -70,14 +70,15 @@ public class SPistolItem extends AnimatedItem {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof SPistolItem) {
-				if (Keybindings.RELOAD.isDown() && selected) {
-					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-					passedData.writeBoolean(true);
-					ClientPlayNetworking.send(HWGMod.SPISTOL, passedData);
-					world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 3.0F, 1.5F);
+			if (entity instanceof Player player)
+				if (player.getMainHandItem().getItem() instanceof SPistolItem) {
+					if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+						var passedData = new FriendlyByteBuf(Unpooled.buffer());
+						passedData.writeBoolean(true);
+						ClientPlayNetworking.send(HWGMod.SPISTOL, passedData);
+						world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 3.0F, 1.5F);
+					}
 				}
-			}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
@@ -86,7 +87,8 @@ public class SPistolItem extends AnimatedItem {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+				if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
+					user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
 				if (!user.level().isClientSide)
 					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "reload");
 			}

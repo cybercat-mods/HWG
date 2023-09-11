@@ -54,7 +54,7 @@ public class Meanie2Item extends AnimatedItem {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
-						if (result.getEntity()instanceof LivingEntity livingEntity)
+						if (result.getEntity() instanceof LivingEntity livingEntity)
 							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.meanie_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
@@ -79,13 +79,13 @@ public class Meanie2Item extends AnimatedItem {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof Meanie2Item) {
-				if (Keybindings.RELOAD.isDown() && selected) {
-					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-					passedData.writeBoolean(true);
-					ClientPlayNetworking.send(HWGMod.MEANIE2, passedData);
-				}
-			}
+			if (entity instanceof Player player)
+				if (player.getMainHandItem().getItem() instanceof Meanie2Item)
+					if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+						var passedData = new FriendlyByteBuf(Unpooled.buffer());
+						passedData.writeBoolean(true);
+						ClientPlayNetworking.send(HWGMod.MEANIE2, passedData);
+					}
 	}
 
 	public void reload(Player user, InteractionHand hand) {

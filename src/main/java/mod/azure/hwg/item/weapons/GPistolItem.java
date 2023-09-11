@@ -53,7 +53,7 @@ public class GPistolItem extends AnimatedItem {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
 					if (result != null) {
-						if (result.getEntity()instanceof LivingEntity livingEntity)
+						if (result.getEntity() instanceof LivingEntity livingEntity)
 							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.golden_pistol_damage);
 					} else {
 						var bullet = createArrow(worldIn, stack, playerentity);
@@ -78,17 +78,18 @@ public class GPistolItem extends AnimatedItem {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof GPistolItem) {
-				if (Keybindings.RELOAD.isDown() && selected && !((Player) entity).getCooldowns().isOnCooldown(stack.getItem())) {
-					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-					passedData.writeBoolean(true);
-					ClientPlayNetworking.send(HWGMod.GPISTOL, passedData);
+			if (entity instanceof Player player)
+				if (player.getMainHandItem().getItem() instanceof GPistolItem) {
+					if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+						var passedData = new FriendlyByteBuf(Unpooled.buffer());
+						passedData.writeBoolean(true);
+						ClientPlayNetworking.send(HWGMod.GPISTOL, passedData);
+					}
 				}
-			}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
-		if (user.getItemInHand(hand).getItem() instanceof GPistolItem) {
+		if (user.getItemInHand(hand).getItem() instanceof GPistolItem)
 			while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.BULLETS) > 0) {
 				removeAmmo(HWGItems.BULLETS, user);
 				user.getCooldowns().addCooldown(this, 30);
@@ -97,7 +98,6 @@ public class GPistolItem extends AnimatedItem {
 				if (!user.level().isClientSide)
 					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "goldenreload");
 			}
-		}
 	}
 
 	public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {

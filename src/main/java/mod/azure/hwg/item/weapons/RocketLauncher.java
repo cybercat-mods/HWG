@@ -52,7 +52,8 @@ public class RocketLauncher extends HWGGunBase {
 				removeAmmo(HWGItems.ROCKET, user);
 				user.getItemInHand(hand).hurtAndBreak(-2, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
+				if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
+					user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
 			}
 		}
 	}
@@ -60,11 +61,13 @@ public class RocketLauncher extends HWGGunBase {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof RocketLauncher && Keybindings.RELOAD.isDown() && selected) {
-				FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-				passedData.writeBoolean(true);
-				ClientPlayNetworking.send(HWGMod.ROCKETLAUNCHER, passedData);
-			}
+			if (entity instanceof Player player)
+				if (player.getMainHandItem().getItem() instanceof RocketLauncher)
+					if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+						var passedData = new FriendlyByteBuf(Unpooled.buffer());
+						passedData.writeBoolean(true);
+						ClientPlayNetworking.send(HWGMod.ROCKETLAUNCHER, passedData);
+					}
 	}
 
 	public RocketEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {

@@ -88,6 +88,8 @@ public class BalrogItem extends HWGGunBase {
 				removeAmmo(Items.BLAZE_ROD, user);
 				user.getItemInHand(hand).hurtAndBreak(-50, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
+				if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
+					user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 			}
 		}
@@ -96,14 +98,16 @@ public class BalrogItem extends HWGGunBase {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof BalrogItem && Keybindings.RELOAD.isDown() && selected) {
-				FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-				passedData.writeBoolean(true);
-				ClientPlayNetworking.send(HWGMod.BALROG, passedData);
-				world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
-			}
+			if (entity instanceof Player player)
+				if (player.getMainHandItem().getItem() instanceof BalrogItem)
+					if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+						var passedData = new FriendlyByteBuf(Unpooled.buffer());
+						passedData.writeBoolean(true);
+						ClientPlayNetworking.send(HWGMod.BALROG, passedData);
+					}
 		if (!(entity instanceof HWGEntity) && selected)
-			((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1, 1, false, false, false));
+			if (entity instanceof LivingEntity living)
+				living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1, 1, false, false, false));
 	}
 
 	public BlazeRodEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {

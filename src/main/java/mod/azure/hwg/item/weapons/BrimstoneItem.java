@@ -76,13 +76,13 @@ public class BrimstoneItem extends HWGGunBase {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof BrimstoneItem) {
-				if (Keybindings.RELOAD.isDown() && selected) {
-					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-					passedData.writeBoolean(true);
-					ClientPlayNetworking.send(HWGMod.BRIMSTONE, passedData);
-				}
-			}
+			if (entity instanceof Player player)
+				if (player.getMainHandItem().getItem() instanceof BrimstoneItem)
+					if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+						var passedData = new FriendlyByteBuf(Unpooled.buffer());
+						passedData.writeBoolean(true);
+						ClientPlayNetworking.send(HWGMod.BRIMSTONE, passedData);
+					}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
@@ -91,7 +91,8 @@ public class BrimstoneItem extends HWGGunBase {
 				removeAmmo(HWGItems.FUEL_TANK, user);
 				user.getItemInHand(hand).hurtAndBreak(-186, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
-				user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+				if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
+					user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 			}
 		}
 	}

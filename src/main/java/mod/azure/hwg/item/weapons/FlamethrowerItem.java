@@ -75,14 +75,15 @@ public class FlamethrowerItem extends HWGGunBase {
 	@Override
 	public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
 		if (world.isClientSide)
-			if (((Player) entity).getMainHandItem().getItem() instanceof FlamethrowerItem) {
-				if (Keybindings.RELOAD.isDown() && selected) {
-					FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-					passedData.writeBoolean(true);
-					ClientPlayNetworking.send(HWGMod.FLAMETHOWER, passedData);
-					world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+			if (entity instanceof Player player)
+				if (player.getMainHandItem().getItem() instanceof FlamethrowerItem) {
+					if (Keybindings.RELOAD.isDown() && selected) {
+						var passedData = new FriendlyByteBuf(Unpooled.buffer());
+						passedData.writeBoolean(true);
+						ClientPlayNetworking.send(HWGMod.FLAMETHOWER, passedData);
+						world.playSound((Player) null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+					}
 				}
-			}
 	}
 
 	public void reload(Player user, InteractionHand hand) {
