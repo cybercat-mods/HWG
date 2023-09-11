@@ -86,9 +86,9 @@ public class HellhorseRevolverItem extends AnimatedItem {
 				user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
 				if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
-					user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.REVOLVERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
+					user.level().playSound((Player) null, user.getX(), user.getY(), user.getZ(), HWGSounds.REVOLVERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
 				if (!user.level().isClientSide)
-					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.getCommandSenderWorld()), "shoot_controller", "reload");
+					triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), "shoot_controller", "reload");
 			}
 		}
 	}

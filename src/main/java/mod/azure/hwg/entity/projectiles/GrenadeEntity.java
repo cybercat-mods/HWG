@@ -36,7 +36,8 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RedStoneWireBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
@@ -124,7 +125,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	@Override
 	public void tick() {
 		super.tick();
-		if (getOwner()instanceof Player owner)
+		if (getOwner() instanceof Player owner)
 			setYRot(entityData.get(FORCED_YAW));
 	}
 
@@ -263,11 +264,10 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void stun() {
-		var aabb = new AABB(this.blockPosition().above()).inflate(3D, 3D, 3D);
-		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
-			if (e.isAlive() && e instanceof LivingEntity) {
-				((LivingEntity) e).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
-				((LivingEntity) e).addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
+		this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(3)).forEach(e -> {
+			if (e.isAlive()) {
+				e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 1));
+				e.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
 			}
 		});
 	}
@@ -277,18 +277,16 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	protected void naplam() {
-		var aabb = new AABB(this.blockPosition().above()).inflate(3D, 3D, 3D);
-		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
-			if (e.isAlive() && e instanceof LivingEntity) {
-				((LivingEntity) e).setRemainingFireTicks(200);
+		this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(3)).forEach(e -> {
+			if (e.isAlive()) {
+				e.setRemainingFireTicks(200);
 			}
 		});
 		this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true, Level.ExplosionInteraction.NONE);
 	}
 
 	protected void emp() {
-		var aabb = new AABB(this.blockPosition().above()).inflate(8D, 8D, 8D);
-		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
+		this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(8)).forEach(e -> {
 			if (e.isAlive() && (e instanceof TechnodemonEntity || e instanceof TechnodemonGreaterEntity))
 				e.hurt(damageSources().arrow(this, this), 10);
 		});

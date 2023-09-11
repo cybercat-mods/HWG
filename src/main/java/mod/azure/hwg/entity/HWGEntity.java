@@ -177,7 +177,7 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 
 	public void shoot() {
 		if (!level().isClientSide) {
-			final var world = getCommandSenderWorld();
+			final var world = level();
 			final var vector3d = getViewVector(1.0F);
 			final var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());
 			bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);

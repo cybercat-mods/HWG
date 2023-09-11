@@ -34,7 +34,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -138,7 +137,7 @@ public class FireballEntity extends AbstractArrow {
 		++this.ticksInAir;
 		if (this.ticksInAir >= 40)
 			this.remove(Entity.RemovalReason.DISCARDED);
-		if (getOwner()instanceof Player owner)
+		if (getOwner() instanceof Player owner)
 			setYRot(entityData.get(FORCED_YAW));
 		var isInsideWaterBlock = level().isWaterAt(blockPosition());
 		spawnLightSource(isInsideWaterBlock);
@@ -150,10 +149,9 @@ public class FireballEntity extends AbstractArrow {
 			this.level().addParticle(HWGParticles.BRIM_ORANGE, true, x, y, z, 0, 0, 0);
 			this.level().addParticle(HWGParticles.BRIM_RED, true, x, y, z, 0, 0, 0);
 		}
-		var aabb = new AABB(this.blockPosition().above()).inflate(1D, 5D, 1D);
-		this.getCommandSenderWorld().getEntities(this, aabb).forEach(e -> {
+		this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2)).forEach(e -> {
 			if (e.isAlive() && !(e instanceof Player))
-				if (!(e instanceof FireballEntity || this.getOwner() instanceof Player))
+				if (!(this.getOwner() instanceof Player))
 					e.setRemainingFireTicks(90);
 		});
 	}

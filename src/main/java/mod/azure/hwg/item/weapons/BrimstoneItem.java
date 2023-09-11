@@ -92,7 +92,7 @@ public class BrimstoneItem extends HWGGunBase {
 				user.getItemInHand(hand).hurtAndBreak(-186, user, s -> user.broadcastBreakEvent(hand));
 				user.getItemInHand(hand).setPopTime(3);
 				if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
-					user.getCommandSenderWorld().playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+					user.level().playSound((Player) null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
 			}
 		}
 	}
