@@ -32,14 +32,14 @@ public class HWGGunBase extends Item {
 
 	public void removeAmmo(Item ammo, Player playerEntity) {
 		if (!playerEntity.isCreative()) {
-			for (ItemStack item : playerEntity.getInventory().offhand) {
-				if (item.getItem() == ammo) {
-					item.shrink(1);
+			for (var offhanditem : playerEntity.getInventory().offhand) {
+				if (offhanditem.getItem() == ammo) {
+					offhanditem.shrink(1);
 					break;
 				}
-				for (ItemStack item1 : playerEntity.getInventory().items) {
-					if (item1.getItem() == ammo) {
-						item1.shrink(1);
+				for (var maininventoryitem : playerEntity.getInventory().items) {
+					if (maininventoryitem.getItem() == ammo) {
+						maininventoryitem.shrink(1);
 						break;
 					}
 				}
