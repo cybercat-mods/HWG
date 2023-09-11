@@ -11,7 +11,7 @@ import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -56,7 +56,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public BlazeRodEntity(Level world, LivingEntity owner) {
-		super(ProjectilesEntityRegister.BLAZEROD, owner, world);
+		super(HWGProjectiles.BLAZEROD, owner, world);
 	}
 
 	protected BlazeRodEntity(EntityType<? extends BlazeRodEntity> type, double x, double y, double z, Level world) {
@@ -71,7 +71,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public BlazeRodEntity(Level world, double x, double y, double z) {
-		super(ProjectilesEntityRegister.BLAZEROD, x, y, z, world);
+		super(HWGProjectiles.BLAZEROD, x, y, z, world);
 		this.setNoGravity(true);
 		this.setBaseDamage(0);
 	}

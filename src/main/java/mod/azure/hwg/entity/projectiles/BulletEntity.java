@@ -9,7 +9,7 @@ import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.ParticleTypes;
@@ -55,7 +55,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public BulletEntity(Level world, LivingEntity owner, Float damage) {
-		super(ProjectilesEntityRegister.BULLETS, owner, world);
+		super(HWGProjectiles.BULLETS, owner, world);
 		bulletdamage = damage;
 	}
 
@@ -64,7 +64,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public BulletEntity(Level world, double x, double y, double z) {
-		super(ProjectilesEntityRegister.BULLETS, x, y, z, world);
+		super(HWGProjectiles.BULLETS, x, y, z, world);
 		this.setNoGravity(true);
 		this.setBaseDamage(0);
 	}

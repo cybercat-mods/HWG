@@ -22,7 +22,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-public class ProjectilesEntityRegister {
+public class HWGProjectiles {
 
 	public static List<EntityType<? extends Entity>> ENTITY_TYPES = new LinkedList();
 	public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList();

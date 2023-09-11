@@ -18,7 +18,7 @@ import mod.azure.hwg.util.registry.HWGLoot;
 import mod.azure.hwg.util.registry.HWGMobs;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGSounds;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
@@ -51,7 +51,7 @@ public class HWGMod implements ModInitializer {
 	public static GigCompat GIG_ITEMS;
 	public static HWGParticles PARTICLES;
 	public static final String MODID = "hwg";
-	public static ProjectilesEntityRegister PROJECTILES;
+	public static HWGProjectiles PROJECTILES;
 	public static MenuType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
 	public static final ResourceLocation LUGER = new ResourceLocation(MODID, "luger");
 	public static final ResourceLocation HELL = new ResourceLocation(MODID, "hellgun");
@@ -94,7 +94,7 @@ public class HWGMod implements ModInitializer {
 		SOUNDS = new HWGSounds();
 		MOBS = new HWGMobs();
 		PARTICLES = new HWGParticles();
-		PROJECTILES = new ProjectilesEntityRegister();
+		PROJECTILES = new HWGProjectiles();
 		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, WeaponItemGroup, FabricItemGroup.builder().icon(() -> new ItemStack(HWGItems.AK47)) // icon
 				.title(Component.translatable("itemGroup.hwg.weapons")) // title
 				.displayItems((context, entries) -> {

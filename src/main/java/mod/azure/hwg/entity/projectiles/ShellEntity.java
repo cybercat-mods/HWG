@@ -9,7 +9,7 @@ import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.ParticleTypes;
@@ -54,7 +54,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public ShellEntity(Level world, LivingEntity owner) {
-		super(ProjectilesEntityRegister.SHELL, owner, world);
+		super(HWGProjectiles.SHELL, owner, world);
 	}
 
 	protected ShellEntity(EntityType<? extends ShellEntity> type, double x, double y, double z, Level world) {
@@ -69,7 +69,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public ShellEntity(Level world, double x, double y, double z) {
-		super(ProjectilesEntityRegister.SHELL, x, y, z, world);
+		super(HWGProjectiles.SHELL, x, y, z, world);
 		this.setNoGravity(true);
 		this.setBaseDamage(0);
 	}

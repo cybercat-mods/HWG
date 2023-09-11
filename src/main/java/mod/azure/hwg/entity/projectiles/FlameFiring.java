@@ -12,7 +12,7 @@ import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.util.registry.HWGParticles;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -59,7 +59,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 	}
 
 	public FlameFiring(Level world, LivingEntity owner) {
-		super(ProjectilesEntityRegister.FIRING, owner, world);
+		super(HWGProjectiles.FIRING, owner, world);
 		this.shooter = owner;
 	}
 
@@ -75,7 +75,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
 	}
 
 	public FlameFiring(Level world, double x, double y, double z) {
-		super(ProjectilesEntityRegister.FIRING, x, y, z, world);
+		super(HWGProjectiles.FIRING, x, y, z, world);
 		this.setNoGravity(true);
 		this.setBaseDamage(0);
 	}

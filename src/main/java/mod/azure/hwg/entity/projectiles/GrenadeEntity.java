@@ -12,7 +12,7 @@ import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -63,7 +63,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public GrenadeEntity(Level world, LivingEntity owner) {
-		super(ProjectilesEntityRegister.GRENADE, owner, world);
+		super(HWGProjectiles.GRENADE, owner, world);
 	}
 
 	protected GrenadeEntity(EntityType<? extends GrenadeEntity> type, double x, double y, double z, Level world) {
@@ -86,7 +86,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public GrenadeEntity(Level world, double x, double y, double z, ItemStack stack) {
-		super(ProjectilesEntityRegister.GRENADE, world);
+		super(HWGProjectiles.GRENADE, world);
 		this.absMoveTo(x, y, z);
 	}
 
@@ -96,7 +96,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public GrenadeEntity(Level world, double x, double y, double z) {
-		super(ProjectilesEntityRegister.GRENADE, x, y, z, world);
+		super(HWGProjectiles.GRENADE, x, y, z, world);
 		this.setNoGravity(true);
 		this.setBaseDamage(0);
 	}

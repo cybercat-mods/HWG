@@ -6,7 +6,7 @@ import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -53,7 +53,7 @@ public class FireballEntity extends AbstractArrow {
 	}
 
 	public FireballEntity(Level world, LivingEntity owner) {
-		super(ProjectilesEntityRegister.FIREBALL, owner, world);
+		super(HWGProjectiles.FIREBALL, owner, world);
 	}
 
 	protected FireballEntity(EntityType<? extends FireballEntity> type, double x, double y, double z, Level world) {
@@ -68,7 +68,7 @@ public class FireballEntity extends AbstractArrow {
 	}
 
 	public FireballEntity(Level world, double x, double y, double z) {
-		super(ProjectilesEntityRegister.FIREBALL, x, y, z, world);
+		super(HWGProjectiles.FIREBALL, x, y, z, world);
 		this.setNoGravity(true);
 		this.setBaseDamage(0);
 	}

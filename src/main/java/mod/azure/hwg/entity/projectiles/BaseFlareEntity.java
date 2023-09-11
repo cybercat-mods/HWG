@@ -7,7 +7,7 @@ import mod.azure.azurelib.entities.TickingLightEntity;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGSounds;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
@@ -39,11 +39,11 @@ public class BaseFlareEntity extends AbstractArrow {
 	private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(BaseFlareEntity.class, EntityDataSerializers.INT);
 
 	public BaseFlareEntity(EntityType<? extends AbstractArrow> entityType, Level world) {
-		super(ProjectilesEntityRegister.FLARE, world);
+		super(HWGProjectiles.FLARE, world);
 	}
 
 	public BaseFlareEntity(Level world, double x, double y, double z, ItemStack stack) {
-		super(ProjectilesEntityRegister.FLARE, world);
+		super(HWGProjectiles.FLARE, world);
 		this.absMoveTo(x, y, z);
 	}
 

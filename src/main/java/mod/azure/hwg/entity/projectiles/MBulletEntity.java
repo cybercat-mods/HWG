@@ -9,7 +9,7 @@ import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
-import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
+import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.particles.ParticleTypes;
@@ -56,7 +56,7 @@ public class MBulletEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public MBulletEntity(Level world, LivingEntity owner) {
-		super(ProjectilesEntityRegister.MBULLETS, owner, world);
+		super(HWGProjectiles.MBULLETS, owner, world);
 	}
 
 	protected MBulletEntity(EntityType<? extends MBulletEntity> type, double x, double y, double z, Level world) {
@@ -71,7 +71,7 @@ public class MBulletEntity extends AbstractArrow implements GeoEntity {
 	}
 
 	public MBulletEntity(Level world, double x, double y, double z) {
-		super(ProjectilesEntityRegister.MBULLETS, x, y, z, world);
+		super(HWGProjectiles.MBULLETS, x, y, z, world);
 		this.setNoGravity(true);
 		this.setBaseDamage(0);
 	}
