@@ -15,6 +15,8 @@ import mod.azure.hwg.entity.TechnodemonGreaterEntity;
 import mod.azure.hwg.util.registry.ProjectilesEntityRegister;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -37,7 +39,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.RedStoneWireBlock;
+import net.minecraft.world.level.block.RedstoneTorchBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
@@ -290,10 +294,36 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 			if (e.isAlive() && (e instanceof TechnodemonEntity || e instanceof TechnodemonGreaterEntity))
 				e.hurt(damageSources().arrow(this, this), 10);
 		});
-//		this.getCommandSenderWorld().getBlockStatesIfLoaded(aabb).forEach(state -> {
-//			if (state.is(Blocks.REDSTONE_WIRE))
-//				this.level().destroyBlock(portalEntrancePos, true);
-//		});
+		this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.LEVER)).forEach(state -> {
+			for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
+				if (this.level().getBlockState(testPos).is(Blocks.LEVER))
+					this.level().setBlockAndUpdate(testPos, state.setValue(LeverBlock.POWERED, false));
+			}
+		});
+		this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_WIRE)).forEach(state -> {
+			for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
+				if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_WIRE))
+					this.level().setBlockAndUpdate(testPos, state.setValue(RedStoneWireBlock.POWER, 0));
+			}
+		});
+		this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_TORCH)).forEach(state -> {
+			for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
+				if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_TORCH))
+					this.level().destroyBlock(testPos, true, null, 512);
+			}
+		});
+		this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_WALL_TORCH)).forEach(state -> {
+			for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
+				if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_WALL_TORCH))
+					this.level().destroyBlock(testPos, true, null, 512);
+			}
+		});
+		this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_LAMP)).forEach(state -> {
+			for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
+				if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_LAMP))
+					this.level().setBlockAndUpdate(testPos, state.setValue(RedstoneTorchBlock.LIT, false));
+			}
+		});
 	}
 
 	@Override
