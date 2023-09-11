@@ -39,11 +39,14 @@ public class TechnodemonGreaterModel extends GeoModel<TechnodemonGreaterEntity> 
 		super.setCustomAnimations(animatable, instanceId, animationState);
 
 		var head = getAnimationProcessor().getBone("head");
+		var body = getAnimationProcessor().getBone("chest");
 		var entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
 		if (head != null) {
 			head.setRotX((entityData.headPitch() - 5) * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}
+		if (body != null) 
+			body.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 	}
 }

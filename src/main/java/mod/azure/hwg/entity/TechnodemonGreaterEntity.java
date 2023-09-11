@@ -6,12 +6,13 @@ import java.util.UUID;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
+import mod.azure.azurelib.core.animation.Animation.LoopType;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.entity.tasks.HWGMeleeAttackTask;
 import mod.azure.hwg.entity.tasks.RangedShootingAttack;
-import mod.azure.hwg.item.weapons.Minigun;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -41,7 +42,6 @@ import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.attack.AnimatableMeleeAttack;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
@@ -66,16 +66,14 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		final var isDead = dead || getHealth() < 0.01 || isDeadOrDying();
 		controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
 			if (event.isMoving() && !isSwimming())
 				return event.setAndContinue(RawAnimation.begin().thenLoop("walking"));
 			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-		})).add(new AnimationController<>(this, event -> {
-			if ((entityData.get(STATE) == 1 || swinging) && !isDead && !(getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
-				return event.setAndContinue(RawAnimation.begin().thenLoop("attacking"));
-			return PlayState.STOP;
 		}));
+		controllers.add(new AnimationController<>(this, "attackController", 0, event -> {
+			return PlayState.STOP;
+		}).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
 	}
 
 	@Override
@@ -100,12 +98,15 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
 	@Override
 	public BrainActivityGroup<TechnodemonGreaterEntity> getIdleTasks() {
-		return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<TechnodemonGreaterEntity>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()), new SetRandomLookTarget<>()), new OneRandomBehaviour<>(new SetRandomWalkTarget<>().speedModifier(0.7F).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
+		return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<TechnodemonGreaterEntity>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || (target instanceof Player player && !(player.isCreative() || player.isSpectator()))), new SetRandomLookTarget<>()), new OneRandomBehaviour<>(new SetRandomWalkTarget<>().speedModifier(0.7F).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
 	}
 
 	@Override
 	public BrainActivityGroup<TechnodemonGreaterEntity> getFightTasks() {
-		return BrainActivityGroup.fightTasks(new InvalidateAttackTarget<>().stopIf(target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()), new RangedShootingAttack<>(20).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)), new AnimatableMeleeAttack<>(0));
+		return BrainActivityGroup.fightTasks(
+				new InvalidateAttackTarget<>().stopIf(target -> !target.isAlive() || (target instanceof Player player && (player.isCreative() || player.isSpectator()))),  
+				new RangedShootingAttack<>(5).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)), 
+				new HWGMeleeAttackTask<>(3));
 	}
 
 	@Override
@@ -141,7 +142,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
-		setVariant( random.nextInt(0, 3));
+		setVariant(random.nextInt(0, 3));
 		setUUID(UUID.randomUUID());
 		setItemSlot(EquipmentSlot.MAINHAND, makeInitialWeapon());
 		return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityTag);

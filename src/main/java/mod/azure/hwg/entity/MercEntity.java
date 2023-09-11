@@ -5,12 +5,13 @@ import java.util.List;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
+import mod.azure.azurelib.core.animation.Animation.LoopType;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.entity.tasks.HWGMeleeAttackTask;
 import mod.azure.hwg.entity.tasks.RangedShootingAttack;
-import mod.azure.hwg.item.weapons.Minigun;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -46,7 +47,6 @@ import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
 import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.behaviour.FirstApplicableBehaviour;
 import net.tslat.smartbrainlib.api.core.behaviour.OneRandomBehaviour;
-import net.tslat.smartbrainlib.api.core.behaviour.custom.attack.AnimatableMeleeAttack;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.look.LookAtTarget;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.misc.Idle;
 import net.tslat.smartbrainlib.api.core.behaviour.custom.move.MoveToWalkTarget;
@@ -71,12 +71,12 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 
 	@Override
 	public void registerControllers(ControllerRegistrar controllers) {
-		final var isDead = dead || getHealth() < 0.01 || isDeadOrDying();
-		controllers.add(new AnimationController<>(this, "livingController", 0, event -> event.setAndContinue(RawAnimation.begin().thenLoop("idle")))).add(new AnimationController<>(this, event -> {
-			if ((entityData.get(STATE) == 1 || swinging) && !isDead && !(getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
-				return event.setAndContinue(RawAnimation.begin().thenLoop("attacking"));
-			return PlayState.STOP;
+		controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
+			return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
 		}));
+		controllers.add(new AnimationController<>(this, "attackController", 0, event -> {
+			return PlayState.STOP;
+		}).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
 	}
 
 	public static boolean canSpawn(EntityType<? extends HWGEntity> type, LevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
@@ -109,12 +109,15 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 
 	@Override
 	public BrainActivityGroup<MercEntity> getIdleTasks() {
-		return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<MercEntity>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()), new SetRandomLookTarget<>()), new OneRandomBehaviour<>(new SetRandomWalkTarget<>().speedModifier(1).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
+		return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<MercEntity>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || (target instanceof Player player && !(player.isCreative() || player.isSpectator()))), new SetRandomLookTarget<>()), new OneRandomBehaviour<>(new SetRandomWalkTarget<>().speedModifier(1).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
 	}
 
 	@Override
 	public BrainActivityGroup<MercEntity> getFightTasks() {
-		return BrainActivityGroup.fightTasks(new InvalidateAttackTarget<>().stopIf(target -> !target.isAlive() || target instanceof Player && ((Player) target).isCreative()), new RangedShootingAttack<>(20).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)), new AnimatableMeleeAttack<>(0));
+		return BrainActivityGroup.fightTasks(
+				new InvalidateAttackTarget<>().stopIf(target -> !target.isAlive() || (target instanceof Player player && (player.isCreative() || player.isSpectator()))), 
+				new RangedShootingAttack<>(5).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)), 
+				new HWGMeleeAttackTask<>(3));
 	}
 
 	@Override
@@ -140,7 +143,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 	}
 
 	public static AttributeSupplier.Builder createMobAttributes() {
-		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGMod.config.merc_health).add(Attributes.ARMOR, 3).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+		return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGMod.config.merc_health).add(Attributes.ARMOR, 3).add(Attributes.ATTACK_DAMAGE, 2D).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
 	}
 
 	@Override

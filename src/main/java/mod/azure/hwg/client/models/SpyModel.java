@@ -39,6 +39,7 @@ public class SpyModel extends GeoModel<SpyEntity> {
 		super.setCustomAnimations(animatable, instanceId, animationState);
 
 		var head = getAnimationProcessor().getBone("head");
+		var body = getAnimationProcessor().getBone("body");
 		var left_arm = getAnimationProcessor().getBone("BipedLeftArm");
 		var right_arm = getAnimationProcessor().getBone("BipedRightArm");
 		var left_leg = getAnimationProcessor().getBone("BipedLeftLeg");
@@ -49,9 +50,11 @@ public class SpyModel extends GeoModel<SpyEntity> {
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}
+		if (body != null) 
+			body.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		if (left_arm != null)
 			left_arm.setRotX(Mth.cos(animatable.walkAnimation.position() * 0.6662F) * 2.0F * animatable.walkAnimation.speed() * 0.5F);
-		if (right_arm != null && animatable.getAttckingState() == 0)
+		if (right_arm != null && !animatable.isAggressive()) 
 			right_arm.setRotX(Mth.cos(animatable.walkAnimation.position() * 0.6662F + 3.1415927F) * 2.0F * animatable.walkAnimation.speed() * 0.5F);
 		if (left_leg != null)
 			left_leg.setRotX(Mth.cos(animatable.walkAnimation.position() * 0.6662F + 3.1415927F) * 1.4F * animatable.walkAnimation.speed() * 0.5F);

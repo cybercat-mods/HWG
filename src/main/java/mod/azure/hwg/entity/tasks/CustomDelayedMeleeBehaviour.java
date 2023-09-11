@@ -8,19 +8,19 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 
-public abstract class CustomDelayedBehaviour<E extends HWGEntity> extends ExtendedBehaviour<E> {
+public abstract class CustomDelayedMeleeBehaviour<E extends HWGEntity> extends ExtendedBehaviour<E> {
 	protected final int delayTime;
 	protected long delayFinishedAt = 0;
 	protected Consumer<E> delayedCallback = entity -> {
 	};
 
-	public CustomDelayedBehaviour(int delayTicks) {
+	public CustomDelayedMeleeBehaviour(int delayTicks) {
 		this.delayTime = delayTicks;
 
 		runFor(entity -> Math.max(delayTicks, 60));
 	}
 
-	public final CustomDelayedBehaviour<E> whenActivating(Consumer<E> callback) {
+	public final CustomDelayedMeleeBehaviour<E> whenActivating(Consumer<E> callback) {
 		this.delayedCallback = callback;
 
 		return this;
@@ -35,11 +35,8 @@ public abstract class CustomDelayedBehaviour<E extends HWGEntity> extends Extend
 			super.start(level, entity, gameTime);
 			doDelayedAction(entity);
 		}
-		if (entity.getTarget() != null) {
-			if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun) && !entity.isWithinMeleeAttackRange(entity.getTarget()))
-				entity.triggerAnim("attackController", "ranged");
-			entity.lookAt(entity.getTarget(), 30.0f, 30.0f);
-		}
+		if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
+			entity.triggerAnim("attackController", "melee");
 	}
 
 	@Override

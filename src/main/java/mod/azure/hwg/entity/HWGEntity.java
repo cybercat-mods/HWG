@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 
 import mod.azure.azurelib.animatable.GeoEntity;
+import mod.azure.azurelib.animatable.GeoItem;
 import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
@@ -34,6 +35,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -168,7 +170,8 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 		return item instanceof PistolItem || item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item || item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem || item instanceof HellhorseRevolverItem || item instanceof Minigun
 				? new BulletEntity(level(), this,
 						item instanceof PistolItem ? HWGMod.config.pistol_damage
-								: item instanceof LugerItem ? HWGMod.config.luger_damage : item instanceof AssasultItem ? HWGMod.config.ak47_damage : item instanceof Assasult1Item ? HWGMod.config.smg_damage : item instanceof GPistolItem ? HWGMod.config.golden_pistol_damage : item instanceof SPistolItem ? HWGMod.config.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGMod.config.hellhorse_damage : item instanceof Minigun ? HWGMod.config.minigun_damage : HWGMod.config.sniper_damage)
+								: item instanceof LugerItem ? HWGMod.config.luger_damage
+										: item instanceof AssasultItem ? HWGMod.config.ak47_damage : item instanceof Assasult1Item ? HWGMod.config.smg_damage : item instanceof GPistolItem ? HWGMod.config.golden_pistol_damage : item instanceof SPistolItem ? HWGMod.config.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGMod.config.hellhorse_damage : item instanceof Minigun ? HWGMod.config.minigun_damage : HWGMod.config.sniper_damage)
 				: item instanceof FlamethrowerItem ? new FlameFiring(level(), this) : item instanceof BrimstoneItem ? new BlazeRodEntity(level(), this) : item instanceof BalrogItem ? new FireballEntity(level(), this) : new ShellEntity(level(), this);
 	}
 
@@ -179,6 +182,8 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 			final var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());
 			bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);
 			bullet.shootFromRotation(this, getXRot(), getYRot(), 0.0F, 1.0F * 3.0F, 1.0F);
+			if (getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof GeoItem weapon)
+				weapon.triggerAnim(this, GeoItem.getOrAssignId(getItemBySlot(EquipmentSlot.MAINHAND), (ServerLevel) this.level()), "shoot_controller", "firing");
 			world.playSound(this, blockPosition(), getDefaultAttackSound(getItemBySlot(EquipmentSlot.MAINHAND).getItem()), SoundSource.HOSTILE, 1.0F, 1.0f);
 			world.addFreshEntity(bullet);
 		}
