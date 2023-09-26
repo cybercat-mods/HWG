@@ -19,6 +19,6 @@ public class WeaponRenderingMixin {
 	private static void tryItemPose(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
 		var itemstack = player.getItemInHand(hand);
 		if (itemstack.getItem() instanceof HWGGunLoadedBase || itemstack.getItem() instanceof HWGGunBase)
-			ci.setReturnValue(HumanoidModel.ArmPose.BOW_AND_ARROW);
+				ci.setReturnValue(HumanoidModel.ArmPose.CROSSBOW_HOLD);
 	}
 }
