@@ -10,24 +10,21 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 
-public class HWGGunBase extends Item {
+public class HWGGunBase extends SwordItem {
 
 	private BlockPos lightBlockPos = null;
 
 	public HWGGunBase(Properties settings) {
-		super(settings);
+		super(Tiers.NETHERITE, -3, -2.25F, settings);
 	}
 
 	public void removeAmmo(Item ammo, Player playerEntity) {
@@ -123,19 +120,6 @@ public class HWGGunBase extends Item {
 			f = 1.0F;
 
 		return f;
-	}
-
-	public static EntityHitResult hitscanTrace(Player player, double range, float ticks) {
-		var look = player.getViewVector(ticks);
-		var start = player.getEyePosition(ticks);
-		var end = new Vec3(player.getX() + look.x * range, player.getEyeY() + look.y * range, player.getZ() + look.z * range);
-		var traceDistance = player.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player)).getLocation().distanceToSqr(end);
-		for (var possible : player.level().getEntities(player, player.getBoundingBox().expandTowards(look.scale(traceDistance)).expandTowards(3.0D, 3.0D, 3.0D), (entity -> !entity.isSpectator() && entity.isPickable() && entity instanceof LivingEntity))) {
-			if (possible.getBoundingBox().inflate(0.3D).clip(start, end).isPresent())
-				if (start.distanceToSqr(possible.getBoundingBox().inflate(0.3D).clip(start, end).get()) < traceDistance)
-					return ProjectileUtil.getEntityHitResult(player.level(), player, start, end, player.getBoundingBox().expandTowards(look.scale(traceDistance)).inflate(3.0D, 3.0D, 3.0D), (target) -> !target.isSpectator() && player.isAttackable() && player.hasLineOfSight(target));
-		}
-		return null;
 	}
 
 }

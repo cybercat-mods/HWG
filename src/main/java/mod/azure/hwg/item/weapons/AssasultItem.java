@@ -69,21 +69,10 @@ public class AssasultItem extends AnimatedItem {
 				playerentity.getCooldowns().addCooldown(this, this.cooldown);
 				if (!worldIn.isClientSide) {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
-					if (result != null) {
-						if (result.getEntity() instanceof LivingEntity livingEntity) {
-							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.ak47configs.ak47_damage);
-							if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(livingEntity instanceof Player)) {
-								livingEntity.invulnerableTime = 0;
-								livingEntity.setDeltaMovement(0, 0, 0);
-							}
-						}
-					} else {
-						var bullet = createArrow(worldIn, stack, playerentity);
-						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-						bullet.tickCount = -15;
-						worldIn.addFreshEntity(bullet);
-					}
+					var bullet = createArrow(worldIn, stack, playerentity);
+					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 5.0F * 3.0F, 1.0F);
+					bullet.tickCount = -15;
+					worldIn.addFreshEntity(bullet);
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.AK, SoundSource.PLAYERS, 0.25F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
 					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", this.animation);
 				}
