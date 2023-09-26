@@ -71,6 +71,11 @@ public class HWGGunBase extends SwordItem {
 		return InteractionResultHolder.consume(itemStack);
 	}
 
+	@Override
+	public int getUseDuration(ItemStack stack) {
+		return 72000;
+	}
+
 	protected void spawnLightSource(Entity entity, boolean isInWaterBlock) {
 		if (lightBlockPos == null) {
 			lightBlockPos = findFreeSpace(entity.level(), entity.blockPosition(), 2);
