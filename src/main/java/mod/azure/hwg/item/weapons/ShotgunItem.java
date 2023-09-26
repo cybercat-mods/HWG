@@ -47,14 +47,26 @@ public class ShotgunItem extends AnimatedItem {
 				playerentity.getCooldowns().addCooldown(this, 18);
 				if (!worldIn.isClientSide) {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-					var bullet = createArrow(worldIn, stack, playerentity);
-					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 1, 0.5F, 5.0F * 3.0F, 1.0F);
-					var bullet1 = createArrow(worldIn, stack, playerentity);
-					bullet1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1, 0.5F, 5.0F * 3.0F, 1.0F);
-					bullet.tickCount = -15;
-					bullet1.tickCount = -15;
-					worldIn.addFreshEntity(bullet);
-					worldIn.addFreshEntity(bullet1);
+					var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
+					if (result != null) {
+						if (result.getEntity() instanceof LivingEntity livingEntity) {
+							livingEntity.invulnerableTime = 0;
+							livingEntity.setDeltaMovement(0, 0, 0);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.shotgunconfigs.shotgun_damage);
+							livingEntity.invulnerableTime = 0;
+							livingEntity.setDeltaMovement(0, 0, 0);
+							livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.shotgunconfigs.shotgun_damage);
+						}
+					} else {
+						var bullet = createArrow(worldIn, stack, playerentity);
+						bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 1, 0.5F, 20.0F * 3.0F, 1.0F);
+						var bullet1 = createArrow(worldIn, stack, playerentity);
+						bullet1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1, 0.5F, 20.0F * 3.0F, 1.0F);
+						bullet.tickCount = -15;
+						bullet1.tickCount = -15;
+						worldIn.addFreshEntity(bullet);
+						worldIn.addFreshEntity(bullet1);
+					}
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.SHOTGUN, SoundSource.PLAYERS, 1.25F, 1.3F);
 					triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
 				}
