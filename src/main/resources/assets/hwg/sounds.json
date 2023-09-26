@@ -61,5 +61,8 @@
 	},
 	"hwg.flamethrower": {
 		"category": "music", "sounds": [{"name": "hwg:flamethrower"}]
+	},
+	"hwg.bonk": {
+		"category": "music", "sounds": [{"name": "hwg:bonk"}]
 	}
 }

@@ -1,0 +1,26 @@
+{
+  "attributes" : {
+    "attack_range" : 1.5,
+    "two_handed" : false,
+    "category" : "sickle",
+    "attacks" : [ {
+      "hitbox" : "HORIZONTAL_PLANE",
+      "damage_multiplier" : 0.9,
+      "angle" : 120,
+      "upswing" : 0.5,
+      "animation" : "bettercombat:one_handed_slash_horizontal_right",
+      "swing_sound" : {
+        "id" : "hwg:hwg.bonk"
+      }
+    }, {
+      "hitbox" : "HORIZONTAL_PLANE",
+      "damage_multiplier" : 0.9,
+      "angle" : 120,
+      "upswing" : 0.5,
+      "animation" : "bettercombat:one_handed_slash_horizontal_left",
+      "swing_sound" : {
+        "id" : "hwg:hwg.bonk"
+      }
+    } ]
+  }
+}

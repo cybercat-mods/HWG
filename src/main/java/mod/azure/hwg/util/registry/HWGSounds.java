@@ -11,6 +11,7 @@ public class HWGSounds {
 	public static SoundEvent AK = of("hwg.ak");
 	public static SoundEvent RPG = of("hwg.rpg");
 	public static SoundEvent SMG = of("hwg.smg");
+	public static SoundEvent BONK = of("hwg.bonk");
 	public static SoundEvent LUGER = of("hwg.luger");
 	public static SoundEvent TOMMY = of("hwg.tommy");
 	public static SoundEvent PISTOL = of("hwg.pistol");
