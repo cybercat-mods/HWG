@@ -39,6 +39,8 @@ dependencies {
     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.reiVersion}"
     modApi "dev.architectury:architectury-fabric:${project.archVersion}"
     modApi "me.shedaniel.cloth:cloth-config-fabric:${project.clothVersion}"
+	modCompileOnly "curse.maven:BetterC-639842:4685416"
+	modCompileOnly "curse.maven:playeranimator-658587:4587215"
 }
 
 processResources {
@@ -100,6 +102,8 @@ if (file('key.properties').exists()) {
             	requiredDependency 'azurelib'  
             	requiredDependency 'smartbrainlib'  
             	optionalDependency 'modmenu' 
+            	optionalDependency 'gigeresque' 
+            	optionalDependency 'better-combat-by-daedelus' 
         	}
         	mainArtifact(remapJar)
 
@@ -131,6 +135,8 @@ if (file('key.properties').exists()) {
         	required.project "smartbrainlib"
         	required.project "fabric-api"
             optional.project "modmenu"
+            optional.project "gigeresque"
+            optional.project "better-combat"
    		}
 	}
 }

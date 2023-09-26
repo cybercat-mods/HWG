@@ -12,7 +12,7 @@ import com.modrinth.minotaur.dependencies.ModDependency
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-archivesBaseName = project.modName
+archivesBaseName = project.modNameConnector
 version = project.modVersion
 group = project.mavenGroup
 
@@ -32,6 +32,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loaderVersion}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabricVersion}"
   	modImplementation "mod.azure.azurelib:azurelib-fabric-${project.minecraftVersion}:${project.azurelibVersion}"
+  	include "mod.azure.azurelib:azurelib-fabric-${project.minecraftVersion}:${project.azurelibVersion}"
 	modImplementation "com.terraformersmc:modmenu:${project.modmenuVersion}"
 	modImplementation "net.tslat.smartbrainlib:SmartBrainLib-fabric-${project.minecraftVersion}:${project.sblVersion}"
 	modImplementation "net.tslat.smartbrainlib:SmartBrainLib-common-${project.minecraftVersion}:${project.sblVersion}"
