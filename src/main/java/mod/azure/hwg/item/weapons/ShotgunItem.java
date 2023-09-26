@@ -48,9 +48,9 @@ public class ShotgunItem extends AnimatedItem {
 				if (!worldIn.isClientSide) {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					var bullet = createArrow(worldIn, stack, playerentity);
-					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 1, 0.5F, 20.0F * 3.0F, 1.0F);
+					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 1, 0.5F, 5.0F * 3.0F, 1.0F);
 					var bullet1 = createArrow(worldIn, stack, playerentity);
-					bullet1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1, 0.5F, 20.0F * 3.0F, 1.0F);
+					bullet1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1, 0.5F, 5.0F * 3.0F, 1.0F);
 					bullet.tickCount = -15;
 					bullet1.tickCount = -15;
 					worldIn.addFreshEntity(bullet);

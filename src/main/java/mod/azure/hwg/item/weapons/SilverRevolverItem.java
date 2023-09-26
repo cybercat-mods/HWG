@@ -48,7 +48,7 @@ public class SilverRevolverItem extends AnimatedItem {
 				if (!worldIn.isClientSide) {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					var bullet = createArrow(worldIn, stack, playerentity);
-					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 5.0F * 3.0F, 1.0F);
 					bullet.tickCount = -15;
 					if (entityLiving.getRandom().nextInt(1, 101) <= 20)
 						bullet.setSecondsOnFire(100);

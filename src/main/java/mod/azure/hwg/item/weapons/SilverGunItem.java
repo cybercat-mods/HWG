@@ -48,7 +48,7 @@ public class SilverGunItem extends AnimatedItem {
 				if (!worldIn.isClientSide) {
 					stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					var bullet = createArrow(worldIn, stack, playerentity);
-					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+					bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 5.0F * 3.0F, 1.0F);
 					bullet.tickCount = -15;
 					worldIn.addFreshEntity(bullet);
 					worldIn.playSound((Player) null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.PISTOL, SoundSource.PLAYERS, 0.5F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 1F * 0.5F);
