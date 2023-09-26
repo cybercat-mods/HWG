@@ -1,8 +1,6 @@
-v.1.4.17
+v.1.4.18
 
-- Rewrote ranged and melee animations to use the trigger animation system.
-- Added check for cool downs on playing reload sounds.
-- EMP Granades now break Redstone Torches and disable Levers, Lamps, Repeaters, Comparators, and Redstone Wire
-- Revolvers now reload bullets 1 by 1.
-- Configs rewrote, they will reset upon update.
-	- Configs for gun capacity added
+- Changed default gun pose animation. 
+- Added Pistol Whipping animations with Better Combat.
+- Bullets can now blow up TNT.
+- Fixes weapons not firing due to weird mod conflicts.
