@@ -1,6 +1,3 @@
-v.1.4.18
+v.1.4.18b
 
-- Changed default gun pose animation. 
-- Added Pistol Whipping animations with Better Combat.
-- Bullets can now blow up TNT.
-- Fixes weapons not firing due to weird mod conflicts.
+- Updates bundled AzureLib version to latest.
