@@ -1,6 +1,5 @@
 package mod.azure.hwg;
 
-import mod.azure.azurelib.AzureLib;
 import mod.azure.azurelib.AzureLibMod;
 import mod.azure.azurelib.config.format.ConfigFormats;
 import mod.azure.hwg.client.gui.GunTableScreenHandler;
@@ -17,8 +16,8 @@ import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGLoot;
 import mod.azure.hwg.util.registry.HWGMobs;
 import mod.azure.hwg.util.registry.HWGParticles;
-import mod.azure.hwg.util.registry.HWGSounds;
 import mod.azure.hwg.util.registry.HWGProjectiles;
+import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
