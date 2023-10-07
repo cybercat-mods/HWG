@@ -32,7 +32,6 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loaderVersion}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabricVersion}"
   	modImplementation "mod.azure.azurelib:azurelib-fabric-${project.minecraftVersion}:${project.azurelibVersion}"
-  	include "mod.azure.azurelib:azurelib-fabric-${project.minecraftVersion}:${project.azurelibVersion}"
 	modImplementation "com.terraformersmc:modmenu:${project.modmenuVersion}"
 	modImplementation "net.tslat.smartbrainlib:SmartBrainLib-fabric-${project.minecraftVersion}:${project.sblVersion}"
 	modImplementation "net.tslat.smartbrainlib:SmartBrainLib-common-${project.minecraftVersion}:${project.sblVersion}"
@@ -96,6 +95,7 @@ if (file('key.properties').exists()) {
 			addGameVersion("Java 17")
 
         	relations {
+            	requiredDependency 'azurelib'  
             	requiredDependency 'forgified-fabric-api'  
             	requiredDependency 'sinytra-connector'  
             	requiredDependency 'smartbrainlib' 
@@ -126,6 +126,7 @@ if (file('key.properties').exists()) {
 		gameVersions = [project.minecraftVersion]
 		loaders = ['forge']
 		dependencies { 
+        	required.project "azurelib"
         	required.project "connector"
         	required.project "forgified-fabric-api"
         	required.project "smartbrainlib"
