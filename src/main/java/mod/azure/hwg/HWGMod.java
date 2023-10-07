@@ -159,7 +159,6 @@ public class HWGMod implements ModInitializer {
 					entries.accept(HWGItems.LESSER_SPAWN_EGG);
 					entries.accept(HWGItems.GREATER_SPAWN_EGG);
 				}).build()); // build() no longer registers by itself
-		AzureLib.initialize();
 		GunSmithProfession.init();
 		MobSpawn.addSpawnEntries();
 		MobAttributes.init();
