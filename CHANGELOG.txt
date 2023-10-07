@@ -1,3 +1,5 @@
-v.1.4.18b
+v.1.4.19
 
-- Updates bundled AzureLib version to latest.
+- Updates required AzureLib version to v1.0.32.
+- Fixes early init crash with Connector.
+- Adds AzureLib to Connector builds required mods list, no longer bundled as you can use the Forge version safely with Fabric mods.
