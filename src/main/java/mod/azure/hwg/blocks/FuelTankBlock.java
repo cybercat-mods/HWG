@@ -23,47 +23,47 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class FuelTankBlock extends Block {
 
-	public FuelTankBlock() {
-		super(FabricBlockSettings.of().sound(SoundType.METAL).noOcclusion());
-	}
+    public FuelTankBlock() {
+        super(FabricBlockSettings.of().sound(SoundType.METAL).noOcclusion());
+    }
 
-	@Override
-	public boolean dropFromExplosion(Explosion explosion) {
-		return false;
-	}
+    private static void primeBlock(Level world, BlockPos pos, LivingEntity igniter) {
+        if (!world.isClientSide) {
+            var tntEntity = new FuelTankEntity(world, (double) pos.getX() + 0.5D, pos.getY(), (double) pos.getZ() + 0.5D, igniter);
+            world.addFreshEntity(tntEntity);
+        }
+    }
 
-	private static void primeBlock(Level world, BlockPos pos, LivingEntity igniter) {
-		if (!world.isClientSide) {
-			var tntEntity = new FuelTankEntity(world, (double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D, igniter);
-			world.addFreshEntity(tntEntity);
-		}
-	}
+    @Override
+    public boolean dropFromExplosion(Explosion explosion) {
+        return false;
+    }
 
-	@Override
-	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-		var itemStack = player.getItemInHand(hand);
-		var item = itemStack.getItem();
-		if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE)
-			return super.use(state, world, pos, player, hand, hit);
-		else {
-			primeBlock(world, pos, player);
-			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
-			return InteractionResult.sidedSuccess(world.isClientSide);
-		}
-	}
+    @Override
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        var itemStack = player.getItemInHand(hand);
+        var item = itemStack.getItem();
+        if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE)
+            return super.use(state, world, pos, player, hand, hit);
+        else {
+            primeBlock(world, pos, player);
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
+            return InteractionResult.sidedSuccess(world.isClientSide);
+        }
+    }
 
-	@Override
-	public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
-		if (!world.isClientSide) {
-			var entity = projectile.getOwner();
-			var blockPos = hit.getBlockPos();
-			primeBlock(world, blockPos, entity instanceof LivingEntity ? (LivingEntity) entity : null);
-			world.removeBlock(blockPos, false);
-		}
-	}
+    @Override
+    public void onProjectileHit(Level world, BlockState state, BlockHitResult hit, Projectile projectile) {
+        if (!world.isClientSide) {
+            var entity = projectile.getOwner();
+            var blockPos = hit.getBlockPos();
+            primeBlock(world, blockPos, entity instanceof LivingEntity ? (LivingEntity) entity : null);
+            world.removeBlock(blockPos, false);
+        }
+    }
 
-	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
-		return Shapes.box(0.33f, 0f, 0.33f, 0.67f, 1.0f, 0.67f);
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter view, BlockPos pos, CollisionContext context) {
+        return Shapes.box(0.33f, 0f, 0.33f, 0.67f, 1.0f, 0.67f);
+    }
 }

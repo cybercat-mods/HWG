@@ -1,66 +1,66 @@
 package mod.azure.hwg.entity.tasks;
 
-import java.util.function.Consumer;
-
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.item.weapons.Minigun;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
 
+import java.util.function.Consumer;
+
 public abstract class CustomDelayedMeleeBehaviour<E extends HWGEntity> extends ExtendedBehaviour<E> {
-	protected final int delayTime;
-	protected long delayFinishedAt = 0;
-	protected Consumer<E> delayedCallback = entity -> {
-	};
+    protected final int delayTime;
+    protected long delayFinishedAt = 0;
+    protected Consumer<E> delayedCallback = entity -> {
+    };
 
-	public CustomDelayedMeleeBehaviour(int delayTicks) {
-		this.delayTime = delayTicks;
+    public CustomDelayedMeleeBehaviour(int delayTicks) {
+        this.delayTime = delayTicks;
 
-		runFor(entity -> Math.max(delayTicks, 60));
-	}
+        runFor(entity -> Math.max(delayTicks, 60));
+    }
 
-	public final CustomDelayedMeleeBehaviour<E> whenActivating(Consumer<E> callback) {
-		this.delayedCallback = callback;
+    public final CustomDelayedMeleeBehaviour<E> whenActivating(Consumer<E> callback) {
+        this.delayedCallback = callback;
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	protected final void start(ServerLevel level, E entity, long gameTime) {
-		if (this.delayTime > 0) {
-			this.delayFinishedAt = gameTime + this.delayTime;
-			super.start(level, entity, gameTime);
-		} else {
-			super.start(level, entity, gameTime);
-			doDelayedAction(entity);
-		}
-		if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
-			entity.triggerAnim("attackController", "melee");
-	}
+    @Override
+    protected final void start(ServerLevel level, E entity, long gameTime) {
+        if (this.delayTime > 0) {
+            this.delayFinishedAt = gameTime + this.delayTime;
+            super.start(level, entity, gameTime);
+        } else {
+            super.start(level, entity, gameTime);
+            doDelayedAction(entity);
+        }
+        if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
+            entity.triggerAnim("attackController", "melee");
+    }
 
-	@Override
-	protected final void stop(ServerLevel level, E entity, long gameTime) {
-		super.stop(level, entity, gameTime);
+    @Override
+    protected final void stop(ServerLevel level, E entity, long gameTime) {
+        super.stop(level, entity, gameTime);
 
-		this.delayFinishedAt = 0;
-	}
+        this.delayFinishedAt = 0;
+    }
 
-	@Override
-	protected boolean shouldKeepRunning(E entity) {
-		return this.delayFinishedAt >= entity.level().getGameTime();
-	}
+    @Override
+    protected boolean shouldKeepRunning(E entity) {
+        return this.delayFinishedAt >= entity.level().getGameTime();
+    }
 
-	@Override
-	protected final void tick(ServerLevel level, E entity, long gameTime) {
-		super.tick(level, entity, gameTime);
+    @Override
+    protected final void tick(ServerLevel level, E entity, long gameTime) {
+        super.tick(level, entity, gameTime);
 
-		if (this.delayFinishedAt <= gameTime) {
-			doDelayedAction(entity);
-			this.delayedCallback.accept(entity);
-		}
-	}
+        if (this.delayFinishedAt <= gameTime) {
+            doDelayedAction(entity);
+            this.delayedCallback.accept(entity);
+        }
+    }
 
-	protected void doDelayedAction(E entity) {
-	}
+    protected void doDelayedAction(E entity) {
+    }
 }

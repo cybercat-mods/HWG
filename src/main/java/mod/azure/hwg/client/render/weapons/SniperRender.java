@@ -5,7 +5,7 @@ import mod.azure.hwg.client.models.weapons.SniperModel;
 import mod.azure.hwg.item.weapons.SniperItem;
 
 public class SniperRender extends GeoItemRenderer<SniperItem> {
-	public SniperRender() {
-		super(new SniperModel());
-	}
+    public SniperRender() {
+        super(new SniperModel());
+    }
 }

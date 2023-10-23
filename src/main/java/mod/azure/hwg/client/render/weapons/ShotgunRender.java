@@ -5,7 +5,7 @@ import mod.azure.hwg.client.models.weapons.ShotgunModel;
 import mod.azure.hwg.item.weapons.ShotgunItem;
 
 public class ShotgunRender extends GeoItemRenderer<ShotgunItem> {
-	public ShotgunRender() {
-		super(new ShotgunModel());
-	}
+    public ShotgunRender() {
+        super(new ShotgunModel());
+    }
 }

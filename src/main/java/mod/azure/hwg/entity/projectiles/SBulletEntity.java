@@ -22,83 +22,81 @@ import net.minecraft.world.phys.HitResult;
 
 public class SBulletEntity extends BulletEntity {
 
-	public SBulletEntity(EntityType<? extends BulletEntity> entityType, Level world) {
-		super(entityType, world);
-		this.pickup = AbstractArrow.Pickup.DISALLOWED;
-	}
+    public SBulletEntity(EntityType<? extends BulletEntity> entityType, Level world) {
+        super(entityType, world);
+        this.pickup = AbstractArrow.Pickup.DISALLOWED;
+    }
 
-	public SBulletEntity(Level world, LivingEntity owner, Float damage) {
-		super(BWCompat.SILVERBULLETS, owner, world);
-		bulletdamage = damage;
-	}
+    public SBulletEntity(Level world, LivingEntity owner, Float damage) {
+        super(BWCompat.SILVERBULLETS, owner, world);
+        bulletdamage = damage;
+    }
 
-	protected SBulletEntity(EntityType<? extends BulletEntity> type, double x, double y, double z, Level world) {
-		this(type, world);
-	}
+    protected SBulletEntity(EntityType<? extends BulletEntity> type, double x, double y, double z, Level world) {
+        this(type, world);
+    }
 
-	protected SBulletEntity(EntityType<? extends BulletEntity> type, LivingEntity owner, Level world) {
-		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
-		this.setOwner(owner);
-		if (owner instanceof Player)
-			this.pickup = AbstractArrow.Pickup.ALLOWED;
-	}
+    protected SBulletEntity(EntityType<? extends BulletEntity> type, LivingEntity owner, Level world) {
+        this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
+        this.setOwner(owner);
+        if (owner instanceof Player)
+            this.pickup = AbstractArrow.Pickup.ALLOWED;
+    }
 
-	public SBulletEntity(Level world, double x, double y, double z) {
-		super(BWCompat.SILVERBULLETS, x, y, z, world);
-		this.setNoGravity(true);
-		this.setBaseDamage(0);
-	}
+    public SBulletEntity(Level world, double x, double y, double z) {
+        super(BWCompat.SILVERBULLETS, x, y, z, world);
+        this.setNoGravity(true);
+        this.setBaseDamage(0);
+    }
 
-	@Override
-	protected void onHitEntity(EntityHitResult entityHitResult) {
-		var entity = entityHitResult.getEntity();
-		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
-			if (!this.level().isClientSide)
-				this.remove(Entity.RemovalReason.DISCARDED);
-		var entity2 = this.getOwner();
-		DamageSource damageSource2;
-		if (entity2 == null)
-			damageSource2 = damageSources().indirectMagic(this, this);
-		else {
-			damageSource2 = damageSources().indirectMagic(this, entity2);
-			if (entity2 instanceof LivingEntity)
-				((LivingEntity) entity2).setLastHurtMob(entity);
-		}
-		if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, "vulnerable_to_silver")))) {
-			if (entity.hurt(damageSource2, bulletdamage * 3)) {
-				if (entity instanceof LivingEntity) {
-					var livingEntity = (LivingEntity) entity;
-					if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
-						EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
-						EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
-					}
+    @Override
+    protected void onHitEntity(EntityHitResult entityHitResult) {
+        var entity = entityHitResult.getEntity();
+        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity))
+            if (!this.level().isClientSide)
+                this.remove(Entity.RemovalReason.DISCARDED);
+        var entity2 = this.getOwner();
+        DamageSource damageSource2;
+        if (entity2 == null)
+            damageSource2 = damageSources().indirectMagic(this, this);
+        else {
+            damageSource2 = damageSources().indirectMagic(this, entity2);
+            if (entity2 instanceof LivingEntity)
+                ((LivingEntity) entity2).setLastHurtMob(entity);
+        }
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, "vulnerable_to_silver")))) {
+            if (entity.hurt(damageSource2, bulletdamage * 3)) {
+                if (entity instanceof LivingEntity livingEntity) {
+                    if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
+                        EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
+                        EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
+                    }
 
-					this.doPostHurtEffects(livingEntity);
-					if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
-						((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
-				}
-			} else if (!this.level().isClientSide)
-				this.remove(Entity.RemovalReason.DISCARDED);
-		} else {
-			if (entity.hurt(damageSource2, bulletdamage)) {
-				if (entity instanceof LivingEntity) {
-					var livingEntity = (LivingEntity) entity;
-					if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
-						EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
-						EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
-					}
-					this.doPostHurtEffects(livingEntity);
-					if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
-						((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
-				}
-			} else if (!this.level().isClientSide)
-				this.remove(Entity.RemovalReason.DISCARDED);
-		}
-	}
+                    this.doPostHurtEffects(livingEntity);
+                    if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+                        ((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                }
+            } else if (!this.level().isClientSide)
+                this.remove(Entity.RemovalReason.DISCARDED);
+        } else {
+            if (entity.hurt(damageSource2, bulletdamage)) {
+                if (entity instanceof LivingEntity livingEntity) {
+                    if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
+                        EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
+                        EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
+                    }
+                    this.doPostHurtEffects(livingEntity);
+                    if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+                        ((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                }
+            } else if (!this.level().isClientSide)
+                this.remove(Entity.RemovalReason.DISCARDED);
+        }
+    }
 
-	@Override
-	public ItemStack getPickupItem() {
-		return new ItemStack(HWGItems.BULLETS);
-	}
+    @Override
+    public ItemStack getPickupItem() {
+        return new ItemStack(HWGItems.BULLETS);
+    }
 
 }

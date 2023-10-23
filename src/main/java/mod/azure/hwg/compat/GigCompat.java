@@ -9,10 +9,10 @@ import net.minecraft.world.item.Item;
 
 public class GigCompat {
 
-	public static IncineratorUnitItem INCINERATOR = item(new IncineratorUnitItem(), "nostromo_flamethrower");
+    public static IncineratorUnitItem INCINERATOR = item(new IncineratorUnitItem(), "nostromo_flamethrower");
 
-	static <T extends Item> T item(T c, String id) {
-		Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
-		return c;
-	}
+    static <T extends Item> T item(T c, String id) {
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(HWGMod.MODID, id), c);
+        return c;
+    }
 }

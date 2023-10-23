@@ -11,45 +11,45 @@ import net.minecraft.util.Mth;
 
 public class TechnodemonLesserModel extends GeoModel<TechnodemonEntity> {
 
-	public TechnodemonLesserModel() {
-	}
+    public TechnodemonLesserModel() {
+    }
 
-	@Override
-	public ResourceLocation getModelResource(TechnodemonEntity object) {
-		return new ResourceLocation(HWGMod.MODID, "geo/technodemon_lesser_" + object.getVariant() + ".geo.json");
-	}
+    @Override
+    public ResourceLocation getModelResource(TechnodemonEntity object) {
+        return new ResourceLocation(HWGMod.MODID, "geo/technodemon_lesser_" + object.getVariant() + ".geo.json");
+    }
 
-	@Override
-	public ResourceLocation getTextureResource(TechnodemonEntity object) {
-		return new ResourceLocation(HWGMod.MODID, "textures/entity/technodemon_lesser_" + object.getVariant() + ".png");
-	}
+    @Override
+    public ResourceLocation getTextureResource(TechnodemonEntity object) {
+        return new ResourceLocation(HWGMod.MODID, "textures/entity/technodemon_lesser_" + object.getVariant() + ".png");
+    }
 
-	@Override
-	public ResourceLocation getAnimationResource(TechnodemonEntity object) {
-		return new ResourceLocation(HWGMod.MODID, "animations/technodemon_lesser_" + object.getVariant() + ".animation.json");
-	}
+    @Override
+    public ResourceLocation getAnimationResource(TechnodemonEntity object) {
+        return new ResourceLocation(HWGMod.MODID, "animations/technodemon_lesser_" + object.getVariant() + ".animation.json");
+    }
 
-	@Override
-	public RenderType getRenderType(TechnodemonEntity animatable, ResourceLocation texture) {
-		return RenderType.entityTranslucent(getTextureResource(animatable));
-	}
+    @Override
+    public RenderType getRenderType(TechnodemonEntity animatable, ResourceLocation texture) {
+        return RenderType.entityTranslucent(getTextureResource(animatable));
+    }
 
-	@Override
-	public void setCustomAnimations(TechnodemonEntity animatable, long instanceId, AnimationState<TechnodemonEntity> animationState) {
-		super.setCustomAnimations(animatable, instanceId, animationState);
+    @Override
+    public void setCustomAnimations(TechnodemonEntity animatable, long instanceId, AnimationState<TechnodemonEntity> animationState) {
+        super.setCustomAnimations(animatable, instanceId, animationState);
 
-		var head = getAnimationProcessor().getBone("head");
-		var body = getAnimationProcessor().getBone("body");
-		var body2 = getAnimationProcessor().getBone("bipedBody");
-		var entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+        var head = getAnimationProcessor().getBone("head");
+        var body = getAnimationProcessor().getBone("body");
+        var body2 = getAnimationProcessor().getBone("bipedBody");
+        var entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 
-		if (head != null) {
-			head.setRotX((entityData.headPitch() - 5) * Mth.DEG_TO_RAD);
-			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
-		}
-		if (body != null) 
-			body.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
-		if (body2 != null) 
-			body2.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
-	}
+        if (head != null) {
+            head.setRotX((entityData.headPitch() - 5) * Mth.DEG_TO_RAD);
+            head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
+        }
+        if (body != null)
+            body.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
+        if (body2 != null)
+            body2.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
+    }
 }

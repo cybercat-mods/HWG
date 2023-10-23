@@ -5,7 +5,7 @@ import mod.azure.hwg.client.models.weapons.MinigunModel;
 import mod.azure.hwg.item.weapons.AnimatedItem;
 
 public class MinigunRender extends GeoItemRenderer<AnimatedItem> {
-	public MinigunRender() {
-		super(new MinigunModel());
-	}
+    public MinigunRender() {
+        super(new MinigunModel());
+    }
 }

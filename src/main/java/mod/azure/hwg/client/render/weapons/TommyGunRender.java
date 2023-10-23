@@ -5,7 +5,7 @@ import mod.azure.hwg.client.models.weapons.TommyGunModel;
 import mod.azure.hwg.item.weapons.Assasult2Item;
 
 public class TommyGunRender extends GeoItemRenderer<Assasult2Item> {
-	public TommyGunRender() {
-		super(new TommyGunModel());
-	}
+    public TommyGunRender() {
+        super(new TommyGunModel());
+    }
 }

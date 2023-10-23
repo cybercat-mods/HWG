@@ -5,7 +5,7 @@ import mod.azure.hwg.client.models.weapons.SilverRevolverModel;
 import mod.azure.hwg.item.weapons.SilverRevolverItem;
 
 public class SilverRevolverRender extends GeoItemRenderer<SilverRevolverItem> {
-	public SilverRevolverRender() {
-		super(new SilverRevolverModel());
-	}
+    public SilverRevolverRender() {
+        super(new SilverRevolverModel());
+    }
 }

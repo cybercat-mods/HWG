@@ -5,7 +5,7 @@ import mod.azure.hwg.client.models.weapons.AKModel;
 import mod.azure.hwg.item.weapons.AssasultItem;
 
 public class AKRender extends GeoItemRenderer<AssasultItem> {
-	public AKRender() {
-		super(new AKModel());
-	}
+    public AKRender() {
+        super(new AKModel());
+    }
 }

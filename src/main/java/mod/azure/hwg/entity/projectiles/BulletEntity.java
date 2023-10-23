@@ -43,195 +43,190 @@ import net.minecraft.world.phys.HitResult;
 
 public class BulletEntity extends AbstractArrow implements GeoEntity {
 
-	protected int timeInAir;
-	protected boolean inAir;
-	protected int ticksInAir;
-	protected static float bulletdamage;
-	private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-	public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.FLOAT);
+    protected static float bulletdamage;
+    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
+    public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
+    protected int timeInAir;
+    protected boolean inAir;
+    protected int ticksInAir;
 
-	public BulletEntity(EntityType<? extends BulletEntity> entityType, Level world) {
-		super(entityType, world);
-		this.pickup = AbstractArrow.Pickup.DISALLOWED;
-	}
+    public BulletEntity(EntityType<? extends BulletEntity> entityType, Level world) {
+        super(entityType, world);
+        this.pickup = AbstractArrow.Pickup.DISALLOWED;
+    }
 
-	public BulletEntity(Level world, LivingEntity owner, Float damage) {
-		super(HWGProjectiles.BULLETS, owner, world);
-		bulletdamage = damage;
-	}
+    public BulletEntity(Level world, LivingEntity owner, Float damage) {
+        super(HWGProjectiles.BULLETS, owner, world);
+        bulletdamage = damage;
+    }
 
-	protected BulletEntity(EntityType<? extends BulletEntity> type, double x, double y, double z, Level world) {
-		this(type, world);
-	}
+    protected BulletEntity(EntityType<? extends BulletEntity> type, double x, double y, double z, Level world) {
+        this(type, world);
+    }
 
-	public BulletEntity(Level world, double x, double y, double z) {
-		super(HWGProjectiles.BULLETS, x, y, z, world);
-		this.setNoGravity(true);
-		this.setBaseDamage(0);
-	}
+    public BulletEntity(Level world, double x, double y, double z) {
+        super(HWGProjectiles.BULLETS, x, y, z, world);
+        this.setNoGravity(true);
+        this.setBaseDamage(0);
+    }
 
-	protected BulletEntity(EntityType<? extends BulletEntity> type, LivingEntity owner, Level world) {
-		this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
-		this.setOwner(owner);
-		if (owner instanceof Player)
-			this.pickup = AbstractArrow.Pickup.ALLOWED;
-	}
+    protected BulletEntity(EntityType<? extends BulletEntity> type, LivingEntity owner, Level world) {
+        this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
+        this.setOwner(owner);
+        if (owner instanceof Player)
+            this.pickup = AbstractArrow.Pickup.ALLOWED;
+    }
 
-	@Override
-	public void registerControllers(ControllerRegistrar controllers) {
-		controllers.add(new AnimationController<>(this, event -> {
-			return PlayState.CONTINUE;
-		}));
-	}
+    @Override
+    public void registerControllers(ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, event -> {
+            return PlayState.CONTINUE;
+        }));
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return EntityPacket.createPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return EntityPacket.createPacket(this);
+    }
 
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
-	}
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
 
-	@Override
-	protected void doPostHurtEffects(LivingEntity living) {
-		super.doPostHurtEffects(living);
-		if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players == true || !(living instanceof Player)) {
-			living.invulnerableTime = 0;
-			living.setDeltaMovement(0, 0, 0);
-		}
-	}
+    @Override
+    protected void doPostHurtEffects(LivingEntity living) {
+        super.doPostHurtEffects(living);
+        if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players || !(living instanceof Player)) {
+            living.invulnerableTime = 0;
+            living.setDeltaMovement(0, 0, 0);
+        }
+    }
 
-	@Override
-	public void tickDespawn() {
-		++this.ticksInAir;
-		if (this.ticksInAir >= 40)
-			this.remove(Entity.RemovalReason.DISCARDED);
-	}
+    @Override
+    public void tickDespawn() {
+        ++this.ticksInAir;
+        if (this.ticksInAir >= 40)
+            this.remove(Entity.RemovalReason.DISCARDED);
+    }
 
-	@Override
-	public void shoot(double x, double y, double z, float speed, float divergence) {
-		super.shoot(x, y, z, speed, divergence);
-		this.ticksInAir = 0;
-	}
+    @Override
+    public void shoot(double x, double y, double z, float speed, float divergence) {
+        super.shoot(x, y, z, speed, divergence);
+        this.ticksInAir = 0;
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.getEntityData().define(FORCED_YAW, 0f);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(FORCED_YAW, 0f);
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag tag) {
-		super.addAdditionalSaveData(tag);
-		tag.putShort("life", (short) this.ticksInAir);
-		tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putShort("life", (short) this.ticksInAir);
+        tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag tag) {
-		super.readAdditionalSaveData(tag);
-		this.ticksInAir = tag.getShort("life");
-		entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.ticksInAir = tag.getShort("life");
+        entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
+    }
 
-	@Override
-	public void tick() {
-		super.tick();
-		++this.ticksInAir;
-		if (this.ticksInAir >= 40)
-			this.remove(Entity.RemovalReason.DISCARDED);
-		if (this.level().isClientSide) {
-			double x = this.getX() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
-			double z = this.getZ() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
-			this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
-		}
-		if (getOwner()instanceof Player owner)
-			setYRot(entityData.get(FORCED_YAW));
-	}
+    @Override
+    public void tick() {
+        super.tick();
+        ++this.ticksInAir;
+        if (this.ticksInAir >= 40)
+            this.remove(Entity.RemovalReason.DISCARDED);
+        if (this.level().isClientSide) {
+            double x = this.getX() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
+            double z = this.getZ() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
+            this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
+        }
+        if (getOwner() instanceof Player owner)
+            setYRot(entityData.get(FORCED_YAW));
+    }
 
-	@Override
-	public boolean isNoGravity() {
-		if (this.isUnderWater())
-			return false;
-		else
-			return true;
-	}
+    @Override
+    public boolean isNoGravity() {
+        return !this.isUnderWater();
+    }
 
-	public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
+    @Override
+    public void setSoundEvent(SoundEvent soundIn) {
+        this.hitSound = soundIn;
+    }
 
-	@Override
-	public void setSoundEvent(SoundEvent soundIn) {
-		this.hitSound = soundIn;
-	}
+    @Override
+    protected SoundEvent getDefaultHitGroundSoundEvent() {
+        return SoundEvents.ARMOR_EQUIP_IRON;
+    }
 
-	@Override
-	protected SoundEvent getDefaultHitGroundSoundEvent() {
-		return SoundEvents.ARMOR_EQUIP_IRON;
-	}
+    @Override
+    protected void onHitBlock(BlockHitResult blockHitResult) {
+        super.onHitBlock(blockHitResult);
+        if (!this.level().isClientSide)
+            this.remove(Entity.RemovalReason.DISCARDED);
+        if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.gunconfigs.bullets_breakdripstone)
+            level().destroyBlock(blockHitResult.getBlockPos(), true);
+        if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.TNT))
+            level().getBlockState(blockHitResult.getBlockPos()).setValue(TntBlock.UNSTABLE, true);
+        if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
+            level().destroyBlock(blockHitResult.getBlockPos(), true);
+        this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON);
+    }
 
-	@Override
-	protected void onHitBlock(BlockHitResult blockHitResult) {
-		super.onHitBlock(blockHitResult);
-		if (!this.level().isClientSide)
-			this.remove(Entity.RemovalReason.DISCARDED);
-		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.gunconfigs.bullets_breakdripstone == true)
-			level().destroyBlock(blockHitResult.getBlockPos(), true);
-		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.TNT))
-			level().getBlockState(blockHitResult.getBlockPos()).setValue(TntBlock.UNSTABLE, true);
-		if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
-			level().destroyBlock(blockHitResult.getBlockPos(), true);
-		this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON);
-	}
+    @Override
+    protected void onHitEntity(EntityHitResult entityHitResult) {
+        var entity = entityHitResult.getEntity();
+        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity))
+            if (!this.level().isClientSide)
+                this.remove(Entity.RemovalReason.DISCARDED);
+        var entity2 = this.getOwner();
+        DamageSource damageSource2;
+        if (entity2 == null)
+            damageSource2 = damageSources().arrow(this, this);
+        else {
+            damageSource2 = damageSources().arrow(this, entity2);
+            if (entity2 instanceof LivingEntity)
+                ((LivingEntity) entity2).setLastHurtMob(entity);
+        }
+        if (entity.hurt(damageSource2, bulletdamage)) {
+            if (entity instanceof LivingEntity livingEntity) {
+                if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
+                    EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
+                    EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
+                }
+                this.doPostHurtEffects(livingEntity);
+                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
+                    ((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+            }
+        } else if (!this.level().isClientSide)
+            this.remove(Entity.RemovalReason.DISCARDED);
+    }
 
-	@Override
-	protected void onHitEntity(EntityHitResult entityHitResult) {
-		var entity = entityHitResult.getEntity();
-		if (entityHitResult.getType() != HitResult.Type.ENTITY || !((EntityHitResult) entityHitResult).getEntity().is(entity))
-			if (!this.level().isClientSide)
-				this.remove(Entity.RemovalReason.DISCARDED);
-		var entity2 = this.getOwner();
-		DamageSource damageSource2;
-		if (entity2 == null)
-			damageSource2 = damageSources().arrow(this, this);
-		else {
-			damageSource2 = damageSources().arrow(this, entity2);
-			if (entity2 instanceof LivingEntity)
-				((LivingEntity) entity2).setLastHurtMob(entity);
-		}
-		if (entity.hurt(damageSource2, bulletdamage)) {
-			if (entity instanceof LivingEntity) {
-				var livingEntity = (LivingEntity) entity;
-				if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
-					EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
-					EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
-				}
-				this.doPostHurtEffects(livingEntity);
-				if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
-					((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
-			}
-		} else if (!this.level().isClientSide)
-			this.remove(Entity.RemovalReason.DISCARDED);
-	}
+    @Override
+    public ItemStack getPickupItem() {
+        return new ItemStack(HWGItems.BULLETS);
+    }
 
-	@Override
-	public ItemStack getPickupItem() {
-		return new ItemStack(HWGItems.BULLETS);
-	}
+    @Override
+    @Environment(EnvType.CLIENT)
+    public boolean shouldRenderAtSqrDistance(double distance) {
+        return true;
+    }
 
-	@Override
-	@Environment(EnvType.CLIENT)
-	public boolean shouldRenderAtSqrDistance(double distance) {
-		return true;
-	}
-
-	public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
-		var f = 0.017453292F;
-		var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
-		var y = -Mth.sin((pitch + roll) * f);
-		var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
-		this.shoot(x, y, z, modifierZ, 0);
-	}
+    public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
+        var f = 0.017453292F;
+        var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
+        var y = -Mth.sin((pitch + roll) * f);
+        var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
+        this.shoot(x, y, z, modifierZ, 0);
+    }
 
 }

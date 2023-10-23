@@ -5,7 +5,7 @@ import mod.azure.hwg.client.models.weapons.GPistolModel;
 import mod.azure.hwg.item.weapons.GPistolItem;
 
 public class GPistolRender extends GeoItemRenderer<GPistolItem> {
-	public GPistolRender() {
-		super(new GPistolModel());
-	}
+    public GPistolRender() {
+        super(new GPistolModel());
+    }
 }

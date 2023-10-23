@@ -10,16 +10,16 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ReiPlugin implements REIClientPlugin {
 
-	public static final CategoryIdentifier<HWGDisplay> CRAFTING = CategoryIdentifier.of(new ResourceLocation(HWGMod.MODID, "crafting"));
+    public static final CategoryIdentifier<HWGDisplay> CRAFTING = CategoryIdentifier.of(new ResourceLocation(HWGMod.MODID, "crafting"));
 
-	@Override
-	public void registerCategories(CategoryRegistry registry) {
-		registry.add(new HWGCategory());
-		registry.addWorkstations(CRAFTING, HWGCategory.ICON);
-	}
+    @Override
+    public void registerCategories(CategoryRegistry registry) {
+        registry.add(new HWGCategory());
+        registry.addWorkstations(CRAFTING, HWGCategory.ICON);
+    }
 
-	@Override
-	public void registerDisplays(DisplayRegistry registry) {
-		registry.registerFiller(GunTableRecipe.class, HWGDisplay::new);
-	}
+    @Override
+    public void registerDisplays(DisplayRegistry registry) {
+        registry.registerFiller(GunTableRecipe.class, HWGDisplay::new);
+    }
 }

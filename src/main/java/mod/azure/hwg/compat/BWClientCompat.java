@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
 public class BWClientCompat {
 
-	public static void onInitializeClient() {
-		EntityRendererRegistry.register(BWCompat.SILVERBULLETS, (ctx) -> new SBulletRender(ctx));
-	}
+    public static void onInitializeClient() {
+        EntityRendererRegistry.register(BWCompat.SILVERBULLETS, (ctx) -> new SBulletRender(ctx));
+    }
 }

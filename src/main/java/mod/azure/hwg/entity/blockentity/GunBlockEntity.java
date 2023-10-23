@@ -19,36 +19,36 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class GunBlockEntity extends BlockEntity implements ImplementedInventory, MenuProvider {
 
-	private final NonNullList<ItemStack> items = NonNullList.withSize(6, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> items = NonNullList.withSize(6, ItemStack.EMPTY);
 
-	public GunBlockEntity(BlockPos pos, BlockState state) {
-		super(HWGMobs.GUN_TABLE_ENTITY, pos, state);
-	}
+    public GunBlockEntity(BlockPos pos, BlockState state) {
+        super(HWGMobs.GUN_TABLE_ENTITY, pos, state);
+    }
 
-	@Override
-	public void load(CompoundTag nbt) {
-		super.load(nbt);
-		ContainerHelper.loadAllItems(nbt, items);
-	}
+    @Override
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
+        ContainerHelper.loadAllItems(nbt, items);
+    }
 
-	@Override
-	public void saveAdditional(CompoundTag nbt) {
-		super.saveAdditional(nbt);
-		ContainerHelper.saveAllItems(nbt, items);
-	}
+    @Override
+    public void saveAdditional(CompoundTag nbt) {
+        super.saveAdditional(nbt);
+        ContainerHelper.saveAllItems(nbt, items);
+    }
 
-	@Override
-	public NonNullList<ItemStack> getItems() {
-		return items;
-	}
+    @Override
+    public NonNullList<ItemStack> getItems() {
+        return items;
+    }
 
-	@Override
-	public Component getDisplayName() {
-		return Component.translatable(getBlockState().getBlock().getDescriptionId());
-	}
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable(getBlockState().getBlock().getDescriptionId());
+    }
 
-	@Override
-	public AbstractContainerMenu createMenu(int syncId, Inventory inventory, Player player) {
-		return new GunTableScreenHandler(syncId, inventory, ContainerLevelAccess.create(level, worldPosition));
-	}
+    @Override
+    public AbstractContainerMenu createMenu(int syncId, Inventory inventory, Player player) {
+        return new GunTableScreenHandler(syncId, inventory, ContainerLevelAccess.create(level, worldPosition));
+    }
 }

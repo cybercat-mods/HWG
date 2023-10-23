@@ -10,27 +10,27 @@ import net.minecraft.world.level.Level;
 
 public class GrenadeStunItem extends Item {
 
-	public GrenadeStunItem() {
-		super(new Item.Properties());
-	}
+    public GrenadeStunItem() {
+        super(new Item.Properties());
+    }
 
-	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-		ItemStack itemStack = user.getItemInHand(hand);
-		if (!user.getCooldowns().isOnCooldown(this)) {
-			user.getCooldowns().addCooldown(this, 25);
-			if (!world.isClientSide) {
-				var nadeEntity = new GrenadeEntity(world, user);
-				nadeEntity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 1.5F, 1.0F);
-				nadeEntity.setVariant(5);
-				nadeEntity.setState(1);
-				world.addFreshEntity(nadeEntity);
-			}
-			if (!user.getAbilities().instabuild)
-				itemStack.shrink(1);
-			return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
-		} else {
-			return InteractionResultHolder.fail(itemStack);
-		}
-	}
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+        ItemStack itemStack = user.getItemInHand(hand);
+        if (!user.getCooldowns().isOnCooldown(this)) {
+            user.getCooldowns().addCooldown(this, 25);
+            if (!world.isClientSide) {
+                var nadeEntity = new GrenadeEntity(world, user);
+                nadeEntity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 1.5F, 1.0F);
+                nadeEntity.setVariant(5);
+                nadeEntity.setState(1);
+                world.addFreshEntity(nadeEntity);
+            }
+            if (!user.getAbilities().instabuild)
+                itemStack.shrink(1);
+            return InteractionResultHolder.sidedSuccess(itemStack, world.isClientSide());
+        } else {
+            return InteractionResultHolder.fail(itemStack);
+        }
+    }
 
 }
