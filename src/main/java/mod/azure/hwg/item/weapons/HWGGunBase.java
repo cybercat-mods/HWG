@@ -1,7 +1,7 @@
 package mod.azure.hwg.item.weapons;
 
-import mod.azure.azurelib.AzureLibMod;
-import mod.azure.azurelib.entities.TickingLightEntity;
+import mod.azure.hwg.entity.blockentity.TickingLightEntity;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -33,8 +33,7 @@ public class HWGGunBase extends Item {
     public static float getPowerForTime(int charge) {
         var f = (float) charge / 20.0F;
         f = (f * f + f * 2.0F) / 3.0F;
-        if (f > 1.0F)
-            f = 1.0F;
+        if (f > 1.0F) f = 1.0F;
 
         return f;
     }
@@ -104,17 +103,14 @@ public class HWGGunBase extends Item {
     protected void spawnLightSource(Entity entity, boolean isInWaterBlock) {
         if (lightBlockPos == null) {
             lightBlockPos = findFreeSpace(entity.level(), entity.blockPosition(), 2);
-            if (lightBlockPos == null)
-                return;
-            entity.level().setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
+            if (lightBlockPos == null) return;
+            entity.level().setBlockAndUpdate(lightBlockPos, HWGBlocks.TICKING_LIGHT_BLOCK.defaultBlockState());
         } else if (checkDistance(lightBlockPos, entity.blockPosition(), 2)) {
             var blockEntity = entity.level().getBlockEntity(lightBlockPos);
             if (blockEntity instanceof TickingLightEntity)
                 ((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
-            else
-                lightBlockPos = null;
-        } else
-            lightBlockPos = null;
+            else lightBlockPos = null;
+        } else lightBlockPos = null;
     }
 
     private boolean checkDistance(BlockPos blockPosA, BlockPos blockPosB, int distance) {
@@ -122,8 +118,7 @@ public class HWGGunBase extends Item {
     }
 
     private BlockPos findFreeSpace(Level world, BlockPos blockPos, int maxDistance) {
-        if (blockPos == null)
-            return null;
+        if (blockPos == null) return null;
 
         var offsets = new int[maxDistance * 2 + 1];
         offsets[0] = 0;
@@ -136,8 +131,7 @@ public class HWGGunBase extends Item {
                 for (int z : offsets) {
                     BlockPos offsetPos = blockPos.offset(x, y, z);
                     BlockState state = world.getBlockState(offsetPos);
-                    if (state.isAir() || state.getBlock().equals(AzureLibMod.TICKING_LIGHT_BLOCK))
-                        return offsetPos;
+                    if (state.isAir() || state.getBlock().equals(HWGBlocks.TICKING_LIGHT_BLOCK)) return offsetPos;
                 }
 
         return null;

@@ -1,7 +1,7 @@
 package mod.azure.hwg.item.weapons;
 
-import mod.azure.azurelib.AzureLibMod;
-import mod.azure.azurelib.entities.TickingLightEntity;
+import mod.azure.hwg.entity.blockentity.TickingLightEntity;
+import mod.azure.hwg.util.registry.HWGBlocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -88,7 +88,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
             lightBlockPos = findFreeSpace(entity.level(), entity.blockPosition(), 2);
             if (lightBlockPos == null)
                 return;
-            entity.level().setBlockAndUpdate(lightBlockPos, AzureLibMod.TICKING_LIGHT_BLOCK.defaultBlockState());
+            entity.level().setBlockAndUpdate(lightBlockPos, HWGBlocks.TICKING_LIGHT_BLOCK.defaultBlockState());
         } else if (checkDistance(lightBlockPos, entity.blockPosition(), 2)) {
             var blockEntity = entity.level().getBlockEntity(lightBlockPos);
             if (blockEntity instanceof TickingLightEntity)
@@ -118,7 +118,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
                 for (var z : offsets) {
                     var offsetPos = blockPos.offset(x, y, z);
                     var state = world.getBlockState(offsetPos);
-                    if (state.isAir() || state.getBlock().equals(AzureLibMod.TICKING_LIGHT_BLOCK))
+                    if (state.isAir() || state.getBlock().equals(HWGBlocks.TICKING_LIGHT_BLOCK))
                         return offsetPos;
                 }
 
