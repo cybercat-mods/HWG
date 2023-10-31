@@ -5,11 +5,11 @@ import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.object.PlayState;
+import mod.azure.azurelib.entities.TickingLightEntity;
 import mod.azure.azurelib.network.packet.EntityPacket;
+import mod.azure.azurelib.platform.Services;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
-import mod.azure.hwg.entity.blockentity.TickingLightEntity;
-import mod.azure.hwg.util.registry.HWGBlocks;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
@@ -238,7 +238,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
             lightBlockPos = findFreeSpace(level(), blockPosition(), 2);
             if (lightBlockPos == null)
                 return;
-            level().setBlockAndUpdate(lightBlockPos, HWGBlocks.TICKING_LIGHT_BLOCK.defaultBlockState());
+            level().setBlockAndUpdate(lightBlockPos, Services.PLATFORM.getTickingLightBlock().defaultBlockState());
         } else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
             var blockEntity = level().getBlockEntity(lightBlockPos);
             if (blockEntity instanceof TickingLightEntity)
@@ -268,7 +268,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
                 for (int z : offsets) {
                     var offsetPos = blockPos.offset(x, y, z);
                     var state = world.getBlockState(offsetPos);
-                    if (state.isAir() || state.getBlock().equals(HWGBlocks.TICKING_LIGHT_BLOCK))
+                    if (state.isAir() || state.getBlock().equals(Services.PLATFORM.getTickingLightBlock()))
                         return offsetPos;
                 }
 
