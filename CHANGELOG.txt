@@ -1,4 +1,4 @@
-v.1.4.21
+v.1.4.22
 
-- Revert back to AzureLib LightBlock/Entity now that it's multiloader compatible.
-- Require at least AzureLib 2.0.3.
+- Clean up code.
+- Adds weapon cooldown configuration.
