@@ -79,9 +79,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> {
-            return PlayState.CONTINUE;
-        }));
+        controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
     }
 
     @Override
@@ -152,9 +150,9 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         spawnLightSource(isInsideWaterBlock);
         if (this.level().isClientSide) {
-            var x = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
+            var x = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * this.getBbWidth() * 0.5D;
             var y = this.getY() + 0.05D + this.random.nextDouble();
-            var z = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
+            var z = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * this.getBbWidth() * 0.5D;
             this.level().addParticle(ParticleTypes.FLAME, true, x, y, z, 0, 0, 0);
             this.level().addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, x, y, z, 0, 0, 0);
         }
@@ -190,29 +188,28 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity))
-            if (!this.level().isClientSide)
-                this.remove(Entity.RemovalReason.DISCARDED);
+        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide)
+            this.remove(Entity.RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
         if (entity2 == null)
             damageSource2 = damageSources().arrow(this, this);
         else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity)
-                ((LivingEntity) entity2).setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity)
+                livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, HWGMod.config.gunconfigs.balrogconfigs.balrog_damage)) {
             if (entity instanceof LivingEntity livingEntity) {
-                if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
+                if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity1) {
                     EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
-                    EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
+                    EnchantmentHelper.doPostDamageEffects(livingEntity1, livingEntity);
                 }
                 this.explode();
 
                 this.doPostHurtEffects(livingEntity);
-                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
-                    ((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
+                    serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
         } else if (!this.level().isClientSide)
             this.remove(Entity.RemovalReason.DISCARDED);
@@ -241,8 +238,8 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
             level().setBlockAndUpdate(lightBlockPos, Services.PLATFORM.getTickingLightBlock().defaultBlockState());
         } else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
             var blockEntity = level().getBlockEntity(lightBlockPos);
-            if (blockEntity instanceof TickingLightEntity)
-                ((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+            if (blockEntity instanceof TickingLightEntity tickingLightEntity)
+                tickingLightEntity.refresh(isInWaterBlock ? 20 : 0);
             else
                 lightBlockPos = null;
         } else

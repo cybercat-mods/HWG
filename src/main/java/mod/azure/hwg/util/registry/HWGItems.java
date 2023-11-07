@@ -79,4 +79,7 @@ public record HWGItems() {
         }
         return vanillaItemMap;
     }
+
+    public static void initialize() {
+    }
 }

@@ -52,24 +52,23 @@ public class SBulletEntity extends BulletEntity {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity))
-            if (!this.level().isClientSide)
-                this.remove(Entity.RemovalReason.DISCARDED);
+        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide)
+            this.remove(Entity.RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
         if (entity2 == null)
             damageSource2 = damageSources().indirectMagic(this, this);
         else {
             damageSource2 = damageSources().indirectMagic(this, entity2);
-            if (entity2 instanceof LivingEntity)
-                ((LivingEntity) entity2).setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity)
+                livingEntity.setLastHurtMob(entity);
         }
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, "vulnerable_to_silver")))) {
             if (entity.hurt(damageSource2, bulletdamage * 3)) {
                 if (entity instanceof LivingEntity livingEntity) {
-                    if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
+                    if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity1) {
                         EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
-                        EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
+                        EnchantmentHelper.doPostDamageEffects(livingEntity1, livingEntity);
                     }
 
                     this.doPostHurtEffects(livingEntity);
@@ -81,9 +80,9 @@ public class SBulletEntity extends BulletEntity {
         } else {
             if (entity.hurt(damageSource2, bulletdamage)) {
                 if (entity instanceof LivingEntity livingEntity) {
-                    if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
+                    if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity1) {
                         EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
-                        EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
+                        EnchantmentHelper.doPostDamageEffects(livingEntity1, livingEntity);
                     }
                     this.doPostHurtEffects(livingEntity);
                     if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())

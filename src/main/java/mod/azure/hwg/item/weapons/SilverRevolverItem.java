@@ -71,15 +71,13 @@ public class SilverRevolverItem extends AnimatedItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof SilverRevolverItem) {
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.SILVERHELL, passedData);
-                    }
-                }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof SilverRevolverItem) {
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.SILVERHELL, passedData);
+            }
+        }
     }
 
     public void reload(Player user, InteractionHand hand) {
@@ -99,8 +97,7 @@ public class SilverRevolverItem extends AnimatedItem {
     }
 
     public SBulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new SBulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.pistolconfigs.pistol_damage);
-        return bullet;
+        return new SBulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.pistolconfigs.pistol_damage);
     }
 
     @Override

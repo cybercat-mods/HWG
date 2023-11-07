@@ -77,9 +77,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> {
-            return PlayState.CONTINUE;
-        }));
+        controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
     }
 
     @Override
@@ -140,8 +138,8 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
         if (this.ticksInAir >= 40)
             this.remove(Entity.RemovalReason.DISCARDED);
         if (this.level().isClientSide) {
-            double d2 = this.getX() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
-            double f2 = this.getZ() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
+            double d2 = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
+            double f2 = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             this.level().addParticle(ParticleTypes.SMOKE, true, d2, this.getY(), f2, 0, 0, 0);
         }
         if (getOwner() instanceof Player owner)
@@ -178,27 +176,26 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity))
-            if (!this.level().isClientSide)
-                this.remove(Entity.RemovalReason.DISCARDED);
+        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide)
+            this.remove(Entity.RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
         if (entity2 == null) {
             damageSource2 = damageSources().arrow(this, this);
         } else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity)
-                ((LivingEntity) entity2).setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity)
+                livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, HWGMod.config.gunconfigs.shotgunconfigs.shotgun_damage)) {
             if (entity instanceof LivingEntity livingEntity) {
-                if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
+                if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity2) {
                     EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
-                    EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
+                    EnchantmentHelper.doPostDamageEffects(livingEntity2, livingEntity);
                 }
                 this.doPostHurtEffects(livingEntity);
-                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
-                    ((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
+                    serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
         } else if (!this.level().isClientSide)
             this.remove(Entity.RemovalReason.DISCARDED);

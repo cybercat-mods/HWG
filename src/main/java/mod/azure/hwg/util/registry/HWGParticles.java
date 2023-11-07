@@ -31,4 +31,7 @@ public record HWGParticles() {
     private static SimpleParticleType register(ResourceLocation identifier, boolean alwaysSpawn) {
         return Registry.register(BuiltInRegistries.PARTICLE_TYPE, identifier, FabricParticleTypes.simple(alwaysSpawn));
     }
+
+    public static void initialize() {
+    }
 }

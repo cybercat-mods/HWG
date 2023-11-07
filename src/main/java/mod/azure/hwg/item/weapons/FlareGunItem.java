@@ -28,7 +28,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -51,40 +50,8 @@ import java.util.function.Supplier;
 
 public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
 
-    public static final Predicate<ItemStack> BLACK_FLARE = (stack) -> {
-        return stack.getItem() == HWGItems.BLACK_FLARE;
-    };
-    public static final Predicate<ItemStack> FLARE = BLACK_FLARE.or((stack) -> {
-        return stack.getItem() == HWGItems.BLUE_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.BROWN_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.CYAN_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.GRAY_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.GREEN_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.LIGHTBLUE_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.LIGHTGRAY_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.LIME_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.MAGENTA_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.ORANGE_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.PINK_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.PURPLE_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.RED_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.WHITE_FLARE;
-    }).or((stack) -> {
-        return stack.getItem() == HWGItems.YELLOW_FLARE;
-    });
+    private static final Predicate<ItemStack> BLACK_FLARE = stack -> stack.getItem() == HWGItems.BLACK_FLARE;
+    public static final Predicate<ItemStack> FLARE = BLACK_FLARE.or(stack -> stack.getItem() == HWGItems.BLUE_FLARE).or(stack -> stack.getItem() == HWGItems.BROWN_FLARE).or(stack -> stack.getItem() == HWGItems.CYAN_FLARE).or(stack -> stack.getItem() == HWGItems.GRAY_FLARE).or(stack -> stack.getItem() == HWGItems.GREEN_FLARE).or(stack -> stack.getItem() == HWGItems.LIGHTBLUE_FLARE).or(stack -> stack.getItem() == HWGItems.LIGHTGRAY_FLARE).or(stack -> stack.getItem() == HWGItems.LIME_FLARE).or(stack -> stack.getItem() == HWGItems.MAGENTA_FLARE).or(stack -> stack.getItem() == HWGItems.ORANGE_FLARE).or(stack -> stack.getItem() == HWGItems.PINK_FLARE).or(stack -> stack.getItem() == HWGItems.PURPLE_FLARE).or(stack -> stack.getItem() == HWGItems.RED_FLARE).or(stack -> stack.getItem() == HWGItems.WHITE_FLARE).or(stack -> stack.getItem() == HWGItems.YELLOW_FLARE);
     private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
     private boolean charged = false;
@@ -162,7 +129,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
     private static boolean loadProjectiles(LivingEntity shooter, ItemStack projectile) {
         var i = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MULTISHOT, projectile);
         var j = i == 0 ? 1 : 3;
-        var bl = shooter instanceof Player && ((Player) shooter).getAbilities().instabuild;
+        var bl = shooter instanceof Player player && player.getAbilities().instabuild;
         var itemStack = shooter.getProjectile(projectile);
         var itemStack2 = itemStack.copy();
 
@@ -189,8 +156,8 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
             ItemStack itemStack2;
             if (!bl && !creative && !simulated) {
                 itemStack2 = projectile.split(1);
-                if (projectile.isEmpty() && shooter instanceof Player)
-                    ((Player) shooter).getInventory().removeItem(projectile);
+                if (projectile.isEmpty() && shooter instanceof Player player)
+                    player.getInventory().removeItem(projectile);
             } else
                 itemStack2 = projectile.copy();
 
@@ -200,56 +167,54 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
     }
 
     public static boolean isCharged(ItemStack stack) {
-        var NbtCompound = stack.getTag();
-        return NbtCompound != null && NbtCompound.getBoolean("Charged");
+        var nbt = stack.getTag();
+        return nbt != null && nbt.getBoolean("Charged");
     }
 
     public static void setCharged(ItemStack stack, boolean charged) {
-        var NbtCompound = stack.getOrCreateTag();
-        NbtCompound.putBoolean("Charged", charged);
+        var nbt = stack.getOrCreateTag();
+        nbt.putBoolean("Charged", charged);
     }
 
     private static void putProjectile(ItemStack crossbow, ItemStack projectile) {
-        var NbtCompound = crossbow.getOrCreateTag();
-        ListTag NbtList2;
-        if (NbtCompound.contains("ChargedProjectiles", 9))
-            NbtList2 = NbtCompound.getList("ChargedProjectiles", 10);
+        var nbt = crossbow.getOrCreateTag();
+        ListTag list;
+        if (nbt.contains("ChargedProjectiles", 9))
+            list = nbt.getList("ChargedProjectiles", 10);
         else
-            NbtList2 = new ListTag();
+            list = new ListTag();
 
-        var NbtCompound2 = new CompoundTag();
-        projectile.save(NbtCompound2);
-        NbtList2.add(NbtCompound2);
-        NbtCompound.put("ChargedProjectiles", NbtList2);
+        var nbt2 = new CompoundTag();
+        projectile.save(nbt2);
+        list.add(nbt2);
+        nbt.put("ChargedProjectiles", list);
     }
 
     private static List<ItemStack> getProjectiles(ItemStack crossbow) {
         List<ItemStack> list = Lists.newArrayList();
-        var NbtCompound = crossbow.getTag();
-        if (NbtCompound != null && NbtCompound.contains("ChargedProjectiles", 9)) {
-            var NbtList = NbtCompound.getList("ChargedProjectiles", 10);
-            if (NbtList != null)
-                for (int i = 0; i < NbtList.size(); ++i) {
-                    var NbtCompound2 = NbtList.getCompound(i);
-                    list.add(ItemStack.of(NbtCompound2));
+        var nbt = crossbow.getTag();
+        if (nbt != null && nbt.contains("ChargedProjectiles", 9)) {
+            var list2 = nbt.getList("ChargedProjectiles", 10);
+            if (list2 != null)
+                for (int i = 0; i < list2.size(); ++i) {
+                    var ntb2 = list2.getCompound(i);
+                    list.add(ItemStack.of(ntb2));
                 }
         }
         return list;
     }
 
     private static void clearProjectiles(ItemStack crossbow) {
-        var NbtCompound = crossbow.getTag();
-        if (NbtCompound != null) {
-            var NbtList = NbtCompound.getList("ChargedProjectiles", 9);
-            NbtList.clear();
-            NbtCompound.put("ChargedProjectiles", NbtList);
+        var nbt = crossbow.getTag();
+        if (nbt != null) {
+            var list = nbt.getList("ChargedProjectiles", 9);
+            list.clear();
+            nbt.put("ChargedProjectiles", list);
         }
     }
 
     public static boolean hasProjectile(ItemStack crossbow, Item projectile) {
-        return getProjectiles(crossbow).stream().anyMatch((s) -> {
-            return s.getItem() == projectile;
-        });
+        return getProjectiles(crossbow).stream().anyMatch(s -> s.getItem() == projectile);
     }
 
     public static void shootAll(Level world, LivingEntity entity, InteractionHand hand, ItemStack stack, float speed, float divergence) {
@@ -257,7 +222,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
         var fs = getSoundPitches(entity.level().random);
 
         for (int i = 0; i < list.size(); ++i) {
-            var itemStack = (ItemStack) list.get(i);
+            var itemStack = list.get(i);
             var bl = entity instanceof Player player && player.getAbilities().instabuild;
             shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 0.0F);
         }
@@ -372,7 +337,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context) {
         var list = getProjectiles(stack);
         if (isCharged(stack) && !list.isEmpty()) {
-            var itemStack = (ItemStack) list.get(0);
+            var itemStack = list.get(0);
             tooltip.add((Component.translatable("Ammo")).append(" ").append(itemStack.getDisplayName()));
             if (context.isAdvanced() && itemStack.getItem() == FLARE) {
                 List<Component> list2 = Lists.newArrayList();

@@ -16,10 +16,12 @@ public class GunTableOutputSlot extends Slot {
         this.gunTableInventory = gunTableInventory;
     }
 
+    @Override
     public boolean mayPlace(ItemStack stack) {
         return false;
     }
 
+    @Override
     public ItemStack remove(int amount) {
         if (this.hasItem())
             this.amount += Math.min(amount, this.getItem().getCount());
@@ -27,16 +29,19 @@ public class GunTableOutputSlot extends Slot {
         return super.remove(amount);
     }
 
+    @Override
     protected void onQuickCraft(ItemStack stack, int amount) {
         this.amount += amount;
         this.checkTakeAchievements(stack);
     }
 
+    @Override
     protected void checkTakeAchievements(ItemStack stack) {
         stack.onCraftedBy(this.player.level(), this.player, this.amount);
         this.amount = 0;
     }
 
+    @Override
     public void onTake(Player player, ItemStack stack) {
         this.checkTakeAchievements(stack);
         var optionalGunTableRecipe = player.level().getRecipeManager().getRecipeFor(Type.INSTANCE, gunTableInventory, player.level());

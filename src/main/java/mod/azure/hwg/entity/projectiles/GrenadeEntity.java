@@ -15,6 +15,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -169,7 +170,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
     public void remove(RemovalReason reason) {
         var areaeffectcloudentity = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
         if (this.getVariant() == 1)
-            areaeffectcloudentity.setParticle(this.getVariant() == 1 ? ParticleTypes.END_ROD : this.getVariant() == 2 ? ParticleTypes.EXPLOSION : this.getVariant() == 3 ? ParticleTypes.EXPLOSION : this.getVariant() == 4 ? ParticleTypes.LARGE_SMOKE : this.getVariant() == 5 ? ParticleTypes.FLASH : ParticleTypes.END_ROD);
+            areaeffectcloudentity.setParticle(this.getParticle());
         areaeffectcloudentity.setRadius(this.getVariant() == 4 ? 5.0F : 2.0F);
         areaeffectcloudentity.setDuration(this.getVariant() == 4 ? 120 : 2);
         if (this.getVariant() == 4)
@@ -177,6 +178,15 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
         areaeffectcloudentity.absMoveTo(this.getX(), this.getEyeY(), this.getZ());
         this.level().addFreshEntity(areaeffectcloudentity);
         super.remove(reason);
+    }
+
+    private ParticleOptions getParticle() {
+        return switch (this.getVariant()) {
+            case 1, 2, 3 -> ParticleTypes.EXPLOSION;
+            case 4 -> ParticleTypes.LARGE_SMOKE;
+            case 5 -> ParticleTypes.FLASH;
+            default -> ParticleTypes.END_ROD;
+        };
     }
 
     @Override

@@ -67,9 +67,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
                 return event.setAndContinue(RawAnimation.begin().thenLoop("walking"));
             return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
         }));
-        controllers.add(new AnimationController<>(this, "attackController", 0, event -> {
-            return PlayState.STOP;
-        }).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
+        controllers.add(new AnimationController<>(this, "attackController", 0, event -> PlayState.STOP).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
     }
 
     @Override
@@ -140,15 +138,14 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
-        final var var = getRandom().nextInt(0, 5);
-        setVariant(var);
-        setItemSlot(EquipmentSlot.MAINHAND, makeInitialWeapon());
+        this.setVariant(this.getRandom().nextInt(0, 5));
+        this.setItemSlot(EquipmentSlot.MAINHAND, makeInitialWeapon());
         return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityTag);
     }
 
     private ItemStack makeInitialWeapon() {
         final var givenList = Arrays.asList(HWGItems.HELLHORSE, HWGItems.FLAMETHROWER, HWGItems.BRIMSTONE);
-        final var randomIndex = random.nextInt(givenList.size());
+        final var randomIndex = this.getRandom().nextInt(givenList.size());
         final var randomElement = givenList.get(randomIndex);
         return new ItemStack(randomElement);
     }

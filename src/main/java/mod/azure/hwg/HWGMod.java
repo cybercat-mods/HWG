@@ -64,15 +64,7 @@ public class HWGMod implements ModInitializer {
     public static final TagKey<Biome> TECHNOGREATER_BIOMES = TagKey.create(Registries.BIOME, HWGMod.modResource("technogreater_biomes"));
     public static final ResourceKey<CreativeModeTab> WeaponItemGroup = ResourceKey.create(Registries.CREATIVE_MODE_TAB, new ResourceLocation(MODID, "weapons"));
     public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, new ResourceLocation(MODID, "gun_table"), new GunTableRecipe.Serializer());
-    public static HWGMobs MOBS;
-    public static HWGItems ITEMS;
-    public static HWGBlocks BLOCKS;
     public static HWGConfig config;
-    public static HWGSounds SOUNDS;
-    public static BWCompat BW_ITEMS;
-    public static GigCompat GIG_ITEMS;
-    public static HWGParticles PARTICLES;
-    public static HWGProjectiles PROJECTILES;
     public static MenuType<GunTableScreenHandler> SCREEN_HANDLER_TYPE;
 
     public static final ResourceLocation modResource(String name) {
@@ -82,16 +74,16 @@ public class HWGMod implements ModInitializer {
     @Override
     public void onInitialize() {
         config = AzureLibMod.registerConfig(HWGConfig.class, ConfigFormats.json()).getConfigInstance();
-        ITEMS = new HWGItems();
+        HWGItems.initialize();
         if (FabricLoader.getInstance().isModLoaded("gigeresque"))
-            GIG_ITEMS = new GigCompat();
+            GigCompat.initialize();
         if (FabricLoader.getInstance().isModLoaded("bewitchment"))
-            BW_ITEMS = new BWCompat();
-        BLOCKS = new HWGBlocks();
-        SOUNDS = new HWGSounds();
-        MOBS = new HWGMobs();
-        PARTICLES = new HWGParticles();
-        PROJECTILES = new HWGProjectiles();
+            BWCompat.initialize();
+        HWGBlocks.initialize();
+        HWGSounds.initialize();
+        HWGMobs.initialize();
+        HWGParticles.initialize();
+        HWGProjectiles.initialize();
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, WeaponItemGroup, FabricItemGroup.builder().icon(() -> new ItemStack(HWGItems.AK47)) // icon
                 .title(Component.translatable("itemGroup.hwg.weapons")) // title
                 .displayItems((context, entries) -> {

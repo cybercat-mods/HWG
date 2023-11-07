@@ -44,32 +44,30 @@ public class Minigun extends AnimatedItem {
 
     @Override
     public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
-        if (entityLiving instanceof Player playerentity) {
-            if (stack.getDamageValue() < (stack.getMaxDamage() - 1) && !playerentity.getCooldowns().isOnCooldown(this)) {
-                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.minigunconfigs.minigun_cooldown);
-                if (!worldIn.isClientSide) {
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
-                    if (result != null) {
-                        if (result.getEntity() instanceof LivingEntity livingEntity) {
-                            livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.minigunconfigs.minigun_damage);
-                            if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players || !(livingEntity instanceof Player)) {
-                                livingEntity.invulnerableTime = 0;
-                                livingEntity.setDeltaMovement(0, 0, 0);
-                            }
+        if (entityLiving instanceof Player playerentity && stack.getDamageValue() < (stack.getMaxDamage() - 1) && !playerentity.getCooldowns().isOnCooldown(this)) {
+            playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.minigunconfigs.minigun_cooldown);
+            if (!worldIn.isClientSide) {
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
+                if (result != null) {
+                    if (result.getEntity() instanceof LivingEntity livingEntity) {
+                        livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.minigunconfigs.minigun_damage);
+                        if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players || !(livingEntity instanceof Player)) {
+                            livingEntity.invulnerableTime = 0;
+                            livingEntity.setDeltaMovement(0, 0, 0);
                         }
-                    } else {
-                        var bullet = createArrow(worldIn, stack, playerentity);
-                        bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-                        bullet.tickCount = -15;
-                        worldIn.addFreshEntity(bullet);
                     }
-                    worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.MINIGUN, SoundSource.PLAYERS, 0.25F, 1.0F);
-                    triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
+                } else {
+                    var bullet = createArrow(worldIn, stack, playerentity);
+                    bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+                    bullet.tickCount = -15;
+                    worldIn.addFreshEntity(bullet);
                 }
-                var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-                spawnLightSource(entityLiving, isInsideWaterBlock);
+                worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.MINIGUN, SoundSource.PLAYERS, 0.25F, 1.0F);
+                triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
             }
+            var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
+            spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 
@@ -89,22 +87,18 @@ public class Minigun extends AnimatedItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof Minigun)
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.MINIGUN, passedData);
-                    }
-        if (!(entity instanceof HWGEntity) && selected)
-            if (entity instanceof LivingEntity living)
-                living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1, 1, false, false, false));
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof Minigun)
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.MINIGUN, passedData);
+            }
+        if (!(entity instanceof HWGEntity) && selected && entity instanceof LivingEntity living)
+            living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 1, 1, false, false, false));
     }
 
     public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.minigunconfigs.minigun_damage);
-        return bullet;
+        return new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.minigunconfigs.minigun_damage);
     }
 
     @Override

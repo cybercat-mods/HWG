@@ -40,9 +40,9 @@ public class Assasult2Item extends AnimatedItem {
 
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
-    public int maxammo;
-    public int cooldown;
-    public String animation;
+    private int maxammo;
+    private int cooldown;
+    private String animation;
 
     public Assasult2Item(int maxammo, int cooldown, String animation) {
         super(new Item.Properties().stacksTo(1).durability(maxammo));
@@ -64,32 +64,30 @@ public class Assasult2Item extends AnimatedItem {
 
     @Override
     public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
-        if (entityLiving instanceof Player playerentity) {
-            if (stack.getDamageValue() < (stack.getMaxDamage() - 1) && !playerentity.getCooldowns().isOnCooldown(this)) {
-                playerentity.getCooldowns().addCooldown(this, this.cooldown);
-                if (!worldIn.isClientSide) {
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
-                    if (result != null) {
-                        if (result.getEntity() instanceof LivingEntity livingEntity) {
-                            livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.tommyconfigs.tommy_damage);
-                            if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players || !(livingEntity instanceof Player)) {
-                                livingEntity.invulnerableTime = 0;
-                                livingEntity.setDeltaMovement(0, 0, 0);
-                            }
+        if (entityLiving instanceof Player playerentity && stack.getDamageValue() < (stack.getMaxDamage() - 1) && !playerentity.getCooldowns().isOnCooldown(this)) {
+            playerentity.getCooldowns().addCooldown(this, this.cooldown);
+            if (!worldIn.isClientSide) {
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
+                if (result != null) {
+                    if (result.getEntity() instanceof LivingEntity livingEntity) {
+                        livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.tommyconfigs.tommy_damage);
+                        if (HWGMod.config.gunconfigs.bullets_disable_iframes_on_players || !(livingEntity instanceof Player)) {
+                            livingEntity.invulnerableTime = 0;
+                            livingEntity.setDeltaMovement(0, 0, 0);
                         }
-                    } else {
-                        var bullet = createArrow(worldIn, stack, playerentity);
-                        bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-                        bullet.tickCount = -15;
-                        worldIn.addFreshEntity(bullet);
                     }
-                    worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.TOMMY, SoundSource.PLAYERS, 0.25F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
-                    triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", this.animation);
+                } else {
+                    var bullet = createArrow(worldIn, stack, playerentity);
+                    bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+                    bullet.tickCount = -15;
+                    worldIn.addFreshEntity(bullet);
                 }
-                var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-                spawnLightSource(entityLiving, isInsideWaterBlock);
+                worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.TOMMY, SoundSource.PLAYERS, 0.25F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
+                triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", this.animation);
             }
+            var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
+            spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 
@@ -100,15 +98,12 @@ public class Assasult2Item extends AnimatedItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof Assasult2Item) {
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.ASSASULT2, passedData);
-                    }
-                }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof Assasult2Item)
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.ASSASULT2, passedData);
+            }
     }
 
     public void reload(Player user, InteractionHand hand) {
@@ -130,8 +125,7 @@ public class Assasult2Item extends AnimatedItem {
     }
 
     public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        BulletEntity arrowentity = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.tommyconfigs.tommy_damage);
-        return arrowentity;
+        return new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.tommyconfigs.tommy_damage);
     }
 
     @Override

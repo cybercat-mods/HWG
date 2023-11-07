@@ -41,27 +41,25 @@ public class SniperItem extends AnimatedItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-        if (entityLiving instanceof Player playerentity) {
-            if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
-                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.sniperconfigs.sniper_cooldown);
-                if (!worldIn.isClientSide) {
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    var result = HWGGunBase.hitscanTrace(playerentity, 256, 1.0F);
-                    if (result != null) {
-                        if (result.getEntity() instanceof LivingEntity livingEntity)
-                            livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), playerentity.isShiftKeyDown() ? HWGMod.config.gunconfigs.sniperconfigs.sniper_scoped_damage : HWGMod.config.gunconfigs.sniperconfigs.sniper_damage);
-                    } else {
-                        var bullet = createArrow(worldIn, stack, playerentity);
-                        bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-                        bullet.tickCount = -15;
-                        worldIn.addFreshEntity(bullet);
-                    }
-                    worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.SNIPER, SoundSource.PLAYERS, 0.25F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
-                    triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
+        if (entityLiving instanceof Player playerentity && stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
+            playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.sniperconfigs.sniper_cooldown);
+            if (!worldIn.isClientSide) {
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                var result = HWGGunBase.hitscanTrace(playerentity, 256, 1.0F);
+                if (result != null) {
+                    if (result.getEntity() instanceof LivingEntity livingEntity)
+                        livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), playerentity.isShiftKeyDown() ? HWGMod.config.gunconfigs.sniperconfigs.sniper_scoped_damage : HWGMod.config.gunconfigs.sniperconfigs.sniper_damage);
+                } else {
+                    var bullet = createArrow(worldIn, stack, playerentity);
+                    bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+                    bullet.tickCount = -15;
+                    worldIn.addFreshEntity(bullet);
                 }
-                var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-                spawnLightSource(entityLiving, isInsideWaterBlock);
+                worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.SNIPER, SoundSource.PLAYERS, 0.25F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
+                triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
             }
+            var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
+            spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 
@@ -71,15 +69,13 @@ public class SniperItem extends AnimatedItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof SniperItem) {
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.SNIPER, passedData);
-                    }
-                }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof SniperItem) {
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.SNIPER, passedData);
+            }
+        }
     }
 
     public void reload(Player user, InteractionHand hand) {
@@ -97,8 +93,7 @@ public class SniperItem extends AnimatedItem {
     }
 
     public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new BulletEntity(worldIn, shooter, shooter.isShiftKeyDown() ? HWGMod.config.gunconfigs.sniperconfigs.sniper_scoped_damage : HWGMod.config.gunconfigs.sniperconfigs.sniper_damage);
-        return bullet;
+        return new BulletEntity(worldIn, shooter, shooter.isShiftKeyDown() ? HWGMod.config.gunconfigs.sniperconfigs.sniper_scoped_damage : HWGMod.config.gunconfigs.sniperconfigs.sniper_damage);
     }
 
     @Override

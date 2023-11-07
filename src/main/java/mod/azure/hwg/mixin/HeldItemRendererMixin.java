@@ -27,7 +27,7 @@ public abstract class HeldItemRendererMixin {
     @Shadow
     private ItemStack offHandItem;
 
-    public HeldItemRendererMixin(Minecraft client) {
+    protected HeldItemRendererMixin(Minecraft client) {
         this.minecraft = client;
     }
 

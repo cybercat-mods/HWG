@@ -44,49 +44,27 @@ public class GPistolItem extends AnimatedItem {
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
-    public static float getArrowVelocity(int charge) {
-        float f = (float) charge / 20.0F;
-        f = (f * f + f * 2.0F) / 3.0F;
-        if (f > 1.0F) {
-            f = 1.0F;
-        }
-
-        return f;
-    }
-
-    public static float getPullProgress(int useTicks) {
-        float f = (float) useTicks / 20.0F;
-        f = (f * f + f * 2.0F) / 3.0F;
-        if (f > 1.0F) {
-            f = 1.0F;
-        }
-
-        return f;
-    }
-
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-        if (entityLiving instanceof Player playerentity) {
-            if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
-                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_cooldown);
-                if (!worldIn.isClientSide) {
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
-                    if (result != null) {
-                        if (result.getEntity() instanceof LivingEntity livingEntity)
-                            livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_damage);
-                    } else {
-                        var bullet = createArrow(worldIn, stack, playerentity);
-                        bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-                        bullet.tickCount = -15;
-                        worldIn.addFreshEntity(bullet);
-                    }
-                    worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.PISTOL, SoundSource.PLAYERS, 6.75F, 1.0F);
-                    triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "golden");
+        if (entityLiving instanceof Player playerentity && stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
+            playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_cooldown);
+            if (!worldIn.isClientSide) {
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
+                if (result != null) {
+                    if (result.getEntity() instanceof LivingEntity livingEntity)
+                        livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_damage);
+                } else {
+                    var bullet = createArrow(worldIn, stack, playerentity);
+                    bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+                    bullet.tickCount = -15;
+                    worldIn.addFreshEntity(bullet);
                 }
-                var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-                spawnLightSource(entityLiving, isInsideWaterBlock);
+                worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.PISTOL, SoundSource.PLAYERS, 6.75F, 1.0F);
+                triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "golden");
             }
+            var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
+            spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 
@@ -97,15 +75,13 @@ public class GPistolItem extends AnimatedItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof GPistolItem) {
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.GPISTOL, passedData);
-                    }
-                }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof GPistolItem) {
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.GPISTOL, passedData);
+            }
+        }
     }
 
     public void reload(Player user, InteractionHand hand) {
@@ -121,8 +97,7 @@ public class GPistolItem extends AnimatedItem {
     }
 
     public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_damage);
-        return bullet;
+        return new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_damage);
     }
 
     @Override

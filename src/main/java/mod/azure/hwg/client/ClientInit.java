@@ -18,7 +18,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class ClientInit implements ClientModInitializer {
 
-    public static KeyMapping scope = new KeyMapping("key.hwg.scope", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, "category.hwg.binds");
+    public static final KeyMapping scope = new KeyMapping("key.hwg.scope", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, "category.hwg.binds");
 
     @Override
     public void onInitializeClient() {

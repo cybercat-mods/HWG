@@ -29,7 +29,7 @@ public abstract class SniperMixin {
     private int screenHeight;
     private boolean scoped = true;
 
-    public SniperMixin(Minecraft client) {
+    protected SniperMixin(Minecraft client) {
         this.minecraft = client;
     }
 

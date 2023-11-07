@@ -7,7 +7,7 @@ import mod.azure.hwg.entity.TechnodemonGreaterEntity;
 import mod.azure.hwg.util.registry.HWGMobs;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 
-public class MobAttributes {
+public record MobAttributes() {
 
     public static void init() {
         FabricDefaultAttributeRegistry.register(HWGMobs.SPY, SpyEntity.createMobAttributes());

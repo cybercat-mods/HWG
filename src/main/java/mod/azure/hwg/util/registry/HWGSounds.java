@@ -36,4 +36,7 @@ public record HWGSounds() {
         Registry.register(BuiltInRegistries.SOUND_EVENT, new ResourceLocation(HWGMod.MODID, id), sound);
         return sound;
     }
+
+    public static void initialize() {
+    }
 }

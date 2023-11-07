@@ -23,66 +23,62 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class BrimstoneItem extends HWGGunBase {
+
     public BrimstoneItem() {
         super(new Item.Properties().stacksTo(1).durability(HWGMod.config.gunconfigs.brimstoneconfigs.brimstone_cap + 1));
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-        if (entityLiving instanceof Player playerentity) {
-            if (stack.getDamageValue() < (stack.getMaxDamage() - 6)) {
-                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.brimstoneconfigs.brimstone_cooldown);
-                if (!worldIn.isClientSide) {
-                    var fireball = createArrow(worldIn, stack, playerentity);
-                    fireball.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 0.25F * 3.0F, 1.0F);
-                    fireball.moveTo(entityLiving.getX(), entityLiving.getY(0.5), entityLiving.getZ(), 0, 0);
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    fireball.setRemainingFireTicks(100);
-                    fireball.setKnockback(1);
+        if (entityLiving instanceof Player playerentity && stack.getDamageValue() < (stack.getMaxDamage() - 6)) {
+            playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.brimstoneconfigs.brimstone_cooldown);
+            if (!worldIn.isClientSide) {
+                var fireball = createArrow(worldIn, stack, playerentity);
+                fireball.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 0.25F * 3.0F, 1.0F);
+                fireball.moveTo(entityLiving.getX(), entityLiving.getY(0.5), entityLiving.getZ(), 0, 0);
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                fireball.setRemainingFireTicks(100);
+                fireball.setKnockback(1);
 
-                    var fireball1 = createArrow(worldIn, stack, playerentity);
-                    fireball1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 5, 0.0F, 0.25F * 3.0F, 1.0F);
-                    fireball1.moveTo(entityLiving.getX(), entityLiving.getY(0.5), entityLiving.getZ(), 0, 0);
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    fireball1.setRemainingFireTicks(100);
-                    fireball1.setKnockback(1);
+                var fireball1 = createArrow(worldIn, stack, playerentity);
+                fireball1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() + 5, 0.0F, 0.25F * 3.0F, 1.0F);
+                fireball1.moveTo(entityLiving.getX(), entityLiving.getY(0.5), entityLiving.getZ(), 0, 0);
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                fireball1.setRemainingFireTicks(100);
+                fireball1.setKnockback(1);
 
-                    var fireball2 = createArrow(worldIn, stack, playerentity);
-                    fireball2.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 5, 0.0F, 0.25F * 3.0F, 1.0F);
-                    fireball2.moveTo(entityLiving.getX(), entityLiving.getY(0.5), entityLiving.getZ(), 0, 0);
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    fireball2.setRemainingFireTicks(100);
-                    fireball2.setKnockback(1);
+                var fireball2 = createArrow(worldIn, stack, playerentity);
+                fireball2.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 5, 0.0F, 0.25F * 3.0F, 1.0F);
+                fireball2.moveTo(entityLiving.getX(), entityLiving.getY(0.5), entityLiving.getZ(), 0, 0);
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                fireball2.setRemainingFireTicks(100);
+                fireball2.setKnockback(1);
 
-                    worldIn.addFreshEntity(fireball);
-                    worldIn.addFreshEntity(fireball1);
-                    worldIn.addFreshEntity(fireball2);
+                worldIn.addFreshEntity(fireball);
+                worldIn.addFreshEntity(fireball1);
+                worldIn.addFreshEntity(fireball2);
 
-                    stack.hurtAndBreak(6, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                stack.hurtAndBreak(6, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 
-                    worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.FIREWORK_ROCKET_BLAST_FAR, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
-                }
-                var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-                spawnLightSource(entityLiving, isInsideWaterBlock);
+                worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.FIREWORK_ROCKET_BLAST_FAR, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
             }
+            var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
+            spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 
     public FireballEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var fireball = new FireballEntity(worldIn, shooter);
-        return fireball;
+        return new FireballEntity(worldIn, shooter);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof BrimstoneItem)
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.BRIMSTONE, passedData);
-                    }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof BrimstoneItem)
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.BRIMSTONE, passedData);
+            }
     }
 
     public void reload(Player user, InteractionHand hand) {

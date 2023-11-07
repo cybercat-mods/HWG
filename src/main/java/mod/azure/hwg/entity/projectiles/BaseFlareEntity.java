@@ -9,6 +9,7 @@ import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -33,8 +34,8 @@ import org.jetbrains.annotations.Nullable;
 public class BaseFlareEntity extends AbstractArrow {
 
     private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(BaseFlareEntity.class, EntityDataSerializers.INT);
-    public int life;
-    public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
+    private int life;
+    private SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
     private BlockPos lightBlockPos = null;
     private int idleTicks = 0;
 
@@ -123,19 +124,29 @@ public class BaseFlareEntity extends AbstractArrow {
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         spawnLightSource(isInsideWaterBlock);
         if (this.level().isClientSide) {
-            this.level().addParticle(
-                    this.getColor() == 16 ? HWGParticles.WHITE_FLARE
-                            : this.getColor() == 15 ? HWGParticles.YELLOW_FLARE
-                            : this.getColor() == 14 ? HWGParticles.RED_FLARE
-                            : this.getColor() == 13 ? HWGParticles.PURPLE_FLARE
-                            : this.getColor() == 12 ? HWGParticles.PINK_FLARE
-                            : this.getColor() == 11 ? HWGParticles.ORANGE_FLARE
-                            : this.getColor() == 10 ? HWGParticles.MAGENTA_FLARE
-                            : this.getColor() == 9 ? HWGParticles.LIME_FLARE
-                            : this.getColor() == 8 ? HWGParticles.LIGHTGRAY_FLARE
-                            : this.getColor() == 7 ? HWGParticles.LIGHTBLUE_FLARE : this.getColor() == 6 ? HWGParticles.GREEN_FLARE : this.getColor() == 5 ? HWGParticles.GRAY_FLARE : this.getColor() == 4 ? HWGParticles.CYAN_FLARE : this.getColor() == 3 ? HWGParticles.BROWN_FLARE : this.getColor() == 2 ? HWGParticles.BLUE_FLARE : this.getColor() == 1 ? HWGParticles.BLACK_FLARE : HWGParticles.WHITE_FLARE,
-                    true, this.getX(), this.getY() - 0.3D, this.getZ(), 0, -this.getDeltaMovement().y * 0.17D, 0);
+            this.level().addParticle(this.particleColor(), true, this.getX(), this.getY() - 0.3D, this.getZ(), 0, -this.getDeltaMovement().y * 0.17D, 0);
         }
+    }
+
+    private ParticleOptions particleColor() {
+        return switch (this.getColor()) {
+            case 15 -> HWGParticles.YELLOW_FLARE;
+            case 14 -> HWGParticles.RED_FLARE;
+            case 13 -> HWGParticles.PURPLE_FLARE;
+            case 12 -> HWGParticles.PINK_FLARE;
+            case 11 -> HWGParticles.ORANGE_FLARE;
+            case 10 -> HWGParticles.MAGENTA_FLARE;
+            case 9 -> HWGParticles.LIME_FLARE;
+            case 8 -> HWGParticles.LIGHTGRAY_FLARE;
+            case 7 -> HWGParticles.LIGHTBLUE_FLARE;
+            case 6 -> HWGParticles.GREEN_FLARE;
+            case 5 -> HWGParticles.GRAY_FLARE;
+            case 4 -> HWGParticles.CYAN_FLARE;
+            case 3 -> HWGParticles.BROWN_FLARE;
+            case 2 -> HWGParticles.BLUE_FLARE;
+            case 1 -> HWGParticles.BLACK_FLARE;
+            default -> HWGParticles.WHITE_FLARE;
+        };
     }
 
     @Override
@@ -197,8 +208,8 @@ public class BaseFlareEntity extends AbstractArrow {
             level().setBlockAndUpdate(lightBlockPos, Services.PLATFORM.getTickingLightBlock().defaultBlockState());
         } else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
             var blockEntity = level().getBlockEntity(lightBlockPos);
-            if (blockEntity instanceof TickingLightEntity)
-                ((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+            if (blockEntity instanceof TickingLightEntity tickingLightEntity)
+                tickingLightEntity.refresh(isInWaterBlock ? 20 : 0);
             else
                 lightBlockPos = null;
         } else

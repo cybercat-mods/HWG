@@ -70,10 +70,9 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
         }
     }
 
+    @Override
     public void slotsChanged(Container inventory) {
-        this.context.execute((world, blockPos) -> {
-            updateResult(this.containerId, world, this.playerInventory.player, this.gunTableInventory);
-        });
+        this.context.execute((world, blockPos) -> updateResult(this.containerId, world, this.playerInventory.player, this.gunTableInventory));
     }
 
     @Override
@@ -81,6 +80,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
         return stillValid(context, player, HWGBlocks.GUN_TABLE);
     }
 
+    @Override
     public boolean canTakeItemForPickAll(ItemStack stack, Slot slot) {
         return false;
     }
@@ -180,10 +180,11 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
         return itemStack.getItem() == otherItemStack.getItem() && ItemStack.isSameItemSameTags(itemStack, otherItemStack);
     }
 
+    @Override
     public void removed(Player player) {
         super.removed(player);
         if (!this.playerInventory.player.level().isClientSide) {
-            if (player.isAlive() && (!(player instanceof ServerPlayer) || !((ServerPlayer) player).hasDisconnected())) {
+            if (player.isAlive() && (!(player instanceof ServerPlayer serverPlayer) || !serverPlayer.hasDisconnected())) {
                 player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(0));
                 player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(1));
                 player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(2));

@@ -74,17 +74,17 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
     }
 
     public static int generateVariants(RandomSource random) {
-        return random.nextInt(500) == 0 ? 3 : random.nextInt(100) < 5 ? 2 : 1;
+        if (random.nextInt(500) == 0)
+            return 3;
+        if (random.nextInt(100) < 5)
+            return 2;
+        return 1;
     }
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
-            return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-        }));
-        controllers.add(new AnimationController<>(this, "attackController", 0, event -> {
-            return PlayState.STOP;
-        }).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
+        controllers.add(new AnimationController<>(this, "livingController", 0, event -> event.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
+        controllers.add(new AnimationController<>(this, "attackController", 0, event -> PlayState.STOP).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
     }
 
     @Override

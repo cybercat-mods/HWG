@@ -11,7 +11,6 @@ import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -23,15 +22,16 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,11 +71,6 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
     }
 
     @Override
-    public void checkDespawn() {
-        super.checkDespawn();
-    }
-
-    @Override
     public int getMaxSpawnClusterSize() {
         return 1;
     }
@@ -103,11 +98,6 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
         super.defineSynchedData();
         entityData.define(ANGER_TIME, 0);
         entityData.define(STATE, 0);
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
-        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityTag);
     }
 
     @Override
@@ -146,37 +136,88 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
     public abstract int getVariants();
 
     public Projectile getProjectile(Item item) {
-        return item instanceof PistolItem || item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item || item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem || item instanceof HellhorseRevolverItem || item instanceof Minigun
-                ? new BulletEntity(level(), this,
-                item instanceof PistolItem ? HWGMod.config.gunconfigs.pistolconfigs.pistol_damage
-                        : item instanceof LugerItem ? HWGMod.config.gunconfigs.lugerconfigs.luger_damage
-                        : item instanceof AssasultItem ? HWGMod.config.gunconfigs.ak47configs.ak47_damage
-                        : item instanceof Assasult1Item ? HWGMod.config.gunconfigs.smgconfigs.smg_damage : item instanceof GPistolItem ? HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_damage : item instanceof SPistolItem ? HWGMod.config.gunconfigs.silencedpistolconfigs.silenced_pistol_damage : item instanceof HellhorseRevolverItem ? HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage : item instanceof Minigun ? HWGMod.config.gunconfigs.minigunconfigs.minigun_damage : HWGMod.config.gunconfigs.sniperconfigs.sniper_damage)
-                : item instanceof FlamethrowerItem ? new FlameFiring(level(), this) : item instanceof BrimstoneItem ? new BlazeRodEntity(level(), this) : item instanceof BalrogItem ? new FireballEntity(level(), this) : new ShellEntity(level(), this);
+        float damage;
+        if (item instanceof PistolItem)
+            damage = HWGMod.config.gunconfigs.pistolconfigs.pistol_damage;
+        else if (item instanceof LugerItem)
+            damage = HWGMod.config.gunconfigs.lugerconfigs.luger_damage;
+        else if (item instanceof AssasultItem)
+            damage = HWGMod.config.gunconfigs.ak47configs.ak47_damage;
+        else if (item instanceof Assasult1Item)
+            damage = HWGMod.config.gunconfigs.smgconfigs.smg_damage;
+        else if (item instanceof GPistolItem)
+            damage = HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_damage;
+        else if (item instanceof SPistolItem)
+            damage = HWGMod.config.gunconfigs.silencedpistolconfigs.silenced_pistol_damage;
+        else if (item instanceof HellhorseRevolverItem)
+            damage = HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage;
+        else if (item instanceof Minigun)
+            damage = HWGMod.config.gunconfigs.minigunconfigs.minigun_damage;
+        else
+            damage = HWGMod.config.gunconfigs.sniperconfigs.sniper_damage;
+        if (item instanceof PistolItem || item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item || item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem || item instanceof HellhorseRevolverItem || item instanceof Minigun) {
+            return new BulletEntity(level(), this, damage);
+        }
+        if (item instanceof FlamethrowerItem) {
+            return new FlameFiring(level(), this);
+        }
+        if (item instanceof BrimstoneItem) {
+            return new BlazeRodEntity(level(), this);
+        }
+        if (item instanceof BalrogItem) {
+            return new FireballEntity(level(), this);
+        }
+        return new ShellEntity(level(), this);
     }
 
     public void shoot() {
-        if (!level().isClientSide) {
-            final var world = level();
+        if (!this.level().isClientSide) {
             final var vector3d = getViewVector(1.0F);
             final var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());
             bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);
             bullet.shootFromRotation(this, getXRot(), getYRot(), 0.0F, 3.0F, 1.0F);
             if (getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof GeoItem weapon)
                 weapon.triggerAnim(this, GeoItem.getOrAssignId(getItemBySlot(EquipmentSlot.MAINHAND), (ServerLevel) this.level()), "shoot_controller", "firing");
-            world.playSound(this, blockPosition(), getDefaultAttackSound(getItemBySlot(EquipmentSlot.MAINHAND).getItem()), SoundSource.HOSTILE, 1.0F, 1.0f);
-            world.addFreshEntity(bullet);
+            this.level().playSound(this, blockPosition(), getDefaultAttackSound(getItemBySlot(EquipmentSlot.MAINHAND).getItem()), SoundSource.HOSTILE, 1.0F, 1.0f);
+            this.level().addFreshEntity(bullet);
         }
     }
 
     public SoundEvent getDefaultAttackSound(Item item) {
-        return item instanceof GPistolItem ? HWGSounds.SPISTOL
-                : item instanceof SPistolItem ? HWGSounds.SPISTOL
-                : item instanceof PistolItem ? HWGSounds.PISTOL
-                : item instanceof LugerItem ? HWGSounds.LUGER
-                : item instanceof AssasultItem ? HWGSounds.AK
-                : item instanceof Assasult1Item ? HWGSounds.SMG
-                : item instanceof ShotgunItem ? HWGSounds.SHOTGUN : item instanceof ShotgunItem ? HWGSounds.SHOTGUN : item instanceof HellhorseRevolverItem ? HWGSounds.REVOLVER : item instanceof FlamethrowerItem ? SoundEvents.FIREWORK_ROCKET_BLAST_FAR : item instanceof BrimstoneItem ? SoundEvents.FIRECHARGE_USE : item instanceof BalrogItem ? SoundEvents.GENERIC_EXPLODE : item instanceof Minigun ? HWGSounds.MINIGUN : HWGSounds.SNIPER;
+        if (item instanceof GPistolItem || item instanceof SPistolItem) {
+            return HWGSounds.SPISTOL;
+        }
+        if (item instanceof PistolItem) {
+            return HWGSounds.PISTOL;
+        }
+        if (item instanceof LugerItem) {
+            return HWGSounds.LUGER;
+        }
+        if (item instanceof AssasultItem) {
+            return HWGSounds.AK;
+        }
+        if (item instanceof Assasult1Item) {
+            return HWGSounds.SMG;
+        }
+        if (item instanceof ShotgunItem) {
+            return HWGSounds.SHOTGUN;
+        }
+        if (item instanceof HellhorseRevolverItem) {
+            return HWGSounds.REVOLVER;
+        }
+        if (item instanceof FlamethrowerItem) {
+            return SoundEvents.FIREWORK_ROCKET_BLAST_FAR;
+        }
+        if (item instanceof BrimstoneItem) {
+            return SoundEvents.FIRECHARGE_USE;
+        }
+        if (item instanceof BalrogItem) {
+            return SoundEvents.GENERIC_EXPLODE;
+        }
+        if (item instanceof Minigun) {
+            return HWGSounds.MINIGUN;
+        }
+        return HWGSounds.SNIPER;
     }
 
 }

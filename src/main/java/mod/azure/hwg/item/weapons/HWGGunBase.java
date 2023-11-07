@@ -31,7 +31,7 @@ public class HWGGunBase extends Item {
     }
 
     public static float getPowerForTime(int charge) {
-        var f = (float) charge / 20.0F;
+        var f = charge / 20.0F;
         f = (f * f + f * 2.0F) / 3.0F;
         if (f > 1.0F) f = 1.0F;
 
@@ -44,9 +44,9 @@ public class HWGGunBase extends Item {
         var end = new Vec3(player.getX() + look.x * range, player.getEyeY() + look.y * range, player.getZ() + look.z * range);
         var traceDistance = player.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player)).getLocation().distanceToSqr(end);
         for (var possible : player.level().getEntities(player, player.getBoundingBox().expandTowards(look.scale(traceDistance)).expandTowards(3.0D, 3.0D, 3.0D), (entity -> !entity.isSpectator() && entity.isPickable() && entity instanceof LivingEntity))) {
-            if (possible.getBoundingBox().inflate(0.3D).clip(start, end).isPresent())
-                if (start.distanceToSqr(possible.getBoundingBox().inflate(0.3D).clip(start, end).get()) < traceDistance)
-                    return ProjectileUtil.getEntityHitResult(player.level(), player, start, end, player.getBoundingBox().expandTowards(look.scale(traceDistance)).inflate(3.0D, 3.0D, 3.0D), (target) -> !target.isSpectator() && player.isAttackable() && player.hasLineOfSight(target));
+            var clip = possible.getBoundingBox().inflate(0.3D).clip(start, end);
+            if (clip.isPresent() && start.distanceToSqr(clip.get()) < traceDistance)
+                return ProjectileUtil.getEntityHitResult(player.level(), player, start, end, player.getBoundingBox().expandTowards(look.scale(traceDistance)).inflate(3.0D, 3.0D, 3.0D), target -> !target.isSpectator() && player.isAttackable() && player.hasLineOfSight(target));
         }
         return null;
     }
@@ -79,11 +79,6 @@ public class HWGGunBase extends Item {
     }
 
     @Override
-    public boolean isValidRepairItem(ItemStack stack, ItemStack ingredient) {
-        return super.isValidRepairItem(stack, ingredient);
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
         tooltip.add(Component.translatable("Ammo: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)).withStyle(ChatFormatting.ITALIC));
     }
@@ -107,8 +102,8 @@ public class HWGGunBase extends Item {
             entity.level().setBlockAndUpdate(lightBlockPos, Services.PLATFORM.getTickingLightBlock().defaultBlockState());
         } else if (checkDistance(lightBlockPos, entity.blockPosition(), 2)) {
             var blockEntity = entity.level().getBlockEntity(lightBlockPos);
-            if (blockEntity instanceof TickingLightEntity)
-                ((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+            if (blockEntity instanceof TickingLightEntity tickingLightEntity)
+                tickingLightEntity.refresh(isInWaterBlock ? 20 : 0);
             else lightBlockPos = null;
         } else lightBlockPos = null;
     }

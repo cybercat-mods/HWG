@@ -47,6 +47,7 @@ public class FuelTankEntity extends Entity {
     protected void defineSynchedData() {
     }
 
+    @Override
     public void tick() {
         this.remove(Entity.RemovalReason.DISCARDED);
         if (!this.level().isClientSide)

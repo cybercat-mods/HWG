@@ -72,9 +72,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> {
-            return PlayState.CONTINUE;
-        }));
+        controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
     }
 
     @Override
@@ -126,8 +124,8 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
     public void tick() {
         super.tick();
         if (this.level().isClientSide) {
-            double x = this.getX() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
-            double z = this.getZ() + (this.random.nextDouble()) * (double) this.getBbWidth() * 0.5D;
+            double x = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
+            double z = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
         }
         var bl = this.isNoPhysics();
@@ -165,8 +163,8 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
                 if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
                     var entity = ((EntityHitResult) hitResult).getEntity();
                     var entity2 = this.getOwner();
-                    if (entity instanceof Player && entity2 instanceof Player
-                            && !((Player) entity2).canHarmPlayer((Player) entity)) {
+                    if (entity instanceof Player player && entity2 instanceof Player player1
+                            && !player1.canHarmPlayer(player)) {
                         hitResult = null;
                         entityHitResult = null;
                     }

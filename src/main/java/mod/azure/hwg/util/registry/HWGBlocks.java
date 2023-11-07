@@ -17,4 +17,7 @@ public record HWGBlocks() {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(HWGMod.MODID, id), c);
         return c;
     }
+
+    public static void initialize() {
+    }
 }

@@ -19,12 +19,12 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
 
     private BlockPos lightBlockPos = null;
 
-    public HWGGunLoadedBase(Properties settings) {
+    protected HWGGunLoadedBase(Properties settings) {
         super(settings);
     }
 
     public static float getArrowVelocity(int charge) {
-        var f = (float) charge / 20.0F;
+        var f = charge / 20.0F;
         f = (f * f + f * 2.0F) / 3.0F;
         if (f > 1.0F)
             f = 1.0F;
@@ -33,7 +33,7 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
     }
 
     public static float getPullProgress(int useTicks) {
-        var f = (float) useTicks / 20.0F;
+        var f = useTicks / 20.0F;
         f = (f * f + f * 2.0F) / 3.0F;
         if (f > 1.0F)
             f = 1.0F;
@@ -69,11 +69,6 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
     }
 
     @Override
-    public boolean isValidRepairItem(ItemStack stack, ItemStack ingredient) {
-        return super.isValidRepairItem(stack, ingredient);
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag context) {
         tooltip.add(Component.translatable("Ammo: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)).withStyle(ChatFormatting.ITALIC));
     }
@@ -91,8 +86,8 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
             entity.level().setBlockAndUpdate(lightBlockPos, Services.PLATFORM.getTickingLightBlock().defaultBlockState());
         } else if (checkDistance(lightBlockPos, entity.blockPosition(), 2)) {
             var blockEntity = entity.level().getBlockEntity(lightBlockPos);
-            if (blockEntity instanceof TickingLightEntity)
-                ((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+            if (blockEntity instanceof TickingLightEntity tickingLightEntity)
+                tickingLightEntity.refresh(isInWaterBlock ? 20 : 0);
             else
                 lightBlockPos = null;
         } else

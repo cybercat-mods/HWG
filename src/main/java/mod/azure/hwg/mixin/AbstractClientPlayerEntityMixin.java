@@ -16,15 +16,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntityMixin extends Player {
 
-    public AbstractClientPlayerEntityMixin(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
+    protected AbstractClientPlayerEntityMixin(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
         super(world, pos, yaw, gameProfile);
     }
 
     @Inject(at = @At("HEAD"), method = "getFieldOfViewModifier", cancellable = true)
     private void render(CallbackInfoReturnable<Float> ci) {
-        var itemStack = this.getMainHandItem();
-        if (Minecraft.getInstance().options.getCameraType().isFirstPerson())
-            if (itemStack.is(HWGItems.SNIPER))
-                ci.setReturnValue(ClientInit.scope.isDown() ? 0.1F : 1.0F);
+        if (Minecraft.getInstance().options.getCameraType().isFirstPerson() && this.getMainHandItem().is(HWGItems.SNIPER))
+            ci.setReturnValue(ClientInit.scope.isDown() ? 0.1F : 1.0F);
     }
 }

@@ -38,6 +38,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         C2SMessageSelectCraft.send(selectedIndex);
     }
 
+    @Override
     protected void init() {
         super.init();
         int i = (this.width - this.imageWidth) / 2;
@@ -45,9 +46,9 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         int k = j + 18;
 
         for (int l = 0; l < 7; ++l) {
-            this.offers[l] = this.addRenderableWidget(new WidgetButtonPage(i, k, l, (button) -> {
-                if (button instanceof WidgetButtonPage) {
-                    this.selectedIndex = ((WidgetButtonPage) button).getIndex() + this.indexStartOffset;
+            this.offers[l] = this.addRenderableWidget(new WidgetButtonPage(i, k, l, button -> {
+                if (button instanceof WidgetButtonPage widgetButtonPage) {
+                    this.selectedIndex = widgetButtonPage.getIndex() + this.indexStartOffset;
                     this.syncRecipeIndex();
                 }
             }));
@@ -55,6 +56,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         }
     }
 
+    @Override
     protected void renderLabels(GuiGraphics matrices, int mouseX, int mouseY) {
         matrices.drawString(this.font, this.title, (75 + this.imageWidth / 2 - this.font.width(this.title) / 2), 6, 4210752, false);
     }
@@ -86,6 +88,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
     }
 
+    @Override
     public void render(GuiGraphics matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
@@ -158,24 +161,26 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         return listSize > 7;
     }
 
+    @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
         int i = this.menu.getRecipes().size();
         if (this.canScroll(i)) {
             int j = i - 7;
-            this.indexStartOffset = (int) ((double) this.indexStartOffset - amount);
+            this.indexStartOffset = (int) (this.indexStartOffset - amount);
             this.indexStartOffset = Mth.clamp(this.indexStartOffset, 0, j);
         }
         return true;
     }
 
+    @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
         int i = this.menu.getRecipes().size();
         if (this.scrolling) {
             int j = this.topPos + 18;
             int k = j + 139;
             int l = i - 7;
-            float f = ((float) mouseY - (float) j - 13.5F) / ((float) (k - j) - 27.0F);
-            f = f * (float) l + 0.5F;
+            float f = ((float) mouseY - j - 13.5F) / ((k - j) - 27.0F);
+            f = f * l + 0.5F;
             this.indexStartOffset = Mth.clamp((int) f, 0, l);
             return true;
         } else {
@@ -183,11 +188,12 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         }
     }
 
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         this.scrolling = false;
         var i = (this.width - this.imageWidth) / 2;
         var j = (this.height - this.imageHeight) / 2;
-        if (this.canScroll(this.menu.getRecipes().size()) && mouseX > (double) (i + 94) && mouseX < (double) (i + 94 + 6) && mouseY > (double) (j + 18) && mouseY <= (double) (j + 18 + 139 + 1))
+        if (this.canScroll(this.menu.getRecipes().size()) && mouseX > (i + 94) && mouseX < (i + 94 + 6) && mouseY > (j + 18) && mouseY <= (j + 18 + 139 + 1))
             this.scrolling = true;
 
         return super.mouseClicked(mouseX, mouseY, button);

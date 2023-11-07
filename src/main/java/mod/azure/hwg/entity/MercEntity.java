@@ -76,12 +76,8 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
-            return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-        }));
-        controllers.add(new AnimationController<>(this, "attackController", 0, event -> {
-            return PlayState.STOP;
-        }).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
+        controllers.add(new AnimationController<>(this, "livingController", 0, event -> event.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
+        controllers.add(new AnimationController<>(this, "attackController", 0, event -> PlayState.STOP).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
     }
 
     @Override

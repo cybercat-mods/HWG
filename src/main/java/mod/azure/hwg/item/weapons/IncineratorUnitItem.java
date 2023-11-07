@@ -39,51 +39,46 @@ public class IncineratorUnitItem extends HWGGunBase {
 
     @Override
     public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
-        if (entityLiving instanceof Player playerentity) {
-            if (stack.getDamageValue() < (stack.getMaxDamage() - 3)) {
-                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.flammerconfigs.flammer_cooldown);
-                if (!worldIn.isClientSide) {
-                    var flames = createArrow(worldIn, stack, playerentity);
-                    flames.setProperties(playerentity.getXRot(), playerentity.getYRot(), 0f, 1.0f);
-                    flames.getEntityData().set(FlameFiring.FORCED_YAW, playerentity.getYRot());
-                    flames.moveTo(entityLiving.getX() + (switch (playerentity.getDirection()) {
-                        case WEST -> -0.75F;
-                        case EAST -> 0.75F;
-                        default -> 0.0F;
-                    }), entityLiving.getY() + (switch (playerentity.getDirection()) {
-                        case DOWN -> 0.5F;
-                        case UP -> -1.85F;
-                        default -> 0.75F;
-                    }), entityLiving.getZ() + (switch (playerentity.getDirection()) {
-                        case NORTH -> -0.75F;
-                        case SOUTH -> 0.75F;
-                        default -> 0.0F;
-                    }), 0, 0);
-                    worldIn.addFreshEntity(flames);
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                }
-                var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-                spawnLightSource(entityLiving, isInsideWaterBlock);
+        if (entityLiving instanceof Player playerentity && stack.getDamageValue() < (stack.getMaxDamage() - 3)) {
+            playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.flammerconfigs.flammer_cooldown);
+            if (!worldIn.isClientSide) {
+                var flames = createArrow(worldIn, stack, playerentity);
+                flames.setProperties(playerentity.getXRot(), playerentity.getYRot(), 0f, 1.0f);
+                flames.getEntityData().set(FlameFiring.FORCED_YAW, playerentity.getYRot());
+                flames.moveTo(entityLiving.getX() + (switch (playerentity.getDirection()) {
+                    case WEST -> -0.75F;
+                    case EAST -> 0.75F;
+                    default -> 0.0F;
+                }), entityLiving.getY() + (switch (playerentity.getDirection()) {
+                    case DOWN -> 0.5F;
+                    case UP -> -1.85F;
+                    default -> 0.75F;
+                }), entityLiving.getZ() + (switch (playerentity.getDirection()) {
+                    case NORTH -> -0.75F;
+                    case SOUTH -> 0.75F;
+                    default -> 0.0F;
+                }), 0, 0);
+                worldIn.addFreshEntity(flames);
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
             }
+            var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
+            spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 
     public FlameFiring createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var flames = new FlameFiring(worldIn, shooter);
-        return flames;
+        return new FlameFiring(worldIn, shooter);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof IncineratorUnitItem)
-                    if (Keybindings.RELOAD.isDown() && selected) {
-                        FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.FLAMETHOWER, passedData);
-                        world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
-                    }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof IncineratorUnitItem)
+            if (Keybindings.RELOAD.isDown() && selected) {
+                FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.FLAMETHOWER, passedData);
+                world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+            }
     }
 
     public void reload(Player user, InteractionHand hand) {

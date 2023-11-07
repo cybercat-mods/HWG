@@ -20,7 +20,6 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.ai.village.poi.PoiTypes;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.entity.npc.VillagerTrades.ItemListing;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -31,21 +30,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-public class GunSmithProfession {
+public record GunSmithProfession() {
 
     public static final Supplier<PoiType> GUNSMITH_POI = registerPoiType("gun_smith", () -> new PoiType(PointOfInterestTypesInvoker.invokeGetBlockStates(HWGBlocks.GUN_TABLE), 1, 10));
     public static final Supplier<VillagerProfession> GUNSMITH = registerProfession("gun_smith", () -> new VillagerProfession("gun_smith", holder -> holder.value().equals(GUNSMITH_POI.get()), holder -> holder.value().equals(GUNSMITH_POI.get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ITEM_FRAME_REMOVE_ITEM));
 
     public static Supplier<VillagerProfession> registerProfession(String name, Supplier<VillagerProfession> profession) {
-        var registry = Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, new ResourceLocation(HWGMod.MODID, name), profession.get());
-        return () -> registry;
+        return () -> Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, new ResourceLocation(HWGMod.MODID, name), profession.get());
     }
 
     public static Supplier<PoiType> registerPoiType(String name, Supplier<PoiType> poiType) {
         var resourceKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, new ResourceLocation(HWGMod.MODID, name));
-        var registry = Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
         PointOfInterestTypesInvoker.invokeRegisterBlockStates(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey), PoiTypes.getBlockStates(HWGBlocks.GUN_TABLE));
-        return () -> registry;
+        return () -> Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
     }
 
     public static void init() {
@@ -58,7 +55,7 @@ public class GunSmithProfession {
     }
 
     public static Int2ObjectMap<VillagerTrades.ItemListing[]> copyToFastUtilMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> immutableMap) {
-        return new Int2ObjectOpenHashMap<ItemListing[]>(immutableMap);
+        return new Int2ObjectOpenHashMap<>(immutableMap);
     }
 
     public static class BuyForItemsFactory implements VillagerTrades.ItemListing {

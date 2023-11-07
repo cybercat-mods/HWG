@@ -42,15 +42,17 @@ public class GunTableBlock extends Block implements EntityBlock {
         builder.add(FACING);
     }
 
+    @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
+    @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
-        var direction = (Direction) state.getValue(FACING);
-        return direction.getAxis() == Direction.Axis.X ? Y_LENGTH1 : X_LENGTH1;
+        return state.getValue(FACING).getAxis() == Direction.Axis.X ? Y_LENGTH1 : X_LENGTH1;
     }
 
+    @Override
     public BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }

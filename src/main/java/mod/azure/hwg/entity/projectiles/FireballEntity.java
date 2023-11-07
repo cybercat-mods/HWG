@@ -143,17 +143,16 @@ public class FireballEntity extends AbstractArrow {
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         spawnLightSource(isInsideWaterBlock);
         if (this.level().isClientSide) {
-            var x = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
+            var x = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * this.getBbWidth() * 0.5D;
             var y = this.getY() + 0.05D + this.random.nextDouble();
-            var z = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * (double) this.getBbWidth() * 0.5D;
+            var z = this.getZ() + (this.random.nextDouble() * 2.0D - 1.0D) * this.getBbWidth() * 0.5D;
             this.level().addParticle(ParticleTypes.FLAME, true, x, y, z, 0, 0, 0);
             this.level().addParticle(HWGParticles.BRIM_ORANGE, true, x, y, z, 0, 0, 0);
             this.level().addParticle(HWGParticles.BRIM_RED, true, x, y, z, 0, 0, 0);
         }
         this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2)).forEach(e -> {
-            if (e.isAlive() && !(e instanceof Player))
-                if (!(this.getOwner() instanceof Player))
-                    e.setRemainingFireTicks(90);
+            if (e.isAlive() && !(e instanceof Player) && !(this.getOwner() instanceof Player))
+                e.setRemainingFireTicks(90);
         });
     }
 
@@ -165,8 +164,8 @@ public class FireballEntity extends AbstractArrow {
             level().setBlockAndUpdate(lightBlockPos, Services.PLATFORM.getTickingLightBlock().defaultBlockState());
         } else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
             var blockEntity = level().getBlockEntity(lightBlockPos);
-            if (blockEntity instanceof TickingLightEntity)
-                ((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+            if (blockEntity instanceof TickingLightEntity tickingLightEntity)
+                tickingLightEntity.refresh(isInWaterBlock ? 20 : 0);
             else
                 lightBlockPos = null;
         } else
@@ -218,7 +217,7 @@ public class FireballEntity extends AbstractArrow {
         super.onHitBlock(blockHitResult);
         if (!this.level().isClientSide) {
             var entity = this.getOwner();
-            if (entity == null || !(entity instanceof Mob) || this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+            if (!(entity instanceof Mob) || this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
                 var blockPos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
                 if (this.level().isEmptyBlock(blockPos))
                     this.level().setBlockAndUpdate(blockPos, BaseFireBlock.getState(this.level(), blockPos));
@@ -231,27 +230,26 @@ public class FireballEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity))
-            if (!this.level().isClientSide)
-                this.remove(Entity.RemovalReason.DISCARDED);
+        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide)
+            this.remove(Entity.RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
         if (entity2 == null)
             damageSource2 = damageSources().arrow(this, this);
         else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity)
-                ((LivingEntity) entity2).setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity)
+                livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, HWGMod.config.gunconfigs.brimstoneconfigs.brimstone_damage)) {
             if (entity instanceof LivingEntity livingEntity) {
-                if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
+                if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity1) {
                     EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
-                    EnchantmentHelper.doPostDamageEffects((LivingEntity) entity2, livingEntity);
+                    EnchantmentHelper.doPostDamageEffects(livingEntity1, livingEntity);
                 }
                 this.doPostHurtEffects(livingEntity);
-                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
-                    ((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
+                    serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
         } else if (!this.level().isClientSide)
             this.remove(Entity.RemovalReason.DISCARDED);

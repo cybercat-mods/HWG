@@ -41,42 +41,38 @@ public class HellhorseRevolverItem extends AnimatedItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-        if (entityLiving instanceof Player playerentity) {
-            if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
-                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_cooldown);
-                if (!worldIn.isClientSide) {
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
-                    if (result != null) {
-                        if (result.getEntity() instanceof LivingEntity livingEntity)
-                            livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage);
-                    } else {
-                        var bullet = createArrow(worldIn, stack, playerentity);
-                        bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-                        bullet.tickCount = -15;
-                        if (entityLiving.getRandom().nextInt(1, 101) <= 20)
-                            bullet.setSecondsOnFire(100);
-                        worldIn.addFreshEntity(bullet);
-                    }
-                    worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.REVOLVER, SoundSource.PLAYERS, 0.5F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
-                    triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
+        if (entityLiving instanceof Player playerentity && stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
+            playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_cooldown);
+            if (!worldIn.isClientSide) {
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
+                if (result != null) {
+                    if (result.getEntity() instanceof LivingEntity livingEntity)
+                        livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage);
+                } else {
+                    var bullet = createArrow(worldIn, stack, playerentity);
+                    bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+                    bullet.tickCount = -15;
+                    if (entityLiving.getRandom().nextInt(1, 101) <= 20)
+                        bullet.setSecondsOnFire(100);
+                    worldIn.addFreshEntity(bullet);
                 }
-                var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-                spawnLightSource(entityLiving, isInsideWaterBlock);
+                worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.REVOLVER, SoundSource.PLAYERS, 0.5F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
+                triggerAnim(playerentity, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "shoot_controller", "firing");
             }
+            var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
+            spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof HellhorseRevolverItem)
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.HELL, passedData);
-                    }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof HellhorseRevolverItem)
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.HELL, passedData);
+            }
     }
 
     public void reload(Player user, InteractionHand hand) {
@@ -96,8 +92,7 @@ public class HellhorseRevolverItem extends AnimatedItem {
     }
 
     public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage);
-        return bullet;
+        return new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage);
     }
 
     @Override

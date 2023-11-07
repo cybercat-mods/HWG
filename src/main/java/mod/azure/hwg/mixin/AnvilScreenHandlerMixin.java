@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = AnvilMenu.class)
 public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
 
-    public AnvilScreenHandlerMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory, ContainerLevelAccess context) {
+    protected AnvilScreenHandlerMixin(@Nullable MenuType<?> type, int syncId, Inventory playerInventory, ContainerLevelAccess context) {
         super(type, syncId, playerInventory, context);
     }
 

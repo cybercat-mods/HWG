@@ -29,7 +29,7 @@ public class FuelTankBlock extends Block {
 
     private static void primeBlock(Level world, BlockPos pos, LivingEntity igniter) {
         if (!world.isClientSide) {
-            var tntEntity = new FuelTankEntity(world, (double) pos.getX() + 0.5D, pos.getY(), (double) pos.getZ() + 0.5D, igniter);
+            var tntEntity = new FuelTankEntity(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, igniter);
             world.addFreshEntity(tntEntity);
         }
     }
@@ -57,7 +57,7 @@ public class FuelTankBlock extends Block {
         if (!world.isClientSide) {
             var entity = projectile.getOwner();
             var blockPos = hit.getBlockPos();
-            primeBlock(world, blockPos, entity instanceof LivingEntity ? (LivingEntity) entity : null);
+            primeBlock(world, blockPos, entity instanceof LivingEntity livingEntity ? livingEntity : null);
             world.removeBlock(blockPos, false);
         }
     }

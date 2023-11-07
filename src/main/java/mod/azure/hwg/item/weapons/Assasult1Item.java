@@ -40,9 +40,9 @@ public class Assasult1Item extends AnimatedItem {
 
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
-    public int maxammo;
-    public int cooldown;
-    public String animation;
+    private int maxammo;
+    private int cooldown;
+    private String animation;
 
     public Assasult1Item(int maxammo, int cooldown, String animation) {
         super(new Item.Properties().stacksTo(1).durability(maxammo));
@@ -100,14 +100,12 @@ public class Assasult1Item extends AnimatedItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof Assasult1Item)
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.ASSASULT1, passedData);
-                    }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof Assasult1Item)
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.ASSASULT1, passedData);
+            }
     }
 
     public void reload(Player user, InteractionHand hand) {
@@ -125,8 +123,7 @@ public class Assasult1Item extends AnimatedItem {
     }
 
     public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.smgconfigs.smg_damage);
-        return bullet;
+        return new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.smgconfigs.smg_damage);
     }
 
     @Override

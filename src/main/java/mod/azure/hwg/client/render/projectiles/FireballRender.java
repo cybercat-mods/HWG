@@ -23,16 +23,16 @@ public class FireballRender extends EntityRenderer<FireballEntity> {
     }
 
     private static void produceVertex(VertexConsumer vertexConsumer, Matrix4f modelMatrix, Matrix3f normalMatrix, int light, float x, int y, int textureU, int textureV) {
-        vertexConsumer.vertex(modelMatrix, x - 0.5F, (float) y - 0.25F, 0.0F).color(255, 255, 255, 255).uv((float) textureU, (float) textureV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normalMatrix, 0.0F, 1.0F, 0.0F).endVertex();
+        vertexConsumer.vertex(modelMatrix, x - 0.5F, y - 0.25F, 0.0F).color(255, 255, 255, 255).uv(textureU, textureV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light).normal(normalMatrix, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
     @Override
-    protected int getBlockLightLevel(FireballEntity FireballEntity, BlockPos blockPos) {
+    protected int getBlockLightLevel(FireballEntity fireballEntity, BlockPos blockPos) {
         return 15;
     }
 
     @Override
-    public void render(FireballEntity FireballEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+    public void render(FireballEntity fireballEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
         matrixStack.pushPose();
         matrixStack.scale(0.5F, 0.5F, 0.5F);
         matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
@@ -46,11 +46,11 @@ public class FireballRender extends EntityRenderer<FireballEntity> {
         produceVertex(vertexConsumer, matrix4f, matrix3f, i, 1.0F, 1, 1, 0);
         produceVertex(vertexConsumer, matrix4f, matrix3f, i, 0.0F, 1, 0, 0);
         matrixStack.popPose();
-        super.render(FireballEntity, f, g, matrixStack, vertexConsumerProvider, i);
+        super.render(fireballEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FireballEntity FireballEntity) {
+    public ResourceLocation getTextureLocation(FireballEntity fireballEntity) {
         return TEXTURE;
     }
 }

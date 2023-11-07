@@ -10,12 +10,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class HWGEquipmentUtils {
+public record HWGEquipmentUtils() {
     public static String TAG = "hwgguntag";
 
     public static boolean ruinedItemHasEnchantment(ItemStack ruinedItem, Enchantment enchantment) {
@@ -42,7 +39,7 @@ public class HWGEquipmentUtils {
 
     public static ItemStack generateRepairedItemForAnvilByFraction(ItemStack leftStack, double damageFraction) {
         var maxDamage = new ItemStack(HWGItems.getItemMap().get(leftStack.getItem())).getMaxDamage();
-        return generateRepairedItemForAnvilByDamage(leftStack, (int) (damageFraction * (double) maxDamage));
+        return generateRepairedItemForAnvilByDamage(leftStack, (int) (damageFraction * maxDamage));
     }
 
     public static ItemStack generateRepairedItemForAnvilByDamage(ItemStack leftStack, int targetDamage) {
@@ -63,7 +60,7 @@ public class HWGEquipmentUtils {
 
     public static Map<Enchantment, Integer> processEncodedEnchantments(String encodedEnchants) {
         if (encodedEnchants.isEmpty())
-            return null;
+            return Collections.emptyMap();
         Map<Enchantment, Integer> enchants = new HashMap<>();
         for (String encodedEnchant : encodedEnchants.split(",")) {
             var enchantItem = encodedEnchant.split(">");
@@ -74,7 +71,7 @@ public class HWGEquipmentUtils {
         return enchants.isEmpty() ? null : enchants;
     }
 
-    public static void onSendEquipmentBreakStatusImpl(ServerPlayer serverPlayer, ItemStack breakingStack, boolean forceSet) {
+    public static void onSendEquipmentBreakStatusImpl(ServerPlayer serverPlayer, ItemStack breakingStack) {
         for (Map.Entry<Item, Item> itemMap : HWGItems.getItemMap().entrySet()) {
             if (isVanillaItemStackBreaking(breakingStack, itemMap.getValue())) {
                 var ruinedStack = new ItemStack(itemMap.getKey());

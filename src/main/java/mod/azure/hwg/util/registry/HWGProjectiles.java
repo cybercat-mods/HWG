@@ -22,7 +22,8 @@ public record HWGProjectiles() {
     public static EntityType<ShellEntity> SHELL = projectile(ShellEntity::new, "shell");
     public static EntityType<BulletEntity> BULLETS = projectile(BulletEntity::new, "bullets");
     public static EntityType<RocketEntity> ROCKETS = projectile(RocketEntity::new, "rockets");
-    public static EntityType<GrenadeEntity> GRENADE = projectile(GrenadeEntity::new, "grenade");    public static EntityType<BaseFlareEntity> FLARE = projectile(BaseFlareEntity::new, "flare");
+    public static EntityType<GrenadeEntity> GRENADE = projectile(GrenadeEntity::new, "grenade");
+    public static EntityType<BaseFlareEntity> FLARE = projectile(BaseFlareEntity::new, "flare");
     public static EntityType<FlameFiring> FIRING = projectile1(FlameFiring::new, "flame_firing");
     public static EntityType<MBulletEntity> MBULLETS = projectile(MBulletEntity::new, "mbullets");
     public static EntityType<BlazeRodEntity> BLAZEROD = projectile(BlazeRodEntity::new, "blazerod");
@@ -64,5 +65,7 @@ public record HWGProjectiles() {
         return type;
     }
 
+    public static void initialize() {
+    }
 
 }

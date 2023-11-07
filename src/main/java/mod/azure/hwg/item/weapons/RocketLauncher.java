@@ -30,18 +30,16 @@ public class RocketLauncher extends HWGGunBase {
 
     @Override
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
-        if (entityLiving instanceof Player playerentity) {
-            if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
-                playerentity.getCooldowns().addCooldown(this, 15);
-                if (!worldIn.isClientSide) {
-                    var rocket = createArrow(worldIn, stack, playerentity);
-                    rocket.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 0.5F * 3.0F, 1.0F);
-                    rocket.moveTo(entityLiving.getX(), entityLiving.getY(0.95), entityLiving.getZ(), 0, 0);
-                    rocket.setBaseDamage(2.5);
-                    worldIn.addFreshEntity(rocket);
-                    stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
-                    worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.RPG, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
-                }
+        if (entityLiving instanceof Player playerentity && stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
+            playerentity.getCooldowns().addCooldown(this, 15);
+            if (!worldIn.isClientSide) {
+                var rocket = createArrow(worldIn, stack, playerentity);
+                rocket.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 0.5F * 3.0F, 1.0F);
+                rocket.moveTo(entityLiving.getX(), entityLiving.getY(0.95), entityLiving.getZ(), 0, 0);
+                rocket.setBaseDamage(2.5);
+                worldIn.addFreshEntity(rocket);
+                stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
+                worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.RPG, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
             }
         }
     }
@@ -60,19 +58,16 @@ public class RocketLauncher extends HWGGunBase {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof RocketLauncher)
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.ROCKETLAUNCHER, passedData);
-                    }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof RocketLauncher)
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.ROCKETLAUNCHER, passedData);
+            }
     }
 
     public RocketEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var rocket = new RocketEntity(worldIn, shooter);
-        return rocket;
+        return new RocketEntity(worldIn, shooter);
     }
 
     @Override

@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 
-public class PacketHandler {
+public record PacketHandler() {
 
     public static final ResourceLocation lock_slot = new ResourceLocation(HWGMod.MODID, "select_craft");
 

@@ -79,34 +79,29 @@ public class ShotgunItem extends AnimatedItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof ShotgunItem)
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.SHOTGUN, passedData);
-                    }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof ShotgunItem)
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.SHOTGUN, passedData);
+            }
     }
 
     public void reload(Player user, InteractionHand hand) {
-        if (user.getItemInHand(hand).getItem() instanceof ShotgunItem) {
-            if (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.SHOTGUN_SHELL) > 0) {
-                removeAmmo(HWGItems.SHOTGUN_SHELL, user);
-                user.getCooldowns().addCooldown(this, 16);
-                user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
-                user.getItemInHand(hand).setPopTime(3);
-                if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
-                    user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.SHOTGUNRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
-                if (!user.level().isClientSide)
-                    triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), "shoot_controller", "reload");
-            }
+        if (user.getItemInHand(hand).getItem() instanceof ShotgunItem && !user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.SHOTGUN_SHELL) > 0) {
+            removeAmmo(HWGItems.SHOTGUN_SHELL, user);
+            user.getCooldowns().addCooldown(this, 16);
+            user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
+            user.getItemInHand(hand).setPopTime(3);
+            if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
+                user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.SHOTGUNRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+            if (!user.level().isClientSide)
+                triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), "shoot_controller", "reload");
         }
     }
 
     public ShellEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new ShellEntity(worldIn, shooter);
-        return bullet;
+        return new ShellEntity(worldIn, shooter);
     }
 
     @Override

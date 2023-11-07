@@ -5,12 +5,10 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-public class ModelProviderinit {
+public record ModelProviderinit() {
 
     public static void init() {
-        ItemProperties.register(HWGItems.ROCKETLAUNCHER, new ResourceLocation("broken"), (itemStack, clientWorld, livingEntity, seed) -> {
-            return isUsable(itemStack) ? 0.0F : 1.0F;
-        });
+        ItemProperties.register(HWGItems.ROCKETLAUNCHER, new ResourceLocation("broken"), (itemStack, clientWorld, livingEntity, seed) -> isUsable(itemStack) ? 0.0F : 1.0F);
         ItemProperties.register(HWGItems.SNIPER, new ResourceLocation("scoped"), (itemStack, clientWorld, livingEntity, seed) -> {
             if (livingEntity != null)
                 return isScoped() ? 1.0F : 0.0F;

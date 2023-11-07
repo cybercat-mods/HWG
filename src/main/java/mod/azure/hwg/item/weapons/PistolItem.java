@@ -94,8 +94,7 @@ public class PistolItem extends AnimatedItem {
     }
 
     public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.pistolconfigs.pistol_damage);
-        return bullet;
+        return new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.pistolconfigs.pistol_damage);
     }
 
     @Override

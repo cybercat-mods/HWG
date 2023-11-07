@@ -69,16 +69,14 @@ public class SPistolItem extends AnimatedItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected) {
-        if (world.isClientSide)
-            if (entity instanceof Player player)
-                if (player.getMainHandItem().getItem() instanceof SPistolItem) {
-                    if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
-                        var passedData = new FriendlyByteBuf(Unpooled.buffer());
-                        passedData.writeBoolean(true);
-                        ClientPlayNetworking.send(HWGMod.SPISTOL, passedData);
-                        world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 3.0F, 1.5F);
-                    }
-                }
+        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof SPistolItem) {
+            if (Keybindings.RELOAD.isDown() && selected && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+                var passedData = new FriendlyByteBuf(Unpooled.buffer());
+                passedData.writeBoolean(true);
+                ClientPlayNetworking.send(HWGMod.SPISTOL, passedData);
+                world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.LEVER_CLICK, SoundSource.PLAYERS, 3.0F, 1.5F);
+            }
+        }
     }
 
     public void reload(Player user, InteractionHand hand) {
@@ -96,8 +94,7 @@ public class SPistolItem extends AnimatedItem {
     }
 
     public BulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        var bullet = new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.silencedpistolconfigs.silenced_pistol_damage);
-        return bullet;
+        return new BulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.silencedpistolconfigs.silenced_pistol_damage);
     }
 
     @Override

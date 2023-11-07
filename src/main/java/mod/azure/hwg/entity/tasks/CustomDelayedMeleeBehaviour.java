@@ -14,7 +14,7 @@ public abstract class CustomDelayedMeleeBehaviour<E extends HWGEntity> extends E
     protected Consumer<E> delayedCallback = entity -> {
     };
 
-    public CustomDelayedMeleeBehaviour(int delayTicks) {
+    protected CustomDelayedMeleeBehaviour(int delayTicks) {
         this.delayTime = delayTicks;
 
         runFor(entity -> Math.max(delayTicks, 60));

@@ -10,36 +10,23 @@ import mod.azure.hwg.util.registry.HWGMobs;
 import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
-public class RenderRegistry {
+public record RenderRegistry() {
 
     public static void init() {
-        EntityRendererRegistry.register(HWGProjectiles.BULLETS, (ctx) -> new BulletRender(ctx));
-
-        EntityRendererRegistry.register(HWGProjectiles.FLARE, (ctx) -> new BaseFlareRender(ctx));
-
-        EntityRendererRegistry.register(HWGProjectiles.MBULLETS, (ctx) -> new MBulletRender(ctx));
-
-        EntityRendererRegistry.register(HWGProjectiles.BLAZEROD, (ctx) -> new BlazeRodRender(ctx));
-
-        EntityRendererRegistry.register(HWGProjectiles.GRENADE, (ctx) -> new GrenadeRender(ctx));
-
-        EntityRendererRegistry.register(HWGProjectiles.SHELL, (ctx) -> new ShellRender(ctx));
-
-        EntityRendererRegistry.register(HWGProjectiles.FIREBALL, (ctx) -> new FireballRender(ctx));
-
-        EntityRendererRegistry.register(HWGProjectiles.FIRING, (ctx) -> new FlameFiringRender(ctx));
-
-        EntityRendererRegistry.register(HWGProjectiles.ROCKETS, (ctx) -> new RocketRender(ctx));
-
-        EntityRendererRegistry.register(HWGMobs.TECHNOLESSER, (ctx) -> new TechnodemonLesserRender(ctx));
-
-        EntityRendererRegistry.register(HWGMobs.TECHNOGREATER, (ctx) -> new TechnodemonGreaterRender(ctx));
-
-        EntityRendererRegistry.register(HWGMobs.MERC, (ctx) -> new MercRender(ctx));
-
-        EntityRendererRegistry.register(HWGMobs.SPY, (ctx) -> new SpyRender(ctx));
-
-        EntityRendererRegistry.register(HWGMobs.FUELTANK, (ctx) -> new FuelTankRender(ctx));
+        EntityRendererRegistry.register(HWGProjectiles.BULLETS, BulletRender::new);
+        EntityRendererRegistry.register(HWGProjectiles.FLARE, BaseFlareRender::new);
+        EntityRendererRegistry.register(HWGProjectiles.MBULLETS, MBulletRender::new);
+        EntityRendererRegistry.register(HWGProjectiles.BLAZEROD, BlazeRodRender::new);
+        EntityRendererRegistry.register(HWGProjectiles.GRENADE, GrenadeRender::new);
+        EntityRendererRegistry.register(HWGProjectiles.SHELL, ShellRender::new);
+        EntityRendererRegistry.register(HWGProjectiles.FIREBALL, FireballRender::new);
+        EntityRendererRegistry.register(HWGProjectiles.FIRING, FlameFiringRender::new);
+        EntityRendererRegistry.register(HWGProjectiles.ROCKETS, RocketRender::new);
+        EntityRendererRegistry.register(HWGMobs.TECHNOLESSER, TechnodemonLesserRender::new);
+        EntityRendererRegistry.register(HWGMobs.TECHNOGREATER, TechnodemonGreaterRender::new);
+        EntityRendererRegistry.register(HWGMobs.MERC, MercRender::new);
+        EntityRendererRegistry.register(HWGMobs.SPY, SpyRender::new);
+        EntityRendererRegistry.register(HWGMobs.FUELTANK, FuelTankRender::new);
 
     }
 

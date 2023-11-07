@@ -25,7 +25,7 @@ public abstract class AnimatedItem extends HWGGunBase implements GeoItem {
     private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     private BlockPos lightBlockPos = null;
 
-    public AnimatedItem(Properties properties) {
+    protected AnimatedItem(Properties properties) {
         super(properties);
     }
 
@@ -57,8 +57,8 @@ public abstract class AnimatedItem extends HWGGunBase implements GeoItem {
             entity.level().setBlockAndUpdate(lightBlockPos, Services.PLATFORM.getTickingLightBlock().defaultBlockState());
         } else if (checkDistance(lightBlockPos, entity.blockPosition(), 2)) {
             var blockEntity = entity.level().getBlockEntity(lightBlockPos);
-            if (blockEntity instanceof TickingLightEntity)
-                ((TickingLightEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+            if (blockEntity instanceof TickingLightEntity tickingLightEntity)
+                tickingLightEntity.refresh(isInWaterBlock ? 20 : 0);
             else
                 lightBlockPos = null;
         } else

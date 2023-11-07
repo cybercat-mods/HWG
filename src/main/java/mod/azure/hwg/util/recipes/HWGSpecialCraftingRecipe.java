@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 public abstract class HWGSpecialCraftingRecipe implements GunRecipes {
     private final ResourceLocation id;
 
-    public HWGSpecialCraftingRecipe(ResourceLocation id) {
+    protected HWGSpecialCraftingRecipe(ResourceLocation id) {
         this.id = id;
     }
 

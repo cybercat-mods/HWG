@@ -17,11 +17,10 @@ import net.minecraft.world.item.Item;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BWCompat {
+public record BWCompat() {
 
-    public static List<EntityType<? extends Entity>> ENTITY_TYPES = new LinkedList();
-    public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList();
-
+    public static List<EntityType<? extends Entity>> ENTITY_TYPES = new LinkedList<>();
+    public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList<>();
     public static SilverGunItem SILVERGUN = item(new SilverGunItem(), "silvergun");
     public static Item SILVERBULLET = item(new Item(new Item.Properties()), "silver_bullet");
     public static SilverRevolverItem SILVERHELLHORSE = item(new SilverRevolverItem(), "shellhorse_revolver");
@@ -42,5 +41,8 @@ public class BWCompat {
         ENTITY_THAT_USE_ITEM_RENDERS.add(type);
 
         return type;
+    }
+
+    public static void initialize() {
     }
 }
