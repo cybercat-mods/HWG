@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
-public class HWGBlocks {
+public record HWGBlocks() {
 
     public static final Block FUEL_TANK = block(new FuelTankBlock(), "fuel_tank");
     public static final GunTableBlock GUN_TABLE = block(new GunTableBlock(), "gun_table");

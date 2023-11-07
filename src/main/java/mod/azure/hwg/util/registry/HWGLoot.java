@@ -2,7 +2,7 @@ package mod.azure.hwg.util.registry;
 
 import net.minecraft.resources.ResourceLocation;
 
-public class HWGLoot {
+public record HWGLoot() {
 
     public static final ResourceLocation JUNGLE = new ResourceLocation("minecraft", "chests/jungle_temple");
     public static final ResourceLocation U_BIG = new ResourceLocation("minecraft", "chests/underwater_ruin_big");

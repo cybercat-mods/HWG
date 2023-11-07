@@ -7,7 +7,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
-public class HWGParticles {
+public record HWGParticles() {
 
     public static final SimpleParticleType BRIM_RED = register(new ResourceLocation(HWGMod.MODID, "brim_red"), false);
     public static final SimpleParticleType RED_FLARE = register(new ResourceLocation(HWGMod.MODID, "red_flare"), false);

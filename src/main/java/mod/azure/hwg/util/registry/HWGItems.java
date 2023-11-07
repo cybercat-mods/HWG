@@ -13,7 +13,7 @@ import net.minecraft.world.item.Item;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HWGItems {
+public record HWGItems() {
 
     public static Minigun MINIGUN = item(new Minigun(), "minigun");
     public static LugerItem LUGER = item(new LugerItem(), "luger");

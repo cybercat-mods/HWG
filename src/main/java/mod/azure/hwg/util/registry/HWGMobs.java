@@ -17,7 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
-public class HWGMobs {
+public record HWGMobs() {
 
     public static final EntityType<TechnodemonEntity> TECHNOLESSER = Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, "technodemon_lesser_1"), FabricEntityTypeBuilder.create(MobCategory.MONSTER, TechnodemonEntity::new).dimensions(EntityDimensions.fixed(0.9f, 2.5F)).fireImmune().trackRangeBlocks(90).trackedUpdateRate(1).build());
 

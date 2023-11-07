@@ -14,7 +14,7 @@ import net.minecraft.world.entity.MobCategory;
 import java.util.LinkedList;
 import java.util.List;
 
-public class HWGProjectiles {
+public record HWGProjectiles() {
 
     public static List<EntityType<? extends Entity>> ENTITY_TYPES = new LinkedList();
     public static List<EntityType<? extends Entity>> ENTITY_THAT_USE_ITEM_RENDERS = new LinkedList();

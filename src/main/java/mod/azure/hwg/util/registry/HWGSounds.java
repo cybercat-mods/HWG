@@ -6,7 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
-public class HWGSounds {
+public record HWGSounds() {
 
     public static SoundEvent AK = of("hwg.ak");
     public static SoundEvent RPG = of("hwg.rpg");
