@@ -31,7 +31,7 @@ public class BrimstoneItem extends HWGGunBase {
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
         if (entityLiving instanceof Player playerentity) {
             if (stack.getDamageValue() < (stack.getMaxDamage() - 6)) {
-                playerentity.getCooldowns().addCooldown(this, 5);
+                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.brimstoneconfigs.brimstone_cooldown);
                 if (!worldIn.isClientSide) {
                     var fireball = createArrow(worldIn, stack, playerentity);
                     fireball.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 0.25F * 3.0F, 1.0F);

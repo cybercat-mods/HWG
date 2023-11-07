@@ -46,7 +46,7 @@ public class Minigun extends AnimatedItem {
     public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
         if (entityLiving instanceof Player playerentity) {
             if (stack.getDamageValue() < (stack.getMaxDamage() - 1) && !playerentity.getCooldowns().isOnCooldown(this)) {
-                playerentity.getCooldowns().addCooldown(this, 0);
+                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.minigunconfigs.minigun_cooldown);
                 if (!worldIn.isClientSide) {
                     stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
                     var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);

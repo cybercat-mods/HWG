@@ -41,7 +41,7 @@ public class IncineratorUnitItem extends HWGGunBase {
     public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
         if (entityLiving instanceof Player playerentity) {
             if (stack.getDamageValue() < (stack.getMaxDamage() - 3)) {
-                playerentity.getCooldowns().addCooldown(this, 5);
+                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.flammerconfigs.flammer_cooldown);
                 if (!worldIn.isClientSide) {
                     var flames = createArrow(worldIn, stack, playerentity);
                     flames.setProperties(playerentity.getXRot(), playerentity.getYRot(), 0f, 1.0f);

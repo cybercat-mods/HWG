@@ -186,6 +186,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int flammer_cap = 250;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int flammer_cooldown = 5;
         }
 
         public static class PistolConfigs {
@@ -198,6 +203,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int pistol_cap = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int pistol_cooldown = 5;
         }
 
         public static class GPistolConfigs {
@@ -210,6 +220,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int golden_pistol_cap = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int golden_pistol_cooldown = 5;
         }
 
         public static class SPistolConfigs {
@@ -222,6 +237,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int silenced_pistol_cap = 6;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int silenced_pistol_cooldown = 5;
         }
 
         public static class LugerConfigs {
@@ -234,6 +254,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int luger_cap = 6;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int luger_cooldown = 5;
         }
 
         public static class AKConfigs {
@@ -246,6 +271,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int ak47_cap = 20;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int ak47_cooldown = 5;
         }
 
         public static class SniperConfigs {
@@ -263,6 +293,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int sniper_cap = 2;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int sniper_cooldown = 35;
         }
 
         public static class MinigunConfigs {
@@ -275,6 +310,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int minigun_cap = 100;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 0)
+            public int minigun_cooldown = 0;
         }
 
         public static class SMGConfigs {
@@ -287,6 +327,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int smg_cap = 50;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int smg_cooldown = 3;
         }
 
         public static class HellhorseConfigs {
@@ -299,6 +344,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int hellhorse_cap = 6;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int hellhorse_cooldown = 5;
         }
 
         public static class TommyConfigs {
@@ -311,6 +361,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int tommy_cap = 50;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int tommy_cooldown = 2;
         }
 
         public static class ShotgunConfigs {
@@ -323,6 +378,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int shotgun_cap = 2;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int shotgun_cooldown = 18;
         }
 
         public static class MeanieConfigs {
@@ -335,6 +395,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int meanie_cap = 6;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int meanie_cooldown = 5;
         }
 
         public static class BalrogConfigs {
@@ -347,6 +412,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int balrog_cap = 4;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int balrog_cooldown = 25;
         }
 
         public static class BrimstoneConfigs {
@@ -359,6 +429,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int brimstone_cap = 185;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int brimstone_cooldown = 5;
         }
     }
 }

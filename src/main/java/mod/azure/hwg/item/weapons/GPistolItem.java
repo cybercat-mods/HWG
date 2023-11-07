@@ -68,7 +68,7 @@ public class GPistolItem extends AnimatedItem {
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
         if (entityLiving instanceof Player playerentity) {
             if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
-                playerentity.getCooldowns().addCooldown(this, 5);
+                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_cooldown);
                 if (!worldIn.isClientSide) {
                     stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
                     var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);

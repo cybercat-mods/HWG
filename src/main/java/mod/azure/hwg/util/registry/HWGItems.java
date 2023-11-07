@@ -48,8 +48,8 @@ public class HWGItems {
     public static GrenadeStunItem G_STUN = item(new GrenadeStunItem(), "grenade_stun");
     public static FlareItem LIGHTBLUE_FLARE = item(new FlareItem(), "lightblue_flare");
     public static FlareItem LIGHTGRAY_FLARE = item(new FlareItem(), "lightgray_flare");
-    public static AssasultItem AK47 = item(new AssasultItem(HWGMod.config.gunconfigs.ak47configs.ak47_cap + 1, 5, "akfiring"), "ak47");
-    public static Assasult1Item SMG = item(new Assasult1Item(HWGMod.config.gunconfigs.smgconfigs.smg_cap + 1, 3, "smgfiring"), "smg");
+    public static AssasultItem AK47 = item(new AssasultItem(HWGMod.config.gunconfigs.ak47configs.ak47_cap + 1, HWGMod.config.gunconfigs.ak47configs.ak47_cooldown, "akfiring"), "ak47");
+    public static Assasult1Item SMG = item(new Assasult1Item(HWGMod.config.gunconfigs.smgconfigs.smg_cap + 1, HWGMod.config.gunconfigs.smgconfigs.smg_cooldown, "smgfiring"), "smg");
     public static GrenadeSmokeItem G_SMOKE = item(new GrenadeSmokeItem(), "grenade_smoke");
     public static Item SNIPER_ROUND = item(new Item(new Item.Properties()), "sniper_round");
     public static Item SHOTGUN_SHELL = item(new Item(new Item.Properties()), "shotgun_shell");

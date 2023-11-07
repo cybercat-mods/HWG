@@ -35,7 +35,7 @@ public class BalrogItem extends HWGGunBase {
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
         if (entityLiving instanceof Player playerentity) {
             if (stack.getDamageValue() < (stack.getMaxDamage() - 4) && !playerentity.getCooldowns().isOnCooldown(this)) {
-                playerentity.getCooldowns().addCooldown(this, 25);
+                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.brimstoneconfigs.brimstone_cooldown);
                 if (!worldIn.isClientSide) {
                     var rod = createArrow(worldIn, stack, playerentity);
                     rod.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 3.0F, 1.0F);
