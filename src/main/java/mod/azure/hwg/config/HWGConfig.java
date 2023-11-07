@@ -143,6 +143,11 @@ public class HWGConfig {
         @Configurable
         @Configurable.Synchronized
         public boolean grenades_breaks = false;
+
+        @Configurable
+        @Configurable.Synchronized
+        @Configurable.Range(min = 1)
+        public int grenades_throw_cooldown = 25;
         @Configurable
         @Configurable.Synchronized
         public boolean bullets_breakdripstone = false;

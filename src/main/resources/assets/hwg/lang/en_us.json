@@ -179,5 +179,6 @@
   "config.hwg.option.meanie_cooldown  " : "Meanie Cooldown",
   "config.hwg.option.balrog_cooldown  " : "Balrog Cooldown",
   "config.hwg.option.brimstone_cooldown   " : "Brimstone Cooldown",
+  "config.hwg.option.grenades_throw_cooldown   " : "Nade Throw Cooldown",
   "itemGroup.hwg.weapons" : "HWG Weapons"
 }

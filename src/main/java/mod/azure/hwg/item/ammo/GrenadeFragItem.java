@@ -1,5 +1,6 @@
 package mod.azure.hwg.item.ammo;
 
+import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -14,10 +15,11 @@ public class GrenadeFragItem extends Item {
         super(new Item.Properties());
     }
 
+    @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
         ItemStack itemStack = user.getItemInHand(hand);
         if (!user.getCooldowns().isOnCooldown(this)) {
-            user.getCooldowns().addCooldown(this, 25);
+            user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.grenades_throw_cooldown);
             if (!world.isClientSide) {
                 var nadeEntity = new GrenadeEntity(world, user);
                 nadeEntity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 1.5F, 1.0F);
