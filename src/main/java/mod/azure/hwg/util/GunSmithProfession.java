@@ -36,13 +36,15 @@ public record GunSmithProfession() {
     public static final Supplier<VillagerProfession> GUNSMITH = registerProfession("gun_smith", () -> new VillagerProfession("gun_smith", holder -> holder.value().equals(GUNSMITH_POI.get()), holder -> holder.value().equals(GUNSMITH_POI.get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ITEM_FRAME_REMOVE_ITEM));
 
     public static Supplier<VillagerProfession> registerProfession(String name, Supplier<VillagerProfession> profession) {
-        return () -> Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, new ResourceLocation(HWGMod.MODID, name), profession.get());
+        var registry = Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, new ResourceLocation(HWGMod.MODID, name), profession.get());
+        return () -> registry;
     }
 
     public static Supplier<PoiType> registerPoiType(String name, Supplier<PoiType> poiType) {
         var resourceKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, new ResourceLocation(HWGMod.MODID, name));
+        var registry = Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
         PointOfInterestTypesInvoker.invokeRegisterBlockStates(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey), PoiTypes.getBlockStates(HWGBlocks.GUN_TABLE));
-        return () -> Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
+        return () -> registry;
     }
 
     public static void init() {
