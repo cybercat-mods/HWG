@@ -43,8 +43,8 @@ public class AssasultItem extends AnimatedItem {
     private int maxammo;
     private String animation;
 
-    public AssasultItem(int maxammo, int cooldown, String animation) {
-        super(new Item.Properties().stacksTo(1).durability(maxammo));
+    public AssasultItem(String animation) {
+        super(new Item.Properties().stacksTo(1).durability(HWGMod.config.gunconfigs.ak47configs.ak47_cap + 1));
         this.maxammo = maxammo;
         this.animation = animation;
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
