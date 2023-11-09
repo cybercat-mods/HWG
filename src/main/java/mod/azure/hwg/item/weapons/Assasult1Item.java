@@ -41,13 +41,11 @@ public class Assasult1Item extends AnimatedItem {
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
     private int maxammo;
-    private int cooldown;
     private String animation;
 
     public Assasult1Item(int maxammo, int cooldown, String animation) {
         super(new Item.Properties().stacksTo(1).durability(maxammo));
         this.maxammo = maxammo;
-        this.cooldown = cooldown;
         this.animation = animation;
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
@@ -66,7 +64,7 @@ public class Assasult1Item extends AnimatedItem {
     public void onUseTick(Level worldIn, LivingEntity entityLiving, ItemStack stack, int count) {
         if (entityLiving instanceof Player playerentity) {
             if (stack.getDamageValue() < (stack.getMaxDamage() - 1) && !playerentity.getCooldowns().isOnCooldown(this)) {
-                playerentity.getCooldowns().addCooldown(this, this.cooldown);
+                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.smgconfigs.smg_cooldown);
                 if (!worldIn.isClientSide) {
                     stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
                     var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
