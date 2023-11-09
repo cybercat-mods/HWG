@@ -84,8 +84,7 @@ public class SilverGunItem extends AnimatedItem {
                 removeAmmo(BWCompat.SILVERBULLET, user);
                 user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
-                if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
-                    user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
+                user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
                 if (!user.level().isClientSide)
                     triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), "shoot_controller", "reload");
             }

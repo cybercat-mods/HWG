@@ -84,8 +84,7 @@ public class SniperItem extends AnimatedItem {
                 removeAmmo(HWGItems.SNIPER_ROUND, user);
                 user.getItemInHand(hand).hurtAndBreak(-2, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
-                if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
-                    user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.SNIPERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
+                user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.SNIPERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
                 if (!user.level().isClientSide)
                     triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), "shoot_controller", "reload");
             }

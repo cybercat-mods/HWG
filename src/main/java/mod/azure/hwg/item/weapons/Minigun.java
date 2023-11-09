@@ -77,8 +77,7 @@ public class Minigun extends AnimatedItem {
                 removeAmmo(HWGItems.BULLETS, user);
                 user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
-                if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
-                    user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.CLIPRELOAD, SoundSource.PLAYERS, 1.00F, 0.3F);
+                user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.CLIPRELOAD, SoundSource.PLAYERS, 1.00F, 0.3F);
                 if (!user.level().isClientSide)
                     triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), "shoot_controller", "reload");
             }

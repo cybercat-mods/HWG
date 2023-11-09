@@ -87,8 +87,7 @@ public class BrimstoneItem extends HWGGunBase {
                 removeAmmo(HWGItems.FUEL_TANK, user);
                 user.getItemInHand(hand).hurtAndBreak(-186, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
-                if (!user.getCooldowns().isOnCooldown(user.getItemInHand(hand).getItem()))
-                    user.level().playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
+                user.level().playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);
             }
         }
     }
