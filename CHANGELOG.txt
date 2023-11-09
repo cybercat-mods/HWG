@@ -1,4 +1,8 @@
-v.1.4.22
+v.1.4.23
 
-- Clean up code.
-- Adds weapon cooldown configuration.
+- Fixes Granade Launcher crashing.
+- Fixes reload sounds not playing.
+- Fixes cooldowns configs for AK, SMG, Tommygun, and Balrog.
+- Fixes max ammo setting for AK, SMG, and Tommygun.
+- Fixes Brimstone not reloading properly when changed.
+- Changed Brimstone reload sound.
