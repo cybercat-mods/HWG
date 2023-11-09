@@ -156,7 +156,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
         var nbtnew = new CompoundTag();
         projectile.save(nbtnew);
         list.add(nbtnew);
-        nbtnew.put("ChargedProjectiles", list);
+        nbt.put("ChargedProjectiles", list);
     }
 
     private static List<ItemStack> getProjectiles(ItemStack crossbow) {
