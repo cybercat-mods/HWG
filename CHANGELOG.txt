@@ -1,8 +1,5 @@
-v.1.4.23
+v.1.4.24
 
-- Fixes Granade Launcher crashing.
-- Fixes reload sounds not playing.
-- Fixes cooldowns configs for AK, SMG, Tommygun, and Balrog.
-- Fixes max ammo setting for AK, SMG, and Tommygun.
-- Fixes Brimstone not reloading properly when changed.
-- Changed Brimstone reload sound.
+- Give the guns support for the new Incendiary Enchantment
+- Simply hide bewitchment/gig items from menu/move recipes to compat datapacks. Fixes logging issues when the two mods aren't installed as well.
+- Requires latest AzureLib
