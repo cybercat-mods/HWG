@@ -11,7 +11,6 @@ import mod.azure.hwg.util.registry.HWGParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.screens.MenuScreens;
 import org.lwjgl.glfw.GLFW;
@@ -25,8 +24,7 @@ public class ClientInit implements ClientModInitializer {
         ModelProviderinit.init();
         RenderRegistry.init();
         MenuScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
-        if (FabricLoader.getInstance().isModLoaded("bewitchment"))
-            BWClientCompat.onInitializeClient();
+        BWClientCompat.onInitializeClient();
         KeyBindingHelper.registerKeyBinding(scope);
         ParticleFactoryRegistry.getInstance().register(HWGParticles.BLACK_FLARE, FlareParticle.BlackSmokeFactory::new);
         ParticleFactoryRegistry.getInstance().register(HWGParticles.BLUE_FLARE, FlareParticle.BlueSmokeFactory::new);
