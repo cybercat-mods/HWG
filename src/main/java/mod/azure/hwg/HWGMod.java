@@ -15,6 +15,8 @@ import mod.azure.hwg.util.registry.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -75,10 +77,8 @@ public class HWGMod implements ModInitializer {
     public void onInitialize() {
         config = AzureLibMod.registerConfig(HWGConfig.class, ConfigFormats.json()).getConfigInstance();
         HWGItems.initialize();
-        if (FabricLoader.getInstance().isModLoaded("gigeresque"))
-            GigCompat.initialize();
-        if (FabricLoader.getInstance().isModLoaded("bewitchment"))
-            BWCompat.initialize();
+        GigCompat.initialize();
+        BWCompat.initialize();
         HWGBlocks.initialize();
         HWGSounds.initialize();
         HWGMobs.initialize();
@@ -160,5 +160,17 @@ public class HWGMod implements ModInitializer {
         SCREEN_HANDLER_TYPE = new MenuType<>(GunTableScreenHandler::new, FeatureFlags.VANILLA_SET);
         Registry.register(BuiltInRegistries.MENU, new ResourceLocation(MODID, "guntable_screen_type"), SCREEN_HANDLER_TYPE);
         PacketHandler.registerMessages();
+        if (FabricLoader.getInstance().isModLoaded("gigeresque"))
+            FabricLoader.getInstance().getModContainer(HWGMod.MODID).ifPresent((modContainer ->
+                    ResourceManagerHelper.registerBuiltinResourcePack(
+                            // Mod Compat datapack found in resources/resourcepacks
+                            HWGMod.modResource("gigcompat"), modContainer, Component.literal("gigcompat"), ResourcePackActivationType.DEFAULT_ENABLED)));
+
+        if (FabricLoader.getInstance().isModLoaded("bewitchment"))
+            FabricLoader.getInstance().getModContainer(HWGMod.MODID).ifPresent((modContainer ->
+                    ResourceManagerHelper.registerBuiltinResourcePack(
+                            // Mod Compat datapack found in resources/resourcepacks
+                            HWGMod.modResource("bewitchmentcompat"), modContainer, Component.literal("bewitchmentcompat"), ResourcePackActivationType.DEFAULT_ENABLED)));
+
     }
 }
