@@ -246,6 +246,8 @@ public class FireballEntity extends AbstractArrow {
                 if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity1) {
                     EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
                     EnchantmentHelper.doPostDamageEffects(livingEntity1, livingEntity);
+                    if (this.isOnFire())
+                        livingEntity.setSecondsOnFire(50);
                 }
                 this.doPostHurtEffects(livingEntity);
                 if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())

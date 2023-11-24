@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -50,6 +51,8 @@ public class ShotgunItem extends AnimatedItem {
                     var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
                     if (result != null) {
                         if (result.getEntity() instanceof LivingEntity livingEntity) {
+                            if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), stack) > 0)
+                                livingEntity.setSecondsOnFire(100);
                             livingEntity.invulnerableTime = 0;
                             livingEntity.setDeltaMovement(0, 0, 0);
                             livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.shotgunconfigs.shotgun_damage);
@@ -64,6 +67,10 @@ public class ShotgunItem extends AnimatedItem {
                         bullet1.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot() - 1, 0.5F, 20.0F * 3.0F, 1.0F);
                         bullet.tickCount = -15;
                         bullet1.tickCount = -15;
+                        if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), stack) > 0)
+                            bullet.setSecondsOnFire(100);
+                        if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), stack) > 0)
+                            bullet1.setSecondsOnFire(100);
                         worldIn.addFreshEntity(bullet);
                         worldIn.addFreshEntity(bullet1);
                     }

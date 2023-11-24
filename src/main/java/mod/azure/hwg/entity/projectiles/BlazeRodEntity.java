@@ -204,6 +204,8 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
                 if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity1) {
                     EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
                     EnchantmentHelper.doPostDamageEffects(livingEntity1, livingEntity);
+                    if (this.isOnFire())
+                        livingEntity.setSecondsOnFire(50);
                 }
                 this.explode();
 

@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -49,12 +50,17 @@ public class SPistolItem extends AnimatedItem {
                     stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
                     var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
                     if (result != null) {
-                        if (result.getEntity() instanceof LivingEntity livingEntity)
+                        if (result.getEntity() instanceof LivingEntity livingEntity) {
+                            if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), stack) > 0)
+                                livingEntity.setSecondsOnFire(100);
                             livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.silencedpistolconfigs.silenced_pistol_damage);
+                        }
                     } else {
                         var bullet = createArrow(worldIn, stack, playerentity);
                         bullet.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
                         bullet.tickCount = -15;
+                        if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), stack) > 0)
+                            bullet.setSecondsOnFire(100);
                         worldIn.addFreshEntity(bullet);
                     }
                     worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), HWGSounds.SPISTOL, SoundSource.PLAYERS, 0.5F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);

@@ -232,6 +232,8 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
         super.onHitEntity(entityHitResult);
         if (!this.level().isClientSide) {
             this.explode();
+            if (this.isOnFire() && entityHitResult.getEntity() instanceof LivingEntity)
+                entityHitResult.getEntity().setSecondsOnFire(50);
             this.remove(Entity.RemovalReason.DISCARDED);
         }
     }
