@@ -1,5 +1,4 @@
-v.1.4.24
+v.1.4.25
 
-- Give the guns support for the new Incendiary Enchantment
-- Simply hide bewitchment/gig items from menu/move recipes to compat datapacks. Fixes logging issues when the two mods aren't installed as well.
-- Requires latest AzureLib
+- Fixes enchantment mixin
+- Fixes projectiles not properly setting entities on fire with Incendiary Enchantment
