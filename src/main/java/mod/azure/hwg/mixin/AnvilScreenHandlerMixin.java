@@ -8,7 +8,8 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.ItemCombinerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +27,7 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
     private void updateRuinedRepair(CallbackInfo ci) {
         var leftStack = this.inputSlots.getItem(0).copy();
         var rightStack = this.inputSlots.getItem(1).copy();
-        if ((leftStack.getItem() instanceof HWGGunBase || leftStack.getItem() instanceof HWGGunLoadedBase) && rightStack.getItem() == Items.ENCHANTED_BOOK) {
+        if ((leftStack.getItem() instanceof HWGGunBase || leftStack.getItem() instanceof HWGGunLoadedBase) && EnchantmentHelper.getEnchantments(rightStack).containsKey(Enchantments.MENDING)) {
             var repaired = ItemStack.EMPTY;
             this.resultSlots.setItem(0, repaired);
             this.broadcastChanges();
