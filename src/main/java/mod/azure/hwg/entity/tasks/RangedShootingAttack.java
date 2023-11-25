@@ -2,9 +2,9 @@ package mod.azure.hwg.entity.tasks;
 
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import mod.azure.azurelib.platform.Services;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.item.weapons.*;
+import mod.azure.hwg.util.Helper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -77,7 +77,8 @@ public class RangedShootingAttack<E extends HWGEntity> extends CustomDelayedBeha
                 entity.shoot();
         else
             entity.shoot();
-        entity.level().setBlockAndUpdate(entity.blockPosition(), Services.PLATFORM.getTickingLightBlock().defaultBlockState());
+        var isInsideWaterBlock = entity.level().isWaterAt(entity.blockPosition());
+        Helper.spawnLightSource(entity, isInsideWaterBlock);
     }
 
 }

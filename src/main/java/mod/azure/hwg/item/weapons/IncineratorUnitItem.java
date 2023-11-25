@@ -4,6 +4,7 @@ import io.netty.buffer.Unpooled;
 import mod.azure.azurelib.Keybindings;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
+import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.ChatFormatting;
@@ -62,7 +63,7 @@ public class IncineratorUnitItem extends HWGGunBase {
                 stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
             }
             var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-            spawnLightSource(entityLiving, isInsideWaterBlock);
+            Helper.spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 

@@ -5,6 +5,7 @@ import mod.azure.azurelib.Keybindings;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.entity.projectiles.BlazeRodEntity;
+import mod.azure.hwg.util.Helper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
@@ -76,7 +77,7 @@ public class BalrogItem extends HWGGunBase {
                 worldIn.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (worldIn.random.nextFloat() * 0.4F + 1.2F) + 0.5F);
             }
             var isInsideWaterBlock = playerentity.level().isWaterAt(playerentity.blockPosition());
-            spawnLightSource(entityLiving, isInsideWaterBlock);
+            Helper.spawnLightSource(entityLiving, isInsideWaterBlock);
         }
     }
 

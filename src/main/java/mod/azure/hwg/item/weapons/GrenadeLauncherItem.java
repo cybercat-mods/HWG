@@ -14,6 +14,7 @@ import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.client.render.weapons.GrenadeLauncherRender;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
+import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
@@ -272,7 +273,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
             if (!world.isClientSide)
                 triggerAnim(user, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "shoot_controller", "firing");
             var isInsideWaterBlock = user.level().isWaterAt(user.blockPosition());
-            spawnLightSource(user, isInsideWaterBlock);
+            Helper.spawnLightSource(user, isInsideWaterBlock);
             return InteractionResultHolder.consume(itemStack);
         } else if (!user.getProjectile(itemStack).isEmpty()) {
             if (!isCharged(itemStack)) {
