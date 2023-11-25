@@ -8,6 +8,7 @@ import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
@@ -45,9 +46,6 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(ShellEntity.class, EntityDataSerializers.FLOAT);
     private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
-    protected int timeInAir;
-    protected boolean inAir;
-    private int ticksInAir;
 
     public ShellEntity(EntityType<? extends ShellEntity> entityType, Level world) {
         super(entityType, world);
@@ -87,8 +85,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void tickDespawn() {
-        ++this.ticksInAir;
-        if (this.ticksInAir >= 40)
+        if (this.tickCount >= 40)
             this.remove(Entity.RemovalReason.DISCARDED);
     }
 
@@ -106,12 +103,6 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
     }
 
     @Override
-    public void shoot(double x, double y, double z, float speed, float divergence) {
-        super.shoot(x, y, z, speed, divergence);
-        this.ticksInAir = 0;
-    }
-
-    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.getEntityData().define(FORCED_YAW, 0f);
@@ -120,22 +111,20 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putShort("life", (short) this.ticksInAir);
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.ticksInAir = tag.getShort("life");
         entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
     }
 
     @Override
     public void tick() {
         super.tick();
-        ++this.ticksInAir;
-        if (this.ticksInAir >= 40)
+        Helper.setOnFire(this);
+        if (this.tickCount >= 40)
             this.remove(Entity.RemovalReason.DISCARDED);
         if (this.level().isClientSide) {
             double d2 = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;

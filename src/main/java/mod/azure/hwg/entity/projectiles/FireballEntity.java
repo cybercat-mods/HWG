@@ -1,15 +1,13 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.entities.TickingLightEntity;
 import mod.azure.azurelib.network.packet.EntityPacket;
-import mod.azure.azurelib.platform.Services;
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -42,10 +40,6 @@ public class FireballEntity extends AbstractArrow {
 
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(FireballEntity.class, EntityDataSerializers.FLOAT);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
-    protected int timeInAir;
-    protected boolean inAir;
-    private int ticksInAir;
-    private BlockPos lightBlockPos = null;
     private int idleTicks = 0;
 
     public FireballEntity(EntityType<? extends FireballEntity> entityType, Level world) {
@@ -90,20 +84,13 @@ public class FireballEntity extends AbstractArrow {
 
     @Override
     public void tickDespawn() {
-        ++this.ticksInAir;
-        if (this.ticksInAir >= 40)
+        if (this.tickCount >= 40)
             this.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return EntityPacket.createPacket(this);
-    }
-
-    @Override
-    public void shoot(double x, double y, double z, float speed, float divergence) {
-        super.shoot(x, y, z, speed, divergence);
-        this.ticksInAir = 0;
     }
 
     @Override
@@ -115,14 +102,12 @@ public class FireballEntity extends AbstractArrow {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putShort("life", (short) this.ticksInAir);
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.ticksInAir = tag.getShort("life");
         entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
     }
 
@@ -135,13 +120,12 @@ public class FireballEntity extends AbstractArrow {
             idleTicks = 0;
         if (idleOpt <= 0 || idleTicks < idleOpt)
             super.tick();
-        ++this.ticksInAir;
-        if (this.ticksInAir >= 40)
+        if (this.tickCount >= 40)
             this.remove(Entity.RemovalReason.DISCARDED);
         if (getOwner() instanceof Player owner)
             setYRot(entityData.get(FORCED_YAW));
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
-        spawnLightSource(isInsideWaterBlock);
+        Helper.spawnLightSource(this, isInsideWaterBlock);
         if (this.level().isClientSide) {
             var x = this.getX() + (this.random.nextDouble() * 2.0D - 1.0D) * this.getBbWidth() * 0.5D;
             var y = this.getY() + 0.05D + this.random.nextDouble();
@@ -154,47 +138,6 @@ public class FireballEntity extends AbstractArrow {
             if (e.isAlive() && !(e instanceof Player) && !(this.getOwner() instanceof Player))
                 e.setRemainingFireTicks(90);
         });
-    }
-
-    private void spawnLightSource(boolean isInWaterBlock) {
-        if (lightBlockPos == null) {
-            lightBlockPos = findFreeSpace(level(), blockPosition(), 2);
-            if (lightBlockPos == null)
-                return;
-            level().setBlockAndUpdate(lightBlockPos, Services.PLATFORM.getTickingLightBlock().defaultBlockState());
-        } else if (checkDistance(lightBlockPos, blockPosition(), 2)) {
-            var blockEntity = level().getBlockEntity(lightBlockPos);
-            if (blockEntity instanceof TickingLightEntity tickingLightEntity)
-                tickingLightEntity.refresh(isInWaterBlock ? 20 : 0);
-            else
-                lightBlockPos = null;
-        } else
-            lightBlockPos = null;
-    }
-
-    private boolean checkDistance(BlockPos blockPosA, BlockPos blockPosB, int distance) {
-        return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance && Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance && Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
-    }
-
-    private BlockPos findFreeSpace(Level world, BlockPos blockPos, int maxDistance) {
-        if (blockPos == null)
-            return null;
-
-        var offsets = new int[maxDistance * 2 + 1];
-        offsets[0] = 0;
-        for (int i = 2; i <= maxDistance * 2; i += 2) {
-            offsets[i - 1] = i / 2;
-            offsets[i] = -i / 2;
-        }
-        for (int x : offsets)
-            for (int y : offsets)
-                for (int z : offsets) {
-                    var offsetPos = blockPos.offset(x, y, z);
-                    var state = world.getBlockState(offsetPos);
-                    if (state.isAir() || state.getBlock().equals(Services.PLATFORM.getTickingLightBlock()))
-                        return offsetPos;
-                }
-        return null;
     }
 
     @Override

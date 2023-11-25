@@ -49,10 +49,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
     private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
-    protected int timeInAir;
-    protected boolean inAir;
     protected String type;
-    private int ticksInAir;
 
     public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level world) {
         super(entityType, world);
@@ -111,7 +108,6 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
         super.addAdditionalSaveData(tag);
         tag.putInt("Variant", this.getVariant());
         tag.putInt("State", this.getVariant());
-        tag.putShort("life", (short) this.ticksInAir);
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
     }
 
@@ -120,7 +116,6 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
         super.readAdditionalSaveData(tag);
         this.setVariant(tag.getInt("Variant"));
         this.setVariant(tag.getInt("State"));
-        this.ticksInAir = tag.getShort("life");
         entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
     }
 
@@ -209,8 +204,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void tickDespawn() {
-        ++this.ticksInAir;
-        if (this.ticksInAir >= 80) {
+        if (this.tickCount >= 80) {
             if (this.getVariant() == 1)
                 this.emp();
             else if (this.getVariant() == 2)
@@ -221,12 +215,6 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
                 this.stun();
             this.remove(Entity.RemovalReason.DISCARDED);
         }
-    }
-
-    @Override
-    public void shoot(double x, double y, double z, float speed, float divergence) {
-        super.shoot(x, y, z, speed, divergence);
-        this.ticksInAir = 0;
     }
 
     @Override

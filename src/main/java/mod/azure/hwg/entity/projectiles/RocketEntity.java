@@ -8,6 +8,7 @@ import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.network.packet.EntityPacket;
 import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
@@ -40,9 +41,6 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
             EntityDataSerializers.FLOAT);
     private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
-    protected int timeInAir;
-    protected boolean inAir;
-    private int ticksInAir;
 
     public RocketEntity(EntityType<? extends RocketEntity> entityType, Level world) {
         super(entityType, world);
@@ -87,17 +85,10 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void tickDespawn() {
-        ++this.ticksInAir;
-        if (this.ticksInAir >= 80) {
+        if (this.tickCount >= 80) {
             this.explode();
             this.remove(Entity.RemovalReason.DISCARDED);
         }
-    }
-
-    @Override
-    public void shoot(double x, double y, double z, float speed, float divergence) {
-        super.shoot(x, y, z, speed, divergence);
-        this.ticksInAir = 0;
     }
 
     @Override
@@ -109,20 +100,19 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putShort("life", (short) this.ticksInAir);
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.ticksInAir = tag.getShort("life");
         entityData.set(FORCED_YAW, tag.getFloat("ForcedYaw"));
     }
 
     @Override
     public void tick() {
         super.tick();
+        Helper.setOnFire(this);
         if (this.level().isClientSide) {
             double x = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             double z = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
@@ -139,16 +129,14 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
         }
         if (getOwner() instanceof Player owner)
             setYRot(entityData.get(FORCED_YAW));
-        ++this.ticksInAir;
         if (this.tickCount >= 80) {
             this.explode();
             this.remove(Entity.RemovalReason.DISCARDED);
         }
-        if (this.inAir && !bl) {
+        if (this.tickCount > 80 && !bl) {
             this.tickDespawn();
-            ++this.timeInAir;
         } else {
-            this.timeInAir = 0;
+            this.tickCount = 0;
             var vec3d3 = this.position();
             var vector3d3 = vec3d3.add(vec3d);
             HitResult hitResult = this.level()
