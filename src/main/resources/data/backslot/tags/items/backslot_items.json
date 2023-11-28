@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "hwg:minigun",
+    "hwg:balrog_gun",
+    "hwg:shotgun",
+    "hwg:sniper_rifle",
+    "hwg:brimstone_gun",
+    "hwg:ak47",
+    "hwg:smg",
+    "hwg:flamethrower",
+    "hwg:rocketlauncher",
+    "hwg:tommy_gun",
+    "hwg:grenade_launcher",
+    "hwg:nostromo_flamethrower"
+  ]
+}

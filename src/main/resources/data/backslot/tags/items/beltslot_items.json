@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "hwg:luger",
+    "hwg:pistol",
+    "hwg:spistol",
+    "hwg:meanie_gun_1",
+    "hwg:meanie_gun_2",
+    "hwg:flare_gun",
+    "hwg:golden_gun",
+    "hwg:grenade_emp",
+    "hwg:grenade_frag",
+    "hwg:grenade_stun",
+    "hwg:grenade_smoke",
+    "hwg:grenade_napalm",
+    "hwg:hellhorse_revolver",
+    "hwg:silvergun",
+    "hwg:shellhorse_revolver"
+  ]
+}
