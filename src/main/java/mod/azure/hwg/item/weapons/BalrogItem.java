@@ -85,6 +85,7 @@ public class BalrogItem extends HWGGunBase {
         if (user.getItemInHand(hand).getItem() instanceof BalrogItem) {
             while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(Items.BLAZE_ROD) > 0) {
                 removeAmmo(Items.BLAZE_ROD, user);
+                user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.balrogconfigs.balrogReloadCooldown);
                 user.getItemInHand(hand).hurtAndBreak(-50, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
                 user.level().playSound(null, user.getX(), user.getY(), user.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.PLAYERS, 1.0F, 1.5F);

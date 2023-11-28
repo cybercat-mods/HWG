@@ -86,6 +86,7 @@ public class IncineratorUnitItem extends HWGGunBase {
         if (user.getItemInHand(hand).getItem() instanceof IncineratorUnitItem) {
             while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.FUEL_TANK) > 0) {
                 removeAmmo(HWGItems.FUEL_TANK, user);
+                user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.flammerconfigs.flammerReloadCooldown);
                 user.getItemInHand(hand).hurtAndBreak(-501, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
             }

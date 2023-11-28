@@ -94,6 +94,7 @@ public class Meanie2Item extends AnimatedItem {
         if (user.getItemInHand(hand).getItem() instanceof Meanie2Item) {
             while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(Items.REDSTONE) > 0) {
                 removeAmmo(Items.REDSTONE, user);
+                user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.meanieconfigs.meanieReloadCooldown);
                 user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
                 user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);

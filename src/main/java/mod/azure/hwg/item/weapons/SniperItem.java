@@ -88,6 +88,7 @@ public class SniperItem extends AnimatedItem {
         if (user.getItemInHand(hand).getItem() instanceof SniperItem) {
             while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.SNIPER_ROUND) > 0) {
                 removeAmmo(HWGItems.SNIPER_ROUND, user);
+                user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.sniperconfigs.sniperReloadCooldown);
                 user.getItemInHand(hand).hurtAndBreak(-2, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
                 user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.SNIPERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);

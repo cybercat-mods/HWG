@@ -97,7 +97,7 @@ public class ShotgunItem extends AnimatedItem {
     public void reload(Player user, InteractionHand hand) {
         if (user.getItemInHand(hand).getItem() instanceof ShotgunItem && !user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.SHOTGUN_SHELL) > 0) {
             removeAmmo(HWGItems.SHOTGUN_SHELL, user);
-            user.getCooldowns().addCooldown(this, 16);
+            user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.shotgunconfigs.shotgunReloadCooldown);
             user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
             user.getItemInHand(hand).setPopTime(3);
             user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.SHOTGUNRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);

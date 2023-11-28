@@ -185,6 +185,16 @@ public class HWGConfig {
         public BalrogConfigs balrogconfigs = new BalrogConfigs();
         @Configurable
         public BrimstoneConfigs brimstoneconfigs = new BrimstoneConfigs();
+        @Configurable
+        public RocketLauncherConfigs rocketlauncherconfigs = new RocketLauncherConfigs();
+
+        public static class RocketLauncherConfigs {
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int rocketlauncherReloadCooldown = 20;
+
+        }
 
         public static class FlammerConfigs {
             @Configurable
@@ -196,6 +206,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int flammer_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int flammerReloadCooldown = 15;
         }
 
         public static class PistolConfigs {
@@ -213,6 +228,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int pistol_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int pistolReloadCooldown = 10;
         }
 
         public static class GPistolConfigs {
@@ -230,6 +250,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int golden_pistol_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int goldenPistolReloadCooldown = 30;
         }
 
         public static class SPistolConfigs {
@@ -247,6 +272,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int silenced_pistol_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int silencedPistolReloadCooldown = 10;
         }
 
         public static class LugerConfigs {
@@ -264,6 +294,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int luger_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int lugerReloadCooldown = 10;
         }
 
         public static class AKConfigs {
@@ -281,6 +316,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int ak47_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int ak47ReloadCooldown = 15;
         }
 
         public static class SniperConfigs {
@@ -303,6 +343,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int sniper_cooldown = 35;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int sniperReloadCooldown = 20;
         }
 
         public static class MinigunConfigs {
@@ -320,6 +365,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 0)
             public int minigun_cooldown = 0;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int minigunReloadCooldown = 20;
         }
 
         public static class SMGConfigs {
@@ -337,6 +387,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int smg_cooldown = 3;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int smgReloadCooldown = 15;
         }
 
         public static class HellhorseConfigs {
@@ -354,6 +409,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int hellhorse_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int hellhorseReloadCooldown = 16;
         }
 
         public static class TommyConfigs {
@@ -371,6 +431,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int tommy_cooldown = 2;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int tommyReloadCooldown = 15;
         }
 
         public static class ShotgunConfigs {
@@ -388,6 +453,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int shotgun_cooldown = 18;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int shotgunReloadCooldown = 16;
         }
 
         public static class MeanieConfigs {
@@ -405,6 +475,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int meanie_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int meanieReloadCooldown = 10;
         }
 
         public static class BalrogConfigs {
@@ -422,6 +497,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int balrog_cooldown = 25;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int balrogReloadCooldown = 15;
         }
 
         public static class BrimstoneConfigs {
@@ -439,6 +519,11 @@ public class HWGConfig {
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int brimstone_cooldown = 5;
+
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int brimstoneReloadCooldown = 15;
         }
     }
 }

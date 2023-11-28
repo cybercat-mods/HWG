@@ -115,8 +115,9 @@ public class Assasult1Item extends AnimatedItem {
         if (user.getItemInHand(hand).getItem() instanceof Assasult1Item) {
             while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.BULLETS) > 0) {
                 removeAmmo(HWGItems.BULLETS, user);
+                user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.smgconfigs.smgReloadCooldown);
                 user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
-                user.getItemInHand(hand).setPopTime(3);
+                user.getItemInHand(hand).setPopTime(10);
                 user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.CLIPRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);
                 if (!user.level().isClientSide)
                     triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), "shoot_controller", "smgreload");

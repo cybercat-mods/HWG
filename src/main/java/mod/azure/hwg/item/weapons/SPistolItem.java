@@ -89,6 +89,7 @@ public class SPistolItem extends AnimatedItem {
         if (user.getItemInHand(hand).getItem() instanceof SPistolItem) {
             while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.BULLETS) > 0) {
                 removeAmmo(HWGItems.BULLETS, user);
+                user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.silencedpistolconfigs.silencedPistolReloadCooldown);
                 user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
                 user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.PISTOLRELOAD, SoundSource.PLAYERS, 1.00F, 1.0F);

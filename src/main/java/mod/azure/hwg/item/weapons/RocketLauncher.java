@@ -51,6 +51,7 @@ public class RocketLauncher extends HWGGunBase {
         if (user.getItemInHand(hand).getItem() instanceof RocketLauncher) {
             while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(HWGItems.ROCKET) > 0) {
                 removeAmmo(HWGItems.ROCKET, user);
+                user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.rocketlauncherconfigs.rocketlauncherReloadCooldown);
                 user.getItemInHand(hand).hurtAndBreak(-2, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
                 user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);

@@ -37,7 +37,7 @@ public class SilverRevolverItem extends AnimatedItem {
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
 
     public SilverRevolverItem() {
-        super(new Item.Properties().stacksTo(1).durability(HWGMod.config.gunconfigs.pistolconfigs.pistol_cap + 1));
+        super(new Item.Properties().stacksTo(1).durability(HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_cap + 1));
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
@@ -45,7 +45,7 @@ public class SilverRevolverItem extends AnimatedItem {
     public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int remainingUseTicks) {
         if (entityLiving instanceof Player playerentity) {
             if (stack.getDamageValue() < (stack.getMaxDamage() - 1)) {
-                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.pistolconfigs.pistol_cooldown);
+                playerentity.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_cooldown);
                 if (!worldIn.isClientSide) {
                     stack.hurtAndBreak(1, entityLiving, p -> p.broadcastBreakEvent(entityLiving.getUsedItemHand()));
                     var result = HWGGunBase.hitscanTrace(playerentity, 64, 1.0F);
@@ -53,7 +53,7 @@ public class SilverRevolverItem extends AnimatedItem {
                         if (result.getEntity() instanceof LivingEntity livingEntity) {
                             if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), stack) > 0)
                                 livingEntity.setSecondsOnFire(100);
-                            livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.pistolconfigs.pistol_damage);
+                            livingEntity.hurt(playerentity.damageSources().playerAttack(playerentity), HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage);
                         }
                     } else {
                         var bullet = createArrow(worldIn, stack, playerentity);
@@ -88,7 +88,7 @@ public class SilverRevolverItem extends AnimatedItem {
         if (user.getItemInHand(hand).getItem() instanceof SilverRevolverItem) {
             while (!user.isCreative() && user.getItemInHand(hand).getDamageValue() != 0 && user.getInventory().countItem(BWCompat.SILVERBULLET) > 0) {
                 removeAmmo(BWCompat.SILVERBULLET, user);
-                user.getCooldowns().addCooldown(this, 16);
+                user.getCooldowns().addCooldown(this, HWGMod.config.gunconfigs.hellhorseconfigs.hellhorseReloadCooldown);
                 user.getItemInHand(hand).hurtAndBreak(-1, user, s -> user.broadcastBreakEvent(hand));
                 user.getItemInHand(hand).setPopTime(3);
                 user.level().playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.REVOLVERRELOAD, SoundSource.PLAYERS, 0.5F, 1.0F);
@@ -100,7 +100,7 @@ public class SilverRevolverItem extends AnimatedItem {
     }
 
     public SBulletEntity createArrow(Level worldIn, ItemStack stack, LivingEntity shooter) {
-        return new SBulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.pistolconfigs.pistol_damage);
+        return new SBulletEntity(worldIn, shooter, HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage);
     }
 
     @Override
