@@ -9,24 +9,24 @@ import net.minecraft.resources.ResourceLocation;
 
 public record HWGParticles() {
 
-    public static final SimpleParticleType BRIM_RED = register(new ResourceLocation(HWGMod.MODID, "brim_red"), false);
-    public static final SimpleParticleType RED_FLARE = register(new ResourceLocation(HWGMod.MODID, "red_flare"), false);
-    public static final SimpleParticleType BLUE_FLARE = register(new ResourceLocation(HWGMod.MODID, "blue_flare"), false);
-    public static final SimpleParticleType CYAN_FLARE = register(new ResourceLocation(HWGMod.MODID, "cyan_flare"), false);
-    public static final SimpleParticleType GRAY_FLARE = register(new ResourceLocation(HWGMod.MODID, "gray_flare"), false);
-    public static final SimpleParticleType LIME_FLARE = register(new ResourceLocation(HWGMod.MODID, "lime_flare"), false);
-    public static final SimpleParticleType PINK_FLARE = register(new ResourceLocation(HWGMod.MODID, "pink_flare"), false);
-    public static final SimpleParticleType BLACK_FLARE = register(new ResourceLocation(HWGMod.MODID, "black_flare"), false);
-    public static final SimpleParticleType BRIM_ORANGE = register(new ResourceLocation(HWGMod.MODID, "brim_orange"), false);
-    public static final SimpleParticleType BROWN_FLARE = register(new ResourceLocation(HWGMod.MODID, "brown_flare"), false);
-    public static final SimpleParticleType GREEN_FLARE = register(new ResourceLocation(HWGMod.MODID, "green_flare"), false);
-    public static final SimpleParticleType WHITE_FLARE = register(new ResourceLocation(HWGMod.MODID, "white_flare"), false);
-    public static final SimpleParticleType ORANGE_FLARE = register(new ResourceLocation(HWGMod.MODID, "orange_flare"), false);
-    public static final SimpleParticleType PURPLE_FLARE = register(new ResourceLocation(HWGMod.MODID, "purple_flare"), false);
-    public static final SimpleParticleType YELLOW_FLARE = register(new ResourceLocation(HWGMod.MODID, "yellow_flare"), false);
-    public static final SimpleParticleType MAGENTA_FLARE = register(new ResourceLocation(HWGMod.MODID, "magenta_flare"), false);
-    public static final SimpleParticleType LIGHTBLUE_FLARE = register(new ResourceLocation(HWGMod.MODID, "lightblue_flare"), false);
-    public static final SimpleParticleType LIGHTGRAY_FLARE = register(new ResourceLocation(HWGMod.MODID, "lightgray_flare"), false);
+    public static final SimpleParticleType BRIM_RED = register(HWGMod.modResource("brim_red"), false);
+    public static final SimpleParticleType RED_FLARE = register(HWGMod.modResource("red_flare"), false);
+    public static final SimpleParticleType BLUE_FLARE = register(HWGMod.modResource("blue_flare"), false);
+    public static final SimpleParticleType CYAN_FLARE = register(HWGMod.modResource("cyan_flare"), false);
+    public static final SimpleParticleType GRAY_FLARE = register(HWGMod.modResource("gray_flare"), false);
+    public static final SimpleParticleType LIME_FLARE = register(HWGMod.modResource("lime_flare"), false);
+    public static final SimpleParticleType PINK_FLARE = register(HWGMod.modResource("pink_flare"), false);
+    public static final SimpleParticleType BLACK_FLARE = register(HWGMod.modResource("black_flare"), false);
+    public static final SimpleParticleType BRIM_ORANGE = register(HWGMod.modResource("brim_orange"), false);
+    public static final SimpleParticleType BROWN_FLARE = register(HWGMod.modResource("brown_flare"), false);
+    public static final SimpleParticleType GREEN_FLARE = register(HWGMod.modResource("green_flare"), false);
+    public static final SimpleParticleType WHITE_FLARE = register(HWGMod.modResource("white_flare"), false);
+    public static final SimpleParticleType ORANGE_FLARE = register(HWGMod.modResource("orange_flare"), false);
+    public static final SimpleParticleType PURPLE_FLARE = register(HWGMod.modResource("purple_flare"), false);
+    public static final SimpleParticleType YELLOW_FLARE = register(HWGMod.modResource("yellow_flare"), false);
+    public static final SimpleParticleType MAGENTA_FLARE = register(HWGMod.modResource("magenta_flare"), false);
+    public static final SimpleParticleType LIGHTBLUE_FLARE = register(HWGMod.modResource("lightblue_flare"), false);
+    public static final SimpleParticleType LIGHTGRAY_FLARE = register(HWGMod.modResource("lightgray_flare"), false);
 
     private static SimpleParticleType register(ResourceLocation identifier, boolean alwaysSpawn) {
         return Registry.register(BuiltInRegistries.PARTICLE_TYPE, identifier, FabricParticleTypes.simple(alwaysSpawn));

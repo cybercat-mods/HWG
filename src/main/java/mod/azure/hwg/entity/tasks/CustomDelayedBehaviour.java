@@ -1,7 +1,7 @@
 package mod.azure.hwg.entity.tasks;
 
 import mod.azure.hwg.entity.HWGEntity;
-import mod.azure.hwg.item.weapons.Minigun;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
@@ -36,7 +36,7 @@ public abstract class CustomDelayedBehaviour<E extends HWGEntity> extends Extend
             doDelayedAction(entity);
         }
         if (entity.getTarget() != null) {
-            if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun) && !entity.isWithinMeleeAttackRange(entity.getTarget()))
+            if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).is(HWGItems.MINIGUN)) && !entity.isWithinMeleeAttackRange(entity.getTarget()))
                 entity.triggerAnim("attackController", "ranged");
             entity.lookAt(entity.getTarget(), 30.0f, 30.0f);
         }

@@ -1,0 +1,138 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"reload": {
+			"animation_length": 0.76,
+			"bones": {
+				"bone2": {
+					"rotation": {
+						"0.2": {
+							"vector": [0, 0, 0]
+						},
+						"0.32": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [0, -3, 1.2]
+						},
+						"0.2": {
+							"vector": [0, -5, 2.1]
+						},
+						"0.32": {
+							"vector": [-6, -11, 2.1]
+						},
+						"0.52": {
+							"vector": [0, -5, 2.1]
+						},
+						"0.64": {
+							"vector": [0, -3, 1.2]
+						},
+						"0.76": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"scale": {
+						"0.2": {
+							"vector": [1, 1, 1]
+						},
+						"0.32": {
+							"vector": [1, 1, 1]
+						},
+						"0.36": {
+							"vector": [0, 0, 0]
+						},
+						"0.48": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [1, 1, 1]
+						}
+					}
+				},
+				"pistol": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [0, 5, -7]
+						},
+						"0.68": {
+							"vector": [0, 5, -7]
+						},
+						"0.76": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"firing": {
+			"loop": true,
+			"animation_length": 0.44,
+			"bones": {
+				"meanie_gun": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [-12.5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"0.44": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [0, 0, 1],
+							"easing": "easeInOutSine"
+						},
+						"0.44": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				},
+				"bone": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, -8.2]
+						},
+						"0.2": {
+							"vector": [-0.6, 1.2, -8.3]
+						},
+						"0.44": {
+							"vector": [0, 0, -8.2]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [6, 6, 0]
+						},
+						"0.44": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

@@ -23,7 +23,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.player.Player;
@@ -51,6 +50,7 @@ import net.tslat.smartbrainlib.api.core.sensor.custom.UnreachableTargetSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -66,11 +66,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
         return (world.getBrightness(LightLayer.BLOCK, pos) <= 8 || world.getDifficulty() == Difficulty.PEACEFUL) && checkAnyLightMonsterSpawnRules(type, world, spawnReason, pos, random);
     }
 
-    public static boolean canSpawnIgnoreLightLevel(EntityType<? extends HWGEntity> type, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL && Monster.checkMonsterSpawnRules(type, world, spawnReason, pos, random);
-    }
-
-    public static AttributeSupplier.Builder createMobAttributes() {
+    public static AttributeSupplier.@NotNull Builder createMobAttributes() {
         return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, HWGMod.config.mobconfigs.mercconfigs.merc_health).add(Attributes.ARMOR, 3).add(Attributes.ATTACK_DAMAGE, 2D).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
@@ -81,7 +77,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
     }
 
     @Override
-    protected Brain.Provider<?> brainProvider() {
+    protected Brain.@NotNull Provider<?> brainProvider() {
         return new SmartBrainProvider<>(this);
     }
 
@@ -92,7 +88,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 
     @Override
     public List<ExtendedSensor<MercEntity>> getSensors() {
-        return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<MercEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<MercEntity>());
+        return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<MercEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<>());
     }
 
     @Override
@@ -193,7 +189,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
     }
 
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.ILLAGER;
     }
 

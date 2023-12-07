@@ -37,8 +37,7 @@ import net.minecraft.world.phys.HitResult;
 
 public class RocketEntity extends AbstractArrow implements GeoEntity {
 
-    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(RocketEntity.class,
-            EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(RocketEntity.class, EntityDataSerializers.FLOAT);
     private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
@@ -58,8 +57,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
     protected RocketEntity(EntityType<? extends RocketEntity> type, LivingEntity owner, Level world) {
         this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
         this.setOwner(owner);
-        if (owner instanceof Player)
-            this.pickup = AbstractArrow.Pickup.ALLOWED;
+        if (owner instanceof Player) this.pickup = AbstractArrow.Pickup.ALLOWED;
     }
 
     public RocketEntity(Level world, double x, double y, double z) {
@@ -116,7 +114,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
         if (this.level().isClientSide) {
             double x = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             double z = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
-            this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
+            this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(0.5), z, 0, 0, 0);
         }
         var bl = this.isNoPhysics();
         var vec3d = this.getDeltaMovement();
@@ -127,8 +125,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
             this.yRotO = this.getYRot();
             this.xRotO = this.getXRot();
         }
-        if (getOwner() instanceof Player owner)
-            setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player owner) setYRot(entityData.get(FORCED_YAW));
         if (this.tickCount >= 80) {
             this.explode();
             this.remove(Entity.RemovalReason.DISCARDED);
@@ -139,10 +136,8 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
             this.tickCount = 0;
             var vec3d3 = this.position();
             var vector3d3 = vec3d3.add(vec3d);
-            HitResult hitResult = this.level()
-                    .clip(new ClipContext(vec3d3, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-            if (hitResult.getType() != HitResult.Type.MISS)
-                vector3d3 = hitResult.getLocation();
+            HitResult hitResult = this.level().clip(new ClipContext(vec3d3, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+            if (hitResult.getType() != HitResult.Type.MISS) vector3d3 = hitResult.getLocation();
             while (!this.isRemoved()) {
                 var entityHitResult = this.findHitEntity(vec3d3, vector3d3);
                 if (entityHitResult != null) {
@@ -151,8 +146,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
                 if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
                     var entity = ((EntityHitResult) hitResult).getEntity();
                     var entity2 = this.getOwner();
-                    if (entity instanceof Player player && entity2 instanceof Player player1
-                            && !player1.canHarmPlayer(player)) {
+                    if (entity instanceof Player player && entity2 instanceof Player player1 && !player1.canHarmPlayer(player)) {
                         hitResult = null;
                         entityHitResult = null;
                     }
@@ -161,8 +155,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
                     this.onHit(hitResult);
                     this.hasImpulse = true;
                 }
-                if (entityHitResult == null || this.getPierceLevel() <= 0)
-                    break;
+                if (entityHitResult == null || this.getPierceLevel() <= 0) break;
                 hitResult = null;
             }
             vec3d = this.getDeltaMovement();
@@ -173,18 +166,15 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
             double j = this.getY() + e;
             double k = this.getZ() + g;
             double l = vec3d.horizontalDistance();
-            if (bl)
-                this.setYRot((float) (Mth.atan2(-e, -g) * 57.2957763671875D));
-            else
-                this.setYRot((float) (Mth.atan2(e, g) * 57.2957763671875D));
+            if (bl) this.setYRot((float) (Mth.atan2(-e, -g) * 57.2957763671875D));
+            else this.setYRot((float) (Mth.atan2(e, g) * 57.2957763671875D));
             this.setXRot((float) (Mth.atan2(e, l) * 57.2957763671875D));
             this.setXRot(lerpRotation(this.xRotO, this.getXRot()));
             this.setYRot(lerpRotation(this.yRotO, this.getYRot()));
             var m = 0.99F;
             this.setDeltaMovement(vec3d.scale(m));
             if (!this.isNoGravity() && !bl)
-                this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.05000000074505806D,
-                        this.getDeltaMovement().z);
+                this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.05000000074505806D, this.getDeltaMovement().z);
             this.absMoveTo(h, j, k);
             this.checkInsideBlocks();
         }
@@ -227,8 +217,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
     }
 
     protected void explode() {
-        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false,
-                HWGMod.config.gunconfigs.rocket_breaks ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGMod.config.gunconfigs.rocket_breaks ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
     }
 
     @Override

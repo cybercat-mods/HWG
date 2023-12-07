@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandler> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(HWGMod.MODID, "textures/gui/gun_table_gui.png");
+    private static final ResourceLocation TEXTURE = HWGMod.modResource("textures/gui/gun_table_gui.png");
     private final GunTableScreen.WidgetButtonPage[] offers = new GunTableScreen.WidgetButtonPage[7];
     private int selectedIndex;
     private int indexStartOffset;

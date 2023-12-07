@@ -27,13 +27,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import org.jetbrains.annotations.Nullable;
 
 public class BaseFlareEntity extends AbstractArrow {
 
     private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(BaseFlareEntity.class, EntityDataSerializers.INT);
     private int life;
-    private SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
     private int idleTicks = 0;
 
     public BaseFlareEntity(EntityType<? extends AbstractArrow> entityType, Level world) {
@@ -43,15 +41,6 @@ public class BaseFlareEntity extends AbstractArrow {
     public BaseFlareEntity(Level world, double x, double y, double z, ItemStack stack) {
         super(HWGProjectiles.FLARE, world);
         this.absMoveTo(x, y, z);
-    }
-
-    public BaseFlareEntity(Level world, @Nullable Entity entity, double x, double y, double z, ItemStack stack) {
-        this(world, x, y, z, stack);
-        this.setOwner(entity);
-    }
-
-    public BaseFlareEntity(Level world, ItemStack stack, LivingEntity shooter) {
-        this(world, shooter, shooter.getX(), shooter.getY(), shooter.getZ(), stack);
     }
 
     public BaseFlareEntity(Level world, ItemStack stack, double x, double y, double z, boolean shotAtAngle) {
@@ -114,7 +103,6 @@ public class BaseFlareEntity extends AbstractArrow {
         setNoGravity(false);
         ++this.life;
         var vec3d = this.getDeltaMovement();
-        vec3d = this.getDeltaMovement();
         this.setDeltaMovement(vec3d.scale(0.99F));
         if (this.tickCount > 25)
             this.setDeltaMovement(0.0, -0.1, 0.0);
@@ -154,13 +142,8 @@ public class BaseFlareEntity extends AbstractArrow {
     }
 
     @Override
-    public void handleEntityEvent(byte status) {
-        super.handleEntityEvent(status);
-    }
-
-    @Override
     public void setSoundEvent(SoundEvent soundIn) {
-        this.hitSound = soundIn;
+        this.getDefaultHitGroundSoundEvent();
     }
 
     @Override

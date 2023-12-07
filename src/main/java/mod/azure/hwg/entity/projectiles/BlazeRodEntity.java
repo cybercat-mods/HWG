@@ -1,15 +1,8 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.network.packet.EntityPacket;
-import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,16 +25,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
+public class BlazeRodEntity extends AbstractArrow {
 
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BlazeRodEntity.class, EntityDataSerializers.FLOAT);
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
     protected int timeInAir;
     protected boolean inAir;
@@ -64,24 +57,13 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
     protected BlazeRodEntity(EntityType<? extends BlazeRodEntity> type, LivingEntity owner, Level world) {
         this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
         this.setOwner(owner);
-        if (owner instanceof Player)
-            this.pickup = AbstractArrow.Pickup.ALLOWED;
+        if (owner instanceof Player) this.pickup = AbstractArrow.Pickup.ALLOWED;
     }
 
     public BlazeRodEntity(Level world, double x, double y, double z) {
         super(HWGProjectiles.BLAZEROD, x, y, z, world);
         this.setNoGravity(true);
         this.setBaseDamage(0);
-    }
-
-    @Override
-    public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
     }
 
     @Override
@@ -134,16 +116,12 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
     @Override
     public void tick() {
         var idleOpt = 100;
-        if (getDeltaMovement().lengthSqr() < 0.01)
-            idleTicks++;
-        else
-            idleTicks = 0;
-        if (idleOpt <= 0 || idleTicks < idleOpt)
-            super.tick();
+        if (getDeltaMovement().lengthSqr() < 0.01) idleTicks++;
+        else idleTicks = 0;
+        if (idleOpt <= 0 || idleTicks < idleOpt) super.tick();
 
         ++this.ticksInAir;
-        if (this.ticksInAir >= 40)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (this.ticksInAir >= 40) this.remove(Entity.RemovalReason.DISCARDED);
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         Helper.setOnFire(this);
         Helper.spawnLightSource(this, isInsideWaterBlock);
@@ -154,8 +132,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
             this.level().addParticle(ParticleTypes.FLAME, true, x, y, z, 0, 0, 0);
             this.level().addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, x, y, z, 0, 0, 0);
         }
-        if (getOwner() instanceof Player owner)
-            setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player owner) setYRot(entityData.get(FORCED_YAW));
     }
 
     @Override
@@ -165,7 +142,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void setSoundEvent(SoundEvent soundIn) {
-        this.hitSound = soundIn;
+        this.getDefaultHitGroundSoundEvent();
     }
 
     @Override
@@ -190,20 +167,17 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
             this.remove(Entity.RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
-        if (entity2 == null)
-            damageSource2 = damageSources().arrow(this, this);
+        if (entity2 == null) damageSource2 = damageSources().arrow(this, this);
         else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity livingEntity)
-                livingEntity.setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity) livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, HWGMod.config.gunconfigs.balrogconfigs.balrog_damage)) {
             if (entity instanceof LivingEntity livingEntity) {
                 if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity1) {
                     EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
                     EnchantmentHelper.doPostDamageEffects(livingEntity1, livingEntity);
-                    if (this.isOnFire())
-                        livingEntity.setSecondsOnFire(50);
+                    if (this.isOnFire()) livingEntity.setSecondsOnFire(50);
                 }
                 this.explode();
 
@@ -211,8 +185,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
                 if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
                     serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
-        } else if (!this.level().isClientSide)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        } else if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
     }
 
     protected void explode() {
@@ -221,7 +194,7 @@ public class BlazeRodEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public ItemStack getPickupItem() {
-        return new ItemStack(HWGItems.ROCKET);
+        return new ItemStack(Items.AIR);
     }
 
     @Override

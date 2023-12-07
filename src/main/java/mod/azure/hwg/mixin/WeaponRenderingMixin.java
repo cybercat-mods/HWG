@@ -1,6 +1,6 @@
 package mod.azure.hwg.mixin;
 
-import mod.azure.hwg.item.weapons.HWGGunBase;
+import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
 import mod.azure.hwg.item.weapons.HWGGunLoadedBase;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -17,7 +17,7 @@ public class WeaponRenderingMixin {
     @Inject(method = "getArmPose", at = @At(value = "TAIL"), cancellable = true)
     private static void tryItemPose(AbstractClientPlayer player, InteractionHand hand, CallbackInfoReturnable<HumanoidModel.ArmPose> ci) {
         var itemstack = player.getItemInHand(hand);
-        if (itemstack.getItem() instanceof HWGGunLoadedBase || itemstack.getItem() instanceof HWGGunBase)
+        if (itemstack.getItem() instanceof HWGGunLoadedBase || itemstack.getItem() instanceof AzureAnimatedGunItem)
             ci.setReturnValue(HumanoidModel.ArmPose.CROSSBOW_HOLD);
     }
 }

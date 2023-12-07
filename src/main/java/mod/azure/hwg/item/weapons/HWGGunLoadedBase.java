@@ -1,10 +1,7 @@
 package mod.azure.hwg.item.weapons;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.TooltipFlag;
@@ -13,8 +10,6 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
-
-    private BlockPos lightBlockPos = null;
 
     protected HWGGunLoadedBase(Properties settings) {
         super(settings);
@@ -36,23 +31,6 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
             f = 1.0F;
 
         return f;
-    }
-
-    public void removeAmmo(Item ammo, Player playerEntity) {
-        if (!playerEntity.isCreative()) {
-            for (ItemStack item : playerEntity.getInventory().offhand) {
-                if (item.getItem() == ammo) {
-                    item.shrink(1);
-                    break;
-                }
-                for (ItemStack item1 : playerEntity.getInventory().items) {
-                    if (item1.getItem() == ammo) {
-                        item1.shrink(1);
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     @Override

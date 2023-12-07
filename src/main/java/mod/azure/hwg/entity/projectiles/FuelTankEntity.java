@@ -9,20 +9,16 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public class FuelTankEntity extends Entity {
-
-    @Nullable
-    private LivingEntity causingEntity;
 
     public FuelTankEntity(EntityType<?> entityTypeIn, Level worldIn) {
         super(entityTypeIn, worldIn);
     }
 
-    public FuelTankEntity(Level worldIn, double x, double y, double z, @Nullable LivingEntity igniter) {
+    public FuelTankEntity(Level worldIn, double x, double y, double z) {
         this(HWGMobs.FUELTANK, worldIn);
         this.absMoveTo(x, y, z);
         var d = level().random.nextDouble() * 6.2831854820251465D;
@@ -30,17 +26,10 @@ public class FuelTankEntity extends Entity {
         this.xo = x;
         this.yo = y;
         this.zo = z;
-        this.causingEntity = igniter;
     }
 
     protected void explode() {
-        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 4.0F, true,
-                Level.ExplosionInteraction.NONE);
-    }
-
-    @Nullable
-    public LivingEntity getCausingEntity() {
-        return this.causingEntity;
+        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 4.0F, true, Level.ExplosionInteraction.NONE);
     }
 
     @Override
@@ -50,8 +39,7 @@ public class FuelTankEntity extends Entity {
     @Override
     public void tick() {
         this.remove(Entity.RemovalReason.DISCARDED);
-        if (!this.level().isClientSide)
-            this.explode();
+        if (!this.level().isClientSide) this.explode();
     }
 
     @Override
@@ -63,7 +51,7 @@ public class FuelTankEntity extends Entity {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return EntityPacket.createPacket(this);
     }
 

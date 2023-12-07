@@ -1,12 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.network.packet.EntityPacket;
-import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -24,7 +18,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -41,13 +34,12 @@ import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
-public class BulletEntity extends AbstractArrow implements GeoEntity {
+public class BulletEntity extends AbstractArrow {
 
+    protected float bulletdamage;
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.FLOAT);
-    protected static float bulletdamage;
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
-    public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
     public BulletEntity(EntityType<? extends BulletEntity> entityType, Level world) {
         super(entityType, world);
@@ -56,39 +48,22 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 
     public BulletEntity(Level world, LivingEntity owner, Float damage) {
         super(HWGProjectiles.BULLETS, owner, world);
-        bulletdamage = damage;
+        this.bulletdamage = damage;
     }
 
     protected BulletEntity(EntityType<? extends BulletEntity> type, double x, double y, double z, Level world) {
         this(type, world);
     }
 
-    public BulletEntity(Level world, double x, double y, double z) {
-        super(HWGProjectiles.BULLETS, x, y, z, world);
-        this.setNoGravity(true);
-        this.setBaseDamage(0);
-    }
-
     protected BulletEntity(EntityType<? extends BulletEntity> type, LivingEntity owner, Level world) {
         this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
         this.setOwner(owner);
-        if (owner instanceof Player)
-            this.pickup = AbstractArrow.Pickup.ALLOWED;
+        this.pickup = Pickup.DISALLOWED;
     }
 
     @Override
-    public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return EntityPacket.createPacket(this);
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
     }
 
     @Override
@@ -102,8 +77,7 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void tickDespawn() {
-        if (this.tickCount >= 40)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (this.tickCount >= 40) this.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override
@@ -127,15 +101,13 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.tickCount >= 40)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (this.tickCount >= 40) this.remove(Entity.RemovalReason.DISCARDED);
         if (this.level().isClientSide) {
             double x = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             double z = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
-            this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(), z, 0, 0, 0);
+            this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(0.5), z, 0, 0, 0);
         }
-        if (getOwner() instanceof Player owner)
-            setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player) setYRot(entityData.get(FORCED_YAW));
         Helper.setOnFire(this);
     }
 
@@ -146,19 +118,18 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public void setSoundEvent(SoundEvent soundIn) {
-        this.hitSound = soundIn;
+        this.getDefaultHitGroundSoundEvent();
     }
 
     @Override
-    protected SoundEvent getDefaultHitGroundSoundEvent() {
+    protected @NotNull SoundEvent getDefaultHitGroundSoundEvent() {
         return SoundEvents.ARMOR_EQUIP_IRON;
     }
 
     @Override
     protected void onHitBlock(BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
-        if (!this.level().isClientSide)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
         if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.gunconfigs.bullets_breakdripstone)
             level().destroyBlock(blockHitResult.getBlockPos(), true);
         if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.TNT))
@@ -171,36 +142,31 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity))
-            if (!this.level().isClientSide)
-                this.remove(Entity.RemovalReason.DISCARDED);
+        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide)
+            this.remove(Entity.RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
-        if (entity2 == null)
-            damageSource2 = damageSources().arrow(this, this);
+        if (entity2 == null) damageSource2 = damageSources().arrow(this, this);
         else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity livingEntity)
-                livingEntity.setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity) livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, bulletdamage)) {
             if (entity instanceof LivingEntity livingEntity) {
                 if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity1) {
                     EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
                     EnchantmentHelper.doPostDamageEffects(livingEntity1, livingEntity);
-                    if (this.isOnFire())
-                        livingEntity.setSecondsOnFire(50);
+                    if (this.isOnFire()) livingEntity.setSecondsOnFire(50);
                 }
                 this.doPostHurtEffects(livingEntity);
-                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
+                if (livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
                     serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
-        } else if (!this.level().isClientSide)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        } else if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override
-    public ItemStack getPickupItem() {
+    public @NotNull ItemStack getPickupItem() {
         return new ItemStack(HWGItems.BULLETS);
     }
 
@@ -208,14 +174,6 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
     @Environment(EnvType.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distance) {
         return true;
-    }
-
-    public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
-        var f = 0.017453292F;
-        var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
-        var y = -Mth.sin((pitch + roll) * f);
-        var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
-        this.shoot(x, y, z, modifierZ, 0);
     }
 
 }

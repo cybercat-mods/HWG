@@ -11,9 +11,10 @@ import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.hwg.client.render.weapons.GrenadeLauncherRender;
+import mod.azure.hwg.client.render.GunRender;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import mod.azure.hwg.item.ammo.GrenadeEmpItem;
+import mod.azure.hwg.item.enums.GunTypeEnum;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
@@ -106,23 +107,20 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
         var itemStack2 = itemStack.copy();
 
         for (int k = 0; k < j; ++k) {
-            if (k > 0)
-                itemStack = itemStack2.copy();
+            if (k > 0) itemStack = itemStack2.copy();
 
             if (itemStack.isEmpty() && bl) {
                 itemStack = new ItemStack(HWGItems.G_SMOKE);
                 itemStack2 = itemStack.copy();
             }
 
-            if (!loadProjectile(shooter, projectile, itemStack, k > 0, bl))
-                return false;
+            if (!loadProjectile(shooter, projectile, itemStack, k > 0, bl)) return false;
         }
         return true;
     }
 
     private static boolean loadProjectile(LivingEntity shooter, ItemStack crossbow, ItemStack projectile, boolean simulated, boolean creative) {
-        if (projectile.isEmpty())
-            return false;
+        if (projectile.isEmpty()) return false;
         else {
             var bl = creative && projectile.getItem() instanceof GrenadeEmpItem;
             ItemStack itemStack2;
@@ -130,8 +128,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
                 itemStack2 = projectile.split(1);
                 if (projectile.isEmpty() && shooter instanceof Player player)
                     player.getInventory().removeItem(projectile);
-            } else
-                itemStack2 = projectile.copy();
+            } else itemStack2 = projectile.copy();
 
             putProjectile(crossbow, itemStack2);
             return true;
@@ -149,10 +146,8 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
     private static void putProjectile(ItemStack crossbow, ItemStack projectile) {
         var nbt = crossbow.getOrCreateTag();
         ListTag list;
-        if (nbt.contains("ChargedProjectiles", 9))
-            list = nbt.getList("ChargedProjectiles", 10);
-        else
-            list = new ListTag();
+        if (nbt.contains("ChargedProjectiles", 9)) list = nbt.getList("ChargedProjectiles", 10);
+        else list = new ListTag();
 
         var nbtnew = new CompoundTag();
         projectile.save(nbtnew);
@@ -165,11 +160,10 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
         var nbt = crossbow.getTag();
         if (nbt != null && nbt.contains("ChargedProjectiles", 9)) {
             var list2 = nbt.getList("ChargedProjectiles", 10);
-            if (list2 != null)
-                for (var i = 0; i < list2.size(); ++i) {
-                    var nbt2 = list2.getCompound(i);
-                    list.add(ItemStack.of(nbt2));
-                }
+            if (list2 != null) for (var i = 0; i < list2.size(); ++i) {
+                var nbt2 = list2.getCompound(i);
+                list.add(ItemStack.of(nbt2));
+            }
         }
         return list;
     }
@@ -195,12 +189,9 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
             var itemStack = list.get(i);
             var bl = entity instanceof Player player && player.getAbilities().instabuild;
             if (!itemStack.isEmpty()) {
-                if (i == 0)
-                    shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 0.0F);
-                else if (i == 1)
-                    shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, -10.0F);
-                else if (i == 2)
-                    shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 10.0F);
+                if (i == 0) shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 0.0F);
+                else if (i == 1) shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, -10.0F);
+                else if (i == 2) shoot(world, entity, hand, stack, itemStack, fs[i], bl, speed, divergence, 10.0F);
             }
         }
         postShoot(world, entity, stack);
@@ -231,7 +222,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "shoot_controller", event -> PlayState.CONTINUE).triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE)).triggerableAnim("loading", RawAnimation.begin().then("loading", LoopType.PLAY_ONCE)));
+        controllers.add(new AnimationController<>(this, "controller", event -> PlayState.CONTINUE).triggerableAnim("firing", RawAnimation.begin().then("firing", LoopType.PLAY_ONCE)).triggerableAnim("loading", RawAnimation.begin().then("loading", LoopType.PLAY_ONCE)));
     }
 
     @Override
@@ -271,7 +262,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
             user.getCooldowns().addCooldown(this, 25);
             setCharged(itemStack, false);
             if (!world.isClientSide)
-                triggerAnim(user, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "shoot_controller", "firing");
+                triggerAnim(user, GeoItem.getOrAssignId(itemStack, (ServerLevel) world), "controller", "firing");
             var isInsideWaterBlock = user.level().isWaterAt(user.blockPosition());
             Helper.spawnLightSource(user, isInsideWaterBlock);
             return InteractionResultHolder.consume(itemStack);
@@ -282,8 +273,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
                 user.startUsingItem(hand);
             }
             return InteractionResultHolder.consume(itemStack);
-        } else
-            return InteractionResultHolder.fail(itemStack);
+        } else return InteractionResultHolder.fail(itemStack);
     }
 
     public void releaseUsing(ItemStack stack, Level world, LivingEntity user, int remainingUseTicks) {
@@ -292,7 +282,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
             var soundCategory = user instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE;
             world.playSound(null, user.getX(), user.getY(), user.getZ(), HWGSounds.GLAUNCHERRELOAD, soundCategory, 0.5F, 1.0F);
             if (!world.isClientSide)
-                triggerAnim(user, GeoItem.getOrAssignId(stack, (ServerLevel) world), "shoot_controller", "loading");
+                triggerAnim(user, GeoItem.getOrAssignId(stack, (ServerLevel) world), "controller", "loading");
             ((Player) user).getCooldowns().addCooldown(this, 15);
         }
     }
@@ -305,11 +295,9 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
                 this.loaded = false;
             }
 
-            if (f >= 0.2F && !this.charged)
-                this.charged = true;
+            if (f >= 0.2F && !this.charged) this.charged = true;
 
-            if (f >= 0.5F && !this.loaded)
-                this.loaded = true;
+            if (f >= 0.5F && !this.loaded) this.loaded = true;
         }
     }
 
@@ -340,10 +328,12 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
     @Override
     public void createRenderer(Consumer<Object> consumer) {
         consumer.accept(new RenderProvider() {
-            private final GrenadeLauncherRender renderer = new GrenadeLauncherRender();
+            private final GunRender<GrenadeLauncherItem> renderer = null;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+                if (renderer == null)
+                    return new GunRender<GrenadeLauncherItem>("grenade_launcher", GunTypeEnum.NADELAUNCHER);
                 return this.renderer;
             }
         });

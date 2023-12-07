@@ -1,7 +1,7 @@
 package mod.azure.hwg.entity.tasks;
 
 import mod.azure.hwg.entity.HWGEntity;
-import mod.azure.hwg.item.weapons.Minigun;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.tslat.smartbrainlib.api.core.behaviour.ExtendedBehaviour;
@@ -35,7 +35,7 @@ public abstract class CustomDelayedMeleeBehaviour<E extends HWGEntity> extends E
             super.start(level, entity, gameTime);
             doDelayedAction(entity);
         }
-        if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof Minigun))
+        if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).is(HWGItems.MINIGUN)))
             entity.triggerAnim("attackController", "melee");
     }
 

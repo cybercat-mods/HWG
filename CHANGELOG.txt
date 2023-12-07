@@ -1,5 +1,10 @@
-v.1.4.26
+v.2.0.0
 
-- Fixes Incendiary Enchantment setting player on fire.
-- Adds Reload Cooldown configuration.
-- Adds weapons to BackSlot tags.
+- Rewrote Mob Rendering code to be efficient.
+- Rewrote weapons to use new AzureLib system for supporting Alt Firing options.
+- Rewrote weapons to use 1 weapon class for everything now.
+- Removed unused HWG Book recipe.
+- Adds Rocket Launcher cool down and cap configs.
+- Flamethrower animations are added to both Flamethrowers.
+- Balrog and Brimestone animations added/emissive textures added.
+- Rocket Launcher now has animations.

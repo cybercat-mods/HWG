@@ -5,7 +5,6 @@ import mod.azure.hwg.entity.projectiles.*;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
@@ -28,6 +27,7 @@ public record HWGProjectiles() {
     public static EntityType<MBulletEntity> MBULLETS = projectile(MBulletEntity::new, "mbullets");
     public static EntityType<BlazeRodEntity> BLAZEROD = projectile(BlazeRodEntity::new, "blazerod");
     public static EntityType<FireballEntity> FIREBALL = projectile(FireballEntity::new, "fireball");
+    public static EntityType<SBulletEntity> SILVERBULLETS = projectile(SBulletEntity::new, "silverbullets");
 
     private static <T extends Entity> EntityType<T> projectile(EntityType.EntityFactory<T> factory, String id) {
         return projectile(factory, id, true);
@@ -37,7 +37,7 @@ public record HWGProjectiles() {
 
         EntityType<T> type = FabricEntityTypeBuilder.create(MobCategory.MISC, factory).dimensions(new EntityDimensions(0.5F, 0.5F, true)).disableSummon().spawnableFarFromPlayer().trackRangeBlocks(90).trackedUpdateRate(1).build();
 
-        Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, HWGMod.modResource(id), type);
 
         ENTITY_TYPES.add(type);
 
@@ -55,7 +55,7 @@ public record HWGProjectiles() {
 
         EntityType<T> type = FabricEntityTypeBuilder.create(MobCategory.MISC, factory).dimensions(new EntityDimensions(1.5F, 1.5F, false)).disableSummon().spawnableFarFromPlayer().fireImmune().trackRangeBlocks(90).trackedUpdateRate(40).build();
 
-        Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(HWGMod.MODID, id), type);
+        Registry.register(BuiltInRegistries.ENTITY_TYPE, HWGMod.modResource(id), type);
 
         ENTITY_TYPES.add(type);
 

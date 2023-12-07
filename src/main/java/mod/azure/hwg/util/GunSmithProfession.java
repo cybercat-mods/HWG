@@ -12,7 +12,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -31,29 +30,24 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 public record GunSmithProfession() {
-
-    public static final Supplier<PoiType> GUNSMITH_POI = registerPoiType("gun_smith", () -> new PoiType(PointOfInterestTypesInvoker.invokeGetBlockStates(HWGBlocks.GUN_TABLE), 1, 10));
-    public static final Supplier<VillagerProfession> GUNSMITH = registerProfession("gun_smith", () -> new VillagerProfession("gun_smith", holder -> holder.value().equals(GUNSMITH_POI.get()), holder -> holder.value().equals(GUNSMITH_POI.get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ITEM_FRAME_REMOVE_ITEM));
+    private static final String gun_smith = "gun_smith";
+    public static final Supplier<PoiType> GUNSMITH_POI = registerPoiType(gun_smith, () -> new PoiType(PointOfInterestTypesInvoker.invokeGetBlockStates(HWGBlocks.GUN_TABLE), 1, 10));
+    public static final Supplier<VillagerProfession> GUNSMITH = registerProfession(gun_smith, () -> new VillagerProfession(gun_smith, holder -> holder.value().equals(GUNSMITH_POI.get()), holder -> holder.value().equals(GUNSMITH_POI.get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.ITEM_FRAME_REMOVE_ITEM));
 
     public static Supplier<VillagerProfession> registerProfession(String name, Supplier<VillagerProfession> profession) {
-        var registry = Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, new ResourceLocation(HWGMod.MODID, name), profession.get());
+        var registry = Registry.register(BuiltInRegistries.VILLAGER_PROFESSION, HWGMod.modResource(name), profession.get());
         return () -> registry;
     }
 
     public static Supplier<PoiType> registerPoiType(String name, Supplier<PoiType> poiType) {
-        var resourceKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, new ResourceLocation(HWGMod.MODID, name));
+        var resourceKey = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, HWGMod.modResource(name));
         var registry = Registry.register(BuiltInRegistries.POINT_OF_INTEREST_TYPE, resourceKey, poiType.get());
         PointOfInterestTypesInvoker.invokeRegisterBlockStates(BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(resourceKey), PoiTypes.getBlockStates(HWGBlocks.GUN_TABLE));
         return () -> registry;
     }
 
     public static void init() {
-        VillagerTrades.TRADES.put(GUNSMITH.get(),
-                copyToFastUtilMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForOneEmeraldFactory(Items.GUNPOWDER, 1, 16, 2), new GunSmithProfession.SellItemFactory(Items.IRON_NUGGET, 2, 1, 16, 1)}, 2,
-                        new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.BULLETS, 2, 16, 10), new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.PISTOL, 5, 16, 20), new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.LUGER, 5, 16, 20)}, 3,
-                        new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(Items.EMERALD, 2, 1, HWGItems.SHOTGUN_SHELL, 16, 16, 30), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.SMG, 1, 16, 30), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.TOMMYGUN, 1, 16, 30)}, 4,
-                        new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(HWGItems.FUEL_TANK, 1, 4, HWGItems.FLAMETHROWER, 1, 16, 40), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 6, 4, HWGItems.SHOTGUN, 1, 16, 40), new GunSmithProfession.BuyForItemsFactory(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS, 48, 16, 50)}, 5,
-                        new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.ROCKETLAUNCHER, 1, 16, 60), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER, 1, 16, 60), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.SNIPER, 1, 16, 60)})));
+        VillagerTrades.TRADES.put(GUNSMITH.get(), copyToFastUtilMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForOneEmeraldFactory(Items.GUNPOWDER, 1, 16, 2), new GunSmithProfession.SellItemFactory(Items.IRON_NUGGET, 2, 1, 16, 1)}, 2, new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.BULLETS, 2, 16, 10), new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.PISTOL, 5, 16, 20), new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.LUGER, 5, 16, 20)}, 3, new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(Items.EMERALD, 2, 1, HWGItems.SHOTGUN_SHELL, 16, 16, 30), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.SMG, 1, 16, 30), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.TOMMYGUN, 1, 16, 30)}, 4, new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(HWGItems.FUEL_TANK, 1, 4, HWGItems.FLAMETHROWER, 1, 16, 40), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 6, 4, HWGItems.SHOTGUN, 1, 16, 40), new GunSmithProfession.BuyForItemsFactory(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS, 48, 16, 50)}, 5, new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.ROCKETLAUNCHER, 1, 16, 60), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER, 1, 16, 60), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.SNIPER, 1, 16, 60)})));
     }
 
     public static Int2ObjectMap<VillagerTrades.ItemListing[]> copyToFastUtilMap(ImmutableMap<Integer, VillagerTrades.ItemListing[]> immutableMap) {

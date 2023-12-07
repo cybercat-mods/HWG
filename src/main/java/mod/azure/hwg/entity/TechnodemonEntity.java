@@ -45,6 +45,7 @@ import net.tslat.smartbrainlib.api.core.sensor.custom.UnreachableTargetSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +57,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
         xpReward = HWGMod.config.mobconfigs.lesserconfigs.lesser_exp;
     }
 
-    public static AttributeSupplier.Builder createMobAttributes() {
+    public static AttributeSupplier.@NotNull Builder createMobAttributes() {
         return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ARMOR, 4).add(Attributes.MAX_HEALTH, HWGMod.config.mobconfigs.lesserconfigs.lesser_health).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
@@ -71,7 +72,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
     }
 
     @Override
-    protected Brain.Provider<?> brainProvider() {
+    protected Brain.@NotNull Provider<?> brainProvider() {
         return new SmartBrainProvider<>(this);
     }
 
@@ -82,7 +83,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
 
     @Override
     public List<ExtendedSensor<TechnodemonEntity>> getSensors() {
-        return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<TechnodemonEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<TechnodemonEntity>());
+        return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<TechnodemonEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<>());
     }
 
     @Override
@@ -165,7 +166,7 @@ public class TechnodemonEntity extends HWGEntity implements SmartBrainOwner<Tech
     }
 
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
 

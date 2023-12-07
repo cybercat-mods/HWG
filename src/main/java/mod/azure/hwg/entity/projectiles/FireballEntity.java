@@ -19,7 +19,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -35,11 +34,11 @@ import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class FireballEntity extends AbstractArrow {
 
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(FireballEntity.class, EntityDataSerializers.FLOAT);
-    public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
     private int idleTicks = 0;
 
     public FireballEntity(EntityType<? extends FireballEntity> entityType, Level world) {
@@ -49,23 +48,6 @@ public class FireballEntity extends AbstractArrow {
 
     public FireballEntity(Level world, LivingEntity owner) {
         super(HWGProjectiles.FIREBALL, owner, world);
-    }
-
-    protected FireballEntity(EntityType<? extends FireballEntity> type, double x, double y, double z, Level world) {
-        this(type, world);
-    }
-
-    protected FireballEntity(EntityType<? extends FireballEntity> type, LivingEntity owner, Level world) {
-        this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
-        this.setOwner(owner);
-        if (owner instanceof Player)
-            this.pickup = AbstractArrow.Pickup.ALLOWED;
-    }
-
-    public FireballEntity(Level world, double x, double y, double z) {
-        super(HWGProjectiles.FIREBALL, x, y, z, world);
-        this.setNoGravity(true);
-        this.setBaseDamage(0);
     }
 
     @Override
@@ -89,7 +71,7 @@ public class FireballEntity extends AbstractArrow {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return EntityPacket.createPacket(this);
     }
 
@@ -122,7 +104,7 @@ public class FireballEntity extends AbstractArrow {
             super.tick();
         if (this.tickCount >= 40)
             this.remove(Entity.RemovalReason.DISCARDED);
-        if (getOwner() instanceof Player owner)
+        if (getOwner() instanceof Player)
             setYRot(entityData.get(FORCED_YAW));
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         Helper.spawnLightSource(this, isInsideWaterBlock);
@@ -147,11 +129,11 @@ public class FireballEntity extends AbstractArrow {
 
     @Override
     public void setSoundEvent(SoundEvent soundIn) {
-        this.hitSound = soundIn;
+        this.getDefaultHitGroundSoundEvent();
     }
 
     @Override
-    protected SoundEvent getDefaultHitGroundSoundEvent() {
+    protected @NotNull SoundEvent getDefaultHitGroundSoundEvent() {
         return SoundEvents.FIRE_AMBIENT;
     }
 
@@ -193,7 +175,7 @@ public class FireballEntity extends AbstractArrow {
                         livingEntity.setSecondsOnFire(50);
                 }
                 this.doPostHurtEffects(livingEntity);
-                if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
+                if (livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
                     serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
         } else if (!this.level().isClientSide)
@@ -201,7 +183,7 @@ public class FireballEntity extends AbstractArrow {
     }
 
     @Override
-    public ItemStack getPickupItem() {
+    public @NotNull ItemStack getPickupItem() {
         return new ItemStack(HWGItems.BULLETS);
     }
 
@@ -209,14 +191,6 @@ public class FireballEntity extends AbstractArrow {
     @Environment(EnvType.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distance) {
         return true;
-    }
-
-    public void setProperties(float pitch, float yaw, float roll, float modifierZ) {
-        var f = 0.017453292F;
-        var x = -Mth.sin(yaw * f) * Mth.cos(pitch * f);
-        var y = -Mth.sin((pitch + roll) * f);
-        var z = Mth.cos(yaw * f) * Mth.cos(pitch * f);
-        this.shoot(x, y, z, modifierZ, 0);
     }
 
 }

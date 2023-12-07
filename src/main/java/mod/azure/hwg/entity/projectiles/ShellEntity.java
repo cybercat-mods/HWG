@@ -1,12 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.network.packet.EntityPacket;
-import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -41,10 +35,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class ShellEntity extends AbstractArrow implements GeoEntity {
+public class ShellEntity extends AbstractArrow {
 
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(ShellEntity.class, EntityDataSerializers.FLOAT);
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
     public ShellEntity(EntityType<? extends ShellEntity> entityType, Level world) {
@@ -63,8 +56,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
     protected ShellEntity(EntityType<? extends ShellEntity> type, LivingEntity owner, Level world) {
         this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
         this.setOwner(owner);
-        if (owner instanceof Player)
-            this.pickup = AbstractArrow.Pickup.ALLOWED;
+        if (owner instanceof Player) this.pickup = AbstractArrow.Pickup.ALLOWED;
     }
 
     public ShellEntity(Level world, double x, double y, double z) {
@@ -74,19 +66,8 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
     }
 
     @Override
-    public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
-
-    @Override
     public void tickDespawn() {
-        if (this.tickCount >= 40)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (this.tickCount >= 40) this.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override
@@ -124,15 +105,13 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
     public void tick() {
         super.tick();
         Helper.setOnFire(this);
-        if (this.tickCount >= 40)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (this.tickCount >= 40) this.remove(Entity.RemovalReason.DISCARDED);
         if (this.level().isClientSide) {
             double d2 = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             double f2 = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
-            this.level().addParticle(ParticleTypes.SMOKE, true, d2, this.getY(), f2, 0, 0, 0);
+            this.level().addParticle(ParticleTypes.SMOKE, true, d2, this.getY(0.5), f2, 0, 0, 0);
         }
-        if (getOwner() instanceof Player owner)
-            setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player owner) setYRot(entityData.get(FORCED_YAW));
     }
 
     @Override
@@ -153,8 +132,7 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
     @Override
     protected void onHitBlock(BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
-        if (!this.level().isClientSide)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
         if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && HWGMod.config.gunconfigs.bullets_breakdripstone)
             level().destroyBlock(blockHitResult.getBlockPos(), true);
         if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
@@ -173,23 +151,20 @@ public class ShellEntity extends AbstractArrow implements GeoEntity {
             damageSource2 = damageSources().arrow(this, this);
         } else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity livingEntity)
-                livingEntity.setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity) livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, HWGMod.config.gunconfigs.shotgunconfigs.shotgun_damage)) {
             if (entity instanceof LivingEntity livingEntity) {
                 if (!this.level().isClientSide && entity2 instanceof LivingEntity livingEntity2) {
                     EnchantmentHelper.doPostHurtEffects(livingEntity, entity2);
                     EnchantmentHelper.doPostDamageEffects(livingEntity2, livingEntity);
-                    if (this.isOnFire())
-                        livingEntity.setSecondsOnFire(50);
+                    if (this.isOnFire()) livingEntity.setSecondsOnFire(50);
                 }
                 this.doPostHurtEffects(livingEntity);
                 if (entity2 != null && livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
                     serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
-        } else if (!this.level().isClientSide)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        } else if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override

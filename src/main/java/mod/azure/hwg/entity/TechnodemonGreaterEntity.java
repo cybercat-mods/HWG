@@ -45,6 +45,7 @@ import net.tslat.smartbrainlib.api.core.sensor.custom.UnreachableTargetSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.HurtBySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +58,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
         xpReward = HWGMod.config.mobconfigs.greatconfigs.greater_exp;
     }
 
-    public static AttributeSupplier.Builder createMobAttributes() {
+    public static AttributeSupplier.@NotNull Builder createMobAttributes() {
         return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.MAX_HEALTH, HWGMod.config.mobconfigs.greatconfigs.greater_health).add(Attributes.ARMOR, 5).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
@@ -72,7 +73,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
     }
 
     @Override
-    protected Brain.Provider<?> brainProvider() {
+    protected Brain.@NotNull Provider<?> brainProvider() {
         return new SmartBrainProvider<>(this);
     }
 
@@ -83,7 +84,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
     @Override
     public List<ExtendedSensor<TechnodemonGreaterEntity>> getSensors() {
-        return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<TechnodemonGreaterEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<TechnodemonGreaterEntity>());
+        return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<TechnodemonGreaterEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<>());
     }
 
     @Override
@@ -93,7 +94,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
     @Override
     public BrainActivityGroup<TechnodemonGreaterEntity> getIdleTasks() {
-        return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<TechnodemonGreaterEntity>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || (target instanceof Player player && !(player.isCreative() || player.isSpectator()))), new SetRandomLookTarget<>()), new OneRandomBehaviour<>(new SetRandomWalkTarget<>().speedModifier(0.7F).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
+        return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || (target instanceof Player player && !(player.isCreative() || player.isSpectator()))), new SetRandomLookTarget<>()), new OneRandomBehaviour<TechnodemonEntity>(new SetRandomWalkTarget<>().speedModifier(0.7F).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
     }
 
     @Override
@@ -165,7 +166,7 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
     }
 
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
 

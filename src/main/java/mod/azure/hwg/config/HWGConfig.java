@@ -192,6 +192,14 @@ public class HWGConfig {
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
+            public int rocketlauncherCap = 1;
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
+            public int rocketlauncherCooldown = 20;
+            @Configurable
+            @Configurable.Synchronized
+            @Configurable.Range(min = 1)
             public int rocketlauncherReloadCooldown = 20;
 
         }

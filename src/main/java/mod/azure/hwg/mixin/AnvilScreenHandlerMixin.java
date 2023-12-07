@@ -1,6 +1,6 @@
 package mod.azure.hwg.mixin;
 
-import mod.azure.hwg.item.weapons.HWGGunBase;
+import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
 import mod.azure.hwg.item.weapons.HWGGunLoadedBase;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -27,7 +27,7 @@ public abstract class AnvilScreenHandlerMixin extends ItemCombinerMenu {
     private void updateRuinedRepair(CallbackInfo ci) {
         var leftStack = this.inputSlots.getItem(0).copy();
         var rightStack = this.inputSlots.getItem(1).copy();
-        if ((leftStack.getItem() instanceof HWGGunBase || leftStack.getItem() instanceof HWGGunLoadedBase) && EnchantmentHelper.getEnchantments(rightStack).containsKey(Enchantments.MENDING)) {
+        if ((leftStack.getItem() instanceof AzureAnimatedGunItem || leftStack.getItem() instanceof HWGGunLoadedBase) && EnchantmentHelper.getEnchantments(rightStack).containsKey(Enchantments.MENDING)) {
             var repaired = ItemStack.EMPTY;
             this.resultSlots.setItem(0, repaired);
             this.broadcastChanges();

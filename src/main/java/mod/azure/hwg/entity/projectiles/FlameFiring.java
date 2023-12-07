@@ -1,12 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.network.packet.EntityPacket;
-import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.util.Helper;
@@ -39,10 +33,9 @@ import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
-public class FlameFiring extends AbstractArrow implements GeoEntity {
+public class FlameFiring extends AbstractArrow {
 
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(FlameFiring.class, EntityDataSerializers.FLOAT);
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
     private LivingEntity shooter;
     private int idleTicks = 0;
@@ -64,8 +57,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
     protected FlameFiring(EntityType<? extends FlameFiring> type, LivingEntity owner, Level world) {
         this(type, owner.getX(), owner.getEyeY() - 0.10000000149011612D, owner.getZ(), world);
         this.setOwner(owner);
-        if (owner instanceof Player)
-            this.pickup = AbstractArrow.Pickup.ALLOWED;
+        if (owner instanceof Player) this.pickup = AbstractArrow.Pickup.ALLOWED;
     }
 
     public FlameFiring(Level world, double x, double y, double z) {
@@ -75,24 +67,13 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
     }
 
     @Override
-    public void registerControllers(ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
-
-    @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return EntityPacket.createPacket(this);
     }
 
     @Override
     public void tickDespawn() {
-        if (this.tickCount >= 40)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (this.tickCount >= 40) this.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override
@@ -125,18 +106,13 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
     @Override
     public void tick() {
         var idleOpt = 100;
-        if (getDeltaMovement().lengthSqr() < 0.01)
-            idleTicks++;
-        else
-            idleTicks = 0;
-        if (idleOpt <= 0 || idleTicks < idleOpt)
-            super.tick();
-        if (this.tickCount >= 40)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (getDeltaMovement().lengthSqr() < 0.01) idleTicks++;
+        else idleTicks = 0;
+        if (idleOpt <= 0 || idleTicks < idleOpt) super.tick();
+        if (this.tickCount >= 40) this.remove(Entity.RemovalReason.DISCARDED);
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         Helper.spawnLightSource(this, isInsideWaterBlock);
-        if (getOwner() instanceof Player)
-            setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player) setYRot(entityData.get(FORCED_YAW));
         if (this.tickCount % 16 == 2)
             this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS, 0.5F, 1.0F);
         if (this.level().isClientSide) {
@@ -150,8 +126,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
         this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2)).forEach(e -> {
             if (e.isAlive() && !(e instanceof Player || e instanceof HWGEntity)) {
                 e.hurt(damageSources().arrow(this, this.shooter), 3);
-                if (!(this.getOwner() instanceof Player))
-                    e.setRemainingFireTicks(90);
+                if (!(this.getOwner() instanceof Player)) e.setRemainingFireTicks(90);
             }
         });
     }
@@ -189,8 +164,7 @@ public class FlameFiring extends AbstractArrow implements GeoEntity {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
-        if (!this.level().isClientSide)
-            this.remove(Entity.RemovalReason.DISCARDED);
+        if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override

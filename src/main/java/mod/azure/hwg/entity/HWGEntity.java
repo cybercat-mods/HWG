@@ -4,9 +4,9 @@ import mod.azure.azurelib.animatable.GeoEntity;
 import mod.azure.azurelib.animatable.GeoItem;
 import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.*;
-import mod.azure.hwg.item.weapons.*;
+import mod.azure.hwg.item.enums.GunTypeEnum;
+import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -29,7 +29,6 @@ import net.minecraft.world.entity.NeutralMob;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
@@ -53,8 +52,7 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
     }
 
     public static boolean canNetherSpawn(EntityType<? extends HWGEntity> type, LevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        if (serverWorldAccess.getDifficulty() == Difficulty.PEACEFUL)
-            return false;
+        if (serverWorldAccess.getDifficulty() == Difficulty.PEACEFUL) return false;
         if (spawnReason != MobSpawnType.CHUNK_GENERATION && spawnReason != MobSpawnType.NATURAL)
             return !serverWorldAccess.getBlockState(pos.below()).is(Blocks.NETHER_WART_BLOCK);
         return !serverWorldAccess.getBlockState(pos.below()).is(Blocks.NETHER_WART_BLOCK);
@@ -75,22 +73,10 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
         return 1;
     }
 
-    protected boolean shouldDrown() {
-        return false;
-    }
-
-    protected boolean shouldBurnInDay() {
-        return false;
-    }
-
     @Override
     @Environment(EnvType.CLIENT)
     public boolean shouldRenderAtSqrDistance(double distance) {
         return true;
-    }
-
-    public void setShooting(boolean attacking) {
-
     }
 
     @Override
@@ -110,14 +96,6 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
         entityData.set(ANGER_TIME, ticks);
     }
 
-    public int getAttckingState() {
-        return entityData.get(STATE);
-    }
-
-    public void setAttackingState(int time) {
-        entityData.set(STATE, time);
-    }
-
     @Override
     public UUID getPersistentAngerTarget() {
         return targetUuid;
@@ -135,89 +113,80 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
 
     public abstract int getVariants();
 
-    public Projectile getProjectile(Item item) {
-        float damage;
-        if (item instanceof PistolItem)
-            damage = HWGMod.config.gunconfigs.pistolconfigs.pistol_damage;
-        else if (item instanceof LugerItem)
-            damage = HWGMod.config.gunconfigs.lugerconfigs.luger_damage;
-        else if (item instanceof AssasultItem)
-            damage = HWGMod.config.gunconfigs.ak47configs.ak47_damage;
-        else if (item instanceof Assasult1Item)
-            damage = HWGMod.config.gunconfigs.smgconfigs.smg_damage;
-        else if (item instanceof GPistolItem)
-            damage = HWGMod.config.gunconfigs.gpistolconfigs.golden_pistol_damage;
-        else if (item instanceof SPistolItem)
-            damage = HWGMod.config.gunconfigs.silencedpistolconfigs.silenced_pistol_damage;
-        else if (item instanceof HellhorseRevolverItem)
-            damage = HWGMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage;
-        else if (item instanceof Minigun)
-            damage = HWGMod.config.gunconfigs.minigunconfigs.minigun_damage;
-        else
-            damage = HWGMod.config.gunconfigs.sniperconfigs.sniper_damage;
-        if (item instanceof PistolItem || item instanceof LugerItem || item instanceof AssasultItem || item instanceof Assasult1Item || item instanceof GPistolItem || item instanceof SPistolItem || item instanceof SniperItem || item instanceof HellhorseRevolverItem || item instanceof Minigun) {
-            return new BulletEntity(level(), this, damage);
-        }
-        if (item instanceof FlamethrowerItem) {
-            return new FlameFiring(level(), this);
-        }
-        if (item instanceof BrimstoneItem) {
-            return new BlazeRodEntity(level(), this);
-        }
-        if (item instanceof BalrogItem) {
-            return new FireballEntity(level(), this);
-        }
-        return new ShellEntity(level(), this);
-    }
-
     public void shoot() {
         if (!this.level().isClientSide) {
             final var vector3d = getViewVector(1.0F);
-            final var bullet = getProjectile(getItemBySlot(EquipmentSlot.MAINHAND).getItem());
-            bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);
-            bullet.shootFromRotation(this, getXRot(), getYRot(), 0.0F, 3.0F, 1.0F);
-            if (getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof GeoItem weapon)
-                weapon.triggerAnim(this, GeoItem.getOrAssignId(getItemBySlot(EquipmentSlot.MAINHAND), (ServerLevel) this.level()), "shoot_controller", "firing");
-            this.level().playSound(this, blockPosition(), getDefaultAttackSound(getItemBySlot(EquipmentSlot.MAINHAND).getItem()), SoundSource.HOSTILE, 1.0F, 1.0f);
-            this.level().addFreshEntity(bullet);
+            if (this.getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof AzureAnimatedGunItem weapon) {
+                final var bullet = getProjectile(weapon, weapon.getGunTypeEnum());
+                bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);
+                bullet.shootFromRotation(this, getXRot(), getYRot(), 0.0F, 3.0F, 1.0F);
+                if (getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof GeoItem geoItem)
+                    geoItem.triggerAnim(this, GeoItem.getOrAssignId(getItemBySlot(EquipmentSlot.MAINHAND), (ServerLevel) this.level()), "controller", "firing");
+                this.level().playSound(this, blockPosition(), getDefaultAttackSound(weapon.getGunTypeEnum()), SoundSource.HOSTILE, 1.0F, 1.0f);
+                this.level().addFreshEntity(bullet);
+            }
         }
     }
 
-    public SoundEvent getDefaultAttackSound(Item item) {
-        if (item instanceof GPistolItem || item instanceof SPistolItem) {
-            return HWGSounds.SPISTOL;
+    public Projectile getProjectile(AzureAnimatedGunItem item, GunTypeEnum gunTypeEnum) {
+        switch (gunTypeEnum) {
+            case PISTOL, LUGER, AK7, SMG, GOLDEN_PISTOL, SIL_PISTOL, HELLHORSE, MINIGUN, SNIPER -> {
+                return new BulletEntity(level(), this, item.getAttackDamage());
+            }
+            case FLAMETHROWER -> {
+                return new FlameFiring(level(), this);
+            }
+            case BRIMSTONE -> {
+                return new BlazeRodEntity(level(), this);
+            }
+            case BALROG -> {
+                return new FireballEntity(level(), this);
+            }
+            default -> {
+                return new ShellEntity(level(), this);
+            }
         }
-        if (item instanceof PistolItem) {
-            return HWGSounds.PISTOL;
+    }
+
+    public SoundEvent getDefaultAttackSound(GunTypeEnum gunTypeEnum) {
+        switch (gunTypeEnum) {
+            case PISTOL, GOLDEN_PISTOL -> {
+                return HWGSounds.PISTOL;
+            }
+            case LUGER -> {
+                return HWGSounds.LUGER;
+            }
+            case AK7 -> {
+                return HWGSounds.AK;
+            }
+            case SMG -> {
+                return HWGSounds.SMG;
+            }
+            case HELLHORSE -> {
+                return HWGSounds.REVOLVER;
+            }
+            case SIL_PISTOL -> {
+                return HWGSounds.SPISTOL;
+            }
+            case FLAMETHROWER -> {
+                return SoundEvents.FIREWORK_ROCKET_BLAST_FAR;
+            }
+            case BRIMSTONE -> {
+                return SoundEvents.FIRECHARGE_USE;
+            }
+            case BALROG -> {
+                return SoundEvents.GENERIC_EXPLODE;
+            }
+            case SNIPER -> {
+                return HWGSounds.SNIPER;
+            }
+            case MINIGUN -> {
+                return HWGSounds.MINIGUN;
+            }
+            default -> {
+                return HWGSounds.SHOTGUN;
+            }
         }
-        if (item instanceof LugerItem) {
-            return HWGSounds.LUGER;
-        }
-        if (item instanceof AssasultItem) {
-            return HWGSounds.AK;
-        }
-        if (item instanceof Assasult1Item) {
-            return HWGSounds.SMG;
-        }
-        if (item instanceof ShotgunItem) {
-            return HWGSounds.SHOTGUN;
-        }
-        if (item instanceof HellhorseRevolverItem) {
-            return HWGSounds.REVOLVER;
-        }
-        if (item instanceof FlamethrowerItem) {
-            return SoundEvents.FIREWORK_ROCKET_BLAST_FAR;
-        }
-        if (item instanceof BrimstoneItem) {
-            return SoundEvents.FIRECHARGE_USE;
-        }
-        if (item instanceof BalrogItem) {
-            return SoundEvents.GENERIC_EXPLODE;
-        }
-        if (item instanceof Minigun) {
-            return HWGSounds.MINIGUN;
-        }
-        return HWGSounds.SNIPER;
     }
 
 }

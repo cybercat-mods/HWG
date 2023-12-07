@@ -5,8 +5,9 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import mod.azure.hwg.client.ClientInit;
-import mod.azure.hwg.item.weapons.SniperItem;
+import mod.azure.azurelib.Keybindings;
+import mod.azure.hwg.HWGMod;
+import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GameRenderer;
@@ -20,7 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Gui.class)
 public abstract class SniperMixin {
 
-    private static final ResourceLocation SNIPER = new ResourceLocation("hwg", "textures/gui/pumpkinblur.png");
+    private static final ResourceLocation SNIPER = HWGMod.modResource("textures/gui/pumpkinblur.png");
+
     @Shadow
     private final Minecraft minecraft;
     @Shadow
@@ -36,13 +38,11 @@ public abstract class SniperMixin {
     @Inject(at = @At("TAIL"), method = "render")
     private void render(CallbackInfo info) {
         var itemStack = this.minecraft.player.getInventory().getSelected();
-        if (this.minecraft.options.getCameraType().isFirstPerson() && itemStack.getItem() instanceof SniperItem) {
-            if (ClientInit.scope.isDown()) {
-                if (this.scoped)
-                    this.scoped = false;
+        if (this.minecraft.options.getCameraType().isFirstPerson() && itemStack.is(HWGItems.SNIPER)) {
+            if (Keybindings.SCOPE.isDown()) {
+                if (this.scoped) this.scoped = false;
                 this.renderSniperOverlay();
-            } else if (!this.scoped)
-                this.scoped = true;
+            } else if (!this.scoped) this.scoped = true;
         }
     }
 

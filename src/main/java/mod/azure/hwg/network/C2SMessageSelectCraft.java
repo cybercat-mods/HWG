@@ -16,7 +16,7 @@ public class C2SMessageSelectCraft implements ServerPlayNetworking.PlayChannelHa
     public static void send(int index) {
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         buf.writeInt(index);
-        ClientPlayNetworking.send(PacketHandler.lock_slot, buf);
+        ClientPlayNetworking.send(PacketHandler.lockSlot, buf);
     }
 
     public void handle(ServerPlayer player, int index) {

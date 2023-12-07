@@ -1,7 +1,7 @@
 package mod.azure.hwg.mixin;
 
 import com.mojang.authlib.GameProfile;
-import mod.azure.hwg.client.ClientInit;
+import mod.azure.azurelib.Keybindings;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -23,6 +23,6 @@ public abstract class AbstractClientPlayerEntityMixin extends Player {
     @Inject(at = @At("HEAD"), method = "getFieldOfViewModifier", cancellable = true)
     private void render(CallbackInfoReturnable<Float> ci) {
         if (Minecraft.getInstance().options.getCameraType().isFirstPerson() && this.getMainHandItem().is(HWGItems.SNIPER))
-            ci.setReturnValue(ClientInit.scope.isDown() ? 0.1F : 1.0F);
+            ci.setReturnValue(Keybindings.SCOPE.isDown() ? 0.1F : 1.0F);
     }
 }
