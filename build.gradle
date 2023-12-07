@@ -1,8 +1,7 @@
 plugins {
     id 'fabric-loom' version '1.3-SNAPSHOT'
     id 'maven-publish'
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id "com.modrinth.minotaur" version "2.+"
+    id "me.modmuss50.mod-publish-plugin" version "0.4.0"
 }
 
 
@@ -80,63 +79,44 @@ loom {
 }
 
 if (file('key.properties').exists()) {
-    curseforge {
-
-        def curseProp = new Properties()
+    publishMods {
+        def releaseProp = new Properties()
         File secretPropsFile = file("key.properties")
-        curseProp.load(secretPropsFile.newInputStream())
-
-        project {
-            apiKey = curseProp.getProperty('curseKey')
-            id = project.curseforgeID
-            releaseType = "release"
-            changelogType = 'text'
-            changelog = file('CHANGELOG.txt')
-            addGameVersion(project.minecraftVersion)
-            addGameVersion("Fabric")
-            addGameVersion("Quilt")
-            addGameVersion("Java 17")
-
-            relations {
-                requiredDependency 'fabric-api'
-                requiredDependency 'azurelib'
-                requiredDependency 'smartbrainlib'
-                optionalDependency 'modmenu'
-                optionalDependency 'gigeresque'
-                optionalDependency 'better-combat-by-daedelus'
-            }
-            mainArtifact(remapJar)
-
-            afterEvaluate {
-                uploadTask.dependsOn("remapJar")
-            }
-        }
-        options {
-            forgeGradleIntegration = false
-        }
-    }
-}
-
-if (file('key.properties').exists()) {
-    modrinth {
-        def modrinthProp = new Properties()
-        File secretPropsFile = file("key.properties")
-        modrinthProp.load(secretPropsFile.newInputStream())
-
-        token = modrinthProp.getProperty('modrinthKey')
-        projectId = project.modrinthID
-        versionNumber = project.modVersion
-        uploadFile = remapJar
+        releaseProp.load(secretPropsFile.newInputStream())
+        file = remapJar.archiveFile
         changelog = rootProject.file("changelog.txt").text
-        gameVersions = [project.minecraftVersion]
-        loaders = ['fabric', 'quilt']
-        dependencies {
-            required.project "azurelib"
-            required.project "smartbrainlib"
-            required.project "fabric-api"
-            optional.project "modmenu"
-            optional.project "gigeresque"
-            optional.project "better-combat"
+        type = STABLE
+        modLoaders.add("fabric")
+        modLoaders.add("quilt")
+
+        curseforge {
+            projectId = project.curseforgeID
+            projectSlug = project.projectSlug
+            accessToken = releaseProp.getProperty("curseKey")
+            minecraftVersions.add("${minecraftVersion}")
+            requires {
+                slug = "fabric-api"
+            }
+            requires {
+                slug = "azurelib"
+            }
+            requires {
+                slug = "smartbrainlib"
+            }
+        }
+        modrinth {
+            projectId = project.modrinthID
+            accessToken = releaseProp.getProperty('modrinthKey')
+            minecraftVersions.add("${minecraftVersion}")
+            requires {
+                slug = "fabric-api"
+            }
+            requires {
+                slug = "azurelib"
+            }
+            requires {
+                slug = "smartbrainlib"
+            }
         }
     }
 }

@@ -1,13 +1,11 @@
 plugins {
     id 'fabric-loom' version '1.3-SNAPSHOT'
 	id 'maven-publish'
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id "com.modrinth.minotaur" version "2.+"
+    id "me.modmuss50.mod-publish-plugin" version "0.4.0"
 }
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
-import com.modrinth.minotaur.dependencies.ModDependency
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
@@ -78,58 +76,50 @@ loom {
 }
 
 if (file('key.properties').exists()) {
-    curseforge {
+    publishMods {
+        def releaseProp = new Properties()
+        File secretPropsFile = file("key.properties")
+        releaseProp.load(secretPropsFile.newInputStream())
+        file = remapJar.archiveFile
+        changelog = rootProject.file("changelog.txt").text
+        type = STABLE
+        modLoaders.add("fabric")
+        modLoaders.add("quilt")
 
-    	def curseProp = new Properties()
-    	File secretPropsFile = file("key.properties")
-    	curseProp.load(secretPropsFile.newInputStream())
-
-    	project {
-        	apiKey = curseProp.getProperty('curseKey')
-        	id = project.curseforgeID
-        	releaseType = "release"
-        	changelogType = 'text'
-        	changelog = file('CHANGELOG.txt')
-			addGameVersion(project.minecraftVersion)
-			addGameVersion("Forge")
-			addGameVersion("Java 17")
-
-        	relations {
-            	requiredDependency 'azurelib'  
-            	requiredDependency 'forgified-fabric-api'  
-            	requiredDependency 'sinytra-connector'  
-            	requiredDependency 'smartbrainlib' 
-        	}
-        	mainArtifact(remapJar)
-
-        	afterEvaluate {
-            	uploadTask.dependsOn("remapJar")
-        	}
-    	}
-    	options {
-        	forgeGradleIntegration = false
-    	}
+        curseforge {
+            projectId = project.curseforgeID
+            projectSlug = project.projectSlug
+            accessToken = releaseProp.getProperty("curseKey")
+            minecraftVersions.add("${minecraftVersion}")
+            requires {
+                slug = "sinytra-connector"
+            }
+            requires {
+                slug = "forgified-fabric-api"
+            }
+            requires {
+                slug = "azurelib"
+            }
+            requires {
+                slug = "smartbrainlib"
+            }
+        }
+        modrinth {
+            projectId = project.modrinthID
+            accessToken = releaseProp.getProperty('modrinthKey')
+            minecraftVersions.add("${minecraftVersion}")
+            requires {
+                slug = "connector"
+            }
+            requires {
+                slug = "forgified-fabric-api"
+            }
+            requires {
+                slug = "azurelib"
+            }
+            requires {
+                slug = "smartbrainlib"
+            }
+        }
     }
-}
-
-if (file('key.properties').exists()) {
-	modrinth {
-		def modrinthProp = new Properties()
-		File secretPropsFile = file("key.properties")
-		modrinthProp.load(secretPropsFile.newInputStream())
-		
-		token = modrinthProp.getProperty('modrinthKey')
-		projectId = project. modrinthID
-		versionNumber = project.modVersion 
-		uploadFile = remapJar 
-		changelog = rootProject.file("changelog.txt").text
-		gameVersions = [project.minecraftVersion]
-		loaders = ['forge']
-		dependencies { 
-        	required.project "azurelib"
-        	required.project "connector"
-        	required.project "forgified-fabric-api"
-        	required.project "smartbrainlib"
-   		}
-	}
 }
