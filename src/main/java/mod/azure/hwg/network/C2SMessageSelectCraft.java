@@ -29,6 +29,7 @@ public class C2SMessageSelectCraft implements ServerPlayNetworking.PlayChannelHa
 
     @Override
     public void receive(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        server.execute(() -> handle(player, buf.readInt()));
+        int nextInt = buf.readInt();
+        server.execute(() -> handle(player, nextInt));
     }
 }
