@@ -1,0 +1,27 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 5,
+      "ingredient": {
+        "item": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "minecraft:lever"
+      }
+    },
+    {
+      "count": 3,
+      "ingredient": {
+        "item": "minecraft:gunpowder"
+      }
+    }
+  ],
+  "result": {
+    "count": 10,
+    "result": "hwg:shotgun_shell"
+  }
+}

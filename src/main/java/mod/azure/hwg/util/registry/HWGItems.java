@@ -1,6 +1,6 @@
 package mod.azure.hwg.util.registry;
 
-import mod.azure.azurelib.items.AzureSpawnEgg;
+import mod.azure.azurelib.common.api.common.items.AzureSpawnEgg;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.ammo.*;
 import mod.azure.hwg.item.enums.GunTypeEnum;

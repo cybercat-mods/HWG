@@ -14,6 +14,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
             var optional = world.getServer().getRecipeManager().getRecipeFor(Type.INSTANCE, craftingInventory, world);
             if (optional.isPresent()) {
                 var craftingRecipe = optional.get();
-                itemStack = craftingRecipe.assemble(craftingInventory, level.registryAccess());
+                itemStack = craftingRecipe.value().assemble(craftingInventory, level.registryAccess());
             }
 
             craftingInventory.setItem(5, itemStack);
@@ -119,8 +120,8 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
         return itemStack;
     }
 
-    public List<GunTableRecipe> getRecipes() {
-        var list = new ArrayList<>(playerInventory.player.level().getRecipeManager().getAllRecipesFor(Type.INSTANCE));
+    public List<RecipeHolder<GunTableRecipe>> getRecipes() {
+		List<RecipeHolder<GunTableRecipe>> list = new ArrayList<>(playerInventory.player.level().getRecipeManager().getAllRecipesFor(Type.INSTANCE));
         list.sort(null);
         return list;
     }
@@ -131,8 +132,9 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
 
     public void switchTo(int recipeIndex) {
         // index out of bounds
-        if (this.getRecipes().size() > recipeIndex) {
-            var gunTableRecipe = getRecipes().get(recipeIndex);
+        List<RecipeHolder<GunTableRecipe>> recipes = getRecipes();
+        if (recipes.size() > recipeIndex) {
+            var gunTableRecipe = recipes.get(recipeIndex).value();
             for (int i = 0; i < 5; i++) {
                 var slotStack = gunTableInventory.getItem(i);
                 if (!slotStack.isEmpty()) {

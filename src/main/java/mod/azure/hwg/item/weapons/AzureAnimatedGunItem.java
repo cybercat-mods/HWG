@@ -1,19 +1,18 @@
 package mod.azure.hwg.item.weapons;
 
 import io.netty.buffer.Unpooled;
-import mod.azure.azurelib.AzureLibMod;
-import mod.azure.azurelib.Keybindings;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.animatable.client.RenderProvider;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.Animation;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.azurelib.util.AzureLibUtil;
-import mod.azure.azurelib.util.ClientUtils;
+import mod.azure.azurelib.common.api.client.helper.ClientUtils;
+import mod.azure.azurelib.common.api.common.animatable.GeoItem;
+import mod.azure.azurelib.common.internal.client.RenderProvider;
+import mod.azure.azurelib.common.internal.common.AzureLibMod;
+import mod.azure.azurelib.common.internal.common.animatable.SingletonGeoAnimatable;
+import mod.azure.azurelib.common.internal.common.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimatableManager;
+import mod.azure.azurelib.common.internal.common.core.animation.Animation;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimationController;
+import mod.azure.azurelib.common.internal.common.core.animation.RawAnimation;
+import mod.azure.azurelib.common.internal.common.core.object.PlayState;
+import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.render.GunRender;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
@@ -274,7 +273,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
     }
 
     private void hitScanDamage(LivingEntity livingEntity, Player player, ItemStack itemStack) {
-        if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+        if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
             livingEntity.setSecondsOnFire(100);
         if (getProjectileTypeEnum() != ProjectileEnum.SHELL)
             livingEntity.hurt(player.damageSources().playerAttack(player), this.getAttackDamage());
@@ -298,7 +297,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                 } else {
                     var bullet = Helper.createBullet(level, player, this.getAttackDamage());
                     bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
-                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
                         bullet.setSecondsOnFire(100);
                     bullet.tickCount = -15;
                     level.addFreshEntity(bullet);
@@ -312,7 +311,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                     var bullet = Helper.createBullet(level, player, getAttackDamage());
                     bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
                     bullet.tickCount = -15;
-                    if (player.getRandom().nextInt(1, 101) <= 20 || EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+                    if (player.getRandom().nextInt(1, 101) <= 20 || EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
                         bullet.setSecondsOnFire(100);
                     level.addFreshEntity(bullet);
                 }
@@ -370,7 +369,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                 } else {
                     var bullet = Helper.createMeanieBullet(level, player);
                     bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
                         bullet.setSecondsOnFire(100);
                     bullet.tickCount = -15;
                     level.addFreshEntity(bullet);
@@ -387,9 +386,9 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                     bullet1.shootFromRotation(player, player.getXRot(), player.getYRot() - 1, 0.5F, 20.0F, 1.0F);
                     bullet.tickCount = -15;
                     bullet1.tickCount = -15;
-                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
                         bullet.setSecondsOnFire(100);
-                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
                         bullet1.setSecondsOnFire(100);
                     level.addFreshEntity(bullet);
                     level.addFreshEntity(bullet1);
@@ -400,7 +399,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                 rocket.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.5F * 3.0F, 1.0F);
                 rocket.moveTo(player.getX(), player.getY(0.5), player.getZ(), 0, 0);
                 rocket.setBaseDamage(2.5);
-                if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+                if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
                     rocket.setSecondsOnFire(100);
                 level.addFreshEntity(rocket);
             }
@@ -412,7 +411,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                     var bullet = Helper.createSilverBullet(level, player);
                     bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
                     bullet.tickCount = -15;
-                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+                    if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
                         bullet.setSecondsOnFire(100);
                     level.addFreshEntity(bullet);
                 }
@@ -467,7 +466,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                     } else {
                         var bullet = Helper.createBullet(level, player, this.getAttackDamage());
                         bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
-                        if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
+                        if (EnchantmentHelper.getItemEnchantmentLevel(mod.azure.azurelib.common.platform.Services.PLATFORM.getIncendairyenchament(), itemStack) > 0)
                             bullet.setSecondsOnFire(100);
                         bullet.tickCount = -15;
                         level.addFreshEntity(bullet);
@@ -481,7 +480,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
     @Override
     public void inventoryTick(@NotNull ItemStack stack, Level world, @NotNull Entity entity, int slot, boolean selected) {
         if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof AzureAnimatedGunItem && selected) {
-            if (Keybindings.RELOAD.consumeClick()) {
+            if (ClientUtils.RELOAD.consumeClick()) {
                 FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
                 passedData.writeBoolean(true);
                 ClientPlayNetworking.send(PacketHandler.reloadGun, passedData);
@@ -493,7 +492,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                     ClientPlayNetworking.send(PacketHandler.shootGun, passedData);
                 }
             } else {
-                if (Keybindings.FIRE_WEAPON.isDown()) {
+                if (ClientUtils.FIRE_WEAPON.isDown()) {
                     FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
                     passedData.writeBoolean(true);
                     ClientPlayNetworking.send(PacketHandler.shootGun, passedData);

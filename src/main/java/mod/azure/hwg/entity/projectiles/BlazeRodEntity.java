@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.network.packet.EntityPacket;
+import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGProjectiles;
@@ -31,6 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class BlazeRodEntity extends AbstractArrow {
 
@@ -42,12 +43,12 @@ public class BlazeRodEntity extends AbstractArrow {
     private int idleTicks = 0;
 
     public BlazeRodEntity(EntityType<? extends BlazeRodEntity> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, ItemStack.EMPTY);
         this.pickup = AbstractArrow.Pickup.DISALLOWED;
     }
 
     public BlazeRodEntity(Level world, LivingEntity owner) {
-        super(HWGProjectiles.BLAZEROD, owner, world);
+        super(HWGProjectiles.BLAZEROD, owner, world, ItemStack.EMPTY);
     }
 
     protected BlazeRodEntity(EntityType<? extends BlazeRodEntity> type, double x, double y, double z, Level world) {
@@ -61,7 +62,7 @@ public class BlazeRodEntity extends AbstractArrow {
     }
 
     public BlazeRodEntity(Level world, double x, double y, double z) {
-        super(HWGProjectiles.BLAZEROD, x, y, z, world);
+        super(HWGProjectiles.BLAZEROD, x, y, z, world, ItemStack.EMPTY);
         this.setNoGravity(true);
         this.setBaseDamage(0);
     }
@@ -75,8 +76,8 @@ public class BlazeRodEntity extends AbstractArrow {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return EntityPacket.createPacket(this);
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -190,11 +191,6 @@ public class BlazeRodEntity extends AbstractArrow {
 
     protected void explode() {
         this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, false, HWGMod.config.gunconfigs.balrog_breaks ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
-    }
-
-    @Override
-    public ItemStack getPickupItem() {
-        return new ItemStack(Items.AIR);
     }
 
     @Override

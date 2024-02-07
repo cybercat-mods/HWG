@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import mod.azure.azurelib.Keybindings;
+import mod.azure.azurelib.common.api.client.helper.ClientUtils;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.client.Minecraft;
@@ -39,7 +39,7 @@ public abstract class SniperMixin {
     private void render(CallbackInfo info) {
         var itemStack = this.minecraft.player.getInventory().getSelected();
         if (this.minecraft.options.getCameraType().isFirstPerson() && itemStack.is(HWGItems.SNIPER)) {
-            if (Keybindings.SCOPE.isDown()) {
+            if (ClientUtils.SCOPE.isDown()) {
                 if (this.scoped) this.scoped = false;
                 this.renderSniperOverlay();
             } else if (!this.scoped) this.scoped = true;

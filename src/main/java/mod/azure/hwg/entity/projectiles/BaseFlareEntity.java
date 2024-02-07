@@ -1,5 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
+import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGParticles;
@@ -11,7 +12,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -24,9 +24,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class BaseFlareEntity extends AbstractArrow {
 
@@ -35,20 +35,20 @@ public class BaseFlareEntity extends AbstractArrow {
     private int idleTicks = 0;
 
     public BaseFlareEntity(EntityType<? extends AbstractArrow> entityType, Level world) {
-        super(HWGProjectiles.FLARE, world);
+        super(HWGProjectiles.FLARE, world, ItemStack.EMPTY);
     }
 
-    public BaseFlareEntity(Level world, double x, double y, double z, ItemStack stack) {
-        super(HWGProjectiles.FLARE, world);
+    public BaseFlareEntity(Level world, double x, double y, double z) {
+        super(HWGProjectiles.FLARE, world, ItemStack.EMPTY);
         this.absMoveTo(x, y, z);
     }
 
-    public BaseFlareEntity(Level world, ItemStack stack, double x, double y, double z, boolean shotAtAngle) {
-        this(world, x, y, z, stack);
+    public BaseFlareEntity(Level world, double x, double y, double z, boolean shotAtAngle) {
+        this(world, x, y, z);
     }
 
-    public BaseFlareEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
-        this(world, stack, x, y, z, shotAtAngle);
+    public BaseFlareEntity(Level world, Entity entity, double x, double y, double z, boolean shotAtAngle) {
+        this(world, x, y, z, shotAtAngle);
         this.setOwner(entity);
     }
 
@@ -165,8 +165,8 @@ public class BaseFlareEntity extends AbstractArrow {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -179,10 +179,4 @@ public class BaseFlareEntity extends AbstractArrow {
     protected boolean tryPickup(Player player) {
         return false;
     }
-
-    @Override
-    protected ItemStack getPickupItem() {
-        return new ItemStack(Items.AIR);
-    }
-
 }

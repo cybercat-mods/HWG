@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.network.packet.EntityPacket;
+import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class MBulletEntity extends AbstractArrow {
 
@@ -43,12 +44,12 @@ public class MBulletEntity extends AbstractArrow {
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
     public MBulletEntity(EntityType<? extends MBulletEntity> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, new ItemStack(HWGItems.BULLETS));
         this.pickup = AbstractArrow.Pickup.DISALLOWED;
     }
 
     public MBulletEntity(Level world, LivingEntity owner) {
-        super(HWGProjectiles.MBULLETS, owner, world);
+        super(HWGProjectiles.MBULLETS, owner, world, new ItemStack(HWGItems.BULLETS));
     }
 
     protected MBulletEntity(EntityType<? extends MBulletEntity> type, double x, double y, double z, Level world) {
@@ -62,7 +63,7 @@ public class MBulletEntity extends AbstractArrow {
     }
 
     public MBulletEntity(Level world, double x, double y, double z) {
-        super(HWGProjectiles.MBULLETS, x, y, z, world);
+        super(HWGProjectiles.MBULLETS, x, y, z, world, new ItemStack(HWGItems.BULLETS));
         this.setNoGravity(true);
         this.setBaseDamage(0);
     }
@@ -79,8 +80,8 @@ public class MBulletEntity extends AbstractArrow {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return EntityPacket.createPacket(this);
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -170,11 +171,6 @@ public class MBulletEntity extends AbstractArrow {
                     ((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
         } else if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
-    }
-
-    @Override
-    public ItemStack getPickupItem() {
-        return new ItemStack(HWGItems.BULLETS);
     }
 
     @Override

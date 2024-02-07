@@ -1,6 +1,6 @@
 package mod.azure.hwg.client;
 
-import mod.azure.azurelib.Keybindings;
+import mod.azure.azurelib.common.api.client.helper.ClientUtils;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +16,6 @@ public record ModelProviderinit() {
     }
 
     private static boolean isScoped() {
-        return Keybindings.SCOPE.isDown();
+        return ClientUtils.SCOPE.isDown();
     }
 }

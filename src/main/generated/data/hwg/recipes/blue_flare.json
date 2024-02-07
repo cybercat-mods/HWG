@@ -1,0 +1,33 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 3,
+      "ingredient": {
+        "item": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:firework_rocket"
+      }
+    },
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "minecraft:gunpowder"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:blue_dye"
+      }
+    }
+  ],
+  "result": {
+    "count": 2,
+    "result": "hwg:blue_flare"
+  }
+}

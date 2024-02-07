@@ -1,7 +1,7 @@
 package mod.azure.hwg.util;
 
-import mod.azure.azurelib.entities.TickingLightEntity;
-import mod.azure.azurelib.platform.Services;
+import mod.azure.azurelib.common.internal.common.blocks.TickingLightEntity;
+import mod.azure.azurelib.common.platform.Services;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.*;
 import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;

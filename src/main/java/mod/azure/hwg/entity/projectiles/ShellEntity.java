@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.network.packet.EntityPacket;
+import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class ShellEntity extends AbstractArrow {
 
@@ -41,12 +42,12 @@ public class ShellEntity extends AbstractArrow {
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
     public ShellEntity(EntityType<? extends ShellEntity> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, new ItemStack(HWGItems.SHOTGUN_SHELL));
         this.pickup = AbstractArrow.Pickup.DISALLOWED;
     }
 
     public ShellEntity(Level world, LivingEntity owner) {
-        super(HWGProjectiles.SHELL, owner, world);
+        super(HWGProjectiles.SHELL, owner, world, new ItemStack(HWGItems.SHOTGUN_SHELL));
     }
 
     protected ShellEntity(EntityType<? extends ShellEntity> type, double x, double y, double z, Level world) {
@@ -60,7 +61,7 @@ public class ShellEntity extends AbstractArrow {
     }
 
     public ShellEntity(Level world, double x, double y, double z) {
-        super(HWGProjectiles.SHELL, x, y, z, world);
+        super(HWGProjectiles.SHELL, x, y, z, world, new ItemStack(HWGItems.SHOTGUN_SHELL));
         this.setNoGravity(true);
         this.setBaseDamage(0);
     }
@@ -71,8 +72,8 @@ public class ShellEntity extends AbstractArrow {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return EntityPacket.createPacket(this);
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -165,11 +166,6 @@ public class ShellEntity extends AbstractArrow {
                     serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
         } else if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
-    }
-
-    @Override
-    public ItemStack getPickupItem() {
-        return new ItemStack(HWGItems.SHOTGUN_SHELL);
     }
 
     @Override

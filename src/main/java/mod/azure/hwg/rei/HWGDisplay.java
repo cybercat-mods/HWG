@@ -1,11 +1,11 @@
 package mod.azure.hwg.rei;
 
+import com.mojang.datafixers.util.Pair;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,15 +18,15 @@ public class HWGDisplay implements Display {
     public final GunTableRecipe recipe2;
 
     public HWGDisplay(GunTableRecipe recipe) {
-        input = Arrays.stream(recipe.ingredients).map(Pair::getLeft).map(EntryIngredients::ofIngredient).toList();
-        count = Arrays.stream(recipe.ingredients).map(Pair::getRight).toList();
-        this.output = EntryIngredients.of(recipe.output);
+        input = recipe.ingredients().stream().map(Pair::getFirst).map(EntryIngredients::ofIngredient).toList();
+        count = recipe.ingredients().stream().map(Pair::getSecond).toList();
+        this.output = EntryIngredients.of(recipe.output());
         this.recipe2 = recipe;
     }
 
     @Override
     public List<EntryIngredient> getInputEntries() {
-        return Arrays.stream(recipe2.ingredients).map(Pair::getLeft).map(EntryIngredients::ofIngredient).toList();
+        return recipe2.ingredients().stream().map(Pair::getFirst).map(EntryIngredients::ofIngredient).toList();
     }
 
     @Override

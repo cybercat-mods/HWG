@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.network.packet.EntityPacket;
+import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.util.Helper;
@@ -32,6 +32,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class FlameFiring extends AbstractArrow {
 
@@ -41,12 +42,12 @@ public class FlameFiring extends AbstractArrow {
     private int idleTicks = 0;
 
     public FlameFiring(EntityType<? extends FlameFiring> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, ItemStack.EMPTY);
         this.pickup = AbstractArrow.Pickup.DISALLOWED;
     }
 
     public FlameFiring(Level world, LivingEntity owner) {
-        super(HWGProjectiles.FIRING, owner, world);
+        super(HWGProjectiles.FIRING, owner, world, ItemStack.EMPTY);
         this.shooter = owner;
     }
 
@@ -61,14 +62,14 @@ public class FlameFiring extends AbstractArrow {
     }
 
     public FlameFiring(Level world, double x, double y, double z) {
-        super(HWGProjectiles.FIRING, x, y, z, world);
+        super(HWGProjectiles.FIRING, x, y, z, world, ItemStack.EMPTY);
         this.setNoGravity(true);
         this.setBaseDamage(0);
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return EntityPacket.createPacket(this);
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -165,11 +166,6 @@ public class FlameFiring extends AbstractArrow {
     protected void onHitEntity(EntityHitResult entityHitResult) {
         super.onHitEntity(entityHitResult);
         if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
-    }
-
-    @Override
-    public ItemStack getPickupItem() {
-        return new ItemStack(Items.AIR);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package mod.azure.hwg.config;
 
-import mod.azure.azurelib.config.Config;
-import mod.azure.azurelib.config.Configurable;
+import mod.azure.azurelib.common.api.common.config.Config;
+import mod.azure.azurelib.common.internal.common.config.Configurable;
 import mod.azure.hwg.HWGMod;
 
 @Config(id = HWGMod.MODID)

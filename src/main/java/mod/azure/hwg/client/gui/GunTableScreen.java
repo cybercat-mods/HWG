@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.List;
 
@@ -71,7 +72,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
     }
 
-    private void renderScrollbar(GuiGraphics matrices, int x, int y, List<GunTableRecipe> tradeOffers) {
+    private void renderScrollbar(GuiGraphics matrices, int x, int y, List<RecipeHolder<GunTableRecipe>> tradeOffers) {
         int i = tradeOffers.size() + 1 - 7;
         if (i > 1) {
             int j = 139 - (27 + (i - 1) * 139 / i);
@@ -90,9 +91,9 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
     @Override
     public void render(GuiGraphics matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
+        this.renderBackground(matrices, mouseX, mouseY, delta);
         super.render(matrices, mouseX, mouseY, delta);
-        List<GunTableRecipe> tradeOfferList = this.menu.getRecipes();
+        List<RecipeHolder<GunTableRecipe>> tradeOfferList = this.menu.getRecipes();
         if (!tradeOfferList.isEmpty()) {
             int i = (this.width - this.imageWidth) / 2;
             int j = (this.height - this.imageHeight) / 2;
@@ -104,11 +105,12 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
             int m = 0;
 
             while (true) {
-                for (GunTableRecipe gunTableRecipe : tradeOfferList)
+                for (RecipeHolder<GunTableRecipe> recipeHolder : tradeOfferList)
                     if (this.canScroll(tradeOfferList.size()) && (m < this.indexStartOffset || m >= 7 + this.indexStartOffset)) {
                         ++m;
                     } else {
-                        ItemStack output = gunTableRecipe.output;
+                        GunTableRecipe gunTableRecipe = recipeHolder.value();
+                        ItemStack output = gunTableRecipe.output();
                         int n = yPos + 2;
                         this.renderIngredients(matrices, gunTableRecipe, xPos, n);
 
@@ -162,11 +164,11 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
         int i = this.menu.getRecipes().size();
         if (this.canScroll(i)) {
             int j = i - 7;
-            this.indexStartOffset = (int) (this.indexStartOffset - amount);
+            this.indexStartOffset = (int) (this.indexStartOffset - scrollY);
             this.indexStartOffset = Mth.clamp(this.indexStartOffset, 0, j);
         }
         return true;
@@ -215,18 +217,19 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         }
 
         public void renderToolTip(GuiGraphics matrices, int mouseX, int mouseY) {
-            if (this.isHovered && menu.getRecipes().size() > this.index + indexStartOffset) {
+            List<RecipeHolder<GunTableRecipe>> recipes = menu.getRecipes();
+            if (this.isHovered && recipes.size() > this.index + indexStartOffset) {
                 ItemStack stack;
                 if (mouseX < this.getX() + 20) {
-                    stack = menu.getRecipes().get(this.index + indexStartOffset).output;
+                    //stack = recipes.get(this.index + indexStartOffset).value().output;
                     renderTooltip(matrices, mouseX, mouseY);
                 } else if (mouseX < this.getX() + 50 && mouseX > this.getX() + 30) {
-                    stack = menu.getRecipes().get(this.index + indexStartOffset).output;
+                    stack = recipes.get(this.index + indexStartOffset).value().output();
                     if (!stack.isEmpty()) {
                         renderTooltip(matrices, mouseX, mouseY);
                     }
                 } else if (mouseX > this.getX() + 65) {
-                    stack = menu.getRecipes().get(this.index + indexStartOffset).output;
+                    //stack = recipes.get(this.index + indexStartOffset).value().output;
                     renderTooltip(matrices, mouseX, mouseY);
                 }
             }
