@@ -3,7 +3,6 @@ package mod.azure.hwg.client.gui;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.mixin.IngredientAccess;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
-import mod.azure.hwg.util.recipes.GunTableRecipe.Type;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,6 +17,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GunTableScreenHandler extends AbstractContainerMenu {
@@ -121,9 +121,10 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
     }
 
     public List<RecipeHolder<GunTableRecipe>> getRecipes() {
-		List<RecipeHolder<GunTableRecipe>> list = new ArrayList<>(playerInventory.player.level().getRecipeManager().getAllRecipesFor(Type.INSTANCE));
-        list.sort(null);
-        return list;
+        List<RecipeHolder<GunTableRecipe>> immutableRecipeListView = playerInventory.player.level().getRecipeManager().getAllRecipesFor(HWGMod.GUN_TABLE_RECIPE_TYPE);
+        List<RecipeHolder<GunTableRecipe>> sortableList = new ArrayList<>(immutableRecipeListView);
+        sortableList.sort(Comparator.comparing(RecipeHolder::id));
+        return sortableList;
     }
 
     public void setRecipeIndex(int index) {

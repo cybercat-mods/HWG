@@ -145,7 +145,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
     }
 
     private void renderIngredients(GuiGraphics matrices, GunTableRecipe gunTableRecipe, int x, int y) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < gunTableRecipe.ingredients().size(); i++) {
             ItemStack[] displayStacks = gunTableRecipe.getIngredientForSlot(i).getItems();
             if (displayStacks.length > 0) {
                 // probably slow, but subclassing ingredient is hard in fabric

@@ -51,9 +51,7 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
-}
 
-processResources {
     doLast {
         def jsonMinifyStart = System.currentTimeMillis()
         def jsonMinified = 0
@@ -133,6 +131,16 @@ if (file('key.properties').exists()) {
             requires {
                 slug = "smartbrainlib"
             }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += [
+                    'src/main/generated'
+            ]
         }
     }
 }
