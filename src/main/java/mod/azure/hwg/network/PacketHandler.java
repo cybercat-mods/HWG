@@ -15,12 +15,16 @@ public record PacketHandler() {
     public static void registerMessages() {
         ServerPlayNetworking.registerGlobalReceiver(lockSlot, new C2SMessageSelectCraft());
         ServerPlayNetworking.registerGlobalReceiver(reloadGun, (server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-            if (player.getMainHandItem().getItem() instanceof AzureAnimatedGunItem)
-                AzureAnimatedGunItem.reload(player, InteractionHand.MAIN_HAND);
+            server.execute(() -> {
+                if (player.getMainHandItem().getItem() instanceof AzureAnimatedGunItem)
+                    AzureAnimatedGunItem.reload(player, InteractionHand.MAIN_HAND);
+            });
         });
         ServerPlayNetworking.registerGlobalReceiver(shootGun, (server, player, serverPlayNetworkHandler, inputPacket, packetSender) -> {
-            if (player.getMainHandItem().getItem() instanceof AzureAnimatedGunItem)
-                AzureAnimatedGunItem.shoot(player);
+            server.execute(() -> {
+                if (player.getMainHandItem().getItem() instanceof AzureAnimatedGunItem)
+                    AzureAnimatedGunItem.shoot(player);
+            });
         });
     }
 }

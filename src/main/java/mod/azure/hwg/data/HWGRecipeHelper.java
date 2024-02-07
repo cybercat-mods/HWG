@@ -1,9 +1,6 @@
 package mod.azure.hwg.data;
 
-import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.DataResult;
-import com.mojang.serialization.JsonOps;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.advancements.AdvancementHolder;
