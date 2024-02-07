@@ -145,7 +145,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
                 }
             }
 
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < gunTableRecipe.ingredients().size(); i++) {
                 var ingredient = gunTableRecipe.getIngredientForSlot(i);
                 if (!ingredient.isEmpty()) {
                     var possibleItems = ((IngredientAccess) (Object) ingredient).getMatchingStacksMod();

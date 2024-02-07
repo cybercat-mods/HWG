@@ -22,7 +22,7 @@ public record GunTableRecipe(List<Pair<Ingredient, Integer>> ingredients, ItemSt
 
     @Override
     public boolean matches(GunTableInventory inv, Level world) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < this.ingredients.size(); i++) {
             var slotStack = inv.getItem(i);
             var pair = ingredients.get(i);
             var ingredient = pair.getFirst();
