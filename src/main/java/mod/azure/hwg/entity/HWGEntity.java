@@ -1,9 +1,9 @@
 package mod.azure.hwg.entity;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.util.AzureLibUtil;
+import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
+import mod.azure.azurelib.common.api.common.animatable.GeoItem;
+import mod.azure.azurelib.common.internal.common.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
 import mod.azure.hwg.entity.projectiles.*;
 import mod.azure.hwg.item.enums.GunTypeEnum;
 import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;

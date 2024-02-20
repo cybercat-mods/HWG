@@ -2,10 +2,10 @@ package mod.azure.hwg.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.cache.object.GeoBone;
-import mod.azure.azurelib.renderer.GeoEntityRenderer;
-import mod.azure.azurelib.renderer.layer.BlockAndItemGeoLayer;
+import mod.azure.azurelib.common.api.client.renderer.GeoEntityRenderer;
+import mod.azure.azurelib.common.api.client.renderer.layer.BlockAndItemGeoLayer;
+import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
+import mod.azure.azurelib.common.internal.common.cache.object.GeoBone;
 import mod.azure.hwg.client.models.HWGEntityModel;
 import mod.azure.hwg.entity.*;
 import mod.azure.hwg.entity.enums.EntityEnum;

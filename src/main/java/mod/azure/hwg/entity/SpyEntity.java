@@ -1,11 +1,11 @@
 package mod.azure.hwg.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.Animation.LoopType;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimatableManager;
+import mod.azure.azurelib.common.internal.common.core.animation.Animation;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimationController;
+import mod.azure.azurelib.common.internal.common.core.animation.RawAnimation;
+import mod.azure.azurelib.common.internal.common.core.object.PlayState;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.tasks.HWGMeleeAttackTask;
 import mod.azure.hwg.entity.tasks.RangedShootingAttack;
@@ -78,9 +78,9 @@ public class SpyEntity extends HWGEntity implements SmartBrainOwner<SpyEntity> {
     }
 
     @Override
-    public void registerControllers(ControllerRegistrar controllers) {
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "livingController", 0, event -> event.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
-        controllers.add(new AnimationController<>(this, "attackController", 0, event -> PlayState.STOP).triggerableAnim("ranged", RawAnimation.begin().then("attacking", LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", LoopType.LOOP)));
+        controllers.add(new AnimationController<>(this, "attackController", 0, event -> PlayState.STOP).triggerableAnim("ranged", RawAnimation.begin().then("attacking", Animation.LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", Animation.LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", Animation.LoopType.LOOP)));
     }
 
     @Override

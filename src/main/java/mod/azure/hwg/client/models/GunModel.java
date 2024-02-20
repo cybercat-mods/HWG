@@ -1,7 +1,7 @@
 package mod.azure.hwg.client.models;
 
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.model.DefaultedItemGeoModel;
+import mod.azure.azurelib.common.api.client.model.DefaultedItemGeoModel;
+import mod.azure.azurelib.common.api.common.animatable.GeoItem;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.item.enums.GunTypeEnum;
 import net.minecraft.resources.ResourceLocation;

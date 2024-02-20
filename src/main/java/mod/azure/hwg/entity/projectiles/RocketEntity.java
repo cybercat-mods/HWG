@@ -1,12 +1,12 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.azurelib.network.packet.EntityPacket;
-import mod.azure.azurelib.util.AzureLibUtil;
+import dev.architectury.networking.SpawnEntityPacket;
+import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
+import mod.azure.azurelib.common.internal.common.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimatableManager;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimationController;
+import mod.azure.azurelib.common.internal.common.core.object.PlayState;
+import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -34,6 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class RocketEntity extends AbstractArrow implements GeoEntity {
 
@@ -42,12 +43,12 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
     public RocketEntity(EntityType<? extends RocketEntity> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, new ItemStack(HWGItems.ROCKET));
         this.pickup = AbstractArrow.Pickup.DISALLOWED;
     }
 
     public RocketEntity(Level world, LivingEntity owner) {
-        super(HWGProjectiles.ROCKETS, owner, world);
+        super(HWGProjectiles.ROCKETS, owner, world, new ItemStack(HWGItems.ROCKET));
     }
 
     protected RocketEntity(EntityType<? extends RocketEntity> type, double x, double y, double z, Level world) {
@@ -61,13 +62,13 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
     }
 
     public RocketEntity(Level world, double x, double y, double z) {
-        super(HWGProjectiles.ROCKETS, x, y, z, world);
+        super(HWGProjectiles.ROCKETS, x, y, z, world, new ItemStack(HWGItems.ROCKET));
         this.setNoGravity(true);
         this.setBaseDamage(0);
     }
 
     @Override
-    public void registerControllers(ControllerRegistrar controllers) {
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
     }
 
@@ -77,8 +78,8 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return EntityPacket.createPacket(this);
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -218,11 +219,6 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 
     protected void explode() {
         this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, HWGMod.config.gunconfigs.rocket_breaks ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
-    }
-
-    @Override
-    public ItemStack getPickupItem() {
-        return new ItemStack(HWGItems.ROCKET);
     }
 
     @Override

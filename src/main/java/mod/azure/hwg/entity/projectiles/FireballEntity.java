@@ -1,9 +1,8 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.network.packet.EntityPacket;
+import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.fabricmc.api.EnvType;
@@ -42,12 +41,12 @@ public class FireballEntity extends AbstractArrow {
     private int idleTicks = 0;
 
     public FireballEntity(EntityType<? extends FireballEntity> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, ItemStack.EMPTY);
         this.pickup = AbstractArrow.Pickup.DISALLOWED;
     }
 
     public FireballEntity(Level world, LivingEntity owner) {
-        super(HWGProjectiles.FIREBALL, owner, world);
+        super(HWGProjectiles.FIREBALL, owner, world, ItemStack.EMPTY);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class FireballEntity extends AbstractArrow {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return EntityPacket.createPacket(this);
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -180,11 +179,6 @@ public class FireballEntity extends AbstractArrow {
             }
         } else if (!this.level().isClientSide)
             this.remove(Entity.RemovalReason.DISCARDED);
-    }
-
-    @Override
-    public @NotNull ItemStack getPickupItem() {
-        return new ItemStack(HWGItems.BULLETS);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package mod.azure.hwg.client.models;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.constant.DataTickets;
-import mod.azure.azurelib.core.animation.AnimationState;
-import mod.azure.azurelib.model.GeoModel;
+import mod.azure.azurelib.common.api.client.model.GeoModel;
+import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
+import mod.azure.azurelib.common.internal.common.constant.DataTickets;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimationState;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.*;
 import mod.azure.hwg.entity.enums.EntityEnum;

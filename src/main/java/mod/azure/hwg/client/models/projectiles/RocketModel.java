@@ -1,6 +1,6 @@
 package mod.azure.hwg.client.models.projectiles;
 
-import mod.azure.azurelib.model.GeoModel;
+import mod.azure.azurelib.common.api.client.model.GeoModel;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.projectiles.RocketEntity;
 import net.minecraft.client.renderer.RenderType;

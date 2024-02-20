@@ -1,12 +1,12 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.network.packet.EntityPacket;
-import mod.azure.azurelib.util.AzureLibUtil;
+import dev.architectury.networking.SpawnEntityPacket;
+import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
+import mod.azure.azurelib.common.internal.common.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimatableManager;
+import mod.azure.azurelib.common.internal.common.core.animation.AnimationController;
+import mod.azure.azurelib.common.internal.common.core.animation.RawAnimation;
+import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
@@ -40,6 +40,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GrenadeEntity extends AbstractArrow implements GeoEntity {
@@ -52,12 +53,12 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
     protected String type;
 
     public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, ItemStack.EMPTY);
         this.pickup = AbstractArrow.Pickup.DISALLOWED;
     }
 
     public GrenadeEntity(Level world, LivingEntity owner) {
-        super(HWGProjectiles.GRENADE, owner, world);
+        super(HWGProjectiles.GRENADE, owner, world, ItemStack.EMPTY);
     }
 
     protected GrenadeEntity(EntityType<? extends GrenadeEntity> type, double x, double y, double z, Level world) {
@@ -80,7 +81,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
     }
 
     public GrenadeEntity(Level world, double x, double y, double z, ItemStack stack) {
-        super(HWGProjectiles.GRENADE, world);
+        super(HWGProjectiles.GRENADE, world, stack);
         this.absMoveTo(x, y, z);
     }
 
@@ -90,7 +91,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
     }
 
     public GrenadeEntity(Level world, double x, double y, double z) {
-        super(HWGProjectiles.GRENADE, x, y, z, world);
+        super(HWGProjectiles.GRENADE, x, y, z, world, ItemStack.EMPTY);
         this.setNoGravity(true);
         this.setBaseDamage(0);
     }
@@ -143,7 +144,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
     }
 
     @Override
-    public void registerControllers(ControllerRegistrar controllers) {
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, event -> {
             if (this.entityData.get(STATE) == 1)
                 return event.setAndContinue(RawAnimation.begin().thenLoop("spin"));
@@ -157,8 +158,8 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return EntityPacket.createPacket(this);
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -329,11 +330,6 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
                     this.level().setBlockAndUpdate(testPos, state.setValue(RedstoneTorchBlock.LIT, false));
             }
         });
-    }
-
-    @Override
-    public ItemStack getPickupItem() {
-        return new ItemStack(Items.AIR);
     }
 
     @Override

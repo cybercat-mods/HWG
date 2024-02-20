@@ -3,7 +3,6 @@ package mod.azure.hwg.client.gui;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.mixin.IngredientAccess;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
-import mod.azure.hwg.util.recipes.GunTableRecipe.Type;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,9 +13,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GunTableScreenHandler extends AbstractContainerMenu {
@@ -59,10 +60,10 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
         if (!world.isClientSide) {
             var serverPlayerEntity = (ServerPlayer) player;
             var itemStack = ItemStack.EMPTY;
-            var optional = world.getServer().getRecipeManager().getRecipeFor(Type.INSTANCE, craftingInventory, world);
+            var optional = world.getServer().getRecipeManager().getRecipeFor(HWGMod.GUN_TABLE_RECIPE_TYPE, craftingInventory, world);
             if (optional.isPresent()) {
                 var craftingRecipe = optional.get();
-                itemStack = craftingRecipe.assemble(craftingInventory, level.registryAccess());
+                itemStack = craftingRecipe.value().assemble(craftingInventory, level.registryAccess());
             }
 
             craftingInventory.setItem(5, itemStack);
@@ -119,10 +120,11 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
         return itemStack;
     }
 
-    public List<GunTableRecipe> getRecipes() {
-        var list = new ArrayList<>(playerInventory.player.level().getRecipeManager().getAllRecipesFor(Type.INSTANCE));
-        list.sort(null);
-        return list;
+    public List<RecipeHolder<GunTableRecipe>> getRecipes() {
+        List<RecipeHolder<GunTableRecipe>> immutableRecipeListView = playerInventory.player.level().getRecipeManager().getAllRecipesFor(HWGMod.GUN_TABLE_RECIPE_TYPE);
+        List<RecipeHolder<GunTableRecipe>> sortableList = new ArrayList<>(immutableRecipeListView);
+        sortableList.sort(Comparator.comparing(RecipeHolder::id));
+        return sortableList;
     }
 
     public void setRecipeIndex(int index) {
@@ -131,8 +133,9 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
 
     public void switchTo(int recipeIndex) {
         // index out of bounds
-        if (this.getRecipes().size() > recipeIndex) {
-            var gunTableRecipe = getRecipes().get(recipeIndex);
+        List<RecipeHolder<GunTableRecipe>> recipes = getRecipes();
+        if (recipes.size() > recipeIndex) {
+            var gunTableRecipe = recipes.get(recipeIndex).value();
             for (int i = 0; i < 5; i++) {
                 var slotStack = gunTableInventory.getItem(i);
                 if (!slotStack.isEmpty()) {
@@ -142,7 +145,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
                 }
             }
 
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < gunTableRecipe.ingredients().size(); i++) {
                 var ingredient = gunTableRecipe.getIngredientForSlot(i);
                 if (!ingredient.isEmpty()) {
                     var possibleItems = ((IngredientAccess) (Object) ingredient).getMatchingStacksMod();

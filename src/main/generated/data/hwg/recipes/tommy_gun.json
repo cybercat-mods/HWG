@@ -1,0 +1,39 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 12,
+      "ingredient": {
+        "item": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:lever"
+      }
+    },
+    {
+      "count": 3,
+      "ingredient": {
+        "item": "minecraft:black_terracotta"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:diamond"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:repeater"
+      }
+    }
+  ],
+  "result": {
+    "count": 1,
+    "result": "hwg:tommy_gun"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 7,
+      "ingredient": {
+        "item": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:lever"
+      }
+    },
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "minecraft:black_terracotta"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:oak_planks"
+      }
+    }
+  ],
+  "result": {
+    "count": 1,
+    "result": "hwg:shotgun"
+  }
+}

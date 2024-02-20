@@ -1,0 +1,21 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "hwg:pistol"
+      }
+    },
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "minecraft:iron_ingot"
+      }
+    }
+  ],
+  "result": {
+    "count": 1,
+    "result": "hwg:spistol"
+  }
+}

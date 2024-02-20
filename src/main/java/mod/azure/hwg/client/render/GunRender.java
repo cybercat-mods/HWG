@@ -2,10 +2,10 @@ package mod.azure.hwg.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.cache.object.BakedGeoModel;
-import mod.azure.azurelib.renderer.GeoItemRenderer;
-import mod.azure.azurelib.renderer.layer.AutoGlowingGeoLayer;
+import mod.azure.azurelib.common.api.client.renderer.GeoItemRenderer;
+import mod.azure.azurelib.common.api.client.renderer.layer.AutoGlowingGeoLayer;
+import mod.azure.azurelib.common.api.common.animatable.GeoItem;
+import mod.azure.azurelib.common.internal.common.cache.object.BakedGeoModel;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.client.models.GunModel;
 import mod.azure.hwg.item.enums.GunTypeEnum;

@@ -5,7 +5,7 @@
   "name": "Happiness is a Warm Gun",
   "description": "Inspired by the likes of Techguns, Team Fortress 2, Doom, and a few other oddities, Happiness (is a) Warm Gun is a simple-yet-detailed gun mod for Fabric 1.16+",
   "authors": [
-    "AzureDoom, cybercat5555"
+    "AzureDoom, cybercat5555", "Drullkus"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/happiness-is-a-warm-gun",
@@ -22,6 +22,9 @@
     "client": [
       "mod.azure.hwg.client.ClientInit"
     ],
+    "fabric-datagen": [
+      "mod.azure.hwg.data.HWGData"
+    ],
     "rei_client": [
       "mod.azure.hwg.rei.ReiPlugin"
     ]
@@ -30,12 +33,12 @@
     "hwg.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.21",
+    "fabricloader": ">=0.15.6",
     "fabric": "*",
-    "minecraft": "1.20.1",
+    "minecraft": "1.20.4",
     "java": ">=17",
-    "smartbrainlib": ">=1.12",
-    "azurelib": ">=2.0.16"
+    "smartbrainlib": ">=1.13",
+    "azurelib": ">=2.1.5"
   },
   "accessWidener": "hwg.accesswidener"
 }

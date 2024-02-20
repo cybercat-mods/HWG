@@ -1,0 +1,27 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "minecraft:gold_ingot"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:diamond"
+      }
+    }
+  ],
+  "result": {
+    "count": 8,
+    "result": "hwg:sniper_round"
+  }
+}

@@ -1,6 +1,7 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.network.packet.EntityPacket;
+import dev.architectury.networking.SpawnEntityPacket;
+import mod.azure.azurelib.common.internal.common.network.packet.EntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -42,12 +43,12 @@ public class BulletEntity extends AbstractArrow {
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.FLOAT);
 
     public BulletEntity(EntityType<? extends BulletEntity> entityType, Level world) {
-        super(entityType, world);
+        super(entityType, world, new ItemStack(HWGItems.BULLETS));
         this.pickup = AbstractArrow.Pickup.DISALLOWED;
     }
 
     public BulletEntity(Level world, LivingEntity owner, Float damage) {
-        super(HWGProjectiles.BULLETS, owner, world);
+        super(HWGProjectiles.BULLETS, owner, world, new ItemStack(HWGItems.BULLETS));
         this.bulletdamage = damage;
     }
 
@@ -63,7 +64,7 @@ public class BulletEntity extends AbstractArrow {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return EntityPacket.createPacket(this);
+        return SpawnEntityPacket.create(this);
     }
 
     @Override
@@ -163,11 +164,6 @@ public class BulletEntity extends AbstractArrow {
                     serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
             }
         } else if (!this.level().isClientSide) this.remove(Entity.RemovalReason.DISCARDED);
-    }
-
-    @Override
-    public @NotNull ItemStack getPickupItem() {
-        return new ItemStack(HWGItems.BULLETS);
     }
 
     @Override

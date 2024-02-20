@@ -1,0 +1,33 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 5,
+      "ingredient": {
+        "item": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:lever"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:red_dye"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:firework_rocket"
+      }
+    }
+  ],
+  "result": {
+    "count": 1,
+    "result": "hwg:flare_gun"
+  }
+}

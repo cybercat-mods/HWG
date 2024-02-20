@@ -1,0 +1,27 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "minecraft:gunpowder"
+      }
+    },
+    {
+      "count": 5,
+      "ingredient": {
+        "item": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "count": 1,
+      "ingredient": {
+        "item": "minecraft:redstone"
+      }
+    }
+  ],
+  "result": {
+    "count": 2,
+    "result": "hwg:grenade_emp"
+  }
+}

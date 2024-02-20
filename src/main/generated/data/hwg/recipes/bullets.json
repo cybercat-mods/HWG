@@ -1,0 +1,27 @@
+{
+  "type": "hwg:gun_table",
+  "ingredients": [
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "minecraft:iron_nugget"
+      }
+    },
+    {
+      "count": 4,
+      "ingredient": {
+        "item": "minecraft:gold_nugget"
+      }
+    },
+    {
+      "count": 2,
+      "ingredient": {
+        "item": "minecraft:gunpowder"
+      }
+    }
+  ],
+  "result": {
+    "count": 10,
+    "result": "hwg:bullets"
+  }
+}
