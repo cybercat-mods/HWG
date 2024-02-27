@@ -1,3 +1,5 @@
-v.2.0.1
+v.2.1.0
 
-- Fixes Crafting Packet
+- 1.20.4 port (Huge thanks to drulllkuus for this!)
+- Requires latest AzureLib (2.1.6)
+- Fixes Siler Revolver texture missing.
