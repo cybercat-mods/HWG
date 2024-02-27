@@ -18,7 +18,6 @@ public class ClientInit implements ClientModInitializer {
         ModelProviderinit.init();
         RenderRegistry.init();
         MenuScreens.register(HWGMod.SCREEN_HANDLER_TYPE, GunTableScreen::new);
-        Services.NETWORK.registerClientReceiverPackets(); // FIXME this method needs calling in AzureLib
         ParticleFactoryRegistry.getInstance().register(HWGParticles.BLACK_FLARE, FlareParticle.BlackSmokeFactory::new);
         ParticleFactoryRegistry.getInstance().register(HWGParticles.BLUE_FLARE, FlareParticle.BlueSmokeFactory::new);
         ParticleFactoryRegistry.getInstance().register(HWGParticles.BROWN_FLARE, FlareParticle.BrownSmokeFactory::new);
