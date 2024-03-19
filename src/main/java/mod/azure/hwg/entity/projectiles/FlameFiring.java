@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import dev.architectury.networking.SpawnEntityPacket;
+import mod.azure.azurelib.common.internal.common.network.packet.EntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.HWGEntity;
 import mod.azure.hwg.util.Helper;
@@ -26,7 +26,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
@@ -69,7 +68,7 @@ public class FlameFiring extends AbstractArrow {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return SpawnEntityPacket.create(this);
+        return (Packet<ClientGamePacketListener>) EntityPacket.createPacket(this);
     }
 
     @Override

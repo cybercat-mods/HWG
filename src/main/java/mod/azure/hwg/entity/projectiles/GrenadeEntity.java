@@ -1,11 +1,11 @@
 package mod.azure.hwg.entity.projectiles;
 
-import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
 import mod.azure.azurelib.common.internal.common.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.common.internal.common.core.animation.AnimatableManager;
 import mod.azure.azurelib.common.internal.common.core.animation.AnimationController;
 import mod.azure.azurelib.common.internal.common.core.animation.RawAnimation;
+import mod.azure.azurelib.common.internal.common.network.packet.EntityPacket;
 import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.entity.TechnodemonEntity;
@@ -35,7 +35,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.phys.BlockHitResult;
@@ -159,7 +158,7 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return SpawnEntityPacket.create(this);
+        return (Packet<ClientGamePacketListener>) EntityPacket.createPacket(this);
     }
 
     @Override

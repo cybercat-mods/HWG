@@ -1,11 +1,11 @@
 package mod.azure.hwg.entity.projectiles;
 
-import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
 import mod.azure.azurelib.common.internal.common.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.common.internal.common.core.animation.AnimatableManager;
 import mod.azure.azurelib.common.internal.common.core.animation.AnimationController;
 import mod.azure.azurelib.common.internal.common.core.object.PlayState;
+import mod.azure.azurelib.common.internal.common.network.packet.EntityPacket;
 import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
@@ -79,7 +79,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return SpawnEntityPacket.create(this);
+        return (Packet<ClientGamePacketListener>) EntityPacket.createPacket(this);
     }
 
     @Override

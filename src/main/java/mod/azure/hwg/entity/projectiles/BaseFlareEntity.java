@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import dev.architectury.networking.SpawnEntityPacket;
+import mod.azure.azurelib.common.internal.common.network.packet.EntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGParticles;
@@ -166,7 +166,7 @@ public class BaseFlareEntity extends AbstractArrow {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return SpawnEntityPacket.create(this);
+        return (Packet<ClientGamePacketListener>) EntityPacket.createPacket(this);
     }
 
     @Override

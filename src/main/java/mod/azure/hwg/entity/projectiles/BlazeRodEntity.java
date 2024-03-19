@@ -1,6 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import dev.architectury.networking.SpawnEntityPacket;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGProjectiles;
@@ -25,7 +24,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -77,7 +75,7 @@ public class BlazeRodEntity extends AbstractArrow {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return SpawnEntityPacket.create(this);
+        return (Packet<ClientGamePacketListener>) mod.azure.azurelib.common.internal.common.network.packet.EntityPacket.createPacket(this);
     }
 
     @Override

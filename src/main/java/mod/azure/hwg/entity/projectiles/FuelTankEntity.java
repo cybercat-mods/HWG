@@ -1,6 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import dev.architectury.networking.SpawnEntityPacket;
+import mod.azure.azurelib.common.internal.common.network.packet.EntityPacket;
 import mod.azure.hwg.util.registry.HWGMobs;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,7 +52,7 @@ public class FuelTankEntity extends Entity {
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return SpawnEntityPacket.create(this);
+        return (Packet<ClientGamePacketListener>) EntityPacket.createPacket(this);
     }
 
     @Override
