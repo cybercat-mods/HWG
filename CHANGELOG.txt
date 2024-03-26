@@ -1,3 +1,3 @@
-v.2.1.1
+v.2.1.2
 
-- Fixes requirement on Arch, no longer needed, closes #119
+- Fixes laggy leg/arm movement.
