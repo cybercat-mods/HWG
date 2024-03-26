@@ -85,13 +85,17 @@ public class HWGEntityModel<T extends HWGEntity & GeoEntity> extends GeoModel<T>
             }
             if (body != null) body.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
             if (leftArm != null)
-                leftArm.setRotX(Mth.cos(animatable.walkAnimation.position() * 0.6662F) * 2.0F * animatable.walkAnimation.speed() * 0.5F);
+                leftArm.setRotX(Mth.cos(animatable.walkAnimation.position(
+                        animationState.getPartialTick()) * 0.6662F) * 2.0F * animatable.walkAnimation.speed() * 0.5F);
             if (rightArm != null && !animatable.isAggressive())
-                rightArm.setRotX(Mth.cos(animatable.walkAnimation.position() * 0.6662F + 3.1415927F) * 2.0F * animatable.walkAnimation.speed() * 0.5F);
+                rightArm.setRotX(Mth.cos(animatable.walkAnimation.position(
+                        animationState.getPartialTick()) * 0.6662F + 3.1415927F) * 2.0F * animatable.walkAnimation.speed() * 0.5F);
             if (leftLeg != null)
-                leftLeg.setRotX(Mth.cos(animatable.walkAnimation.position() * 0.6662F + 3.1415927F) * 1.4F * animatable.walkAnimation.speed() * 0.5F);
+                leftLeg.setRotX(Mth.cos(animatable.walkAnimation.position(
+                        animationState.getPartialTick()) * 0.6662F + 3.1415927F) * 1.4F * animatable.walkAnimation.speed() * 0.5F);
             if (rightLeg != null)
-                rightLeg.setRotX(Mth.cos(animatable.walkAnimation.position() * 0.6662F) * 1.4F * animatable.walkAnimation.speed() * 0.5F);
+                rightLeg.setRotX(Mth.cos(animatable.walkAnimation.position(
+                        animationState.getPartialTick()) * 0.6662F) * 1.4F * animatable.walkAnimation.speed() * 0.5F);
         }
         if (this.entityType == EntityEnum.DEMON) {
             var body = getAnimationProcessor().getBone("chest");
