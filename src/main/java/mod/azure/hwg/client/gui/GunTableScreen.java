@@ -108,7 +108,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
                     if (this.canScroll(tradeOfferList.size()) && (m < this.indexStartOffset || m >= 7 + this.indexStartOffset)) {
                         ++m;
                     } else {
-                        ItemStack output = gunTableRecipe.output;
+                        ItemStack output = gunTableRecipe.output();
                         int n = yPos + 2;
                         this.renderIngredients(matrices, gunTableRecipe, xPos, n);
 
@@ -218,15 +218,15 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
             if (this.isHovered && menu.getRecipes().size() > this.index + indexStartOffset) {
                 ItemStack stack;
                 if (mouseX < this.getX() + 20) {
-                    stack = menu.getRecipes().get(this.index + indexStartOffset).output;
+                    stack = menu.getRecipes().get(this.index + indexStartOffset).output();
                     renderTooltip(matrices, mouseX, mouseY);
                 } else if (mouseX < this.getX() + 50 && mouseX > this.getX() + 30) {
-                    stack = menu.getRecipes().get(this.index + indexStartOffset).output;
+                    stack = menu.getRecipes().get(this.index + indexStartOffset).output();
                     if (!stack.isEmpty()) {
                         renderTooltip(matrices, mouseX, mouseY);
                     }
                 } else if (mouseX > this.getX() + 65) {
-                    stack = menu.getRecipes().get(this.index + indexStartOffset).output;
+                    stack = menu.getRecipes().get(this.index + indexStartOffset).output();
                     renderTooltip(matrices, mouseX, mouseY);
                 }
             }

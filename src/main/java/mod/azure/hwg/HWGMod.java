@@ -29,6 +29,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -49,6 +50,8 @@ public class HWGMod implements ModInitializer {
     public static final TagKey<Biome> TECHNOLESSER_BIOMES = TagKey.create(Registries.BIOME, HWGMod.modResource("technolesser_biomes"));
     public static final TagKey<Biome> TECHNOGREATER_BIOMES = TagKey.create(Registries.BIOME, HWGMod.modResource("technogreater_biomes"));
     public static final ResourceKey<CreativeModeTab> WeaponItemGroup = ResourceKey.create(Registries.CREATIVE_MODE_TAB, HWGMod.modResource("weapons"));
+    public static final RecipeType<GunTableRecipe> GUN_TABLE_RECIPE_TYPE = Registry.register(BuiltInRegistries.RECIPE_TYPE, HWGMod.modResource(GunTableRecipe.Type.ID), GunTableRecipe.Type.INSTANCE);
+
     public static final RecipeSerializer<GunTableRecipe> GUN_TABLE_RECIPE_SERIALIZER = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, HWGMod.modResource("gun_table"), new GunTableRecipe.Serializer());
     protected final List<String> chests = List.of("jungle_temple", "underwater_ruin_big", "buried_treasure", "bastion_other", "nether_bridge", "ruined_portal", "stronghold_library", "bastion_bridge", "underwater_ruin_small", "stronghold_corridor", "stronghold_crossing", "bastion_treasure", "spawn_bonus_chest", "bastion_hoglin_stable");
 

@@ -3,7 +3,6 @@ package mod.azure.hwg.client.gui;
 import mod.azure.hwg.HWGMod;
 import mod.azure.hwg.mixin.IngredientAccess;
 import mod.azure.hwg.util.recipes.GunTableRecipe;
-import mod.azure.hwg.util.recipes.GunTableRecipe.Type;
 import mod.azure.hwg.util.registry.HWGBlocks;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -59,7 +58,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
         if (!world.isClientSide) {
             var serverPlayerEntity = (ServerPlayer) player;
             var itemStack = ItemStack.EMPTY;
-            var optional = world.getServer().getRecipeManager().getRecipeFor(Type.INSTANCE, craftingInventory, world);
+            var optional = world.getServer().getRecipeManager().getRecipeFor((HWGMod.GUN_TABLE_RECIPE_TYPE), craftingInventory, world);
             if (optional.isPresent()) {
                 var craftingRecipe = optional.get();
                 itemStack = craftingRecipe.assemble(craftingInventory, level.registryAccess());
@@ -120,7 +119,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
     }
 
     public List<GunTableRecipe> getRecipes() {
-        var list = new ArrayList<>(playerInventory.player.level().getRecipeManager().getAllRecipesFor(Type.INSTANCE));
+        var list = new ArrayList<>(playerInventory.player.level().getRecipeManager().getAllRecipesFor(HWGMod.GUN_TABLE_RECIPE_TYPE));
         list.sort(null);
         return list;
     }
@@ -142,7 +141,7 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
                 }
             }
 
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < gunTableRecipe.ingredients().size(); i++) {
                 var ingredient = gunTableRecipe.getIngredientForSlot(i);
                 if (!ingredient.isEmpty()) {
                     var possibleItems = ((IngredientAccess) (Object) ingredient).getMatchingStacksMod();

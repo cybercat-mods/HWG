@@ -1,6 +1,6 @@
 package mod.azure.hwg.client.gui;
 
-import mod.azure.hwg.util.recipes.GunTableRecipe.Type;
+import mod.azure.hwg.HWGMod;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -44,7 +44,7 @@ public class GunTableOutputSlot extends Slot {
     @Override
     public void onTake(Player player, ItemStack stack) {
         this.checkTakeAchievements(stack);
-        var optionalGunTableRecipe = player.level().getRecipeManager().getRecipeFor(Type.INSTANCE, gunTableInventory, player.level());
+        var optionalGunTableRecipe = player.level().getRecipeManager().getRecipeFor(HWGMod.GUN_TABLE_RECIPE_TYPE, gunTableInventory, player.level());
         if (optionalGunTableRecipe.isPresent()) {
             var gunTableRecipe = optionalGunTableRecipe.get();
             var defaultedList = gunTableRecipe.getRemainingItems(gunTableInventory);
