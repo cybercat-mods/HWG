@@ -1,3 +1,6 @@
-v.2.0.1
+v.2.0.2
 
-- Fixes Crafting Packet
+- Fixes laggy leg/arm movement.
+- Backports Recipe fixes.
+- Tweaks network code.
+- Fixes Silver Hellhorse Revolver texture.
