@@ -40,5 +40,6 @@ public class CommonMod {
         ModScreens.init();
         HWGBlocks.init();
         ModTabs.init();
+        HWGProfession.init();
     }
 }

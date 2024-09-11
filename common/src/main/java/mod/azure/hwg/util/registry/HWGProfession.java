@@ -25,4 +25,7 @@ public class HWGProfession {
 
     public static final Supplier<VillagerProfession> GUNSMITH = HWGProfession.registerProfession(
             CommonMod.MOD_ID, "gun_smith", () -> new VillagerProfession("gun_smith", holder -> holder.value().equals(GUNSMITH_POI.get()), holder -> holder.value().equals(GUNSMITH_POI.get()), ImmutableSet.of(), ImmutableSet.of(HWGBlocks.GUN_TABLE.get()), SoundEvents.ITEM_FRAME_REMOVE_ITEM));
+
+    public static void init() {
+    }
 }
