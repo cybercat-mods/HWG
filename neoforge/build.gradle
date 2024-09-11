@@ -1,0 +1,91 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev' version "${neo_moddev}"
+    id 'me.modmuss50.mod-publish-plugin' version "${modmuss50_mod_publish_version}"
+}
+
+neoForge {
+    version = "${neo_version}"
+    accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
+
+    parchment {
+        minecraftVersion = "${parchment_minecraft}"
+        mappingsVersion = "${parchment_version}"
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        configureEach {
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    maven { url 'https://libs.azuredoom.com:4443/mods' }
+    maven { url "https://minecraft.curseforge.com/api/maven/" }
+    maven { url "https://cfa2.cursemaven.com" }
+    maven { url 'https://api.modrinth.com/maven' }
+    maven { url "https://maven.shedaniel.me" }
+    mavenCentral()
+}
+
+dependencies {
+    implementation "mod.azure.azurelib:azurelib-neo-${minecraft_version}:${azurelib_version}"
+    implementation "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_version}"
+    implementation "dev.architectury:architectury-neoforge:${arch_version}"
+    implementation "maven.modrinth:common-network:gtfg7U0f"
+}
+
+if (file('key.properties').exists()) {
+    publishMods {
+        def releaseProp = new Properties()
+        File secretPropsFile = file("key.properties")
+        releaseProp.load(secretPropsFile.newInputStream())
+        file = jar.archiveFile
+        changelog = rootProject.file("changelog.md").text
+        type = STABLE
+        modLoaders.add("neoforge")
+
+        curseforge {
+            projectId = project.curseforgeID
+            projectSlug = project.projectSlug
+            accessToken = releaseProp.getProperty("curseKey")
+            minecraftVersions.add("${minecraft_version}")
+            requires {
+                slug = "azurelib"
+            }
+            requires {
+                slug = "common-network"
+            }
+        }
+        modrinth {
+            projectId = project.modrinthID
+            accessToken = releaseProp.getProperty('modrinthKey')
+            minecraftVersions.add("${minecraft_version}")
+            requires {
+                slug = "azurelib"
+            }
+            requires {
+                slug = "common-network"
+            }
+        }
+    }
+}

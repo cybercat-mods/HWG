@@ -1,0 +1,10 @@
+{
+  "type": "hwg:mobspawns",
+  "biomes": "#hwg:merc_biomes",
+  "spawn": {
+    "type": "hwg:merc",
+    "maxCount": 2,
+    "minCount": 1,
+    "weight": 5
+  }
+}

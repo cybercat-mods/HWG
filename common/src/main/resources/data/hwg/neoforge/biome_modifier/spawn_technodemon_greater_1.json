@@ -1,0 +1,10 @@
+{
+  "type": "hwg:mobspawns",
+  "biomes": "#minecraft:is_nether",
+  "spawn": {
+    "type": "hwg:technodemon_greater_1",
+    "maxCount": 2,
+    "minCount": 1,
+    "weight": 2
+  }
+}

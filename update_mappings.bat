@@ -1,1 +1,0 @@
-cmd /k gradlew.bat migrateMappings --mappings "net.minecraft:mappings:1.19.3"

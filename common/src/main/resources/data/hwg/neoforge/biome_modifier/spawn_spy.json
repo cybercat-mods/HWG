@@ -1,0 +1,10 @@
+{
+  "type": "hwg:mobspawns",
+  "biomes": "#hwg:spy_biomes",
+  "spawn": {
+    "type": "hwg:spy",
+    "maxCount": 2,
+    "minCount": 1,
+    "weight": 5
+  }
+}

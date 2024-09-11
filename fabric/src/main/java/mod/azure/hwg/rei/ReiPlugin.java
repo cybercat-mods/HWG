@@ -1,0 +1,24 @@
+package mod.azure.hwg.rei;
+
+import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
+import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
+import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
+import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.util.recipes.GunTableRecipe;
+
+public class ReiPlugin implements REIClientPlugin {
+
+    public static final CategoryIdentifier<HWGDisplay> CRAFTING = CategoryIdentifier.of(CommonMod.modResource("crafting"));
+
+    @Override
+    public void registerCategories(CategoryRegistry registry) {
+        registry.add(new HWGCategory());
+        registry.addWorkstations(CRAFTING, HWGCategory.ICON);
+    }
+
+    @Override
+    public void registerDisplays(DisplayRegistry registry) {
+        registry.registerFiller(GunTableRecipe.class, HWGDisplay::new);
+    }
+}
