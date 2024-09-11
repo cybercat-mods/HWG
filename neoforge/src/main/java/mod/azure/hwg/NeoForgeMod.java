@@ -1,6 +1,5 @@
 package mod.azure.hwg;
 
-import com.google.common.eventbus.Subscribe;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.azure.azurelib.common.internal.common.AzureLib;
@@ -9,7 +8,6 @@ import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
 import mod.azure.hwg.network.PacketHandler;
-import mod.azure.hwg.util.GunSmithProfession;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGMobs;
 import mod.azure.hwg.util.registry.HWGProfession;
@@ -39,6 +37,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.ModifiableBiomeInfo;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
@@ -85,16 +84,25 @@ public final class NeoForgeMod {
         AzureLib.hasKeyBindsInitialized = true;
         modEventBus.addListener(this::createEntityAttributes);
         modEventBus.addListener(this::createSpawnPlacements);
+        NeoForge.EVENT_BUS.addListener(this::villagerTrades);
     }
 
-    @SubscribeEvent
-    public static void villagerTrades(final VillagerTradesEvent event){
+    public void villagerTrades(final VillagerTradesEvent event){
         if (event.getType() == HWGProfession.GUNSMITH.get()) {
-            event.getTrades().put(1, List.of(new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForOneEmeraldFactory(Items.GUNPOWDER, 1, 16, 2), new GunSmithProfession.SellItemFactory(Items.IRON_NUGGET, 2, 1, 16, 1)}));
-            event.getTrades().put(2, List.of(new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.BULLETS.get(), 2, 16, 10), new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.PISTOL.get(), 5, 16, 20), new GunSmithProfession.BuyForItemFactory(Items.EMERALD, HWGItems.LUGER.get(), 5, 16, 20)}));
-            event.getTrades().put(3, List.of(new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(Items.EMERALD, 2, 1, HWGItems.SHOTGUN_SHELL.get(), 16, 16, 30), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.SMG.get(), 1, 16, 30), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 3, HWGItems.TOMMYGUN.get(), 1, 16, 30)}));
-            event.getTrades().put(4, List.of(new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(HWGItems.FUEL_TANK.get(), 1, 4, HWGItems.FLAMETHROWER.get(), 1, 16, 40), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 6, 4, HWGItems.SHOTGUN.get(), 1, 16, 40), new GunSmithProfession.BuyForItemsFactory(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS.get(), 48, 16, 50)}));
-            event.getTrades().put(5, List.of(new VillagerTrades.ItemListing[]{new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.ROCKETLAUNCHER.get(), 1, 16, 60), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER.get(), 1, 16, 60), new GunSmithProfession.BuyForItemsFactory(Items.IRON_INGOT, 18, 8, HWGItems.SNIPER.get(), 1, 16, 60)}));
+            event.getTrades().put(1, List.of(new VillagerTrades.EmeraldForItems(Items.GUNPOWDER, 1, 16, 2)));
+            event.getTrades().put(1, List.of(new VillagerTrades.ItemsForEmeralds(Items.IRON_NUGGET, 2, 1, 16, 1)));
+            event.getTrades().put(2, List.of((new VillagerTrades.EmeraldForItems(HWGItems.BULLETS.get(), 2, 16, 10))));
+            event.getTrades().put(2, List.of((new VillagerTrades.EmeraldForItems(HWGItems.PISTOL.get(), 5, 16, 20))));
+            event.getTrades().put(2, List.of((new VillagerTrades.EmeraldForItems(HWGItems.LUGER.get(), 5, 16, 20))));
+            event.getTrades().put(3, List.of((new VillagerTrades.EmeraldForItems(HWGItems.SHOTGUN_SHELL.get(), 16, 16, 30))));
+            event.getTrades().put(3, List.of(new VillagerTrades.ItemsAndEmeraldsToItems(Items.IRON_INGOT, 3,1, HWGItems.SMG.get(), 1, 16, 30, 0.05F)));
+            event.getTrades().put(3, List.of(new VillagerTrades.ItemsAndEmeraldsToItems(Items.IRON_INGOT, 3,1, HWGItems.TOMMYGUN.get(), 1, 16, 30, 0.05F)));
+            event.getTrades().put(4, List.of(new VillagerTrades.ItemsAndEmeraldsToItems(HWGItems.FUEL_TANK.get(), 1, 4, HWGItems.FLAMETHROWER.get(), 1, 16, 40, 0.05F)));
+            event.getTrades().put(4, List.of(new VillagerTrades.ItemsAndEmeraldsToItems(Items.IRON_INGOT, 6, 4, HWGItems.SHOTGUN.get(), 1, 16, 40, 0.05F)));
+            event.getTrades().put(4, List.of(new VillagerTrades.ItemsAndEmeraldsToItems(Items.GUNPOWDER, 8, 4, HWGItems.BULLETS.get(), 48, 16, 50, 0.05F)));
+            event.getTrades().put(5, List.of(new VillagerTrades.ItemsAndEmeraldsToItems(Items.IRON_INGOT, 18, 8, HWGItems.ROCKETLAUNCHER.get(), 1, 16, 60, 0.05F)));
+            event.getTrades().put(5, List.of(new VillagerTrades.ItemsAndEmeraldsToItems(Items.IRON_INGOT, 18, 8, HWGItems.G_LAUNCHER.get(), 1, 16, 60, 0.05F)));
+            event.getTrades().put(5, List.of(new VillagerTrades.ItemsAndEmeraldsToItems(Items.IRON_INGOT, 18, 8, HWGItems.SNIPER.get(), 1, 16, 60, 0.05F)));
         }
     }
 
