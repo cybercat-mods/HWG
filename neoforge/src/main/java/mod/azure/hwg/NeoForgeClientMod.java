@@ -9,6 +9,7 @@ import mod.azure.hwg.client.render.projectiles.EmptyRender;
 import mod.azure.hwg.client.render.projectiles.GrenadeRender;
 import mod.azure.hwg.client.render.projectiles.RocketRender;
 import mod.azure.hwg.entity.enums.EntityEnum;
+import mod.azure.hwg.network.PacketHandler;
 import mod.azure.hwg.particle.BrimParticle;
 import mod.azure.hwg.particle.FlareParticle;
 import mod.azure.hwg.particle.WFlareParticle;
@@ -58,6 +59,7 @@ public record NeoForgeClientMod() {
                         return isScoped() ? 1.0F : 0.0F;
                     return 0.0F;
                 });
+        new PacketHandler().registerMessages();
     }
 
     @SubscribeEvent
