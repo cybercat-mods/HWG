@@ -32,7 +32,7 @@ repositories {
     }
     maven { url "https://maven.terraformersmc.com/" }
     maven { url "https://maven.terraformersmc.com/releases" } // modmenu
-    maven { url 'https://libs.azuredoom.com:4443/mods' }
+    maven { url 'https://maven.azuredoom.com/mods' }
     maven {
         name = 'Parchment'
         url = 'https://maven.parchmentmc.org'
