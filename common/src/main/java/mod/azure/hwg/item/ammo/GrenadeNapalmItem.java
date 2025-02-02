@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,8 +31,8 @@ public class GrenadeNapalmItem extends Item {
         if (livingEntity instanceof Player user && !user.getCooldowns().isOnCooldown(this)) {
             user.getCooldowns().addCooldown(this, CommonMod.config.gunconfigs.grenades_throw_cooldown);
             if (!level.isClientSide) {
-                var nadeEntity = HWGProjectiles.GRENADE.get().create(level);
-                nadeEntity.setOwner(user);
+                var nadeEntity = new GrenadeEntity(level, new ItemStack(Items.AIR), user, user.getX(),
+                        user.getEyeY() - 0.15000000596046448D, user.getZ(), true);
                 nadeEntity.shootFromRotation(user, user.getXRot(), user.getYRot(), 0.0F, 1.5F, 1.0F);
                 nadeEntity.setVariant(3);
                 nadeEntity.setState(1);

@@ -29,6 +29,7 @@ public class GrenadeRender extends AzEntityRenderer<GrenadeEntity> {
     @Override
     public void render(@NotNull GrenadeEntity entity, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
         ClientUtils.faceRotation(poseStack, entity, partialTick);
+        poseStack.scale(entity.tickCount > 2 ? 1.0F : 0.0F, entity.tickCount > 2 ? 0.5F : 0.0F, entity.tickCount > 2 ? 1.0F : 0.0F);
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 
