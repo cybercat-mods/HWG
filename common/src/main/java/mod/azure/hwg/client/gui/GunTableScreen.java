@@ -97,7 +97,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
             int i = (this.width - this.imageWidth) / 2;
             int j = (this.height - this.imageHeight) / 2;
             int yPos = j + 17;
-            int xPos = i + 3;
+            int xPos = i + 10;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, TEXTURE);
             this.renderScrollbar(matrices, i, j, tradeOfferList);
@@ -111,11 +111,15 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
                         GunTableRecipe gunTableRecipe = recipeHolder.value();
                         ItemStack output = gunTableRecipe.output();
                         int n = yPos + 2;
-                        this.renderIngredients(matrices, gunTableRecipe, xPos, n);
+                        matrices.pose().pushPose();
+                        this.renderIngredients(matrices, gunTableRecipe, xPos - 6, n, mouseX, mouseY);
 
                         this.renderArrow(matrices, gunTableRecipe, i + 22, n);
                         matrices.renderFakeItem(output, i + 24 + 68, n);
                         matrices.renderItemDecorations(this.font, output, i + 24 + 68, n);
+                        if (this.isMouseOverSlot(i + 24 + 68, n, mouseX, mouseY))
+                            matrices.renderTooltip(font, output, mouseX, mouseY);
+                        matrices.pose().popPose();
                         yPos += 20;
                         ++m;
                     }
@@ -143,19 +147,24 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
     }
 
-    private void renderIngredients(GuiGraphics matrices, GunTableRecipe gunTableRecipe, int x, int y) {
+    private void renderIngredients(GuiGraphics matrices, GunTableRecipe gunTableRecipe, int x, int y, int mouseX, int mouseY) {
         for (int i = 0; i < gunTableRecipe.ingredients().size(); i++) {
             ItemStack[] displayStacks = gunTableRecipe.getIngredientForSlot(i).getItems();
             if (displayStacks.length > 0) {
-                // probably slow, but subclassing ingredient is hard in fabric
                 ItemStack stack = new ItemStack(displayStacks[0].getItem(), gunTableRecipe.countRequired(i));
                 if (!stack.isEmpty()) {
                     matrices.renderFakeItem(stack, x, y);
                     matrices.renderItemDecorations(this.font, stack, x, y);
-                    x += 16;
+                    if (this.isMouseOverSlot(x, y, mouseX, mouseY))
+                        matrices.renderTooltip(font, stack, mouseX, mouseY);
+                    x += 18;
                 }
             }
         }
+    }
+
+    private boolean isMouseOverSlot(int x, int y, int mouseX, int mouseY) {
+        return mouseX >= x && mouseX < (x + 16) && mouseY >= y && mouseY < (y + 16);
     }
 
     private boolean canScroll(int listSize) {
