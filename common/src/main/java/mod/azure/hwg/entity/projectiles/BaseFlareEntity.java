@@ -1,5 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
+import mod.azure.azurelib.common.api.common.helper.CommonUtils;
 import mod.azure.hwg.CommonMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -107,7 +108,7 @@ public class BaseFlareEntity extends AbstractArrow {
         if (this.tickCount > 25)
             this.setDeltaMovement(0.0, -0.1, 0.0);
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
-        Helper.spawnLightSource(this, isInsideWaterBlock);
+        CommonUtils.spawnLightSource(this, isInsideWaterBlock);
         if (this.level().isClientSide) {
             this.level().addParticle(this.particleColor(), true, this.getX(), this.getY() - 0.3D, this.getZ(), 0, -this.getDeltaMovement().y * 0.17D, 0);
         }
