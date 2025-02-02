@@ -59,8 +59,6 @@ public class RangedShootingAttack<E extends HWGEntity> extends CustomDelayedBeha
     @Override
     protected void stop(E entity) {
         this.target = null;
-        if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).is(HWGItems.MINIGUN.get())))
-            entity.triggerAnim("attackController", "idle");
     }
 
     @Override

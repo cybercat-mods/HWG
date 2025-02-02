@@ -9,6 +9,7 @@
     "AnvilScreenHandlerMixin",
     "HeldItemRendererMixin",
     "IngredientAccess",
+    "OffhandMixin",
     "PointOfInterestTypesInvoker",
     "VillagerMixin"
   ],

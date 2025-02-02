@@ -3,6 +3,7 @@ package mod.azure.hwg;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.azure.azurelib.common.internal.common.AzureLib;
+import mod.azure.azurelib.rewrite.animation.cache.AzIdentityRegistry;
 import mod.azure.hwg.entity.MercEntity;
 import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
@@ -85,6 +86,34 @@ public final class NeoForgeMod {
         modEventBus.addListener(this::createEntityAttributes);
         modEventBus.addListener(this::createSpawnPlacements);
         NeoForge.EVENT_BUS.addListener(this::villagerTrades);
+        modEventBus.addListener(this::commonSetup);
+    }
+
+    public void commonSetup(final FMLCommonSetupEvent event) {
+        AzIdentityRegistry.register(
+                HWGItems.FLARE_GUN.get(),
+                HWGItems.G_LAUNCHER.get(),
+                HWGItems.FLAMETHROWER.get(),
+                HWGItems.MINIGUN.get(),
+                HWGItems.LUGER.get(),
+                HWGItems.PISTOL.get(),
+                HWGItems.SHOTGUN.get(),
+                HWGItems.SPISTOL.get(),
+                HWGItems.SNIPER.get(),
+                HWGItems.MEANIE1.get(),
+                HWGItems.MEANIE2.get(),
+                HWGItems.GOLDEN_GUN.get(),
+                HWGItems.ROCKETLAUNCHER.get(),
+                HWGItems.HELLHORSE.get(),
+                HWGItems.SILVERGUN.get(),
+                HWGItems.SILVERHELLHORSE.get(),
+                HWGItems.AK47.get(),
+                HWGItems.SMG.get(),
+                HWGItems.TOMMYGUN.get(),
+                HWGItems.BALROG.get(),
+                HWGItems.BRIMSTONE.get(),
+                HWGItems.INCINERATOR.get()
+        );
     }
 
     public void villagerTrades(final VillagerTradesEvent event){

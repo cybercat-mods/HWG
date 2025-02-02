@@ -1,26 +1,31 @@
 package mod.azure.hwg.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mod.azure.azurelib.common.api.client.helper.ClientUtils;
-import mod.azure.azurelib.common.api.client.renderer.GeoEntityRenderer;
-import mod.azure.azurelib.common.internal.common.cache.object.BakedGeoModel;
-import mod.azure.hwg.client.models.projectiles.RocketModel;
+import mod.azure.azurelib.rewrite.render.entity.AzEntityRenderer;
+import mod.azure.azurelib.rewrite.render.entity.AzEntityRendererConfig;
+import mod.azure.hwg.CommonMod;
 import mod.azure.hwg.entity.projectiles.RocketEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-public class RocketRender extends GeoEntityRenderer<RocketEntity> {
+public class RocketRender extends AzEntityRenderer<RocketEntity> {
 
-    public RocketRender(EntityRendererProvider.Context renderManagerIn) {
-        super(renderManagerIn, new RocketModel());
+    private static final ResourceLocation MODEL = CommonMod.modResource("geo/rocket.geo.json");
+
+    private static final ResourceLocation TEXTURE = CommonMod.modResource("textures/item/projectiles/rocket.png");
+
+    public RocketRender(EntityRendererProvider.Context context) {
+        super(AzEntityRendererConfig.<RocketEntity>builder(MODEL, TEXTURE).build(), context);
     }
 
     @Override
-    public void preRender(PoseStack poseStack, RocketEntity animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
-        ClientUtils.faceRotation(poseStack, animatable, partialTick);
-        poseStack.scale(animatable.tickCount > 2 ? 1.0F : 0.0F, animatable.tickCount > 2 ? 0.5F : 0.0F, animatable.tickCount > 2 ? 1.0F : 0.0F);
-        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
+    public void render(@NotNull RocketEntity entity, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
+        ClientUtils.faceRotation(poseStack, entity, partialTick);
+        poseStack.scale(entity.tickCount > 2 ? 1.0F : 0.0F, entity.tickCount > 2 ? 0.5F : 0.0F, entity.tickCount > 2 ? 1.0F : 0.0F);
+        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 
 }

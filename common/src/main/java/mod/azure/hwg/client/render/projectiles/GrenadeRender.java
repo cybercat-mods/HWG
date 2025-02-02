@@ -1,26 +1,35 @@
 package mod.azure.hwg.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mod.azure.azurelib.common.api.client.helper.ClientUtils;
-import mod.azure.azurelib.common.api.client.renderer.GeoEntityRenderer;
-import mod.azure.azurelib.common.internal.common.cache.object.BakedGeoModel;
-import mod.azure.hwg.client.models.projectiles.GrenadeModel;
+import mod.azure.azurelib.rewrite.render.entity.AzEntityRenderer;
+import mod.azure.azurelib.rewrite.render.entity.AzEntityRendererConfig;
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.entity.animation.GrenadeAnimator;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-public class GrenadeRender extends GeoEntityRenderer<GrenadeEntity> {
+public class GrenadeRender extends AzEntityRenderer<GrenadeEntity> {
 
-    public GrenadeRender(EntityRendererProvider.Context renderManagerIn) {
-        super(renderManagerIn, new GrenadeModel());
+    private static final ResourceLocation MODEL = CommonMod.modResource("geo/grenade.geo.json");
+
+    public GrenadeRender(EntityRendererProvider.Context context) {
+        super(AzEntityRendererConfig.<GrenadeEntity>builder(
+                $ -> MODEL, entity -> CommonMod.modResource("textures/item/projectiles/grenade_" +
+                        (entity.getVariant() == 2 ? "frag" :
+                                entity.getVariant() == 3 ? "napalm" :
+                                        entity.getVariant() == 4 ? "smoke" :
+                                                entity.getVariant() == 5 ? "stun" : "emp") + ".png"))
+                .setAnimatorProvider(GrenadeAnimator::new).build(), context);
     }
 
     @Override
-    public void preRender(PoseStack poseStack, GrenadeEntity animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
-        ClientUtils.faceRotation(poseStack, animatable, partialTick);
-        poseStack.scale(animatable.tickCount > 2 ? 0.5F : 0.0F, animatable.tickCount > 2 ? 0.5F : 0.0F, animatable.tickCount > 2 ? 0.5F : 0.0F);
-        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
+    public void render(@NotNull GrenadeEntity entity, float entityYaw, float partialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource bufferSource, int packedLight) {
+        ClientUtils.faceRotation(poseStack, entity, partialTick);
+        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 
 }

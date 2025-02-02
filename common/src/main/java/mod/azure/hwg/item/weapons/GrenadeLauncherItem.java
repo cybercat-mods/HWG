@@ -1,28 +1,15 @@
 package mod.azure.hwg.item.weapons;
 
 import com.google.common.collect.Lists;
-import mod.azure.azurelib.common.api.common.animatable.GeoItem;
-import mod.azure.azurelib.common.internal.client.RenderProvider;
-import mod.azure.azurelib.common.internal.common.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.Animation;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.hwg.client.render.GunRender;
 import mod.azure.hwg.entity.projectiles.GrenadeEntity;
-import mod.azure.hwg.item.enums.GunTypeEnum;
+import mod.azure.hwg.item.weapons.animations.GunDispatcher;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -39,23 +26,22 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
+public class GrenadeLauncherItem extends HWGGunLoadedBase {
 
     public static final Predicate<ItemStack> EMP = stack -> stack.getItem() == HWGItems.G_EMP;
     public static final Predicate<ItemStack> GRENADES = EMP.or(stack -> stack.getItem() == HWGItems.G_FRAG).or(
             stack -> stack.getItem() == HWGItems.G_NAPALM).or(stack -> stack.getItem() == HWGItems.G_SMOKE).or(
             stack -> stack.getItem() == HWGItems.G_STUN);
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
+    private GunDispatcher animationDispatcher;
     private boolean charged = false;
     private boolean loaded = false;
 
     public GrenadeLauncherItem() {
         super(new Properties().stacksTo(1).durability(31).component(DataComponents.CHARGED_PROJECTILES,
                 ChargedProjectiles.EMPTY));
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+        this.animationDispatcher = new GunDispatcher();
     }
 
     @NotNull
@@ -134,19 +120,6 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(
-                new AnimationController<>(this, "controller", event -> PlayState.CONTINUE).triggerableAnim("firing",
-                        RawAnimation.begin().then("firing", Animation.LoopType.PLAY_ONCE)).triggerableAnim("loading",
-                        RawAnimation.begin().then("loading", Animation.LoopType.PLAY_ONCE)));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
-
-    @Override
     public @NotNull Predicate<ItemStack> getSupportedHeldProjectiles() {
         return GRENADES;
     }
@@ -179,7 +152,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
             var isInsideWaterBlock = player.level().isWaterAt(player.blockPosition());
             Helper.spawnLightSource(player, isInsideWaterBlock);
             if (!level.isClientSide)
-                triggerAnim(player, GeoItem.getOrAssignId(itemStack, (ServerLevel) level), "controller", "firing");
+                animationDispatcher.sendFiringCommand(player, itemStack);
             return InteractionResultHolder.consume(itemStack);
         } else if (!player.getProjectile(itemStack).isEmpty()) {
             player.startUsingItem(usedHand);
@@ -195,7 +168,7 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
             level.playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), HWGSounds.GLAUNCHERRELOAD.get(), soundCategory, 0.5F,
                     1.0F);
             if (!level.isClientSide)
-                triggerAnim(livingEntity, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "loading");
+                animationDispatcher.sendLoadingCommand(livingEntity, stack);
             if (livingEntity instanceof Player player)
                 player.getCooldowns().addCooldown(this, 15);
         }
@@ -232,16 +205,6 @@ public class GrenadeLauncherItem extends HWGGunLoadedBase implements GeoItem {
             }
         }
         tooltipComponents.add(Component.translatable("hwg.ammo.reloadgrenades").withStyle(ChatFormatting.ITALIC));
-    }
-
-    @Override
-    public void createRenderer(Consumer<RenderProvider> consumer) {
-        consumer.accept(new RenderProvider() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return new GunRender<GrenadeLauncherItem>("grenade_launcher", GunTypeEnum.NADELAUNCHER);
-            }
-        });
     }
 
 }

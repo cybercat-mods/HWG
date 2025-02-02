@@ -96,7 +96,7 @@ public class FireballEntity extends AbstractArrow {
             idleTicks = 0;
         if (idleTicks < idleOpt)
             super.tick();
-        if (this.tickCount >= 40)
+        if (this.tickCount >= 190)
             this.remove(RemovalReason.DISCARDED);
         if (getOwner() instanceof Player)
             setYRot(entityData.get(FORCED_YAW));

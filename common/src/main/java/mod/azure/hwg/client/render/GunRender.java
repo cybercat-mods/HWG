@@ -1,31 +1,58 @@
 package mod.azure.hwg.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import mod.azure.azurelib.common.api.client.renderer.GeoItemRenderer;
-import mod.azure.azurelib.common.api.client.renderer.layer.AutoGlowingGeoLayer;
-import mod.azure.azurelib.common.api.common.animatable.GeoItem;
-import mod.azure.azurelib.common.internal.common.cache.object.BakedGeoModel;
+import mod.azure.azurelib.rewrite.render.item.AzItemRenderer;
+import mod.azure.azurelib.rewrite.render.item.AzItemRendererConfig;
+import mod.azure.azurelib.rewrite.render.layer.AzAutoGlowingLayer;
 import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.client.models.GunModel;
 import mod.azure.hwg.item.enums.GunTypeEnum;
+import mod.azure.hwg.item.weapons.animations.GunAnimator;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-public class GunRender<T extends Item & GeoItem> extends GeoItemRenderer<T> {
+public class GunRender extends AzItemRenderer {
     private final GunTypeEnum gunTypeEnum;
 
+    private static ResourceLocation HELL_MODEL = CommonMod.modResource("geo/item/hellhorse_revolver/hellhorse_revolver.geo.json");
+
+    private static ResourceLocation PISTOL_MODEL = CommonMod.modResource("geo/item/pistol/pistol.geo.json");
+
+    private static ResourceLocation PISTOL_TEXTURE = CommonMod.modResource("textures/item/pistol/pistol.png");
+
+    private static ResourceLocation MEANIE_TEXTURE = CommonMod.modResource("textures/item/meanie_gun_1/meanie_gun.png");
+
     public GunRender(String id, GunTypeEnum gunTypeEnum) {
-        super(new GunModel<>(CommonMod.modResource(id + "/" + id), gunTypeEnum));
+        super(
+                AzItemRendererConfig.builder(itemStack -> {
+                            if (gunTypeEnum == GunTypeEnum.SILVER_HELL) {
+                                return HELL_MODEL;
+                            }
+                            if (gunTypeEnum == GunTypeEnum.SILVER_PISTOL) {
+                                return PISTOL_MODEL;
+                            }
+                            return CommonMod.modResource("geo/item/"+ id +"/"+ id + ".geo.json");
+                        }, itemStack -> {
+                            if (gunTypeEnum == GunTypeEnum.SIL_PISTOL) {
+                                return PISTOL_TEXTURE;
+                            }
+                            if (gunTypeEnum == GunTypeEnum.MEANIE) {
+                                return MEANIE_TEXTURE;
+                            }
+                            return CommonMod.modResource("textures/item/"+ id + "/" + id + ".png");
+                        })
+                        .setAnimatorProvider(GunAnimator::new)
+                        .build()
+        );
         this.gunTypeEnum = gunTypeEnum;
-        if (gunTypeEnum == GunTypeEnum.BRIMSTONE || gunTypeEnum == GunTypeEnum.BALROG)
-            addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 
     @Override
-    public void preRender(PoseStack poseStack, T animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int color) {
-        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, color);
+    public void renderByItem(ItemStack stack, @NotNull PoseStack poseStack, @NotNull MultiBufferSource source, int packedLight) {
+        super.renderByItem(stack, poseStack, source, packedLight);
+        var model = rendererPipeline.context().bakedModel();
         if (gunTypeEnum == GunTypeEnum.ROCKETLAUNCHER)
-            model.getBone("rocket").get().setHidden(this.currentItemStack.getDamageValue() == (this.currentItemStack.getMaxDamage() - 1));
+            model.getBone("rocket").get().setHidden(stack.getDamageValue() == (stack.getMaxDamage() - 1));
     }
 }

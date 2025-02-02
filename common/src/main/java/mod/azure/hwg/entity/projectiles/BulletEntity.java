@@ -94,7 +94,8 @@ public class BulletEntity extends AbstractArrow {
     @Override
     public void tick() {
         super.tick();
-        if (this.tickCount >= 40) this.remove(RemovalReason.DISCARDED);
+        if (this.tickCount >= 190)
+            this.remove(RemovalReason.DISCARDED);
         if (this.level().isClientSide) {
             double x = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             double z = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;

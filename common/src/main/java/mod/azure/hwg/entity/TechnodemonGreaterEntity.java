@@ -1,11 +1,7 @@
 package mod.azure.hwg.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.Animation;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
+import mod.azure.azurelib.rewrite.util.MoveAnalysis;
 import mod.azure.azurelib.sblforked.api.SmartBrainOwner;
 import mod.azure.azurelib.sblforked.api.core.BrainActivityGroup;
 import mod.azure.azurelib.sblforked.api.core.SmartBrainProvider;
@@ -26,6 +22,7 @@ import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.HurtBySensor;
 import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.NearbyPlayersSensor;
 import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.entity.animation.AnimationDispatcher;
 import mod.azure.hwg.entity.tasks.HWGMeleeAttackTask;
 import mod.azure.hwg.entity.tasks.RangedShootingAttack;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -57,6 +54,8 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
     public TechnodemonGreaterEntity(EntityType<TechnodemonGreaterEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
+        this.animationDispatcher = new AnimationDispatcher(this);
+        this.moveAnalysis = new MoveAnalysis(this);
         xpReward = CommonMod.config.mobconfigs.greatconfigs.greater_exp;
     }
 
@@ -65,13 +64,12 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "livingController", 0, event -> {
-            if (event.isMoving() && !isSwimming())
-                return event.setAndContinue(RawAnimation.begin().thenLoop("walking"));
-            return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-        }));
-        controllers.add(new AnimationController<>(this, "attackController", 0, event -> PlayState.STOP).triggerableAnim("ranged", RawAnimation.begin().then("attacking", Animation.LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", Animation.LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", Animation.LoopType.LOOP)));
+    public void tick() {
+        super.tick();
+        moveAnalysis.update();
+        if (this.level().isClientSide()) {
+            this.handleAnimations();
+        }
     }
 
     @Override

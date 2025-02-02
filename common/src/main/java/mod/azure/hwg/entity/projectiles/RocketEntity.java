@@ -1,11 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
-import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.CommonMod;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGProjectiles;
@@ -30,10 +24,9 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
-public class RocketEntity extends AbstractArrow implements GeoEntity {
+public class RocketEntity extends AbstractArrow {
 
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(RocketEntity.class, EntityDataSerializers.FLOAT);
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
     public RocketEntity(EntityType<? extends RocketEntity> entityType, Level world) {
@@ -43,16 +36,6 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
 
     public RocketEntity(Level world, LivingEntity owner) {
         super(HWGProjectiles.ROCKETS.get(), world);
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> PlayState.CONTINUE));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
     }
 
     @Override
@@ -106,7 +89,7 @@ public class RocketEntity extends AbstractArrow implements GeoEntity {
             this.xRotO = this.getXRot();
         }
         if (getOwner() instanceof Player) setYRot(entityData.get(FORCED_YAW));
-        if (this.tickCount >= 80) {
+        if (this.tickCount >= 190) {
             this.explode();
             this.remove(RemovalReason.DISCARDED);
         }

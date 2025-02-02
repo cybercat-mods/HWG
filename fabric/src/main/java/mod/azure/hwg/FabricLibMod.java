@@ -1,12 +1,14 @@
 package mod.azure.hwg;
 
 import mod.azure.azurelib.common.internal.common.AzureLib;
+import mod.azure.azurelib.rewrite.animation.cache.AzIdentityRegistry;
 import mod.azure.hwg.entity.MercEntity;
 import mod.azure.hwg.entity.SpyEntity;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
 import mod.azure.hwg.network.PacketHandler;
 import mod.azure.hwg.util.GunSmithProfession;
+import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGMobs;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
@@ -31,6 +33,30 @@ public final class FabricLibMod implements ModInitializer {
         FabricDefaultAttributeRegistry.register(HWGMobs.TECHNOGREATER.get(), TechnodemonGreaterEntity.createMobAttributes());
         addSpawnEntries();
         GunSmithProfession.init();
+        AzIdentityRegistry.register(
+                HWGItems.FLARE_GUN.get(),
+                HWGItems.G_LAUNCHER.get(),
+                HWGItems.FLAMETHROWER.get(),
+                HWGItems.MINIGUN.get(),
+                HWGItems.LUGER.get(),
+                HWGItems.PISTOL.get(),
+                HWGItems.SHOTGUN.get(),
+                HWGItems.SPISTOL.get(),
+                HWGItems.SNIPER.get(),
+                HWGItems.MEANIE1.get(),
+                HWGItems.MEANIE2.get(),
+                HWGItems.GOLDEN_GUN.get(),
+                HWGItems.ROCKETLAUNCHER.get(),
+                HWGItems.HELLHORSE.get(),
+                HWGItems.SILVERGUN.get(),
+                HWGItems.SILVERHELLHORSE.get(),
+                HWGItems.AK47.get(),
+                HWGItems.SMG.get(),
+                HWGItems.TOMMYGUN.get(),
+                HWGItems.BALROG.get(),
+                HWGItems.BRIMSTONE.get(),
+                HWGItems.INCINERATOR.get()
+        );
     }
 
     public static void addSpawnEntries() {

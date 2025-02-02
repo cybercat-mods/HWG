@@ -37,6 +37,7 @@
     "fabric-api": "*",
     "java": ">=${java_version}",
     "azurelib": "~${azurelib_version}",
-    "minecraft": "~${minecraft_version}"
+    "minecraft": "~${minecraft_version}",
+    "commonnetworking": ">=1.0.10-1.21"
   }
 }

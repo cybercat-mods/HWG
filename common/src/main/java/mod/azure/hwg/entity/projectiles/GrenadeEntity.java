@@ -1,11 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
-import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
 import mod.azure.hwg.CommonMod;
 import mod.azure.hwg.entity.TechnodemonEntity;
 import mod.azure.hwg.entity.TechnodemonGreaterEntity;
@@ -37,18 +31,19 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
 
-public class GrenadeEntity extends AbstractArrow implements GeoEntity {
+public class GrenadeEntity extends AbstractArrow {
 
     public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
     protected String type;
+    public GrenadeDispatcher grenadeDispatcher;
 
     public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level world) {
         super(entityType, world);
         this.pickup = Pickup.DISALLOWED;
+        this.grenadeDispatcher = new GrenadeDispatcher(this);
     }
 
     public GrenadeEntity(Level world, LivingEntity owner) {
@@ -101,6 +96,13 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
+        if (this.level().isClientSide) {
+            if (this.entityData.get(STATE) == 1) {
+                grenadeDispatcher.sendSpinAnimation();
+            } else {
+                grenadeDispatcher.sendBulletAnimation();
+            }
+        }
         if (getOwner() instanceof Player)
             setYRot(entityData.get(FORCED_YAW));
     }
@@ -115,20 +117,6 @@ public class GrenadeEntity extends AbstractArrow implements GeoEntity {
 
     public void setState(int color) {
         this.entityData.set(STATE, color);
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, event -> {
-            if (this.entityData.get(STATE) == 1)
-                return event.setAndContinue(RawAnimation.begin().thenLoop("spin"));
-            return event.setAndContinue(RawAnimation.begin().thenLoop("bullet"));
-        }));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
     }
 
     @Override

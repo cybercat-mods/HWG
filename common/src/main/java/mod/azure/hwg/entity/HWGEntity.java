@@ -4,6 +4,8 @@ import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
 import mod.azure.azurelib.common.api.common.animatable.GeoItem;
 import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
 import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
+import mod.azure.azurelib.rewrite.util.MoveAnalysis;
+import mod.azure.hwg.entity.animation.AnimationDispatcher;
 import mod.azure.hwg.entity.projectiles.*;
 import mod.azure.hwg.item.enums.GunTypeEnum;
 import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
@@ -35,14 +37,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob, Enemy {
+public abstract class HWGEntity extends Monster implements NeutralMob, Enemy {
 
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> ANGER_TIME = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     private UUID targetUuid;
+    public MoveAnalysis moveAnalysis;
+    public AnimationDispatcher animationDispatcher;
 
     protected HWGEntity(EntityType<? extends Monster> type, Level worldIn) {
         super(type, worldIn);
@@ -55,11 +58,6 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
         if (spawnReason != MobSpawnType.CHUNK_GENERATION && spawnReason != MobSpawnType.NATURAL)
             return !serverWorldAccess.getBlockState(pos.below()).is(Blocks.NETHER_WART_BLOCK);
         return !serverWorldAccess.getBlockState(pos.below()).is(Blocks.NETHER_WART_BLOCK);
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return cache;
     }
 
     @Override
@@ -184,6 +182,18 @@ public abstract class HWGEntity extends Monster implements GeoEntity, NeutralMob
             default -> {
                 return HWGSounds.SHOTGUN.get();
             }
+        }
+    }
+
+    public void setAnimation(Runnable animationAction) {
+        animationAction.run();
+    }
+
+    protected void handleAnimations() {
+        if (this.moveAnalysis.isMoving()) {
+            this.setAnimation(animationDispatcher::sendWalkAnimation);
+        } else {
+            this.setAnimation(animationDispatcher::sendIdleAnimation);
         }
     }
 

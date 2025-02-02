@@ -1,27 +1,14 @@
 package mod.azure.hwg.item.weapons;
 
 import com.google.common.collect.Lists;
-import mod.azure.azurelib.common.api.common.animatable.GeoItem;
-import mod.azure.azurelib.common.internal.client.RenderProvider;
-import mod.azure.azurelib.common.internal.common.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.Animation;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.hwg.client.render.GunRender;
 import mod.azure.hwg.entity.projectiles.BaseFlareEntity;
-import mod.azure.hwg.item.enums.GunTypeEnum;
+import mod.azure.hwg.item.weapons.animations.GunDispatcher;
 import mod.azure.hwg.util.registry.HWGItems;
 import mod.azure.hwg.util.registry.HWGSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -39,20 +26,19 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
+public class FlareGunItem extends HWGGunLoadedBase {
 
+    private GunDispatcher animationDispatcher;
     private boolean loaded = false;
     private boolean charged = false;
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
     private static final Predicate<ItemStack> BLACK_FLARE = stack -> stack.getItem() == HWGItems.BLACK_FLARE;
     public static final Predicate<ItemStack> FLARE = BLACK_FLARE.or(stack -> stack.getItem() == HWGItems.BLUE_FLARE).or(stack -> stack.getItem() == HWGItems.BROWN_FLARE).or(stack -> stack.getItem() == HWGItems.CYAN_FLARE).or(stack -> stack.getItem() == HWGItems.GRAY_FLARE).or(stack -> stack.getItem() == HWGItems.GREEN_FLARE).or(stack -> stack.getItem() == HWGItems.LIGHTBLUE_FLARE).or(stack -> stack.getItem() == HWGItems.LIGHTGRAY_FLARE).or(stack -> stack.getItem() == HWGItems.LIME_FLARE).or(stack -> stack.getItem() == HWGItems.MAGENTA_FLARE).or(stack -> stack.getItem() == HWGItems.ORANGE_FLARE).or(stack -> stack.getItem() == HWGItems.PINK_FLARE).or(stack -> stack.getItem() == HWGItems.PURPLE_FLARE).or(stack -> stack.getItem() == HWGItems.RED_FLARE).or(stack -> stack.getItem() == HWGItems.WHITE_FLARE).or(stack -> stack.getItem() == HWGItems.YELLOW_FLARE);
 
     public FlareGunItem() {
         super(new Properties().stacksTo(1).durability(31).component(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY));
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+        this.animationDispatcher = new GunDispatcher();
     }
 
     private void shootFlare(Level level, LivingEntity shooter, InteractionHand hand, ItemStack stack, List<ItemStack> projectile, boolean creative, float speed, float divergence) {
@@ -139,16 +125,6 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", event -> PlayState.CONTINUE).triggerableAnim("firing", RawAnimation.begin().then("firing", Animation.LoopType.PLAY_ONCE)).triggerableAnim("loading", RawAnimation.begin().then("loading", Animation.LoopType.PLAY_ONCE)));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
-
-    @Override
     public boolean isValidRepairItem(@NotNull ItemStack stack, @NotNull ItemStack ingredient) {
         return Tiers.IRON.getRepairIngredient().test(ingredient) || super.isValidRepairItem(stack, ingredient);
     }
@@ -179,7 +155,7 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
             shootAll(level, player, usedHand, itemStack, 2.6F, 1.0F);
             player.getCooldowns().addCooldown(this, 25);
             if (!level.isClientSide)
-                triggerAnim(player, GeoItem.getOrAssignId(itemStack, (ServerLevel) level), "controller", "firing");
+                animationDispatcher.sendFiringCommand(player, itemStack);
             return InteractionResultHolder.consume(itemStack);
         } else if (!player.getProjectile(itemStack).isEmpty()) {
             player.startUsingItem(usedHand);
@@ -194,8 +170,8 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
             var soundCategory = livingEntity instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE;
             level.playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(), HWGSounds.GLAUNCHERRELOAD.get(), soundCategory, 0.5F,
                     1.0F);
-            if (!level.isClientSide)
-                triggerAnim(livingEntity, GeoItem.getOrAssignId(stack, (ServerLevel) level), "controller", "loading");
+            if (!level.isClientSide && stack.getItem() instanceof FlareGunItem)
+                animationDispatcher.sendLoadingCommand(livingEntity, stack);
             if (livingEntity instanceof Player player)
                 player.getCooldowns().addCooldown(this, 15);
         }
@@ -230,18 +206,6 @@ public class FlareGunItem extends HWGGunLoadedBase implements GeoItem {
             }
         }
         tooltipComponents.add(Component.translatable("hwg.ammo.reloadflares").withStyle(ChatFormatting.ITALIC));
-    }
-
-    @Override
-    public void createRenderer(Consumer<RenderProvider> consumer) {
-        consumer.accept(new RenderProvider() {
-            private final GunRender<FlareGunItem> renderer = null;
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return new GunRender<FlareGunItem>("flare_gun", GunTypeEnum.FLARE);
-            }
-        });
     }
 
 }

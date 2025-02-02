@@ -36,7 +36,7 @@ public abstract class CustomDelayedMeleeBehaviour<E extends HWGEntity> extends E
             doDelayedAction(entity);
         }
         if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).is(HWGItems.MINIGUN.get())))
-            entity.triggerAnim("attackController", "melee");
+            entity.animationDispatcher.sendMeleeAnimation();
     }
 
     @Override

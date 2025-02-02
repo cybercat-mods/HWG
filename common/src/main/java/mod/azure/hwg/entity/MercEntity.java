@@ -1,11 +1,6 @@
 package mod.azure.hwg.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.Animation;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.azurelib.sblforked.api.SmartBrainOwner;
 import mod.azure.azurelib.sblforked.api.core.BrainActivityGroup;
 import mod.azure.azurelib.sblforked.api.core.SmartBrainProvider;
@@ -26,6 +21,7 @@ import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.HurtBySensor;
 import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.NearbyPlayersSensor;
 import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.entity.animation.AnimationDispatcher;
 import mod.azure.hwg.entity.tasks.HWGMeleeAttackTask;
 import mod.azure.hwg.entity.tasks.RangedShootingAttack;
 import mod.azure.hwg.util.registry.HWGItems;
@@ -61,6 +57,7 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 
     public MercEntity(EntityType<MercEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
+        this.animationDispatcher = new AnimationDispatcher(this);
         xpReward = CommonMod.config.mobconfigs.mercconfigs.merc_exp;
     }
 
@@ -70,13 +67,6 @@ public class MercEntity extends HWGEntity implements SmartBrainOwner<MercEntity>
 
     public static AttributeSupplier.@NotNull Builder createMobAttributes() {
         return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.35D).add(Attributes.MAX_HEALTH, CommonMod.config.mobconfigs.mercconfigs.merc_health).add(Attributes.ARMOR, 3).add(Attributes.ATTACK_DAMAGE, 2D).add(Attributes.ARMOR_TOUGHNESS, 1D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "livingController", 0, event -> event.setAndContinue(
-                RawAnimation.begin().thenLoop("idle"))));
-        controllers.add(new AnimationController<>(this, "attackController", 0, event -> PlayState.STOP).triggerableAnim("ranged", RawAnimation.begin().then("attacking", Animation.LoopType.LOOP)).triggerableAnim("melee", RawAnimation.begin().then("melee", Animation.LoopType.PLAY_ONCE)).triggerableAnim("idle", RawAnimation.begin().thenWait(5).then("idle", Animation.LoopType.LOOP)));
     }
 
     @Override

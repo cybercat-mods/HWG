@@ -37,7 +37,7 @@ public abstract class CustomDelayedBehaviour<E extends HWGEntity> extends Extend
         }
         if (entity.getTarget() != null) {
             if (!(entity.getItemBySlot(EquipmentSlot.MAINHAND).is(HWGItems.MINIGUN.get())) && !entity.isWithinMeleeAttackRange(entity.getTarget()))
-                entity.triggerAnim("attackController", "ranged");
+                entity.animationDispatcher.sendRangedAnimation();
             entity.lookAt(entity.getTarget(), 30.0f, 30.0f);
         }
     }

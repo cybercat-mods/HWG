@@ -3,32 +3,20 @@ package mod.azure.hwg.item.weapons;
 import commonnetwork.api.Network;
 import io.netty.buffer.Unpooled;
 import mod.azure.azurelib.common.api.client.helper.ClientUtils;
-import mod.azure.azurelib.common.api.common.animatable.GeoItem;
-import mod.azure.azurelib.common.internal.client.RenderProvider;
 import mod.azure.azurelib.common.internal.common.AzureLibMod;
-import mod.azure.azurelib.common.internal.common.animatable.SingletonGeoAnimatable;
-import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager;
-import mod.azure.azurelib.core.animation.Animation;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.core.object.PlayState;
 import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.client.render.GunRender;
 import mod.azure.hwg.entity.projectiles.FlameFiring;
 import mod.azure.hwg.item.enums.GunTypeEnum;
 import mod.azure.hwg.item.enums.ProjectileEnum;
+import mod.azure.hwg.item.weapons.animations.GunDispatcher;
 import mod.azure.hwg.network.FiringPacket;
 import mod.azure.hwg.network.ReloadPacket;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -47,16 +35,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
+public abstract class AzureAnimatedGunItem extends Item {
     protected Item ammoType;
     protected final String id;
     protected final SoundEvent firingSound;
     protected final SoundEvent reloadSound;
     protected final GunTypeEnum gunTypeEnum;
-    private static final String firing = "firing";
+    public static final String firing = "firing";
     private static final String controller = "controller";
     protected final ProjectileEnum projectileTypeEnum;
-    private final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
+    private GunDispatcher animationDispatcher;
 
     public AzureAnimatedGunItem(String id, ProjectileEnum projectileTypeEnum, GunTypeEnum gunTypeEnum, int maxClipSize, SoundEvent reloadSound, SoundEvent firingSound) {
         super(new Properties().stacksTo(1).durability(maxClipSize + 1));
@@ -65,7 +53,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
         this.gunTypeEnum = gunTypeEnum;
         this.reloadSound = reloadSound;
         this.firingSound = firingSound;
-        SingletonGeoAnimatable.registerSyncedAnimatable(this);
+        this.animationDispatcher = new GunDispatcher();
     }
 
     public String getItemID() {
@@ -425,7 +413,7 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), getFiringSound(), SoundSource.PLAYERS, 0.25F, 1.3F);
             if (!level.isClientSide) {
                 this.singleFire(itemStack, level, player);
-                gunItem.triggerAnim(player, GeoItem.getOrAssignId(player.getMainHandItem(), (ServerLevel) player.level()), AzureAnimatedGunItem.controller, AzureAnimatedGunItem.firing);
+                gunItem.animationDispatcher.sendFiringCommand(player, itemStack);
             }
         }
     }
@@ -437,26 +425,20 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
             if (this.getFiringSound() != null)
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), getFiringSound(), SoundSource.PLAYERS, 0.25F, 1.3F);
             if (!level.isClientSide) {
-                var result = Helper.hitscanTrace(player, 64, 1.0F);
                 if (this.getProjectileTypeEnum() == ProjectileEnum.BULLET) {
-                    if (result != null) {
-                        if (result.getEntity() instanceof LivingEntity livingEntity)
-                            this.hitScanDamage(livingEntity, player, itemStack);
-                    } else {
-                        var bullet = Helper.createBullet(level, player, this.getAttackDamage());
-                        bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
-                        bullet.tickCount = -15;
-                        level.addFreshEntity(bullet);
-                    }
+                    var bullet = Helper.createBullet(level, player, this.getAttackDamage());
+                    bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
+                    bullet.tickCount = -15;
+                    level.addFreshEntity(bullet);
                 }
-                gunItem.triggerAnim(player, GeoItem.getOrAssignId(player.getMainHandItem(), (ServerLevel) player.level()), AzureAnimatedGunItem.controller, AzureAnimatedGunItem.firing);
+                gunItem.animationDispatcher.sendFiringCommand(player, itemStack);
             }
         }
     }
 
     @Override
     public void inventoryTick(@NotNull ItemStack stack, Level world, @NotNull Entity entity, int slot, boolean selected) {
-        if (world.isClientSide && entity instanceof Player player && player.getMainHandItem().getItem() instanceof AzureAnimatedGunItem && selected) {
+        if (world.isClientSide && entity instanceof Player player && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof AzureAnimatedGunItem && selected) {
             if (ClientUtils.RELOAD.consumeClick()) {
                 FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
                 passedData.writeBoolean(true);
@@ -475,33 +457,36 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
                     Network.getNetworkHandler().sendToServer(new FiringPacket());
                 }
             }
+            if (this.gunTypeEnum == GunTypeEnum.BRIMSTONE || this.gunTypeEnum == GunTypeEnum.BALROG) {
+                animationDispatcher.sendIdleCommand(entity, stack);
+            }
         }
     }
 
     public static void shoot(Player player) {
-        if (player.getMainHandItem().getDamageValue() < (player.getMainHandItem().getMaxDamage() - 1) && player.getMainHandItem().getItem() instanceof AzureAnimatedGunItem gunBase) {
-            if (!player.getCooldowns().isOnCooldown(player.getMainHandItem().getItem()) && !player.getMainHandItem().is(HWGItems.MINIGUN.get()))
-                gunBase.fireWeapon(player.getMainHandItem(), player.level(), player);
-            else gunBase.autoFire(player.getMainHandItem(), player.level(), player);
+        if (player.getItemInHand(player.getUsedItemHand()).getDamageValue() < (player.getItemInHand(player.getUsedItemHand()).getMaxDamage() - 1) && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof AzureAnimatedGunItem gunBase) {
+            if (!player.getCooldowns().isOnCooldown(player.getItemInHand(player.getUsedItemHand()).getItem()) && !player.getItemInHand(player.getUsedItemHand()).is(HWGItems.MINIGUN.get()))
+                gunBase.fireWeapon(player.getItemInHand(player.getUsedItemHand()), player.level(), player);
+            else gunBase.autoFire(player.getItemInHand(player.getUsedItemHand()), player.level(), player);
         } else {
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 0.25F, 1.3F);
         }
     }
 
     public static void reload(Player user, InteractionHand hand) {
-        if (user.getMainHandItem().getItem() instanceof AzureAnimatedGunItem gunBase) {
-            while (!user.isCreative() && user.getMainHandItem().getDamageValue() != 0 && user.getInventory().countItem(gunBase.getAmmoType()) > 0) {
+        if (user.getItemInHand(user.getUsedItemHand()).getItem() instanceof AzureAnimatedGunItem gunBase) {
+            while (!user.isCreative() && user.getItemInHand(user.getUsedItemHand()).getDamageValue() != 0 && user.getInventory().countItem(gunBase.getAmmoType()) > 0) {
                 Helper.removeAmmo(gunBase.getAmmoType(), user);
                 user.getCooldowns().addCooldown(gunBase, gunBase.getReloadCoolDown());
-                user.getMainHandItem().hurtAndBreak(-gunBase.getReloadAmount(), user, user.getEquipmentSlotForItem(user.getMainHandItem()));
-                user.getMainHandItem().setPopTime(3);
+                user.getItemInHand(user.getUsedItemHand()).hurtAndBreak(-gunBase.getReloadAmount(), user, user.getEquipmentSlotForItem(user.getItemInHand(user.getUsedItemHand())));
+                user.getItemInHand(user.getUsedItemHand()).setPopTime(3);
                 if (gunBase.getReloadSound() != null)
                     user.level().playSound(null, user.getX(), user.getY(), user.getZ(), gunBase.getReloadSound(), SoundSource.PLAYERS, 1.00F, 1.0F);
                 if (!user.level().isClientSide) {
                     if (user.getRandom().nextInt(0, 100) >= 95 && gunBase.getItemID().equalsIgnoreCase("tommy_gun"))
-                        gunBase.triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), AzureAnimatedGunItem.controller, "tommyreload2");
+                        gunBase.animationDispatcher.sendTommyReloadCommand(user, user.getItemInHand(hand));
                     else
-                        gunBase.triggerAnim(user, GeoItem.getOrAssignId(user.getItemInHand(hand), (ServerLevel) user.level()), AzureAnimatedGunItem.controller, "reload");
+                        gunBase.animationDispatcher.sendReloadCommand(user, user.getItemInHand(hand));
                 }
             }
         }
@@ -533,42 +518,5 @@ public abstract class AzureAnimatedGunItem extends Item implements GeoItem {
             case SILVER_BULLET ->
                     tooltip.add(Component.translatable("hwg.ammo.reloadsilverbullets").withStyle(ChatFormatting.ITALIC));
         }
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, AzureAnimatedGunItem.controller, event -> {
-            if (event.getAnimatable().gunTypeEnum == GunTypeEnum.BRIMSTONE || event.getAnimatable().gunTypeEnum == GunTypeEnum.BALROG)
-                return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-            return PlayState.CONTINUE;
-        }).triggerableAnim(AzureAnimatedGunItem.firing, RawAnimation.begin().then(AzureAnimatedGunItem.firing, Animation.LoopType.PLAY_ONCE))//firing
-                .triggerableAnim("tommyreload2", RawAnimation.begin().then("tommyreload2", Animation.LoopType.PLAY_ONCE))//reload tommy special
-                .triggerableAnim("reload", RawAnimation.begin().then("reload", Animation.LoopType.PLAY_ONCE)).setSoundKeyframeHandler(event -> {
-                    Player player = ClientUtils.getClientPlayer();
-                    if (this.getGunTypeEnum() == GunTypeEnum.FLAMETHROWER && event.getKeyframeData().getSound().matches("tank") && player.level().isClientSide())
-                        player.level().playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.METAL_PLACE, SoundSource.HOSTILE, 0.25F, 1.0F, false);
-                }));//reload
-    }
-
-    @Override
-    public boolean isPerspectiveAware() {
-        return true;
-    }
-
-    @Override
-    public void createRenderer(Consumer<RenderProvider> consumer) {
-        consumer.accept(new RenderProvider() {
-            private final GunRender<AzureAnimatedGunItem> renderer = null;
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return new GunRender<AzureAnimatedGunItem>(getItemID(), getGunTypeEnum());
-            }
-        });
     }
 }

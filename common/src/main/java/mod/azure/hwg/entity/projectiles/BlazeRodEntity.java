@@ -93,7 +93,8 @@ public class BlazeRodEntity extends AbstractArrow {
         if (idleTicks < idleOpt) super.tick();
 
         ++this.ticksInAir;
-        if (this.ticksInAir >= 40) this.remove(RemovalReason.DISCARDED);
+        if (this.tickCount >= 190)
+            this.remove(RemovalReason.DISCARDED);
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         Helper.setOnFire(this);
         Helper.spawnLightSource(this, isInsideWaterBlock);

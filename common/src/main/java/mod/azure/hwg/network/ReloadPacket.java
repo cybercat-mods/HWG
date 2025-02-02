@@ -16,7 +16,7 @@ public class ReloadPacket {
     }
 
     public static void handle(PacketContext<ReloadPacket> ctx) {
-        if (Side.SERVER.equals(ctx.side()) && ctx.sender().getMainHandItem().getItem() instanceof AzureAnimatedGunItem)
+        if (Side.SERVER.equals(ctx.side()) && ctx.sender().getItemInHand(ctx.sender().getUsedItemHand()).getItem() instanceof AzureAnimatedGunItem)
             AzureAnimatedGunItem.reload(ctx.sender(), InteractionHand.MAIN_HAND);
     }
 

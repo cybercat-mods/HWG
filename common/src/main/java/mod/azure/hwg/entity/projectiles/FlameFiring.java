@@ -89,7 +89,8 @@ public class FlameFiring extends AbstractArrow {
         if (getDeltaMovement().lengthSqr() < 0.01) idleTicks++;
         else idleTicks = 0;
         if (idleTicks < idleOpt) super.tick();
-        if (this.tickCount >= 40) this.remove(RemovalReason.DISCARDED);
+        if (this.tickCount >= 190)
+            this.remove(RemovalReason.DISCARDED);
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         Helper.spawnLightSource(this, isInsideWaterBlock);
         if (getOwner() instanceof Player) setYRot(entityData.get(FORCED_YAW));

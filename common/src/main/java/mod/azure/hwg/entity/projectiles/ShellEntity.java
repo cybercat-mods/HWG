@@ -82,7 +82,8 @@ public class ShellEntity extends AbstractArrow {
     public void tick() {
         super.tick();
         Helper.setOnFire(this);
-        if (this.tickCount >= 40) this.remove(RemovalReason.DISCARDED);
+        if (this.tickCount >= 190)
+            this.remove(RemovalReason.DISCARDED);
         if (this.level().isClientSide) {
             double d2 = this.getX() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             double f2 = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
