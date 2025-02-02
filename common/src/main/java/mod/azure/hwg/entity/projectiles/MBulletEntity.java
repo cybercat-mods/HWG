@@ -15,6 +15,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -42,6 +43,20 @@ public class MBulletEntity extends AbstractArrow {
 
     public MBulletEntity(Level world, LivingEntity owner) {
         super(HWGProjectiles.MBULLETS.get(), world);
+    }
+
+    public MBulletEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
+        this(world, stack, x, y, z, shotAtAngle);
+        this.setOwner(entity);
+    }
+
+    public MBulletEntity(Level world, ItemStack stack, double x, double y, double z, boolean shotAtAngle) {
+        this(world, x, y, z, stack);
+    }
+
+    public MBulletEntity(Level world, double x, double y, double z, ItemStack stack) {
+        super(HWGProjectiles.MBULLETS.get(), world);
+        this.absMoveTo(x, y, z);
     }
 
     @Override

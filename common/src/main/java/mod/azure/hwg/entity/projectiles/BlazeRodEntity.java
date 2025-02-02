@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +38,21 @@ public class BlazeRodEntity extends AbstractArrow {
     }
 
     public BlazeRodEntity(Level world, LivingEntity owner) {
-        super(HWGProjectiles.BULLETS.get(), world);
+        super(HWGProjectiles.BLAZEROD.get(), world);
+    }
+
+    public BlazeRodEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
+        this(world, stack, x, y, z, shotAtAngle);
+        this.setOwner(entity);
+    }
+
+    public BlazeRodEntity(Level world, ItemStack stack, double x, double y, double z, boolean shotAtAngle) {
+        this(world, x, y, z, stack);
+    }
+
+    public BlazeRodEntity(Level world, double x, double y, double z, ItemStack stack) {
+        super(HWGProjectiles.BLAZEROD.get(), world);
+        this.absMoveTo(x, y, z);
     }
 
     @Override

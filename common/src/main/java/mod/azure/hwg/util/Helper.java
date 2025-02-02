@@ -11,6 +11,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -107,12 +109,16 @@ public class Helper {
         return null;
     }
 
-    public static BulletEntity createBullet(Level worldIn, LivingEntity shooter, float damage) {
-        return new BulletEntity(worldIn, shooter, damage);
+    public static BulletEntity createBullet(Level level, LivingEntity shooter, float damage) {
+        var bulletEntity = new BulletEntity(level, new ItemStack(Items.AIR), shooter, shooter.getX(),
+                shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), false);
+        bulletEntity.bulletdamage = damage;
+        return bulletEntity;
     }
 
-    public static BlazeRodEntity createBlazeRod(Level worldIn, LivingEntity shooter) {
-        return new BlazeRodEntity(worldIn, shooter);
+    public static BlazeRodEntity createBlazeRod(Level level, LivingEntity shooter) {
+        return new BlazeRodEntity(level, new ItemStack(Items.AIR), shooter, shooter.getX(),
+                shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), false);
     }
 
     public static FireballEntity createFireball(Level worldIn, LivingEntity shooter) {
@@ -123,19 +129,24 @@ public class Helper {
         return new FlameFiring(worldIn, shooter);
     }
 
-    public static MBulletEntity createMeanieBullet(Level worldIn, LivingEntity shooter) {
-        return new MBulletEntity(worldIn, shooter);
+    public static MBulletEntity createMeanieBullet(Level level, LivingEntity shooter) {
+        return new MBulletEntity(level, new ItemStack(Items.AIR), shooter, shooter.getX(),
+                shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), false);
     }
 
-    public static ShellEntity createShell(Level worldIn, LivingEntity shooter) {
-        return new ShellEntity(worldIn, shooter);
+    public static ShellEntity createShell(Level level, LivingEntity shooter) {
+        return new ShellEntity(level, new ItemStack(Items.AIR), shooter, shooter.getX(),
+                shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), false);
     }
 
     public static RocketEntity createRocket(Level worldIn, LivingEntity shooter) {
         return new RocketEntity(worldIn, shooter);
     }
 
-    public static SBulletEntity createSilverBullet(Level worldIn, LivingEntity shooter) {
-        return new SBulletEntity(worldIn, shooter, CommonMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage);
+    public static SBulletEntity createSilverBullet(Level level, LivingEntity shooter) {
+        var bulletEntity = new SBulletEntity(level, new ItemStack(Items.AIR), shooter, shooter.getX(),
+                shooter.getEyeY() - 0.15000000596046448D, shooter.getZ(), false);
+        bulletEntity.bulletdamage = CommonMod.config.gunconfigs.hellhorseconfigs.hellhorse_damage;
+        return bulletEntity;
     }
 }

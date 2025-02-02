@@ -1,6 +1,7 @@
 package mod.azure.hwg.entity.projectiles;
 
 import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.util.BlockBreakProgressManager;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.minecraft.core.particles.ParticleTypes;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -40,6 +42,20 @@ public class ShellEntity extends AbstractArrow {
 
     public ShellEntity(Level world, LivingEntity owner) {
         super(HWGProjectiles.SHELL.get(), world);
+    }
+
+    public ShellEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
+        this(world, stack, x, y, z, shotAtAngle);
+        this.setOwner(entity);
+    }
+
+    public ShellEntity(Level world, ItemStack stack, double x, double y, double z, boolean shotAtAngle) {
+        this(world, x, y, z, stack);
+    }
+
+    public ShellEntity(Level world, double x, double y, double z, ItemStack stack) {
+        super(HWGProjectiles.SHELL.get(), world);
+        this.absMoveTo(x, y, z);
     }
 
     @Override
@@ -111,6 +127,12 @@ public class ShellEntity extends AbstractArrow {
     protected void onHitBlock(@NotNull BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
         if (!this.level().isClientSide) this.remove(RemovalReason.DISCARDED);
+        if (CommonMod.config.gunconfigs.bullets_breakdripstone && !level().getBlockState(blockHitResult.getBlockPos()).is(Blocks.BEDROCK))
+            BlockBreakProgressManager.damage(
+                    level(),
+                    blockHitResult.getBlockPos(),
+                    CommonMod.config.gunconfigs.shotgunconfigs.shotgun_damage * 2.0F
+            );
         if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && CommonMod.config.gunconfigs.bullets_breakdripstone)
             level().destroyBlock(blockHitResult.getBlockPos(), true);
         if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)

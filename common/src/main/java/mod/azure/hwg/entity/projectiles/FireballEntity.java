@@ -42,6 +42,7 @@ public class FireballEntity extends AbstractArrow {
 
     public FireballEntity(Level world, LivingEntity owner) {
         super(HWGProjectiles.FIREBALL.get(), world);
+        this.setOwner(owner);
     }
 
     @Override
