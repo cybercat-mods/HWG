@@ -258,43 +258,21 @@ public abstract class AzureAnimatedGunItem extends Item {
         return InteractionResultHolder.consume(itemStack);
     }
 
-    private void hitScanDamage(LivingEntity livingEntity, Player player, ItemStack itemStack) {
-        if (getProjectileTypeEnum() != ProjectileEnum.SHELL)
-            livingEntity.hurt(player.damageSources().playerAttack(player), this.getAttackDamage());
-        else {
-            for (var y = 0; y < 3; ++y) {
-                livingEntity.invulnerableTime = 0;
-                livingEntity.setDeltaMovement(0, 0, 0);
-                livingEntity.hurt(player.damageSources().playerAttack(player), this.getAttackDamage());
-            }
-        }
-    }
-
     private void singleFire(@NotNull ItemStack itemStack, @NotNull Level level, @NotNull Player player) {
         var result = Helper.hitscanTrace(player, 64, 1.0F);
         player.getCooldowns().addCooldown(this, this.getCoolDown());
         switch (this.getProjectileTypeEnum()) {
             case BULLET -> {
-                if (result != null) {
-                    if (result.getEntity() instanceof LivingEntity livingEntity)
-                        this.hitScanDamage(livingEntity, player, itemStack);
-                } else {
-                    var bullet = Helper.createBullet(level, player, this.getAttackDamage());
-                    bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
-                    bullet.tickCount = -15;
-                    level.addFreshEntity(bullet);
-                }
+                var bullet = Helper.createBullet(level, player, this.getAttackDamage());
+                bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
+                bullet.tickCount = -15;
+                level.addFreshEntity(bullet);
             }
             case HELL -> {
-                if (result != null) {
-                    if (result.getEntity() instanceof LivingEntity livingEntity)
-                        this.hitScanDamage(livingEntity, player, itemStack);
-                } else {
-                    var bullet = Helper.createBullet(level, player, getAttackDamage());
-                    bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-                    bullet.tickCount = -15;
-                    level.addFreshEntity(bullet);
-                }
+                var bullet = Helper.createBullet(level, player, getAttackDamage());
+                bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+                bullet.tickCount = -15;
+                level.addFreshEntity(bullet);
             }
             case BLAZE -> {
                 var rod = Helper.createBlazeRod(level, player);
@@ -340,30 +318,20 @@ public abstract class AzureAnimatedGunItem extends Item {
                 level.addFreshEntity(fireball2);
             }
             case MEANIE -> {
-                if (result != null) {
-                    if (result.getEntity() instanceof LivingEntity livingEntity)
-                        this.hitScanDamage(livingEntity, player, itemStack);
-                } else {
-                    var bullet = Helper.createMeanieBullet(level, player);
-                    bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
-                    bullet.tickCount = -15;
-                    level.addFreshEntity(bullet);
-                }
+                var bullet = Helper.createMeanieBullet(level, player);
+                bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F * 3.0F, 1.0F);
+                bullet.tickCount = -15;
+                level.addFreshEntity(bullet);
             }
             case SHELL -> {
-                if (result != null) {
-                    if (result.getEntity() instanceof LivingEntity livingEntity)
-                        this.hitScanDamage(livingEntity, player, itemStack);
-                } else {
-                    var bullet = Helper.createShell(level, player);
-                    bullet.shootFromRotation(player, player.getXRot(), player.getYRot() + 1, 0.5F, 20.0F, 1.0F);
-                    var bullet1 = Helper.createShell(level, player);
-                    bullet1.shootFromRotation(player, player.getXRot(), player.getYRot() - 1, 0.5F, 20.0F, 1.0F);
-                    bullet.tickCount = -15;
-                    bullet1.tickCount = -15;
-                    level.addFreshEntity(bullet);
-                    level.addFreshEntity(bullet1);
-                }
+                var bullet = Helper.createShell(level, player);
+                bullet.shootFromRotation(player, player.getXRot(), player.getYRot() + 1, 0.5F, 20.0F, 1.0F);
+                var bullet1 = Helper.createShell(level, player);
+                bullet1.shootFromRotation(player, player.getXRot(), player.getYRot() - 1, 0.5F, 20.0F, 1.0F);
+                bullet.tickCount = -15;
+                bullet1.tickCount = -15;
+                level.addFreshEntity(bullet);
+                level.addFreshEntity(bullet1);
             }
             case ROCKET -> {
                 var rocket = Helper.createRocket(level, player);
@@ -373,15 +341,10 @@ public abstract class AzureAnimatedGunItem extends Item {
                 level.addFreshEntity(rocket);
             }
             case SILVER_BULLET -> {
-                if (result != null) {
-                    if (result.getEntity() instanceof LivingEntity livingEntity)
-                        this.hitScanDamage(livingEntity, player, itemStack);
-                } else {
-                    var bullet = Helper.createSilverBullet(level, player);
-                    bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
-                    bullet.tickCount = -15;
-                    level.addFreshEntity(bullet);
-                }
+                 var bullet = Helper.createSilverBullet(level, player);
+                 bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
+                 bullet.tickCount = -15;
+                 level.addFreshEntity(bullet);
             }
             case FLAMES -> {
                 var flames = Helper.createFlame(level, player);
