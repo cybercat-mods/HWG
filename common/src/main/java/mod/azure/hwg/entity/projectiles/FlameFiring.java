@@ -2,6 +2,7 @@ package mod.azure.hwg.entity.projectiles;
 
 import mod.azure.hwg.CommonMod;
 import mod.azure.hwg.entity.HWGEntity;
+import mod.azure.hwg.util.BlockBreakProgressManager;
 import mod.azure.hwg.util.Helper;
 import mod.azure.hwg.util.registry.HWGParticles;
 import mod.azure.hwg.util.registry.HWGProjectiles;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -131,11 +133,13 @@ public class FlameFiring extends AbstractArrow {
     protected void onHitBlock(@NotNull BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
         if (!this.level().isClientSide) {
-            Entity entity = this.getOwner();
-            if (!(entity instanceof Mob) || this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
-                var blockPos = blockHitResult.getBlockPos().relative(blockHitResult.getDirection());
-                if (this.level().isEmptyBlock(blockPos))
-                    this.level().setBlockAndUpdate(blockPos, BaseFireBlock.getState(this.level(), blockPos));
+            var hitPos = blockHitResult.getBlockPos().above();
+            for (var x = -1; x <= 1; x++) {
+                for (var z = -1; z <= 1; z++) {
+                    var firePos = hitPos.offset(x, 0, z);
+                    if (this.level().getBlockState(firePos).isAir())
+                        this.level().setBlockAndUpdate(firePos, Blocks.FIRE.defaultBlockState());
+                }
             }
             this.remove(RemovalReason.DISCARDED);
         }
