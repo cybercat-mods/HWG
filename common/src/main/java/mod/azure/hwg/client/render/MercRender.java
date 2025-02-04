@@ -28,7 +28,8 @@ public class MercRender<T extends MercEntity> extends AzEntityRenderer<MercEntit
                         .setAnimatorProvider(MercAnimator::new)
                         .addRenderLayer(new AzBlockAndItemLayer<MercEntity>() {
 
-                            public ItemStack itemStackForBoneWithEntity(AzBone bone, MercEntity animatable) {
+                            @Override
+                            public ItemStack itemStackForBone(AzBone bone, MercEntity animatable) {
                                 return switch (bone.getName()) {
                                     case "rArmRuff", "rightHand" -> animatable.getItemBySlot(EquipmentSlot.MAINHAND);
                                     default -> null;
@@ -36,32 +37,17 @@ public class MercRender<T extends MercEntity> extends AzEntityRenderer<MercEntit
                             }
 
                             @Override
-                            public void renderForBone(AzRendererPipelineContext<MercEntity> context, AzBone bone) {
-                                var stack = itemStackForBoneWithEntity(bone, context.animatable());
-
-                                if (stack == null)
-                                    return;
-
-                                context.poseStack().pushPose();
-                                RenderUtils.translateAndRotateMatrixForBone(context.poseStack(), bone);
-
-                                renderItemForBone(context, bone, stack);
-
-                                context.poseStack().popPose();
-                            }
-
-                            @Override
-                            protected ItemDisplayContext getTransformTypeForStack(AzBone bone, ItemStack stack) {
+                            protected ItemDisplayContext getTransformTypeForStack(AzBone bone, ItemStack stack, MercEntity animatable) {
                                 return ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
                             }
 
                             @Override
-                            protected void renderItemForBone(AzRendererPipelineContext<MercEntity> context, AzBone bone, ItemStack itemStack) {
+                            protected void renderItemForBone(AzRendererPipelineContext<MercEntity> context, AzBone bone, ItemStack itemStack, MercEntity animatable) {
                                 context.poseStack().mulPose(Axis.XP.rotationDegrees(270));
                                 context.poseStack().mulPose(Axis.YP.rotationDegrees(0));
                                 context.poseStack().mulPose(Axis.ZP.rotationDegrees(0f));
                                 context.poseStack().translate(0.0D, 0.1D, -0.1D);
-                                super.renderItemForBone(context, bone, itemStack);
+                                super.renderItemForBone(context, bone, itemStack, animatable);
                             }
                         })
                         .build(),

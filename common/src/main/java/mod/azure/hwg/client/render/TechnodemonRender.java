@@ -1,7 +1,6 @@
 package mod.azure.hwg.client.render;
 
 import com.mojang.math.Axis;
-import mod.azure.azurelib.common.internal.client.util.RenderUtils;
 import mod.azure.azurelib.rewrite.model.AzBone;
 import mod.azure.azurelib.rewrite.render.AzRendererPipelineContext;
 import mod.azure.azurelib.rewrite.render.entity.AzEntityRenderer;
@@ -26,7 +25,8 @@ public class TechnodemonRender<T extends TechnodemonEntity> extends AzEntityRend
                         .setAnimatorProvider(TechnodemonAnimator::new)
                         .addRenderLayer(new AzBlockAndItemLayer<TechnodemonEntity>() {
 
-                            public ItemStack itemStackForBoneWithEntity(AzBone bone, T animatable) {
+                            @Override
+                            public ItemStack itemStackForBone(AzBone bone, TechnodemonEntity animatable) {
                                 return switch (bone.getName()) {
                                     case "rArmRuff", "rightHand" -> animatable.getItemBySlot(EquipmentSlot.MAINHAND);
                                     default -> null;
@@ -34,27 +34,12 @@ public class TechnodemonRender<T extends TechnodemonEntity> extends AzEntityRend
                             }
 
                             @Override
-                            public void renderForBone(AzRendererPipelineContext<TechnodemonEntity> context, AzBone bone) {
-                                var stack = itemStackForBoneWithEntity(bone, (T) context.animatable());
-
-                                if (stack == null)
-                                    return;
-
-                                context.poseStack().pushPose();
-                                RenderUtils.translateAndRotateMatrixForBone(context.poseStack(), bone);
-
-                                renderItemForBone(context, bone, stack);
-
-                                context.poseStack().popPose();
-                            }
-
-                            @Override
-                            protected ItemDisplayContext getTransformTypeForStack(AzBone bone, ItemStack stack) {
+                            protected ItemDisplayContext getTransformTypeForStack(AzBone bone, ItemStack stack, TechnodemonEntity animatable) {
                                 return ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
                             }
 
                             @Override
-                            protected void renderItemForBone(AzRendererPipelineContext<TechnodemonEntity> context, AzBone bone, ItemStack itemStack) {
+                            protected void renderItemForBone(AzRendererPipelineContext<TechnodemonEntity> context, AzBone bone, ItemStack itemStack, TechnodemonEntity animatable) {
                                 if (context.animatable().getMainHandItem().is(HWGItems.MINIGUN.get())) {
                                     context.poseStack().mulPose(Axis.XP.rotationDegrees(-15));
                                 } else {
@@ -71,7 +56,7 @@ public class TechnodemonRender<T extends TechnodemonEntity> extends AzEntityRend
                                 } else {
                                     context.poseStack().translate(0.2D, 0.15D, -0.65D);
                                 }
-                                super.renderItemForBone(context, bone, itemStack);
+                                super.renderItemForBone(context, bone, itemStack, animatable);
                             }
                         })
                         .build(),
