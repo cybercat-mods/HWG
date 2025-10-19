@@ -1,10 +1,5 @@
 package mod.azure.hwg.client.gui;
 
-import mod.azure.hwg.mixins.IngredientAccess;
-import mod.azure.hwg.util.recipes.GunTableRecipe;
-import mod.azure.hwg.util.recipes.GunTableRecipe.Type;
-import mod.azure.hwg.util.registry.HWGBlocks;
-import mod.azure.hwg.util.registry.ModScreens;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -22,11 +17,22 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import mod.azure.hwg.mixins.IngredientAccess;
+import mod.azure.hwg.util.recipes.GunTableRecipe;
+import mod.azure.hwg.util.recipes.GunTableRecipe.Type;
+import mod.azure.hwg.util.registry.HWGBlocks;
+import mod.azure.hwg.util.registry.ModScreens;
+
 public class GunTableScreenHandler extends AbstractContainerMenu {
+
     protected static Level level;
+
     protected final Inventory playerInventory;
+
     protected final GunTableInventory gunTableInventory;
+
     protected final ContainerLevelAccess context;
+
     protected int recipeIndex;
 
     // client
@@ -55,14 +61,15 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
 
         for (k = 0; k < 9; ++k)
             this.addSlot(new Slot(playerInventory, k, 127 + k * 18, 142));
-
     }
 
     protected static void updateResult(int syncId, Level world, Player player, GunTableInventory craftingInventory) {
         if (!world.isClientSide) {
             var serverPlayerEntity = (ServerPlayer) player;
             var itemStack = ItemStack.EMPTY;
-            var optional = world.getServer().getRecipeManager().getRecipeFor(Type.INSTANCE, craftingInventory.recipeInput, world);
+            var optional = world.getServer()
+                .getRecipeManager()
+                .getRecipeFor(Type.INSTANCE, craftingInventory.recipeInput, world);
             if (optional.isPresent()) {
                 var craftingRecipe = optional.get();
                 itemStack = craftingRecipe.value().assemble(craftingInventory.recipeInput, level.registryAccess());
@@ -75,7 +82,14 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
 
     @Override
     public void slotsChanged(@NotNull Container inventory) {
-        this.context.execute((world, blockPos) -> updateResult(this.containerId, world, this.playerInventory.player, this.gunTableInventory));
+        this.context.execute(
+            (world, blockPos) -> updateResult(
+                this.containerId,
+                world,
+                this.playerInventory.player,
+                this.gunTableInventory
+            )
+        );
     }
 
     @Override
@@ -120,7 +134,9 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
     }
 
     public List<RecipeHolder<GunTableRecipe>> getRecipes() {
-        List<RecipeHolder<GunTableRecipe>> immutableRecipeListView = playerInventory.player.level().getRecipeManager().getAllRecipesFor(Type.INSTANCE);
+        List<RecipeHolder<GunTableRecipe>> immutableRecipeListView = playerInventory.player.level()
+            .getRecipeManager()
+            .getAllRecipesFor(Type.INSTANCE);
         List<RecipeHolder<GunTableRecipe>> sortableList = new ArrayList<>(immutableRecipeListView);
         sortableList.sort(Comparator.comparing(RecipeHolder::id));
         return sortableList;
@@ -179,14 +195,19 @@ public class GunTableScreenHandler extends AbstractContainerMenu {
     }
 
     private boolean equals(ItemStack itemStack, ItemStack otherItemStack) {
-        return itemStack.getItem() == otherItemStack.getItem() && ItemStack.isSameItemSameComponents(itemStack, otherItemStack);
+        return itemStack.getItem() == otherItemStack.getItem() && ItemStack.isSameItemSameComponents(
+            itemStack,
+            otherItemStack
+        );
     }
 
     @Override
     public void removed(@NotNull Player player) {
         super.removed(player);
         if (!this.playerInventory.player.level().isClientSide) {
-            if (player.isAlive() && (!(player instanceof ServerPlayer serverPlayer) || !serverPlayer.hasDisconnected())) {
+            if (
+                player.isAlive() && (!(player instanceof ServerPlayer serverPlayer) || !serverPlayer.hasDisconnected())
+            ) {
                 player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(0));
                 player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(1));
                 player.getInventory().placeItemBackInInventory(this.gunTableInventory.removeItemNoUpdate(2));

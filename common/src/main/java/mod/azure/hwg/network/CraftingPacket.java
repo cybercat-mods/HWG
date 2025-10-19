@@ -4,11 +4,13 @@ import commonnetwork.api.Network;
 import commonnetwork.networking.data.PacketContext;
 import commonnetwork.networking.data.Side;
 import io.netty.buffer.Unpooled;
-import mod.azure.hwg.client.gui.GunTableScreenHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
+import mod.azure.hwg.client.gui.GunTableScreenHandler;
+
 public class CraftingPacket {
+
     private static int index;
 
     public CraftingPacket(int index) {
@@ -35,6 +37,5 @@ public class CraftingPacket {
         }
     }
 
-    public void encode(FriendlyByteBuf buf) {
-    }
+    public void encode(FriendlyByteBuf buf) {}
 }

@@ -1,31 +1,6 @@
 package mod.azure.hwg.entity;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import mod.azure.azurelib.rewrite.util.MoveAnalysis;
-import mod.azure.azurelib.sblforked.api.SmartBrainOwner;
-import mod.azure.azurelib.sblforked.api.core.BrainActivityGroup;
-import mod.azure.azurelib.sblforked.api.core.SmartBrainProvider;
-import mod.azure.azurelib.sblforked.api.core.behaviour.FirstApplicableBehaviour;
-import mod.azure.azurelib.sblforked.api.core.behaviour.OneRandomBehaviour;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.look.LookAtTarget;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.misc.Idle;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.move.MoveToWalkTarget;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.move.StrafeTarget;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.path.SetRandomWalkTarget;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.target.InvalidateAttackTarget;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.target.SetPlayerLookTarget;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.target.SetRandomLookTarget;
-import mod.azure.azurelib.sblforked.api.core.behaviour.custom.target.TargetOrRetaliate;
-import mod.azure.azurelib.sblforked.api.core.sensor.ExtendedSensor;
-import mod.azure.azurelib.sblforked.api.core.sensor.custom.UnreachableTargetSensor;
-import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.HurtBySensor;
-import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.NearbyLivingEntitySensor;
-import mod.azure.azurelib.sblforked.api.core.sensor.vanilla.NearbyPlayersSensor;
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.entity.animation.AnimationDispatcher;
-import mod.azure.hwg.entity.tasks.HWGMeleeAttackTask;
-import mod.azure.hwg.entity.tasks.RangedShootingAttack;
-import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.azurelib.common.util.MoveAnalysis;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -34,10 +9,16 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MoveThroughVillageGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -47,10 +28,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
-public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwner<TechnodemonGreaterEntity> {
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.entity.ai.DelayedAttackGoal;
+import mod.azure.hwg.entity.ai.DelayedRangedAttackGoal;
+import mod.azure.hwg.entity.animation.AnimationDispatcher;
+import mod.azure.hwg.util.registry.HWGItems;
+
+public class TechnodemonGreaterEntity extends HWGEntity {
 
     public TechnodemonGreaterEntity(EntityType<TechnodemonGreaterEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -60,7 +46,13 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
     }
 
     public static AttributeSupplier.@NotNull Builder createMobAttributes() {
-        return LivingEntity.createLivingAttributes().add(Attributes.FOLLOW_RANGE, 25.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.MAX_HEALTH, CommonMod.config.mobconfigs.greatconfigs.greater_health).add(Attributes.ARMOR, 5).add(Attributes.ATTACK_DAMAGE, 10D).add(Attributes.ATTACK_KNOCKBACK, 1.0D);
+        return LivingEntity.createLivingAttributes()
+            .add(Attributes.FOLLOW_RANGE, 25.0D)
+            .add(Attributes.MOVEMENT_SPEED, 0.25D)
+            .add(Attributes.MAX_HEALTH, CommonMod.config.mobconfigs.greatconfigs.greater_health)
+            .add(Attributes.ARMOR, 5)
+            .add(Attributes.ATTACK_DAMAGE, 10D)
+            .add(Attributes.ATTACK_KNOCKBACK, 1.0D);
     }
 
     @Override
@@ -73,36 +65,20 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
     }
 
     @Override
-    protected Brain.@NotNull Provider<?> brainProvider() {
-        return new SmartBrainProvider<>(this);
-    }
-
-    @Override
-    protected void customServerAiStep() {
-        tickBrain(this);
-    }
-
-    @Override
-    public List<ExtendedSensor<TechnodemonGreaterEntity>> getSensors() {
-        return ObjectArrayList.of(new NearbyPlayersSensor<>(), new NearbyLivingEntitySensor<TechnodemonGreaterEntity>().setPredicate((target, entity) -> target instanceof Player || target instanceof Villager), new HurtBySensor<>(), new UnreachableTargetSensor<>());
-    }
-
-    @Override
-    public BrainActivityGroup<TechnodemonGreaterEntity> getCoreTasks() {
-        return BrainActivityGroup.coreTasks(new StrafeTarget<>(), new LookAtTarget<>(), new MoveToWalkTarget<>());
-    }
-
-    @Override
-    public BrainActivityGroup<TechnodemonGreaterEntity> getIdleTasks() {
-        return BrainActivityGroup.idleTasks(new FirstApplicableBehaviour<>(new TargetOrRetaliate<>(), new SetPlayerLookTarget<>().stopIf(target -> !target.isAlive() || (target instanceof Player player && !(player.isCreative() || player.isSpectator()))), new SetRandomLookTarget<>()), new OneRandomBehaviour<TechnodemonEntity>(new SetRandomWalkTarget<>().speedModifier(0.7F).startCondition(entity -> !entity.isAggressive()), new Idle<>().runFor(entity -> entity.getRandom().nextInt(30, 60))));
-    }
-
-    @Override
-    public BrainActivityGroup<TechnodemonGreaterEntity> getFightTasks() {
-        return BrainActivityGroup.fightTasks(
-                new InvalidateAttackTarget<>().stopIf(target -> !target.isAlive() || (target instanceof Player player && (player.isCreative() || player.isSpectator()))),
-                new RangedShootingAttack<>(5).whenStarting(entity -> setAggressive(true)).whenStarting(entity -> setAggressive(false)),
-                new HWGMeleeAttackTask<>(3));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(2, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(3, new DelayedAttackGoal(this, 1.0F, false, 20, this::runAttackAnimations));
+        this.goalSelector.addGoal(
+            3,
+            new DelayedRangedAttackGoal(this, 1.0F, false, 30, this::runRangeAttackAniamtions)
+        );
+        this.goalSelector.addGoal(6, new MoveThroughVillageGoal(this, 1.0F, true, 4, () -> true));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, (double) 1.0F));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 
     @Override
@@ -133,7 +109,12 @@ public class TechnodemonGreaterEntity extends HWGEntity implements SmartBrainOwn
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+    public SpawnGroupData finalizeSpawn(
+        @NotNull ServerLevelAccessor level,
+        @NotNull DifficultyInstance difficulty,
+        @NotNull MobSpawnType spawnType,
+        @Nullable SpawnGroupData spawnGroupData
+    ) {
         setVariant(random.nextInt(0, 3));
         setUUID(UUID.randomUUID());
         setItemSlot(EquipmentSlot.MAINHAND, makeInitialWeapon());

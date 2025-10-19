@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Ingredient.class)
 public interface IngredientAccess {
+
     @Accessor("itemStacks")
     ItemStack[] getMatchingStacksMod();
 }

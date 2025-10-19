@@ -1,12 +1,13 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.hwg.util.registry.HWGMobs;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+
+import mod.azure.hwg.util.registry.HWGMobs;
 
 public class FuelTankEntity extends Entity {
 
@@ -15,8 +16,7 @@ public class FuelTankEntity extends Entity {
     }
 
     @Override
-    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
-    }
+    protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {}
 
     @Override
     public boolean shouldBeSaved() {
@@ -34,22 +34,22 @@ public class FuelTankEntity extends Entity {
     }
 
     protected void explode() {
-        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 4.0F, true, Level.ExplosionInteraction.NONE);
+        this.level()
+            .explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 4.0F, true, Level.ExplosionInteraction.NONE);
     }
 
     @Override
     public void tick() {
         this.remove(RemovalReason.DISCARDED);
-        if (!this.level().isClientSide) this.explode();
+        if (!this.level().isClientSide)
+            this.explode();
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
-    }
+    protected void addAdditionalSaveData(CompoundTag tag) {}
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-    }
+    protected void readAdditionalSaveData(CompoundTag tag) {}
 
     @Override
     public boolean shouldRenderAtSqrDistance(double distance) {

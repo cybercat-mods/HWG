@@ -1,24 +1,33 @@
 package mod.azure.hwg.util.registry.interfaces;
 
-import mod.azure.hwg.platform.Services;
 import net.minecraft.sounds.SoundEvent;
 
 import java.util.function.Supplier;
+
+import mod.azure.hwg.platform.Services;
 
 /**
  * Example of using this Interface to create a new SoundEvent:
  * <p>
  * The following code demonstrates how to register a new sound event in the game:
  * </p>
+ *
  * <pre>{@code
- * public static Supplier<SoundEvent> TEST_SOUND = CommonSoundRegistryInterface.registerSound("modid", "test_sound", () -> SoundEvent.createVariableRangeEvent(
- *             ResourceLocation.fromNamespaceAndPath("modid", "test_sound")));
+ *
+ * public static Supplier<SoundEvent> TEST_SOUND = CommonSoundRegistryInterface.registerSound(
+ *     "modid",
+ *     "test_sound",
+ *     () -> SoundEvent.createVariableRangeEvent(
+ *         ResourceLocation.fromNamespaceAndPath("modid", "test_sound")
+ *     )
+ * );
  * }</pre>
  * <p>
  * In this example:
  * </p>
  * <ul>
- * <li><code>registerSound</code> is a method to register a new sound event with the specified mod ID and sound name.</li>
+ * <li><code>registerSound</code> is a method to register a new sound event with the specified mod ID and sound
+ * name.</li>
  * <li><code>SoundEvent</code> is used to create a new sound event instance.</li>
  * </ul>
  * <p>

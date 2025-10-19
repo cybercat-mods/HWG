@@ -1,9 +1,6 @@
 package mod.azure.hwg.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.network.CraftingPacket;
-import mod.azure.hwg.util.recipes.GunTableRecipe;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -19,11 +16,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.network.CraftingPacket;
+import mod.azure.hwg.util.recipes.GunTableRecipe;
+
 public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandler> {
+
     private static final ResourceLocation TEXTURE = CommonMod.modResource("textures/gui/gun_table_gui.png");
-    private final GunTableScreen.WidgetButtonPage[] offers = new GunTableScreen.WidgetButtonPage[7];
+
+    private final WidgetButtonPage[] offers = new WidgetButtonPage[7];
+
     private int selectedIndex;
+
     private int indexStartOffset;
+
     private boolean scrolling;
 
     public GunTableScreen(GunTableScreenHandler handler, Inventory inventory, Component title) {
@@ -58,7 +64,14 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
     @Override
     protected void renderLabels(GuiGraphics matrices, int mouseX, int mouseY) {
-        matrices.drawString(this.font, this.title, (75 + this.imageWidth / 2 - this.font.width(this.title) / 2), 6, 4210752, false);
+        matrices.drawString(
+            this.font,
+            this.title,
+            (75 + this.imageWidth / 2 - this.font.width(this.title) / 2),
+            6,
+            4210752,
+            false
+        );
     }
 
     protected void renderBg(GuiGraphics matrices, float delta, int mouseX, int mouseY) {
@@ -68,7 +81,6 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         int i = ((this.width - this.imageWidth) / 2) - 5;
         int j = (this.height - this.imageHeight) / 2;
         matrices.blit(TEXTURE, i, j, 0, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 512, 256);
-
     }
 
     private void renderScrollbar(GuiGraphics matrices, int x, int y, List<RecipeHolder<GunTableRecipe>> tradeOffers) {
@@ -85,7 +97,6 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         } else {
             matrices.blit(TEXTURE, x + 113, y + 18, 0, 6.0F, 199.0F, 6, 27, 512, 256);
         }
-
     }
 
     @Override
@@ -97,7 +108,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
             int i = (this.width - this.imageWidth) / 2;
             int j = (this.height - this.imageHeight) / 2;
             int yPos = j + 17;
-            int xPos = i + 10;
+            int xPos = i + 3;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, TEXTURE);
             this.renderScrollbar(matrices, i, j, tradeOfferList);
@@ -105,15 +116,18 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
             while (true) {
                 for (RecipeHolder<GunTableRecipe> recipeHolder : tradeOfferList)
-                    if (this.canScroll(tradeOfferList.size()) && (m < this.indexStartOffset || m >= 7 + this.indexStartOffset)) {
+                    if (
+                        this.canScroll(tradeOfferList.size()) && (m < this.indexStartOffset || m >= 7
+                            + this.indexStartOffset)
+                    ) {
                         ++m;
                     } else {
                         GunTableRecipe gunTableRecipe = recipeHolder.value();
                         ItemStack output = gunTableRecipe.output();
                         int n = yPos + 2;
-                        matrices.pose().pushPose();
-                        this.renderIngredients(matrices, gunTableRecipe, xPos - 6, n, mouseX, mouseY);
+                        this.renderIngredients(matrices, gunTableRecipe, xPos, n, mouseX, mouseY);
 
+                        matrices.pose().pushPose();
                         this.renderArrow(matrices, gunTableRecipe, i + 22, n);
                         matrices.renderFakeItem(output, i + 24 + 68, n);
                         matrices.renderItemDecorations(this.font, output, i + 24 + 68, n);
@@ -140,31 +154,38 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         this.renderTooltip(matrices, mouseX, mouseY);
     }
 
+    private boolean isMouseOverSlot(int x, int y, int mouseX, int mouseY) {
+        return mouseX >= x && mouseX < (x + 16) && mouseY >= y && mouseY < (y + 16);
+    }
+
     private void renderArrow(GuiGraphics matrices, GunTableRecipe tradeOffer, int x, int y) {
         RenderSystem.enableBlend();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, TEXTURE);
-
     }
 
-    private void renderIngredients(GuiGraphics matrices, GunTableRecipe gunTableRecipe, int x, int y, int mouseX, int mouseY) {
+    private void renderIngredients(
+        GuiGraphics matrices,
+        GunTableRecipe gunTableRecipe,
+        int x,
+        int y,
+        int mouseX,
+        int mouseY
+    ) {
         for (int i = 0; i < gunTableRecipe.ingredients().size(); i++) {
             ItemStack[] displayStacks = gunTableRecipe.getIngredientForSlot(i).getItems();
             if (displayStacks.length > 0) {
+                // probably slow, but subclassing ingredient is hard in fabric
                 ItemStack stack = new ItemStack(displayStacks[0].getItem(), gunTableRecipe.countRequired(i));
                 if (!stack.isEmpty()) {
                     matrices.renderFakeItem(stack, x, y);
                     matrices.renderItemDecorations(this.font, stack, x, y);
                     if (this.isMouseOverSlot(x, y, mouseX, mouseY))
                         matrices.renderTooltip(font, stack, mouseX, mouseY);
-                    x += 18;
+                    x += 16;
                 }
             }
         }
-    }
-
-    private boolean isMouseOverSlot(int x, int y, int mouseX, int mouseY) {
-        return mouseX >= x && mouseX < (x + 16) && mouseY >= y && mouseY < (y + 16);
     }
 
     private boolean canScroll(int listSize) {
@@ -203,7 +224,10 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
         this.scrolling = false;
         var i = (this.width - this.imageWidth) / 2;
         var j = (this.height - this.imageHeight) / 2;
-        if (this.canScroll(this.menu.getRecipes().size()) && mouseX > (i + 94) && mouseX < (i + 94 + 6) && mouseY > (j + 18) && mouseY <= (j + 18 + 139 + 1))
+        if (
+            this.canScroll(this.menu.getRecipes().size()) && mouseX > (i + 94) && mouseX < (i + 94 + 6) && mouseY > (j
+                + 18) && mouseY <= (j + 18 + 139 + 1)
+        )
             this.scrolling = true;
 
         return super.mouseClicked(mouseX, mouseY, button);
@@ -213,7 +237,7 @@ public class GunTableScreen extends AbstractContainerScreen<GunTableScreenHandle
 
         final int index;
 
-        public WidgetButtonPage(int x, int y, int index, Button.OnPress onPress) {
+        public WidgetButtonPage(int x, int y, int index, OnPress onPress) {
             super(x, y, 112, 20, CommonComponents.EMPTY, onPress, DEFAULT_NARRATION);
             this.index = index;
             this.visible = false;

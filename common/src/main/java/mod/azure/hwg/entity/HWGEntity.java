@@ -1,20 +1,10 @@
 package mod.azure.hwg.entity;
 
-import mod.azure.azurelib.common.api.common.animatable.GeoEntity;
-import mod.azure.azurelib.common.api.common.animatable.GeoItem;
-import mod.azure.azurelib.common.internal.common.util.AzureLibUtil;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.rewrite.util.MoveAnalysis;
-import mod.azure.hwg.entity.animation.AnimationDispatcher;
-import mod.azure.hwg.entity.projectiles.*;
-import mod.azure.hwg.item.enums.GunTypeEnum;
-import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
-import mod.azure.hwg.util.registry.HWGSounds;
+import mod.azure.azurelib.common.util.MoveAnalysis;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -22,10 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -37,14 +24,35 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+import mod.azure.hwg.entity.animation.AnimationDispatcher;
+import mod.azure.hwg.entity.projectiles.*;
+import mod.azure.hwg.item.enums.GunTypeEnum;
+import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
+import mod.azure.hwg.util.registry.HWGSounds;
+
 public abstract class HWGEntity extends Monster implements NeutralMob, Enemy {
 
-    public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> ANGER_TIME = SynchedEntityData.defineId(HWGEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(
+        HWGEntity.class,
+        EntityDataSerializers.INT
+    );
+
+    public static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(
+        HWGEntity.class,
+        EntityDataSerializers.INT
+    );
+
+    private static final EntityDataAccessor<Integer> ANGER_TIME = SynchedEntityData.defineId(
+        HWGEntity.class,
+        EntityDataSerializers.INT
+    );
+
     private static final UniformInt ANGER_TIME_RANGE = TimeUtil.rangeOfSeconds(20, 39);
+
     private UUID targetUuid;
+
     public MoveAnalysis moveAnalysis;
+
     public AnimationDispatcher animationDispatcher;
 
     protected HWGEntity(EntityType<? extends Monster> type, Level worldIn) {
@@ -53,8 +61,15 @@ public abstract class HWGEntity extends Monster implements NeutralMob, Enemy {
         noCulling = true;
     }
 
-    public static boolean canNetherSpawn(EntityType<? extends HWGEntity> type, LevelAccessor serverWorldAccess, MobSpawnType spawnReason, BlockPos pos, RandomSource random) {
-        if (serverWorldAccess.getDifficulty() == Difficulty.PEACEFUL) return false;
+    public static boolean canNetherSpawn(
+        EntityType<? extends HWGEntity> type,
+        LevelAccessor serverWorldAccess,
+        MobSpawnType spawnReason,
+        BlockPos pos,
+        RandomSource random
+    ) {
+        if (serverWorldAccess.getDifficulty() == Difficulty.PEACEFUL)
+            return false;
         if (spawnReason != MobSpawnType.CHUNK_GENERATION && spawnReason != MobSpawnType.NATURAL)
             return !serverWorldAccess.getBlockState(pos.below()).is(Blocks.NETHER_WART_BLOCK);
         return !serverWorldAccess.getBlockState(pos.below()).is(Blocks.NETHER_WART_BLOCK);
@@ -116,9 +131,16 @@ public abstract class HWGEntity extends Monster implements NeutralMob, Enemy {
                 final var bullet = getProjectile(weapon, weapon.getGunTypeEnum());
                 bullet.setPos(this.getX() + vector3d.x * 2, this.getY(0.5), this.getZ() + vector3d.z * 2);
                 bullet.shootFromRotation(this, getXRot(), getYRot(), 0.0F, 3.0F, 1.0F);
-                if (getItemBySlot(EquipmentSlot.MAINHAND).getItem() instanceof GeoItem geoItem)
-                    geoItem.triggerAnim(this, GeoItem.getOrAssignId(getItemBySlot(EquipmentSlot.MAINHAND), (ServerLevel) this.level()), "controller", "firing");
-                this.level().playSound(this, blockPosition(), getDefaultAttackSound(weapon.getGunTypeEnum()), SoundSource.HOSTILE, 1.0F, 1.0f);
+                weapon.animationDispatcher.sendFiringCommand(this, getItemBySlot(EquipmentSlot.MAINHAND));
+                this.level()
+                    .playSound(
+                        this,
+                        blockPosition(),
+                        getDefaultAttackSound(weapon.getGunTypeEnum()),
+                        SoundSource.HOSTILE,
+                        1.0F,
+                        1.0f
+                    );
                 this.level().addFreshEntity(bullet);
             }
         }
@@ -195,6 +217,14 @@ public abstract class HWGEntity extends Monster implements NeutralMob, Enemy {
         } else {
             this.setAnimation(animationDispatcher::sendIdleAnimation);
         }
+    }
+
+    public void runAttackAnimations() {
+        animationDispatcher.sendMeleeAnimation();
+    }
+
+    public void runRangeAttackAniamtions() {
+        animationDispatcher.sendRangedAnimation();
     }
 
 }

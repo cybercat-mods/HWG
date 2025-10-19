@@ -1,20 +1,8 @@
 package mod.azure.hwg;
 
-import mod.azure.azurelib.common.api.client.helper.ClientUtils;
-import mod.azure.azurelib.rewrite.render.item.AzItemRendererRegistry;
-import mod.azure.hwg.client.gui.GunTableScreen;
-import mod.azure.hwg.client.render.*;
-import mod.azure.hwg.client.render.projectiles.BaseFlareRender;
-import mod.azure.hwg.client.render.projectiles.EmptyRender;
-import mod.azure.hwg.client.render.projectiles.GrenadeRender;
-import mod.azure.hwg.client.render.projectiles.RocketRender;
-import mod.azure.hwg.entity.enums.EntityEnum;
-import mod.azure.hwg.item.enums.GunTypeEnum;
-import mod.azure.hwg.network.PacketHandler;
-import mod.azure.hwg.particle.BrimParticle;
-import mod.azure.hwg.particle.FlareParticle;
-import mod.azure.hwg.particle.WFlareParticle;
-import mod.azure.hwg.util.registry.*;
+import com.mojang.blaze3d.platform.InputConstants;
+import mod.azure.azurelib.common.render.item.AzItemRendererRegistry;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -22,11 +10,45 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import org.lwjgl.glfw.GLFW;
 
-@EventBusSubscriber(modid = CommonMod.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+import mod.azure.hwg.client.HWGKeybinds;
+import mod.azure.hwg.client.gui.GunTableScreen;
+import mod.azure.hwg.client.render.*;
+import mod.azure.hwg.client.render.projectiles.BaseFlareRender;
+import mod.azure.hwg.client.render.projectiles.EmptyRender;
+import mod.azure.hwg.client.render.projectiles.GrenadeRender;
+import mod.azure.hwg.client.render.projectiles.RocketRender;
+import mod.azure.hwg.item.enums.GunTypeEnum;
+import mod.azure.hwg.network.PacketHandler;
+import mod.azure.hwg.particle.BrimParticle;
+import mod.azure.hwg.particle.FlareParticle;
+import mod.azure.hwg.particle.WFlareParticle;
+import mod.azure.hwg.util.registry.*;
+
+@EventBusSubscriber(modid = CommonMod.MOD_ID, value = Dist.CLIENT)
 public record NeoForgeClientMod() {
+
+    @SubscribeEvent
+    public static void registerKeys(final RegisterKeyMappingsEvent event) {
+        HWGKeybinds.RELOAD = new KeyMapping(
+            "key.hwg.reload",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_R,
+            "category.hwg.binds"
+        );
+        event.register(HWGKeybinds.RELOAD);
+        HWGKeybinds.SCOPE = new KeyMapping(
+            "key.hwg.scope",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_LEFT_ALT,
+            "category.hwg.binds"
+        );
+        event.register(HWGKeybinds.SCOPE);
+    }
 
     @SubscribeEvent
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
@@ -45,42 +67,83 @@ public record NeoForgeClientMod() {
         event.registerEntityRenderer(HWGMobs.MERC.get(), MercRender::new);
         event.registerEntityRenderer(HWGMobs.SPY.get(), SpyRender::new);
         event.registerEntityRenderer(HWGMobs.FUELTANK.get(), FuelTankRender::new);
+        AzItemRendererRegistry.register(HWGItems.FLARE_GUN.get(), () -> new GunRender("flare_gun", GunTypeEnum.FLARE));
+        AzItemRendererRegistry.register(
+            HWGItems.G_LAUNCHER.get(),
+            () -> new GunRender("grenade_launcher", GunTypeEnum.NADELAUNCHER)
+        );
         AzItemRendererRegistry.register(HWGItems.PISTOL.get(), () -> new GunRender("pistol", GunTypeEnum.PISTOL));
-        AzItemRendererRegistry.register(HWGItems.FLAMETHROWER.get(), () -> new GunRender("flamethrower", GunTypeEnum.FLAMETHROWER));
+        AzItemRendererRegistry.register(
+            HWGItems.FLAMETHROWER.get(),
+            () -> new GunRender("flamethrower", GunTypeEnum.FLAMETHROWER)
+        );
         AzItemRendererRegistry.register(HWGItems.MINIGUN.get(), () -> new GunRender("minigun", GunTypeEnum.MINIGUN));
         AzItemRendererRegistry.register(HWGItems.LUGER.get(), () -> new GunRender("luger", GunTypeEnum.LUGER));
         AzItemRendererRegistry.register(HWGItems.PISTOL.get(), () -> new GunRender("pistol", GunTypeEnum.PISTOL));
         AzItemRendererRegistry.register(HWGItems.SHOTGUN.get(), () -> new GunRender("shotgun", GunTypeEnum.SHOTGUN));
         AzItemRendererRegistry.register(HWGItems.SPISTOL.get(), () -> new GunRender("spistol", GunTypeEnum.SIL_PISTOL));
         AzItemRendererRegistry.register(HWGItems.SNIPER.get(), () -> new GunRender("sniper_rifle", GunTypeEnum.SNIPER));
-        AzItemRendererRegistry.register(HWGItems.MEANIE1.get(), () -> new GunRender("meanie_gun_1", GunTypeEnum.MEANIE));
-        AzItemRendererRegistry.register(HWGItems.MEANIE2.get(), () -> new GunRender("meanie_gun_2", GunTypeEnum.MEANIE));
-        AzItemRendererRegistry.register(HWGItems.GOLDEN_GUN.get(), () -> new GunRender("golden_gun", GunTypeEnum.GOLDEN_PISTOL));
-        AzItemRendererRegistry.register(HWGItems.ROCKETLAUNCHER.get(), () -> new GunRender("rocketlauncher", GunTypeEnum.ROCKETLAUNCHER));
-        AzItemRendererRegistry.register(HWGItems.HELLHORSE.get(), () -> new GunRender("hellhorse_revolver", GunTypeEnum.HELLHORSE));
-        AzItemRendererRegistry.register(HWGItems.SILVERGUN.get(), () -> new GunRender("silvergun", GunTypeEnum.SILVER_PISTOL));
-        AzItemRendererRegistry.register(HWGItems.SILVERHELLHORSE.get(), () -> new GunRender("shellhorse_revolver", GunTypeEnum.SILVER_HELL));
+        AzItemRendererRegistry.register(
+            HWGItems.MEANIE1.get(),
+            () -> new GunRender("meanie_gun_1", GunTypeEnum.MEANIE)
+        );
+        AzItemRendererRegistry.register(
+            HWGItems.MEANIE2.get(),
+            () -> new GunRender("meanie_gun_2", GunTypeEnum.MEANIE)
+        );
+        AzItemRendererRegistry.register(
+            HWGItems.GOLDEN_GUN.get(),
+            () -> new GunRender("golden_gun", GunTypeEnum.GOLDEN_PISTOL)
+        );
+        AzItemRendererRegistry.register(
+            HWGItems.ROCKETLAUNCHER.get(),
+            () -> new GunRender("rocketlauncher", GunTypeEnum.ROCKETLAUNCHER)
+        );
+        AzItemRendererRegistry.register(
+            HWGItems.HELLHORSE.get(),
+            () -> new GunRender("hellhorse_revolver", GunTypeEnum.HELLHORSE)
+        );
+        AzItemRendererRegistry.register(
+            HWGItems.SILVERGUN.get(),
+            () -> new GunRender("silvergun", GunTypeEnum.SILVER_PISTOL)
+        );
+        AzItemRendererRegistry.register(
+            HWGItems.SILVERHELLHORSE.get(),
+            () -> new GunRender("shellhorse_revolver", GunTypeEnum.SILVER_HELL)
+        );
         AzItemRendererRegistry.register(HWGItems.AK47.get(), () -> new GunRender("ak47", GunTypeEnum.AK7));
         AzItemRendererRegistry.register(HWGItems.SMG.get(), () -> new GunRender("smg", GunTypeEnum.SMG));
-        AzItemRendererRegistry.register(HWGItems.TOMMYGUN.get(), () -> new GunRender("tommy_gun", GunTypeEnum.TOMMYGUN));
+        AzItemRendererRegistry.register(
+            HWGItems.TOMMYGUN.get(),
+            () -> new GunRender("tommy_gun", GunTypeEnum.TOMMYGUN)
+        );
         AzItemRendererRegistry.register(HWGItems.BALROG.get(), () -> new GunRender("balrog_gun", GunTypeEnum.BALROG));
-        AzItemRendererRegistry.register(HWGItems.BRIMSTONE.get(), () -> new GunRender("brimstone_gun", GunTypeEnum.BRIMSTONE));
-        AzItemRendererRegistry.register(HWGItems.INCINERATOR.get(), () -> new GunRender("nostromo_flamethrower", GunTypeEnum.FLAMETHROWER));
+        AzItemRendererRegistry.register(
+            HWGItems.BRIMSTONE.get(),
+            () -> new GunRender("brimstone_gun", GunTypeEnum.BRIMSTONE)
+        );
+        AzItemRendererRegistry.register(
+            HWGItems.INCINERATOR.get(),
+            () -> new GunRender("nostromo_flamethrower", GunTypeEnum.FLAMETHROWER)
+        );
     }
 
     @SubscribeEvent
-    public static void registerScreens(final RegisterMenuScreensEvent event){
+    public static void registerScreens(final RegisterMenuScreensEvent event) {
         event.register(ModScreens.SCREEN_HANDLER_TYPE.get(), GunTableScreen::new);
     }
 
     @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event) {
         ItemProperties.register(
-                HWGItems.SNIPER.get(), ResourceLocation.parse("scoped"), (itemStack, clientWorld, livingEntity, seed) -> {
-                    if (livingEntity != null)
-                        return isScoped() ? 1.0F : 0.0F;
-                    return 0.0F;
-                });
+            HWGItems.SNIPER.get(),
+            ResourceLocation.parse("scoped"),
+            (itemStack, clientWorld, livingEntity, seed) -> {
+                if (livingEntity != null)
+                    return isScoped() ? 1.0F : 0.0F;
+                return 0.0F;
+            }
+        );
         new PacketHandler().registerMessages();
     }
 
@@ -107,6 +170,6 @@ public record NeoForgeClientMod() {
     }
 
     private static boolean isScoped() {
-        return ClientUtils.SCOPE.isDown();
+        return HWGKeybinds.SCOPE.isDown();
     }
 }

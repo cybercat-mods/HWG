@@ -1,8 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
@@ -31,9 +28,17 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.util.Helper;
+import mod.azure.hwg.util.registry.HWGProjectiles;
+
 public class MBulletEntity extends AbstractArrow {
 
-    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(MBulletEntity.class, EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(
+        MBulletEntity.class,
+        EntityDataSerializers.FLOAT
+    );
+
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
     public MBulletEntity(EntityType<? extends MBulletEntity> entityType, Level world) {
@@ -45,7 +50,15 @@ public class MBulletEntity extends AbstractArrow {
         super(HWGProjectiles.MBULLETS.get(), world);
     }
 
-    public MBulletEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
+    public MBulletEntity(
+        Level world,
+        ItemStack stack,
+        Entity entity,
+        double x,
+        double y,
+        double z,
+        boolean shotAtAngle
+    ) {
         this(world, stack, x, y, z, shotAtAngle);
         this.setOwner(entity);
     }
@@ -72,7 +85,8 @@ public class MBulletEntity extends AbstractArrow {
 
     @Override
     public void tickDespawn() {
-        if (this.tickCount >= 40) this.remove(RemovalReason.DISCARDED);
+        if (this.tickCount >= 40)
+            this.remove(RemovalReason.DISCARDED);
     }
 
     @Override
@@ -88,7 +102,7 @@ public class MBulletEntity extends AbstractArrow {
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
-        tag.putShort("life", (short)this.tickCount);
+        tag.putShort("life", (short) this.tickCount);
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
     }
 
@@ -110,7 +124,8 @@ public class MBulletEntity extends AbstractArrow {
             double f2 = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             this.level().addParticle(ParticleTypes.ELECTRIC_SPARK, true, d2, this.getY(0.5), f2, 0, 0, 0);
         }
-        if (getOwner() instanceof Player) setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player)
+            setYRot(entityData.get(FORCED_YAW));
     }
 
     @Override
@@ -131,10 +146,17 @@ public class MBulletEntity extends AbstractArrow {
     @Override
     protected void onHitBlock(@NotNull BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
-        if (!this.level().isClientSide) this.remove(RemovalReason.DISCARDED);
-        if (level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock && CommonMod.config.gunconfigs.bullets_breakdripstone)
+        if (!this.level().isClientSide)
+            this.remove(RemovalReason.DISCARDED);
+        if (
+            level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof PointedDripstoneBlock
+                && CommonMod.config.gunconfigs.bullets_breakdripstone
+        )
             level().destroyBlock(blockHitResult.getBlockPos(), true);
-        if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
+        if (
+            level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE)
+                || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock
+        )
             level().destroyBlock(blockHitResult.getBlockPos(), true);
         this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON.value());
     }
@@ -142,25 +164,37 @@ public class MBulletEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide) {
+        if (
+            entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this
+                .level().isClientSide
+        ) {
             this.remove(RemovalReason.DISCARDED);
         }
         var entity2 = this.getOwner();
         DamageSource damageSource2;
-        if (entity2 == null) damageSource2 = damageSources().arrow(this, this);
+        if (entity2 == null)
+            damageSource2 = damageSources().arrow(this, this);
         else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity livingEntity) livingEntity.setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity)
+                livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, CommonMod.config.gunconfigs.meanieconfigs.meanie_damage)) {
             if (entity instanceof LivingEntity livingEntity) {
-                if (!this.level().isClientSide && entity2 instanceof LivingEntity && this.isOnFire()) livingEntity.setRemainingFireTicks(50);
+                if (!this.level().isClientSide && entity2 instanceof LivingEntity && this.isOnFire())
+                    livingEntity.setRemainingFireTicks(50);
 
                 this.doPostHurtEffects(livingEntity);
-                if (livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer && !this.isSilent())
-                    ((ServerPlayer) entity2).connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                if (
+                    livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer
+                        && !this.isSilent()
+                )
+                    ((ServerPlayer) entity2).connection.send(
+                        new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F)
+                    );
             }
-        } else if (!this.level().isClientSide) this.remove(RemovalReason.DISCARDED);
+        } else if (!this.level().isClientSide)
+            this.remove(RemovalReason.DISCARDED);
     }
 
     @Override

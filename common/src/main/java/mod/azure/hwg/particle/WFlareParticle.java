@@ -6,7 +6,16 @@ import net.minecraft.core.particles.SimpleParticleType;
 import org.jetbrains.annotations.NotNull;
 
 public class WFlareParticle extends TextureSheetParticle {
-    private WFlareParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+
+    private WFlareParticle(
+        ClientLevel world,
+        double x,
+        double y,
+        double z,
+        double velocityX,
+        double velocityY,
+        double velocityZ
+    ) {
         super(world, x, y, z);
         this.scale(3.0F);
         this.setSize(0.25F, 0.25F);
@@ -38,13 +47,23 @@ public class WFlareParticle extends TextureSheetParticle {
     }
 
     public static class WhiteSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public WhiteSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new WFlareParticle(clientWorld, d, e, f, g, h, i);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;

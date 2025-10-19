@@ -2,19 +2,8 @@ package mod.azure.hwg.item.weapons;
 
 import commonnetwork.api.Network;
 import io.netty.buffer.Unpooled;
-import mod.azure.azurelib.common.api.client.helper.ClientUtils;
-import mod.azure.azurelib.common.internal.common.AzureLibMod;
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.entity.projectiles.FlameFiring;
-import mod.azure.hwg.item.enums.GunTypeEnum;
-import mod.azure.hwg.item.enums.ProjectileEnum;
-import mod.azure.hwg.item.weapons.animations.GunDispatcher;
-import mod.azure.hwg.network.FiringPacket;
-import mod.azure.hwg.network.ReloadPacket;
-import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.azurelib.common.util.client.ClientUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -33,20 +22,45 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.function.Consumer;
+
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.client.HWGKeybinds;
+import mod.azure.hwg.entity.projectiles.FlameFiring;
+import mod.azure.hwg.item.enums.GunTypeEnum;
+import mod.azure.hwg.item.enums.ProjectileEnum;
+import mod.azure.hwg.item.weapons.animations.GunDispatcher;
+import mod.azure.hwg.network.ReloadPacket;
+import mod.azure.hwg.util.Helper;
+import mod.azure.hwg.util.registry.HWGItems;
 
 public abstract class AzureAnimatedGunItem extends Item {
-    protected Item ammoType;
-    protected final String id;
-    protected final SoundEvent firingSound;
-    protected final SoundEvent reloadSound;
-    protected final GunTypeEnum gunTypeEnum;
-    public static final String firing = "firing";
-    private static final String controller = "controller";
-    protected final ProjectileEnum projectileTypeEnum;
-    private GunDispatcher animationDispatcher;
 
-    public AzureAnimatedGunItem(String id, ProjectileEnum projectileTypeEnum, GunTypeEnum gunTypeEnum, int maxClipSize, SoundEvent reloadSound, SoundEvent firingSound) {
+    protected Item ammoType;
+
+    protected final String id;
+
+    protected final SoundEvent firingSound;
+
+    protected final SoundEvent reloadSound;
+
+    protected final GunTypeEnum gunTypeEnum;
+
+    public static final String firing = "firing";
+
+    private static final String controller = "controller";
+
+    protected final ProjectileEnum projectileTypeEnum;
+
+    public GunDispatcher animationDispatcher;
+
+    public AzureAnimatedGunItem(
+        String id,
+        ProjectileEnum projectileTypeEnum,
+        GunTypeEnum gunTypeEnum,
+        int maxClipSize,
+        SoundEvent reloadSound,
+        SoundEvent firingSound
+    ) {
         super(new Properties().stacksTo(1).durability(maxClipSize + 1));
         this.id = id;
         this.projectileTypeEnum = projectileTypeEnum;
@@ -90,8 +104,10 @@ public abstract class AzureAnimatedGunItem extends Item {
     }
 
     public int getReloadAmount() {
-        if (this.gunTypeEnum == GunTypeEnum.FLAMETHROWER) return CommonMod.config.gunconfigs.flammerconfigs.flammer_cap;
-        if (this.gunTypeEnum == GunTypeEnum.BRIMSTONE) return CommonMod.config.gunconfigs.brimstoneconfigs.brimstone_cap;
+        if (this.gunTypeEnum == GunTypeEnum.FLAMETHROWER)
+            return CommonMod.config.gunconfigs.flammerconfigs.flammer_cap;
+        if (this.gunTypeEnum == GunTypeEnum.BRIMSTONE)
+            return CommonMod.config.gunconfigs.brimstoneconfigs.brimstone_cap;
         return 1;
     }
 
@@ -252,14 +268,31 @@ public abstract class AzureAnimatedGunItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(
+        @NotNull Level level,
+        Player player,
+        @NotNull InteractionHand hand
+    ) {
         var itemStack = player.getItemInHand(hand);
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(itemStack);
     }
 
+    @Override
+    public void onUseTick(
+        @NotNull Level level,
+        @NotNull LivingEntity livingEntity,
+        @NotNull ItemStack stack,
+        int remainingUseDuration
+    ) {
+        if (livingEntity instanceof Player player) {
+            shoot(player);
+            recoil(player);
+        }
+        super.onUseTick(level, livingEntity, stack, remainingUseDuration);
+    }
+
     private void singleFire(@NotNull ItemStack itemStack, @NotNull Level level, @NotNull Player player) {
-        var result = Helper.hitscanTrace(player, 64, 1.0F);
         player.getCooldowns().addCooldown(this, this.getCoolDown());
         switch (this.getProjectileTypeEnum()) {
             case BULLET -> {
@@ -341,10 +374,10 @@ public abstract class AzureAnimatedGunItem extends Item {
                 level.addFreshEntity(rocket);
             }
             case SILVER_BULLET -> {
-                 var bullet = Helper.createSilverBullet(level, player);
-                 bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
-                 bullet.tickCount = -15;
-                 level.addFreshEntity(bullet);
+                var bullet = Helper.createSilverBullet(level, player);
+                bullet.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 20.0F, 1.0F);
+                bullet.tickCount = -15;
+                level.addFreshEntity(bullet);
             }
             case FLAMES -> {
                 var flames = Helper.createFlame(level, player);
@@ -369,11 +402,22 @@ public abstract class AzureAnimatedGunItem extends Item {
     }
 
     public void fireWeapon(@NotNull ItemStack itemStack, @NotNull Level level, @NotNull Player player) {
-        if (itemStack.getItem() instanceof AzureAnimatedGunItem gunItem && !player.getCooldowns().isOnCooldown(gunItem)) {
+        if (
+            itemStack.getItem() instanceof AzureAnimatedGunItem gunItem && !player.getCooldowns().isOnCooldown(gunItem)
+        ) {
             Helper.spawnLightSource(player, player.level().isWaterAt(player.blockPosition()));
             itemStack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(itemStack));
             if (this.getFiringSound() != null)
-                level.playSound(null, player.getX(), player.getY(), player.getZ(), getFiringSound(), SoundSource.PLAYERS, 0.25F, 1.3F);
+                level.playSound(
+                    null,
+                    player.getX(),
+                    player.getY(),
+                    player.getZ(),
+                    getFiringSound(),
+                    SoundSource.PLAYERS,
+                    0.25F,
+                    1.3F
+                );
             if (!level.isClientSide) {
                 this.singleFire(itemStack, level, player);
                 gunItem.animationDispatcher.sendFiringCommand(player, itemStack);
@@ -382,11 +426,22 @@ public abstract class AzureAnimatedGunItem extends Item {
     }
 
     public void autoFire(@NotNull ItemStack itemStack, @NotNull Level level, @NotNull Player player) {
-        if (itemStack.getItem() instanceof AzureAnimatedGunItem gunItem && !player.getCooldowns().isOnCooldown(gunItem)) {
+        if (
+            itemStack.getItem() instanceof AzureAnimatedGunItem gunItem && !player.getCooldowns().isOnCooldown(gunItem)
+        ) {
             Helper.spawnLightSource(player, player.level().isWaterAt(player.blockPosition()));
             itemStack.hurtAndBreak(1, player, player.getEquipmentSlotForItem(itemStack));
             if (this.getFiringSound() != null)
-                level.playSound(null, player.getX(), player.getY(), player.getZ(), getFiringSound(), SoundSource.PLAYERS, 0.25F, 1.3F);
+                level.playSound(
+                    null,
+                    player.getX(),
+                    player.getY(),
+                    player.getZ(),
+                    getFiringSound(),
+                    SoundSource.PLAYERS,
+                    0.25F,
+                    1.3F
+                );
             if (!level.isClientSide) {
                 if (this.getProjectileTypeEnum() == ProjectileEnum.BULLET) {
                     var bullet = Helper.createBullet(level, player, this.getAttackDamage());
@@ -400,25 +455,21 @@ public abstract class AzureAnimatedGunItem extends Item {
     }
 
     @Override
-    public void inventoryTick(@NotNull ItemStack stack, Level world, @NotNull Entity entity, int slot, boolean selected) {
-        if (world.isClientSide && entity instanceof Player player && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof AzureAnimatedGunItem && selected) {
-            if (ClientUtils.RELOAD.consumeClick()) {
+    public void inventoryTick(
+        @NotNull ItemStack stack,
+        Level world,
+        @NotNull Entity entity,
+        int slot,
+        boolean selected
+    ) {
+        if (
+            world.isClientSide && entity instanceof Player player && player.getItemInHand(player.getUsedItemHand())
+                .getItem() instanceof AzureAnimatedGunItem && selected
+        ) {
+            if (HWGKeybinds.RELOAD.consumeClick()) {
                 FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
                 passedData.writeBoolean(true);
                 Network.getNetworkHandler().sendToServer(new ReloadPacket());
-            }
-            if (AzureLibMod.config.useVanillaUseKey) {
-                if (Minecraft.getInstance().options.keyUse.isDown()) {
-                    FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-                    passedData.writeBoolean(true);
-                    Network.getNetworkHandler().sendToServer(new FiringPacket());
-                }
-            } else {
-                if (ClientUtils.FIRE_WEAPON.isDown()) {
-                    FriendlyByteBuf passedData = new FriendlyByteBuf(Unpooled.buffer());
-                    passedData.writeBoolean(true);
-                    Network.getNetworkHandler().sendToServer(new FiringPacket());
-                }
             }
             if (this.gunTypeEnum == GunTypeEnum.BRIMSTONE || this.gunTypeEnum == GunTypeEnum.BALROG) {
                 animationDispatcher.sendIdleCommand(entity, stack);
@@ -426,25 +477,84 @@ public abstract class AzureAnimatedGunItem extends Item {
         }
     }
 
+    public static void recoil(Player player) {
+        if (
+            player.getItemInHand(player.getUsedItemHand()).getDamageValue() < (player.getItemInHand(
+                player.getUsedItemHand()
+            ).getMaxDamage() - 1) && player.getItemInHand(player.getUsedItemHand())
+                .getItem() instanceof AzureAnimatedGunItem gunBase
+        ) {
+            if (player.level().isClientSide()) {
+                var baseRecoilX = player.level().getRandom().nextBoolean() ? 1f : -1f;
+                var recoilY = 1.25f;
+                ClientUtils.getClientPlayer().turn(baseRecoilX * 5, -recoilY * 5);
+            }
+        }
+    }
+
     public static void shoot(Player player) {
-        if (player.getItemInHand(player.getUsedItemHand()).getDamageValue() < (player.getItemInHand(player.getUsedItemHand()).getMaxDamage() - 1) && player.getItemInHand(player.getUsedItemHand()).getItem() instanceof AzureAnimatedGunItem gunBase) {
-            if (!player.getCooldowns().isOnCooldown(player.getItemInHand(player.getUsedItemHand()).getItem()) && !player.getItemInHand(player.getUsedItemHand()).is(HWGItems.MINIGUN.get()))
+        if (
+            player.getItemInHand(player.getUsedItemHand()).getDamageValue() < (player.getItemInHand(
+                player.getUsedItemHand()
+            ).getMaxDamage() - 1) && player.getItemInHand(player.getUsedItemHand())
+                .getItem() instanceof AzureAnimatedGunItem gunBase
+        ) {
+            if (
+                !player.getCooldowns().isOnCooldown(player.getItemInHand(player.getUsedItemHand()).getItem()) && !player
+                    .getItemInHand(player.getUsedItemHand())
+                    .is(HWGItems.MINIGUN.get())
+            )
                 gunBase.fireWeapon(player.getItemInHand(player.getUsedItemHand()), player.level(), player);
-            else gunBase.autoFire(player.getItemInHand(player.getUsedItemHand()), player.level(), player);
+            else
+                gunBase.autoFire(player.getItemInHand(player.getUsedItemHand()), player.level(), player);
+            if (player.level().isClientSide()) {
+                var baseRecoilX = player.level().getRandom().nextBoolean() ? 1f : -1f;
+                var recoilY = 1.25f;
+                ClientUtils.getClientPlayer().turn(baseRecoilX * 5, -recoilY * 5);
+            }
         } else {
-            player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.COMPARATOR_CLICK, SoundSource.PLAYERS, 0.25F, 1.3F);
+            player.level()
+                .playSound(
+                    null,
+                    player.getX(),
+                    player.getY(),
+                    player.getZ(),
+                    SoundEvents.COMPARATOR_CLICK,
+                    SoundSource.PLAYERS,
+                    0.25F,
+                    1.3F
+                );
         }
     }
 
     public static void reload(Player user, InteractionHand hand) {
         if (user.getItemInHand(user.getUsedItemHand()).getItem() instanceof AzureAnimatedGunItem gunBase) {
-            while (!user.isCreative() && user.getItemInHand(user.getUsedItemHand()).getDamageValue() != 0 && user.getInventory().countItem(gunBase.getAmmoType()) > 0) {
+            while (
+                !user.isCreative() && user.getItemInHand(user.getUsedItemHand()).getDamageValue() != 0 && user
+                    .getInventory()
+                    .countItem(gunBase.getAmmoType()) > 0
+            ) {
                 Helper.removeAmmo(gunBase.getAmmoType(), user);
                 user.getCooldowns().addCooldown(gunBase, gunBase.getReloadCoolDown());
-                user.getItemInHand(user.getUsedItemHand()).hurtAndBreak(-gunBase.getReloadAmount(), user, user.getEquipmentSlotForItem(user.getItemInHand(user.getUsedItemHand())));
+                user.getItemInHand(user.getUsedItemHand())
+                    .hurtAndBreak(
+                        -gunBase.getReloadAmount(),
+                        user,
+                        user.getEquipmentSlotForItem(user.getItemInHand(user.getUsedItemHand()))
+                    );
                 user.getItemInHand(user.getUsedItemHand()).setPopTime(3);
                 if (gunBase.getReloadSound() != null)
-                    user.level().playSound(null, user.getX(), user.getY(), user.getZ(), gunBase.getReloadSound(), SoundSource.PLAYERS, 1.00F, 1.0F);
+                    user.level()
+                        .playSound(
+                            null,
+                            user.getX(),
+                            user.getY(),
+                            user.getZ(),
+                            gunBase.getReloadSound(),
+                            SoundSource.PLAYERS,
+                            1.00F,
+                            1.0F
+                        );
                 if (!user.level().isClientSide) {
                     if (user.getRandom().nextInt(0, 100) >= 95 && gunBase.getItemID().equalsIgnoreCase("tommy_gun"))
                         gunBase.animationDispatcher.sendTommyReloadCommand(user, user.getItemInHand(hand));
@@ -461,25 +571,39 @@ public abstract class AzureAnimatedGunItem extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag tooltipFlag) {
+    public void appendHoverText(
+        @NotNull ItemStack stack,
+        @NotNull TooltipContext context,
+        @NotNull List<Component> tooltip,
+        @NotNull TooltipFlag tooltipFlag
+    ) {
         super.appendHoverText(stack, context, tooltip, tooltipFlag);
-        tooltip.add(Component.translatable("Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)).withStyle(ChatFormatting.ITALIC));
+        tooltip.add(
+            Component.translatable(
+                "Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)
+            ).withStyle(ChatFormatting.ITALIC)
+        );
         switch (getProjectileTypeEnum()) {
             case BULLET, HELL ->
-                    tooltip.add(Component.translatable("hwg.ammo.reloadbullets").withStyle(ChatFormatting.ITALIC));
+                tooltip.add(Component.translatable("hwg.ammo.reloadbullets").withStyle(ChatFormatting.ITALIC));
             case BLAZE ->
-                    tooltip.add(Component.translatable("hwg.ammo.reloadblazerod").withStyle(ChatFormatting.ITALIC));
+                tooltip.add(Component.translatable("hwg.ammo.reloadblazerod").withStyle(ChatFormatting.ITALIC));
             case FIREBALL, FLAMES -> {
                 tooltip.add(Component.translatable("hwg.ammo.reloadfuel").withStyle(ChatFormatting.ITALIC));
-                tooltip.add(Component.translatable("Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)).withStyle(ChatFormatting.ITALIC));
+                tooltip.add(
+                    Component.translatable(
+                        "Fuel: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage()
+                            - 1)
+                    ).withStyle(ChatFormatting.ITALIC)
+                );
             }
             case MEANIE ->
-                    tooltip.add(Component.translatable("hwg.ammo.reloadredstone").withStyle(ChatFormatting.ITALIC));
+                tooltip.add(Component.translatable("hwg.ammo.reloadredstone").withStyle(ChatFormatting.ITALIC));
             case SHELL -> tooltip.add(Component.translatable("hwg.ammo.reloadshells").withStyle(ChatFormatting.ITALIC));
             case ROCKET ->
-                    tooltip.add(Component.translatable("hwg.ammo.reloadrockets").withStyle(ChatFormatting.ITALIC));
+                tooltip.add(Component.translatable("hwg.ammo.reloadrockets").withStyle(ChatFormatting.ITALIC));
             case SILVER_BULLET ->
-                    tooltip.add(Component.translatable("hwg.ammo.reloadsilverbullets").withStyle(ChatFormatting.ITALIC));
+                tooltip.add(Component.translatable("hwg.ammo.reloadsilverbullets").withStyle(ChatFormatting.ITALIC));
         }
     }
 }

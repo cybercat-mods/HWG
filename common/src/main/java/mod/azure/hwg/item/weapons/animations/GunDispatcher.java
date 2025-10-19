@@ -1,18 +1,27 @@
 package mod.azure.hwg.item.weapons.animations;
 
-import mod.azure.azurelib.rewrite.animation.dispatch.command.AzCommand;
-import mod.azure.azurelib.rewrite.animation.play_behavior.AzPlayBehaviors;
-import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
+import mod.azure.azurelib.common.animation.dispatch.command.AzCommand;
+import mod.azure.azurelib.common.animation.play_behavior.AzPlayBehaviors;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+
+import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
 
 public class GunDispatcher {
 
     private final AzCommand IDLE_COMMAND = AzCommand.create("base_controller", "idle", AzPlayBehaviors.LOOP);
 
-    private final AzCommand FIRING_COMMAND = AzCommand.create("base_controller", AzureAnimatedGunItem.firing, AzPlayBehaviors.PLAY_ONCE);
+    private final AzCommand FIRING_COMMAND = AzCommand.create(
+        "base_controller",
+        AzureAnimatedGunItem.firing,
+        AzPlayBehaviors.PLAY_ONCE
+    );
 
-    private final AzCommand TOMMYRELOAD_COMMAND = AzCommand.create("base_controller", "tommyreload2", AzPlayBehaviors.PLAY_ONCE);
+    private final AzCommand TOMMYRELOAD_COMMAND = AzCommand.create(
+        "base_controller",
+        "tommyreload2",
+        AzPlayBehaviors.PLAY_ONCE
+    );
 
     private final AzCommand RELOAD_COMMAND = AzCommand.create("base_controller", "reload", AzPlayBehaviors.PLAY_ONCE);
 

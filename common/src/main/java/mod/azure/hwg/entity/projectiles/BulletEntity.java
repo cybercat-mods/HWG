@@ -1,9 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.util.BlockBreakProgressManager;
-import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
@@ -23,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
 import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.phys.BlockHitResult;
@@ -31,10 +26,19 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.util.BlockBreakProgressManager;
+import mod.azure.hwg.util.Helper;
+import mod.azure.hwg.util.registry.HWGProjectiles;
+
 public class BulletEntity extends AbstractArrow {
 
     public float bulletdamage;
-    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BulletEntity.class, EntityDataSerializers.FLOAT);
+
+    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(
+        BulletEntity.class,
+        EntityDataSerializers.FLOAT
+    );
 
     public BulletEntity(EntityType<? extends BulletEntity> entityType, Level world) {
         super(entityType, world);
@@ -47,7 +51,15 @@ public class BulletEntity extends AbstractArrow {
         this.bulletdamage = damage;
     }
 
-    public BulletEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
+    public BulletEntity(
+        Level world,
+        ItemStack stack,
+        Entity entity,
+        double x,
+        double y,
+        double z,
+        boolean shotAtAngle
+    ) {
         this(world, stack, x, y, z, shotAtAngle);
         this.setOwner(entity);
     }
@@ -72,7 +84,8 @@ public class BulletEntity extends AbstractArrow {
 
     @Override
     public void tickDespawn() {
-        if (this.tickCount >= 40) this.remove(RemovalReason.DISCARDED);
+        if (this.tickCount >= 40)
+            this.remove(RemovalReason.DISCARDED);
     }
 
     @Override
@@ -108,7 +121,8 @@ public class BulletEntity extends AbstractArrow {
             double z = this.getZ() + (this.random.nextDouble()) * this.getBbWidth() * 0.5D;
             this.level().addParticle(ParticleTypes.SMOKE, true, x, this.getY(0.5), z, 0, 0, 0);
         }
-        if (getOwner() instanceof Player) setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player)
+            setYRot(entityData.get(FORCED_YAW));
         Helper.setOnFire(this);
     }
 
@@ -130,16 +144,23 @@ public class BulletEntity extends AbstractArrow {
     @Override
     protected void onHitBlock(@NotNull BlockHitResult blockHitResult) {
         super.onHitBlock(blockHitResult);
-        if (!this.level().isClientSide) this.remove(RemovalReason.DISCARDED);
-        if (CommonMod.config.gunconfigs.bullets_breakdripstone && !level().getBlockState(blockHitResult.getBlockPos()).is(Blocks.BEDROCK))
+        if (!this.level().isClientSide)
+            this.remove(RemovalReason.DISCARDED);
+        if (
+            CommonMod.config.gunconfigs.bullets_breakdripstone && !level().getBlockState(blockHitResult.getBlockPos())
+                .is(Blocks.BEDROCK)
+        )
             BlockBreakProgressManager.damage(
-                    level(),
-                    blockHitResult.getBlockPos(),
-                    this.bulletdamage * 2.0F
+                level(),
+                blockHitResult.getBlockPos(),
+                this.bulletdamage * 2.0F
             );
         if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.TNT))
             level().getBlockState(blockHitResult.getBlockPos()).setValue(TntBlock.UNSTABLE, true);
-        if (level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE) || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock)
+        if (
+            level().getBlockState(blockHitResult.getBlockPos()).getBlock().defaultBlockState().is(Blocks.GLASS_PANE)
+                || level().getBlockState(blockHitResult.getBlockPos()).getBlock() instanceof StainedGlassPaneBlock
+        )
             level().destroyBlock(blockHitResult.getBlockPos(), true);
         this.setSoundEvent(SoundEvents.ARMOR_EQUIP_IRON.value());
     }
@@ -147,25 +168,37 @@ public class BulletEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide)
+        if (
+            entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this
+                .level().isClientSide
+        )
             this.remove(RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
-        if (entity2 == null) damageSource2 = damageSources().arrow(this, this);
+        if (entity2 == null)
+            damageSource2 = damageSources().arrow(this, this);
         else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity livingEntity) livingEntity.setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity)
+                livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, bulletdamage)) {
             if (entity instanceof LivingEntity livingEntity) {
                 if (!this.level().isClientSide && entity2 instanceof LivingEntity) {
-                    if (this.isOnFire()) livingEntity.setRemainingFireTicks(50);
+                    if (this.isOnFire())
+                        livingEntity.setRemainingFireTicks(50);
                 }
                 this.doPostHurtEffects(livingEntity);
-                if (livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
-                    serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                if (
+                    livingEntity != entity2 && livingEntity instanceof Player
+                        && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent()
+                )
+                    serverPlayer.connection.send(
+                        new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F)
+                    );
             }
-        } else if (!this.level().isClientSide) this.remove(RemovalReason.DISCARDED);
+        } else if (!this.level().isClientSide)
+            this.remove(RemovalReason.DISCARDED);
     }
 
     @Override

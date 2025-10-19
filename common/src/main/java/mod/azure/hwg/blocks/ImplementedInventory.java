@@ -65,8 +65,7 @@ public interface ImplementedInventory extends Container {
     }
 
     @Override
-    default void setChanged() {
-    }
+    default void setChanged() {}
 
     @Override
     default boolean stillValid(@NotNull Player player) {

@@ -1,8 +1,5 @@
 package mod.azure.hwg.entity.blockentity;
 
-import mod.azure.hwg.blocks.ImplementedInventory;
-import mod.azure.hwg.client.gui.GunTableScreenHandler;
-import mod.azure.hwg.util.registry.HWGMobs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -18,6 +15,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+
+import mod.azure.hwg.blocks.ImplementedInventory;
+import mod.azure.hwg.client.gui.GunTableScreenHandler;
+import mod.azure.hwg.util.registry.HWGMobs;
 
 public class GunBlockEntity extends BlockEntity implements ImplementedInventory, MenuProvider {
 

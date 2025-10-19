@@ -45,8 +45,17 @@ public abstract class HWGGunLoadedBase extends ProjectileWeaponItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        tooltipComponents.add(Component.translatable("Ammo: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)).withStyle(ChatFormatting.ITALIC));
+    public void appendHoverText(
+        ItemStack stack,
+        TooltipContext context,
+        List<Component> tooltipComponents,
+        TooltipFlag tooltipFlag
+    ) {
+        tooltipComponents.add(
+            Component.translatable(
+                "Ammo: " + (stack.getMaxDamage() - stack.getDamageValue() - 1) + " / " + (stack.getMaxDamage() - 1)
+            ).withStyle(ChatFormatting.ITALIC)
+        );
     }
 
     @Override

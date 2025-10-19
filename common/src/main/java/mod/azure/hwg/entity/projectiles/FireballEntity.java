@@ -1,9 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGParticles;
-import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
@@ -21,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
@@ -30,9 +25,18 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.util.Helper;
+import mod.azure.hwg.util.registry.HWGParticles;
+import mod.azure.hwg.util.registry.HWGProjectiles;
+
 public class FireballEntity extends AbstractArrow {
 
-    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(FireballEntity.class, EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(
+        FireballEntity.class,
+        EntityDataSerializers.FLOAT
+    );
+
     private int idleTicks = 0;
 
     public FireballEntity(EntityType<? extends FireballEntity> entityType, Level world) {
@@ -78,7 +82,7 @@ public class FireballEntity extends AbstractArrow {
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
-        tag.putShort("life", (short)this.tickCount);
+        tag.putShort("life", (short) this.tickCount);
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
     }
 
@@ -150,7 +154,10 @@ public class FireballEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide)
+        if (
+            entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this
+                .level().isClientSide
+        )
             this.remove(RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
@@ -168,8 +175,13 @@ public class FireballEntity extends AbstractArrow {
                         livingEntity.setRemainingFireTicks(50);
                 }
                 this.doPostHurtEffects(livingEntity);
-                if (livingEntity != entity2 && livingEntity instanceof Player && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent())
-                    serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                if (
+                    livingEntity != entity2 && livingEntity instanceof Player
+                        && entity2 instanceof ServerPlayer serverPlayer && !this.isSilent()
+                )
+                    serverPlayer.connection.send(
+                        new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F)
+                    );
             }
         } else if (!this.level().isClientSide)
             this.remove(RemovalReason.DISCARDED);

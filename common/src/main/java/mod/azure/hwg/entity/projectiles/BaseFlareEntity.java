@@ -1,12 +1,6 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.azurelib.common.api.common.helper.CommonUtils;
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGItems;
-import mod.azure.hwg.util.registry.HWGParticles;
-import mod.azure.hwg.util.registry.HWGProjectiles;
-import mod.azure.hwg.util.registry.HWGSounds;
+import mod.azure.azurelib.common.util.CommonUtils;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,10 +19,21 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.util.registry.HWGItems;
+import mod.azure.hwg.util.registry.HWGParticles;
+import mod.azure.hwg.util.registry.HWGProjectiles;
+import mod.azure.hwg.util.registry.HWGSounds;
+
 public class BaseFlareEntity extends AbstractArrow {
 
-    private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(BaseFlareEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(
+        BaseFlareEntity.class,
+        EntityDataSerializers.INT
+    );
+
     private int life;
+
     private int idleTicks = 0;
 
     public BaseFlareEntity(EntityType<? extends AbstractArrow> entityType, Level world) {
@@ -70,7 +75,7 @@ public class BaseFlareEntity extends AbstractArrow {
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
-        compound.putShort("life", (short)this.tickCount);
+        compound.putShort("life", (short) this.tickCount);
         compound.putInt("Variant", this.getColor());
     }
 
@@ -100,7 +105,17 @@ public class BaseFlareEntity extends AbstractArrow {
         if (this.tickCount >= 800 || this.isInWater())
             this.remove(RemovalReason.DISCARDED);
         if (this.life == 0 && !this.isSilent())
-            this.level().playSound(null, this.getX(), this.getY(), this.getZ(), HWGSounds.FLAREGUN_SHOOT.get(), SoundSource.PLAYERS, 6.0F, 1.0F);
+            this.level()
+                .playSound(
+                    null,
+                    this.getX(),
+                    this.getY(),
+                    this.getZ(),
+                    HWGSounds.FLAREGUN_SHOOT.get(),
+                    SoundSource.PLAYERS,
+                    6.0F,
+                    1.0F
+                );
         setNoGravity(false);
         ++this.life;
         var vec3d = this.getDeltaMovement();
@@ -110,7 +125,17 @@ public class BaseFlareEntity extends AbstractArrow {
         var isInsideWaterBlock = level().isWaterAt(blockPosition());
         CommonUtils.spawnLightSource(this, isInsideWaterBlock);
         if (this.level().isClientSide) {
-            this.level().addParticle(this.particleColor(), true, this.getX(), this.getY() - 0.3D, this.getZ(), 0, -this.getDeltaMovement().y * 0.17D, 0);
+            this.level()
+                .addParticle(
+                    this.particleColor(),
+                    true,
+                    this.getX(),
+                    this.getY() - 0.3D,
+                    this.getZ(),
+                    0,
+                    -this.getDeltaMovement().y * 0.17D,
+                    0
+                );
         }
     }
 

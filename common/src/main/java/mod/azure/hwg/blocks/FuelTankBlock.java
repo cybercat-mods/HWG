@@ -1,7 +1,6 @@
 package mod.azure.hwg.blocks;
 
 import com.mojang.serialization.MapCodec;
-import mod.azure.hwg.entity.projectiles.FuelTankEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +18,10 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.entity.projectiles.FuelTankEntity;
+
 public class FuelTankBlock extends Block {
+
     public static final MapCodec<Block> CODEC = simpleCodec(FuelTankBlock::new);
 
     public FuelTankBlock(Properties properties) {
@@ -44,7 +46,13 @@ public class FuelTankBlock extends Block {
     }
 
     @Override
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player, @NotNull BlockHitResult hitResult) {
+    protected @NotNull InteractionResult useWithoutItem(
+        @NotNull BlockState state,
+        @NotNull Level level,
+        @NotNull BlockPos pos,
+        Player player,
+        @NotNull BlockHitResult hitResult
+    ) {
         var itemStack = player.getItemInHand(player.getUsedItemHand());
         var item = itemStack.getItem();
         if (item != Items.FLINT_AND_STEEL && item != Items.FIRE_CHARGE)
@@ -57,7 +65,12 @@ public class FuelTankBlock extends Block {
     }
 
     @Override
-    public void onProjectileHit(Level world, @NotNull BlockState state, @NotNull BlockHitResult hit, @NotNull Projectile projectile) {
+    public void onProjectileHit(
+        Level world,
+        @NotNull BlockState state,
+        @NotNull BlockHitResult hit,
+        @NotNull Projectile projectile
+    ) {
         if (!world.isClientSide) {
             var blockPos = hit.getBlockPos();
             primeBlock(world, blockPos);
@@ -66,7 +79,12 @@ public class FuelTankBlock extends Block {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter view, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    public @NotNull VoxelShape getShape(
+        @NotNull BlockState state,
+        @NotNull BlockGetter view,
+        @NotNull BlockPos pos,
+        @NotNull CollisionContext context
+    ) {
         return Shapes.box(0.33f, 0f, 0.33f, 0.67f, 1.0f, 0.67f);
     }
 }

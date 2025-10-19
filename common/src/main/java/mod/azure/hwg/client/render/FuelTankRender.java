@@ -2,13 +2,14 @@ package mod.azure.hwg.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.entity.projectiles.FuelTankEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.entity.projectiles.FuelTankEntity;
 
 public class FuelTankRender extends EntityRenderer<FuelTankEntity> {
 
@@ -20,7 +21,14 @@ public class FuelTankRender extends EntityRenderer<FuelTankEntity> {
     }
 
     @Override
-    public void render(@NotNull FuelTankEntity entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(
+        @NotNull FuelTankEntity entityIn,
+        float entityYaw,
+        float partialTicks,
+        PoseStack matrixStackIn,
+        @NotNull MultiBufferSource bufferIn,
+        int packedLightIn
+    ) {
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.0D, 0.5D, 0.0D);
 

@@ -1,7 +1,7 @@
 package mod.azure.hwg.entity.animation;
 
-import mod.azure.azurelib.rewrite.animation.dispatch.command.AzCommand;
-import mod.azure.azurelib.rewrite.animation.play_behavior.AzPlayBehaviors;
+import mod.azure.azurelib.common.animation.dispatch.command.AzCommand;
+import mod.azure.azurelib.common.animation.play_behavior.AzPlayBehaviors;
 import net.minecraft.world.entity.Entity;
 
 public class AnimationDispatcher {
@@ -10,7 +10,11 @@ public class AnimationDispatcher {
 
     private final AzCommand IDLE_COMMAND = AzCommand.create("base_controller", "idle", AzPlayBehaviors.LOOP);
 
-    private final AzCommand RANGED_COMMAND = AzCommand.create("base_controller", "attacking", AzPlayBehaviors.PLAY_ONCE);
+    private final AzCommand RANGED_COMMAND = AzCommand.create(
+        "base_controller",
+        "attacking",
+        AzPlayBehaviors.PLAY_ONCE
+    );
 
     private final AzCommand MELEE_COMMAND = AzCommand.create("base_controller", "melee", AzPlayBehaviors.PLAY_ONCE);
 

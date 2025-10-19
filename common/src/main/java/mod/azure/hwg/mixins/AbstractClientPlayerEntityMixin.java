@@ -1,8 +1,6 @@
 package mod.azure.hwg.mixins;
 
 import com.mojang.authlib.GameProfile;
-import mod.azure.azurelib.common.api.client.helper.ClientUtils;
-import mod.azure.hwg.util.registry.HWGItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
@@ -13,6 +11,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import mod.azure.hwg.client.HWGKeybinds;
+import mod.azure.hwg.util.registry.HWGItems;
+
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerEntityMixin extends Player {
 
@@ -22,7 +23,10 @@ public abstract class AbstractClientPlayerEntityMixin extends Player {
 
     @Inject(at = @At("HEAD"), method = "getFieldOfViewModifier", cancellable = true)
     private void render(CallbackInfoReturnable<Float> ci) {
-        if (Minecraft.getInstance().options.getCameraType().isFirstPerson() && this.getMainHandItem().is(HWGItems.SNIPER.get()))
-            ci.setReturnValue(ClientUtils.SCOPE.isDown() ? 0.1F : 1.0F);
+        if (
+            Minecraft.getInstance().options.getCameraType().isFirstPerson() && this.getMainHandItem()
+                .is(HWGItems.SNIPER.get())
+        )
+            ci.setReturnValue(HWGKeybinds.SCOPE.isDown() ? 0.1F : 1.0F);
     }
 }

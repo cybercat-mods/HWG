@@ -1,7 +1,5 @@
 package mod.azure.hwg.mixins;
 
-import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
-import mod.azure.hwg.item.weapons.HWGGunLoadedBase;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -13,6 +11,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import mod.azure.hwg.item.weapons.AzureAnimatedGunItem;
+import mod.azure.hwg.item.weapons.HWGGunLoadedBase;
 
 @Mixin(Villager.class)
 public abstract class VillagerMixin extends AbstractVillager {

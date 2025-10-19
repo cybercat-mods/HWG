@@ -5,15 +5,20 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import mod.azure.hwg.util.recipes.GunTableRecipe;
 
 import java.util.Collections;
 import java.util.List;
 
+import mod.azure.hwg.util.recipes.GunTableRecipe;
+
 public class HWGDisplay implements Display {
+
     public final List<EntryIngredient> input;
+
     public final List<Integer> count;
+
     public final EntryIngredient output;
+
     public final GunTableRecipe recipe2;
 
     public HWGDisplay(GunTableRecipe recipe) {

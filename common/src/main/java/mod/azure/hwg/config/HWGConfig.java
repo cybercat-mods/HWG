@@ -1,7 +1,8 @@
 package mod.azure.hwg.config;
 
-import mod.azure.azurelib.common.api.common.config.Config;
-import mod.azure.azurelib.common.internal.common.config.Configurable;
+import mod.azure.azurelib.common.config.Config;
+import mod.azure.azurelib.common.config.Configurable;
+
 import mod.azure.hwg.CommonMod;
 
 @Config(id = CommonMod.MOD_ID)
@@ -9,6 +10,7 @@ public class HWGConfig {
 
     @Configurable
     public MobConfigs mobconfigs = new MobConfigs();
+
     @Configurable
     public GunConfigs gunconfigs = new GunConfigs();
 
@@ -16,14 +18,18 @@ public class HWGConfig {
 
         @Configurable
         public MercConfigs mercconfigs = new MercConfigs();
+
         @Configurable
         public SpyConfigs spyconfigs = new SpyConfigs();
+
         @Configurable
         public LesserConfigs lesserconfigs = new LesserConfigs();
+
         @Configurable
         public GreatConfigs greatconfigs = new GreatConfigs();
 
         public static class MercConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 0)
@@ -51,6 +57,7 @@ public class HWGConfig {
         }
 
         public static class SpyConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 0)
@@ -78,6 +85,7 @@ public class HWGConfig {
         }
 
         public static class LesserConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 0)
@@ -105,6 +113,7 @@ public class HWGConfig {
         }
 
         public static class GreatConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 0)
@@ -137,9 +146,11 @@ public class HWGConfig {
         @Configurable
         @Configurable.Synchronized
         public boolean rocket_breaks = true;
+
         @Configurable
         @Configurable.Synchronized
         public boolean balrog_breaks = false;
+
         @Configurable
         @Configurable.Synchronized
         public boolean grenades_breaks = false;
@@ -148,55 +159,75 @@ public class HWGConfig {
         @Configurable.Synchronized
         @Configurable.Range(min = 1)
         public int grenades_throw_cooldown = 25;
+
         @Configurable
         @Configurable.Synchronized
         public boolean bullets_breakdripstone = false;
+
         @Configurable
         @Configurable.Synchronized
         public boolean bullets_disable_iframes_on_players = false;
 
         @Configurable
         public FlammerConfigs flammerconfigs = new FlammerConfigs();
+
         @Configurable
         public PistolConfigs pistolconfigs = new PistolConfigs();
+
         @Configurable
         public GPistolConfigs gpistolconfigs = new GPistolConfigs();
+
         @Configurable
         public SPistolConfigs silencedpistolconfigs = new SPistolConfigs();
+
         @Configurable
         public LugerConfigs lugerconfigs = new LugerConfigs();
+
         @Configurable
         public AKConfigs ak47configs = new AKConfigs();
+
         @Configurable
         public SniperConfigs sniperconfigs = new SniperConfigs();
+
         @Configurable
         public MinigunConfigs minigunconfigs = new MinigunConfigs();
+
         @Configurable
         public SMGConfigs smgconfigs = new SMGConfigs();
+
         @Configurable
         public HellhorseConfigs hellhorseconfigs = new HellhorseConfigs();
+
         @Configurable
         public TommyConfigs tommyconfigs = new TommyConfigs();
+
         @Configurable
         public ShotgunConfigs shotgunconfigs = new ShotgunConfigs();
+
         @Configurable
         public MeanieConfigs meanieconfigs = new MeanieConfigs();
+
         @Configurable
         public BalrogConfigs balrogconfigs = new BalrogConfigs();
+
         @Configurable
         public BrimstoneConfigs brimstoneconfigs = new BrimstoneConfigs();
+
         @Configurable
         public RocketLauncherConfigs rocketlauncherconfigs = new RocketLauncherConfigs();
 
         public static class RocketLauncherConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int rocketlauncherCap = 1;
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
             public int rocketlauncherCooldown = 20;
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
@@ -205,6 +236,7 @@ public class HWGConfig {
         }
 
         public static class FlammerConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.Range(min = 1)
@@ -222,6 +254,7 @@ public class HWGConfig {
         }
 
         public static class PistolConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -244,6 +277,7 @@ public class HWGConfig {
         }
 
         public static class GPistolConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -266,6 +300,7 @@ public class HWGConfig {
         }
 
         public static class SPistolConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -288,6 +323,7 @@ public class HWGConfig {
         }
 
         public static class LugerConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -310,6 +346,7 @@ public class HWGConfig {
         }
 
         public static class AKConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -332,6 +369,7 @@ public class HWGConfig {
         }
 
         public static class SniperConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -359,6 +397,7 @@ public class HWGConfig {
         }
 
         public static class MinigunConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -381,6 +420,7 @@ public class HWGConfig {
         }
 
         public static class SMGConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -403,6 +443,7 @@ public class HWGConfig {
         }
 
         public static class HellhorseConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -425,6 +466,7 @@ public class HWGConfig {
         }
 
         public static class TommyConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -447,6 +489,7 @@ public class HWGConfig {
         }
 
         public static class ShotgunConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -469,6 +512,7 @@ public class HWGConfig {
         }
 
         public static class MeanieConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -491,6 +535,7 @@ public class HWGConfig {
         }
 
         public static class BalrogConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)
@@ -513,6 +558,7 @@ public class HWGConfig {
         }
 
         public static class BrimstoneConfigs {
+
             @Configurable
             @Configurable.Synchronized
             @Configurable.DecimalRange(min = 1)

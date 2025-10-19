@@ -1,8 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
@@ -26,10 +23,19 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.util.Helper;
+import mod.azure.hwg.util.registry.HWGProjectiles;
+
 public class BlazeRodEntity extends AbstractArrow {
 
-    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(BlazeRodEntity.class, EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(
+        BlazeRodEntity.class,
+        EntityDataSerializers.FLOAT
+    );
+
     private int ticksInAir;
+
     private int idleTicks = 0;
 
     public BlazeRodEntity(EntityType<? extends BlazeRodEntity> entityType, Level world) {
@@ -41,7 +47,15 @@ public class BlazeRodEntity extends AbstractArrow {
         super(HWGProjectiles.BLAZEROD.get(), world);
     }
 
-    public BlazeRodEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
+    public BlazeRodEntity(
+        Level world,
+        ItemStack stack,
+        Entity entity,
+        double x,
+        double y,
+        double z,
+        boolean shotAtAngle
+    ) {
         this(world, stack, x, y, z, shotAtAngle);
         this.setOwner(entity);
     }
@@ -90,7 +104,7 @@ public class BlazeRodEntity extends AbstractArrow {
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
-        tag.putShort("life", (short)this.tickCount);
+        tag.putShort("life", (short) this.tickCount);
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
     }
 
@@ -103,9 +117,12 @@ public class BlazeRodEntity extends AbstractArrow {
     @Override
     public void tick() {
         var idleOpt = 100;
-        if (getDeltaMovement().lengthSqr() < 0.01) idleTicks++;
-        else idleTicks = 0;
-        if (idleTicks < idleOpt) super.tick();
+        if (getDeltaMovement().lengthSqr() < 0.01)
+            idleTicks++;
+        else
+            idleTicks = 0;
+        if (idleTicks < idleOpt)
+            super.tick();
 
         ++this.ticksInAir;
         if (this.tickCount >= 190)
@@ -120,7 +137,8 @@ public class BlazeRodEntity extends AbstractArrow {
             this.level().addParticle(ParticleTypes.FLAME, true, x, y, z, 0, 0, 0);
             this.level().addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, x, y, z, 0, 0, 0);
         }
-        if (getOwner() instanceof Player) setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player)
+            setYRot(entityData.get(FORCED_YAW));
     }
 
     @Override
@@ -151,30 +169,53 @@ public class BlazeRodEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         var entity = entityHitResult.getEntity();
-        if (entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this.level().isClientSide)
+        if (
+            entityHitResult.getType() != HitResult.Type.ENTITY || !entityHitResult.getEntity().is(entity) && !this
+                .level().isClientSide
+        )
             this.remove(RemovalReason.DISCARDED);
         var entity2 = this.getOwner();
         DamageSource damageSource2;
-        if (entity2 == null) damageSource2 = damageSources().arrow(this, this);
+        if (entity2 == null)
+            damageSource2 = damageSources().arrow(this, this);
         else {
             damageSource2 = damageSources().arrow(this, entity2);
-            if (entity2 instanceof LivingEntity livingEntity) livingEntity.setLastHurtMob(entity);
+            if (entity2 instanceof LivingEntity livingEntity)
+                livingEntity.setLastHurtMob(entity);
         }
         if (entity.hurt(damageSource2, CommonMod.config.gunconfigs.balrogconfigs.balrog_damage)) {
             if (entity instanceof LivingEntity livingEntity) {
-                if (!this.level().isClientSide && entity2 instanceof LivingEntity && this.isOnFire()) livingEntity.setRemainingFireTicks(50);
+                if (!this.level().isClientSide && entity2 instanceof LivingEntity && this.isOnFire())
+                    livingEntity.setRemainingFireTicks(50);
 
                 this.explode();
 
                 this.doPostHurtEffects(livingEntity);
-                if (livingEntity != entity2 && livingEntity instanceof Player player && player instanceof ServerPlayer serverPlayer && !this.isSilent())
-                    serverPlayer.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F));
+                if (
+                    livingEntity != entity2 && livingEntity instanceof Player player
+                        && player instanceof ServerPlayer serverPlayer && !this.isSilent()
+                )
+                    serverPlayer.connection.send(
+                        new ClientboundGameEventPacket(ClientboundGameEventPacket.ARROW_HIT_PLAYER, 0.0F)
+                    );
             }
-        } else if (!this.level().isClientSide) this.remove(RemovalReason.DISCARDED);
+        } else if (!this.level().isClientSide)
+            this.remove(RemovalReason.DISCARDED);
     }
 
     protected void explode() {
-        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, false, CommonMod.config.gunconfigs.balrog_breaks ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+        this.level()
+            .explode(
+                this,
+                this.getX(),
+                this.getY(0.0625D),
+                this.getZ(),
+                1.0F,
+                false,
+                CommonMod.config.gunconfigs.balrog_breaks
+                    ? Level.ExplosionInteraction.BLOCK
+                    : Level.ExplosionInteraction.NONE
+            );
     }
 
     @Override

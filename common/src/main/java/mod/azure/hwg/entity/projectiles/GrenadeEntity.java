@@ -1,9 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.entity.TechnodemonEntity;
-import mod.azure.hwg.entity.TechnodemonGreaterEntity;
-import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.ParticleOptions;
@@ -31,13 +27,32 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.entity.TechnodemonEntity;
+import mod.azure.hwg.entity.TechnodemonGreaterEntity;
+import mod.azure.hwg.util.registry.HWGProjectiles;
+
 public class GrenadeEntity extends AbstractArrow {
 
-    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(GrenadeEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(
+        GrenadeEntity.class,
+        EntityDataSerializers.FLOAT
+    );
+
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(
+        GrenadeEntity.class,
+        EntityDataSerializers.INT
+    );
+
+    private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(
+        GrenadeEntity.class,
+        EntityDataSerializers.INT
+    );
+
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
+
     protected String type;
+
     public GrenadeDispatcher grenadeDispatcher;
 
     public GrenadeEntity(EntityType<? extends GrenadeEntity> entityType, Level world) {
@@ -50,7 +65,15 @@ public class GrenadeEntity extends AbstractArrow {
         super(HWGProjectiles.GRENADE.get(), world);
     }
 
-    public GrenadeEntity(Level world, ItemStack stack, Entity entity, double x, double y, double z, boolean shotAtAngle) {
+    public GrenadeEntity(
+        Level world,
+        ItemStack stack,
+        Entity entity,
+        double x,
+        double y,
+        double z,
+        boolean shotAtAngle
+    ) {
         this(world, stack, x, y, z, shotAtAngle);
         this.setOwner(entity);
     }
@@ -79,7 +102,7 @@ public class GrenadeEntity extends AbstractArrow {
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
-        tag.putShort("life", (short)this.tickCount);
+        tag.putShort("life", (short) this.tickCount);
         tag.putInt("Variant", this.getVariant());
         tag.putInt("State", this.getVariant());
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
@@ -219,7 +242,18 @@ public class GrenadeEntity extends AbstractArrow {
     }
 
     protected void frag() {
-        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, CommonMod.config.gunconfigs.grenades_breaks ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+        this.level()
+            .explode(
+                this,
+                this.getX(),
+                this.getY(0.0625D),
+                this.getZ(),
+                2.0F,
+                false,
+                CommonMod.config.gunconfigs.grenades_breaks
+                    ? Level.ExplosionInteraction.BLOCK
+                    : Level.ExplosionInteraction.NONE
+            );
     }
 
     protected void naplam() {
@@ -228,7 +262,8 @@ public class GrenadeEntity extends AbstractArrow {
                 e.setRemainingFireTicks(200);
             }
         });
-        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true, Level.ExplosionInteraction.NONE);
+        this.level()
+            .explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 1.0F, true, Level.ExplosionInteraction.NONE);
     }
 
     protected void emp() {
@@ -236,48 +271,104 @@ public class GrenadeEntity extends AbstractArrow {
             if (e.isAlive() && (e instanceof TechnodemonEntity || e instanceof TechnodemonGreaterEntity))
                 e.hurt(damageSources().arrow(this, this), 10);
         });
-        this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.LEVER)).forEach(state -> {
-            for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
-                if (this.level().getBlockState(testPos).is(Blocks.LEVER))
-                    this.level().setBlockAndUpdate(testPos, state.setValue(LeverBlock.POWERED, false));
-            }
-        });
-        this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_WIRE)).forEach(state -> {
-            for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
-                if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_WIRE))
-                    this.level().setBlockAndUpdate(testPos, state.setValue(RedStoneWireBlock.POWER, 0));
-            }
-        });
-        this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.COMPARATOR)).forEach(state -> {
-            for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
-                if (this.level().getBlockState(testPos).is(Blocks.COMPARATOR))
-                    this.level().setBlockAndUpdate(testPos, state.setValue(DiodeBlock.POWERED, false));
-            }
-        });
-        this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REPEATER)).forEach(state -> {
-            for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
-                if (this.level().getBlockState(testPos).is(Blocks.REPEATER))
-                    this.level().setBlockAndUpdate(testPos, state.setValue(DiodeBlock.POWERED, false));
-            }
-        });
-        this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_TORCH)).forEach(state -> {
-            for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
-                if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_TORCH))
-                    this.level().destroyBlock(testPos, true, null, 512);
-            }
-        });
-        this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_WALL_TORCH)).forEach(state -> {
-            for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
-                if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_WALL_TORCH))
-                    this.level().destroyBlock(testPos, true, null, 512);
-            }
-        });
-        this.level().getBlockStatesIfLoaded(this.getBoundingBox().inflate(8)).filter(state -> state.is(Blocks.REDSTONE_LAMP)).forEach(state -> {
-            for (var testPos : BlockPos.betweenClosed(this.blockPosition().offset(new Vec3i(-8, -8, -8)), this.blockPosition().offset(new Vec3i(8, 8, 8)))) {
-                if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_LAMP))
-                    this.level().setBlockAndUpdate(testPos, state.setValue(RedstoneTorchBlock.LIT, false));
-            }
-        });
+        this.level()
+            .getBlockStatesIfLoaded(this.getBoundingBox().inflate(8))
+            .filter(state -> state.is(Blocks.LEVER))
+            .forEach(state -> {
+                for (
+                    var testPos : BlockPos.betweenClosed(
+                        this.blockPosition().offset(new Vec3i(-8, -8, -8)),
+                        this.blockPosition().offset(new Vec3i(8, 8, 8))
+                    )
+                ) {
+                    if (this.level().getBlockState(testPos).is(Blocks.LEVER))
+                        this.level().setBlockAndUpdate(testPos, state.setValue(LeverBlock.POWERED, false));
+                }
+            });
+        this.level()
+            .getBlockStatesIfLoaded(this.getBoundingBox().inflate(8))
+            .filter(state -> state.is(Blocks.REDSTONE_WIRE))
+            .forEach(state -> {
+                for (
+                    var testPos : BlockPos.betweenClosed(
+                        this.blockPosition().offset(new Vec3i(-8, -8, -8)),
+                        this.blockPosition().offset(new Vec3i(8, 8, 8))
+                    )
+                ) {
+                    if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_WIRE))
+                        this.level().setBlockAndUpdate(testPos, state.setValue(RedStoneWireBlock.POWER, 0));
+                }
+            });
+        this.level()
+            .getBlockStatesIfLoaded(this.getBoundingBox().inflate(8))
+            .filter(state -> state.is(Blocks.COMPARATOR))
+            .forEach(state -> {
+                for (
+                    var testPos : BlockPos.betweenClosed(
+                        this.blockPosition().offset(new Vec3i(-8, -8, -8)),
+                        this.blockPosition().offset(new Vec3i(8, 8, 8))
+                    )
+                ) {
+                    if (this.level().getBlockState(testPos).is(Blocks.COMPARATOR))
+                        this.level().setBlockAndUpdate(testPos, state.setValue(DiodeBlock.POWERED, false));
+                }
+            });
+        this.level()
+            .getBlockStatesIfLoaded(this.getBoundingBox().inflate(8))
+            .filter(state -> state.is(Blocks.REPEATER))
+            .forEach(state -> {
+                for (
+                    var testPos : BlockPos.betweenClosed(
+                        this.blockPosition().offset(new Vec3i(-8, -8, -8)),
+                        this.blockPosition().offset(new Vec3i(8, 8, 8))
+                    )
+                ) {
+                    if (this.level().getBlockState(testPos).is(Blocks.REPEATER))
+                        this.level().setBlockAndUpdate(testPos, state.setValue(DiodeBlock.POWERED, false));
+                }
+            });
+        this.level()
+            .getBlockStatesIfLoaded(this.getBoundingBox().inflate(8))
+            .filter(state -> state.is(Blocks.REDSTONE_TORCH))
+            .forEach(state -> {
+                for (
+                    var testPos : BlockPos.betweenClosed(
+                        this.blockPosition().offset(new Vec3i(-8, -8, -8)),
+                        this.blockPosition().offset(new Vec3i(8, 8, 8))
+                    )
+                ) {
+                    if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_TORCH))
+                        this.level().destroyBlock(testPos, true, null, 512);
+                }
+            });
+        this.level()
+            .getBlockStatesIfLoaded(this.getBoundingBox().inflate(8))
+            .filter(state -> state.is(Blocks.REDSTONE_WALL_TORCH))
+            .forEach(state -> {
+                for (
+                    var testPos : BlockPos.betweenClosed(
+                        this.blockPosition().offset(new Vec3i(-8, -8, -8)),
+                        this.blockPosition().offset(new Vec3i(8, 8, 8))
+                    )
+                ) {
+                    if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_WALL_TORCH))
+                        this.level().destroyBlock(testPos, true, null, 512);
+                }
+            });
+        this.level()
+            .getBlockStatesIfLoaded(this.getBoundingBox().inflate(8))
+            .filter(state -> state.is(Blocks.REDSTONE_LAMP))
+            .forEach(state -> {
+                for (
+                    var testPos : BlockPos.betweenClosed(
+                        this.blockPosition().offset(new Vec3i(-8, -8, -8)),
+                        this.blockPosition().offset(new Vec3i(8, 8, 8))
+                    )
+                ) {
+                    if (this.level().getBlockState(testPos).is(Blocks.REDSTONE_LAMP))
+                        this.level().setBlockAndUpdate(testPos, state.setValue(RedstoneTorchBlock.LIT, false));
+                }
+            });
     }
 
     @Override

@@ -1,17 +1,24 @@
 package mod.azure.hwg.util.registry.interfaces;
 
-import mod.azure.hwg.platform.Services;
 import net.minecraft.world.level.block.Block;
 
 import java.util.function.Supplier;
+
+import mod.azure.hwg.platform.Services;
 
 /**
  * Example of using this Interface to create a new Block:
  * <p>
  * The following code demonstrates how to register a new block in the game:
  * </p>
+ *
  * <pre>{@code
- * public static final Supplier<TestBlock> TEST_BLOCK = CommonBlockRegistryInterface.registerBlock("modid", "blockname", TestBlock::new);
+ *
+ * public static final Supplier<TestBlock> TEST_BLOCK = CommonBlockRegistryInterface.registerBlock(
+ *     "modid",
+ *     "blockname",
+ *     TestBlock::new
+ * );
  * }</pre>
  * <p>
  * In this example:

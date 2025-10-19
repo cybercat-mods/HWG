@@ -5,16 +5,17 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.recipes.RecipeOutput;
 
 public class HWGRecipeGenerator extends FabricRecipeProvider implements HWGRecipeHelper {
-	public HWGRecipeGenerator(FabricDataOutput output) {
-		super(output, null);
-	}
 
-	@Override
-	public void buildRecipes(RecipeOutput exporter) {
-		HWGRecipeHelper.makeWeapons(exporter);
+    public HWGRecipeGenerator(FabricDataOutput output) {
+        super(output, null);
+    }
 
-		HWGRecipeHelper.makeGrenades(exporter);
+    @Override
+    public void buildRecipes(RecipeOutput exporter) {
+        HWGRecipeHelper.makeWeapons(exporter);
 
-		HWGRecipeHelper.makeAmmo(exporter);
-	}
+        HWGRecipeHelper.makeGrenades(exporter);
+
+        HWGRecipeHelper.makeAmmo(exporter);
+    }
 }

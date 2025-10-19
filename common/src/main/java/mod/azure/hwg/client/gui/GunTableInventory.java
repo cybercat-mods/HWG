@@ -9,16 +9,17 @@ import net.minecraft.world.item.crafting.RecipeInput;
 import org.jetbrains.annotations.NotNull;
 
 public class GunTableInventory implements Container {
+
     private final GunTableScreenHandler container;
 
     private final NonNullList<ItemStack> stacks;
 
-    public GunTableInventory.CustomRecipeInput recipeInput;
+    public CustomRecipeInput recipeInput;
 
     public GunTableInventory(GunTableScreenHandler container) {
         this.stacks = NonNullList.withSize(6, ItemStack.EMPTY);
         this.container = container;
-        this.recipeInput = new GunTableInventory.CustomRecipeInput(this);
+        this.recipeInput = new CustomRecipeInput(this);
     }
 
     @Override
@@ -70,9 +71,7 @@ public class GunTableInventory implements Container {
     }
 
     @Override
-    public void setChanged() {
-
-    }
+    public void setChanged() {}
 
     @Override
     public void clearContent() {

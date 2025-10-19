@@ -6,7 +6,19 @@ import net.minecraft.core.particles.SimpleParticleType;
 import org.jetbrains.annotations.NotNull;
 
 public class FlareParticle extends TextureSheetParticle {
-    private FlareParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, float red, float green, float blue) {
+
+    private FlareParticle(
+        ClientLevel world,
+        double x,
+        double y,
+        double z,
+        double velocityX,
+        double velocityY,
+        double velocityZ,
+        float red,
+        float green,
+        float blue
+    ) {
         super(world, x, y, z);
         this.scale(3.0F);
         this.setSize(0.25F, 0.25F);
@@ -41,150 +53,240 @@ public class FlareParticle extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
-
     public static class BlackSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public BlackSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 0, 0, 0);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class RedSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public RedSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 22, 156, 156);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class GreenSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public GreenSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 199, 78, 189);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class BrownSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public BrownSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 71, 79, 82);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class BlueSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public BlueSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 254, 216, 61);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class PurpleSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public PurpleSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 128, 199, 31);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class CyanSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public CyanSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 176, 46, 38);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class LightGraySmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public LightGraySmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 131, 84, 50);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class GraySmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public GraySmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             FlareParticle campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 157, 157, 151);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class PinkSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public PinkSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 10, 150, 156);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             campfireSmokeParticle.setAlpha(0.4F);
@@ -192,75 +294,120 @@ public class FlareParticle extends TextureSheetParticle {
         }
     }
 
-
     public static class LimeSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public LimeSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 137, 50, 184);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class YellowSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public YellowSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 60, 68, 170);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class LightBlueSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public LightBlueSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 249, 128, 29);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class MagentaSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public MagentaSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 94, 124, 22);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;
         }
     }
 
-
     public static class OrangeSmokeFactory implements ParticleProvider<SimpleParticleType> {
+
         private final SpriteSet spriteProvider;
 
         public OrangeSmokeFactory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(@NotNull SimpleParticleType defaultParticleType, @NotNull ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
+        public Particle createParticle(
+            @NotNull SimpleParticleType defaultParticleType,
+            @NotNull ClientLevel clientWorld,
+            double d,
+            double e,
+            double f,
+            double g,
+            double h,
+            double i
+        ) {
             var campfireSmokeParticle = new FlareParticle(clientWorld, d, e, f, g, h, i, 58, 179, 216);
             campfireSmokeParticle.pickSprite(this.spriteProvider);
             return campfireSmokeParticle;

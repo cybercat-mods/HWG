@@ -4,23 +4,24 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import mod.azure.hwg.client.gui.GunTableInventory;
-import mod.azure.hwg.util.registry.ModRecipes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public record GunTableRecipe(List<Pair<Ingredient, Integer>> ingredients, ItemStack output) implements Recipe<GunTableInventory.CustomRecipeInput>, Comparable<GunTableRecipe> {
+import mod.azure.hwg.client.gui.GunTableInventory;
+import mod.azure.hwg.util.registry.ModRecipes;
+
+public record GunTableRecipe(
+    List<Pair<Ingredient, Integer>> ingredients,
+    ItemStack output
+) implements Recipe<GunTableInventory.CustomRecipeInput>, Comparable<GunTableRecipe> {
 
     @Override
     public boolean matches(@NotNull GunTableInventory.CustomRecipeInput inv, @NotNull Level world) {
@@ -36,7 +37,10 @@ public record GunTableRecipe(List<Pair<Ingredient, Integer>> ingredients, ItemSt
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull GunTableInventory.CustomRecipeInput craftingContainer, HolderLookup.@NotNull Provider registries) {
+    public @NotNull ItemStack assemble(
+        @NotNull GunTableInventory.CustomRecipeInput craftingContainer,
+        HolderLookup.@NotNull Provider registries
+    ) {
         return this.getResultItem(registries).copy();
     }
 
@@ -69,11 +73,12 @@ public record GunTableRecipe(List<Pair<Ingredient, Integer>> ingredients, ItemSt
     }
 
     public static class Type implements RecipeType<GunTableRecipe> {
+
         public static final Type INSTANCE = new Type();
+
         public static final String ID = "gun_table";
 
-        private Type() {
-        }
+        private Type() {}
     }
 
     @Override
@@ -84,19 +89,27 @@ public record GunTableRecipe(List<Pair<Ingredient, Integer>> ingredients, ItemSt
     }
 
     public static class Serializer implements RecipeSerializer<GunTableRecipe> {
+
         public static Serializer INSTANCE = new Serializer();
 
-        public Serializer() {
-        }
+        public Serializer() {}
 
-        public static final MapCodec<GunTableRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+        public static final MapCodec<GunTableRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(
+            inst -> inst.group(
                 Codec.list(
-                        Codec.mapPair(Ingredient.CODEC_NONEMPTY.fieldOf("ingredient"),
-                                Codec.INT.fieldOf("count")).codec()).fieldOf("ingredients").forGetter(i -> i.ingredients),
+                    Codec.mapPair(
+                        Ingredient.CODEC_NONEMPTY.fieldOf("ingredient"),
+                        Codec.INT.fieldOf("count")
+                    ).codec()
+                ).fieldOf("ingredients").forGetter(i -> i.ingredients),
                 ItemStack.CODEC.fieldOf("result").forGetter(i -> i.output)
-        ).apply(inst, GunTableRecipe::new));
+            ).apply(inst, GunTableRecipe::new)
+        );
+
         public static final StreamCodec<RegistryFriendlyByteBuf, GunTableRecipe> STREAM_CODEC = StreamCodec.of(
-                GunTableRecipe.Serializer::toNetwork, GunTableRecipe.Serializer::fromNetwork);
+            Serializer::toNetwork,
+            Serializer::fromNetwork
+        );
 
         @Override
         public @NotNull MapCodec<GunTableRecipe> codec() {
@@ -109,7 +122,9 @@ public record GunTableRecipe(List<Pair<Ingredient, Integer>> ingredients, ItemSt
         }
 
         private static GunTableRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
-            List<com.mojang.datafixers.util.Pair<Ingredient, Integer>> list = buffer.readList(buf -> com.mojang.datafixers.util.Pair.of(Ingredient.CONTENTS_STREAM_CODEC.decode(buffer), buffer.readInt()));
+            List<Pair<Ingredient, Integer>> list = buffer.readList(
+                buf -> Pair.of(Ingredient.CONTENTS_STREAM_CODEC.decode(buffer), buffer.readInt())
+            );
             ItemStack output = ItemStack.STREAM_CODEC.decode(buffer);
             return new GunTableRecipe(list, output);
         }

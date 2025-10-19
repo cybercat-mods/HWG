@@ -1,5 +1,8 @@
 {
   "values": [
-    "hwg:gun_smith"
+    {
+      "id": "hwg:gun_smith",
+      "required": false
+    }
   ]
 }

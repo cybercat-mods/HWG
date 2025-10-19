@@ -1,7 +1,6 @@
 package mod.azure.hwg.blocks;
 
 import com.mojang.serialization.MapCodec;
-import mod.azure.hwg.entity.blockentity.GunBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
@@ -26,11 +25,16 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.entity.blockentity.GunBlockEntity;
+
 public class GunTableBlock extends Block implements EntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+
     private static final VoxelShape X_LENGTH1 = Block.box(0, 0, 1, 16, 17, 16);
+
     private static final VoxelShape Y_LENGTH1 = Block.box(1, 0, 0, 16, 17, 16);
+
     public static final MapCodec<Block> CODEC = simpleCodec(GunTableBlock::new);
 
     public GunTableBlock(Properties properties) {
@@ -54,7 +58,12 @@ public class GunTableBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+    public @NotNull VoxelShape getShape(
+        BlockState state,
+        @NotNull BlockGetter world,
+        @NotNull BlockPos pos,
+        @NotNull CollisionContext context
+    ) {
         return state.getValue(FACING).getAxis() == Direction.Axis.X ? Y_LENGTH1 : X_LENGTH1;
     }
 
@@ -74,7 +83,13 @@ public class GunTableBlock extends Block implements EntityBlock {
     }
 
     @Override
-    protected @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+    protected @NotNull InteractionResult useWithoutItem(
+        @NotNull BlockState state,
+        Level level,
+        @NotNull BlockPos pos,
+        @NotNull Player player,
+        @NotNull BlockHitResult hitResult
+    ) {
         if (!level.isClientSide) {
             var screenHandlerFactory = state.getMenuProvider(level, pos);
             if (screenHandlerFactory != null)
@@ -89,7 +104,13 @@ public class GunTableBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, @NotNull Level world, @NotNull BlockPos pos, BlockState newState, boolean moved) {
+    public void onRemove(
+        BlockState state,
+        @NotNull Level world,
+        @NotNull BlockPos pos,
+        BlockState newState,
+        boolean moved
+    ) {
         if (state.getBlock() != newState.getBlock()) {
             var blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof GunBlockEntity) {

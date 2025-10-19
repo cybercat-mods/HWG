@@ -1,8 +1,5 @@
 package mod.azure.hwg.entity.projectiles;
 
-import mod.azure.hwg.CommonMod;
-import mod.azure.hwg.util.Helper;
-import mod.azure.hwg.util.registry.HWGProjectiles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -24,9 +21,17 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
+import mod.azure.hwg.CommonMod;
+import mod.azure.hwg.util.Helper;
+import mod.azure.hwg.util.registry.HWGProjectiles;
+
 public class RocketEntity extends AbstractArrow {
 
-    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(RocketEntity.class, EntityDataSerializers.FLOAT);
+    public static final EntityDataAccessor<Float> FORCED_YAW = SynchedEntityData.defineId(
+        RocketEntity.class,
+        EntityDataSerializers.FLOAT
+    );
+
     public SoundEvent hitSound = this.getDefaultHitGroundSoundEvent();
 
     public RocketEntity(EntityType<? extends RocketEntity> entityType, Level world) {
@@ -59,7 +64,7 @@ public class RocketEntity extends AbstractArrow {
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
-        tag.putShort("life", (short)this.tickCount);
+        tag.putShort("life", (short) this.tickCount);
         tag.putFloat("ForcedYaw", entityData.get(FORCED_YAW));
     }
 
@@ -88,7 +93,8 @@ public class RocketEntity extends AbstractArrow {
             this.yRotO = this.getYRot();
             this.xRotO = this.getXRot();
         }
-        if (getOwner() instanceof Player) setYRot(entityData.get(FORCED_YAW));
+        if (getOwner() instanceof Player)
+            setYRot(entityData.get(FORCED_YAW));
         if (this.tickCount >= 190) {
             this.explode();
             this.remove(RemovalReason.DISCARDED);
@@ -99,8 +105,10 @@ public class RocketEntity extends AbstractArrow {
             this.tickCount = 0;
             var vec3d3 = this.position();
             var vector3d3 = vec3d3.add(vec3d);
-            HitResult hitResult = this.level().clip(new ClipContext(vec3d3, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-            if (hitResult.getType() != HitResult.Type.MISS) vector3d3 = hitResult.getLocation();
+            HitResult hitResult = this.level()
+                .clip(new ClipContext(vec3d3, vector3d3, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+            if (hitResult.getType() != HitResult.Type.MISS)
+                vector3d3 = hitResult.getLocation();
             while (!this.isRemoved()) {
                 var entityHitResult = this.findHitEntity(vec3d3, vector3d3);
                 if (entityHitResult != null) {
@@ -109,7 +117,11 @@ public class RocketEntity extends AbstractArrow {
                 if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
                     var entity = ((EntityHitResult) hitResult).getEntity();
                     var entity2 = this.getOwner();
-                    if (entity instanceof Player player && entity2 instanceof Player player1 && !player1.canHarmPlayer(player)) {
+                    if (
+                        entity instanceof Player player && entity2 instanceof Player player1 && !player1.canHarmPlayer(
+                            player
+                        )
+                    ) {
                         hitResult = null;
                         entityHitResult = null;
                     }
@@ -118,7 +130,8 @@ public class RocketEntity extends AbstractArrow {
                     this.onHit(hitResult);
                     this.hasImpulse = true;
                 }
-                if (entityHitResult == null || this.getPierceLevel() <= 0) break;
+                if (entityHitResult == null || this.getPierceLevel() <= 0)
+                    break;
                 hitResult = null;
             }
             vec3d = this.getDeltaMovement();
@@ -129,15 +142,21 @@ public class RocketEntity extends AbstractArrow {
             double j = this.getY() + e;
             double k = this.getZ() + g;
             double l = vec3d.horizontalDistance();
-            if (bl) this.setYRot((float) (Mth.atan2(-e, -g) * 57.2957763671875D));
-            else this.setYRot((float) (Mth.atan2(e, g) * 57.2957763671875D));
+            if (bl)
+                this.setYRot((float) (Mth.atan2(-e, -g) * 57.2957763671875D));
+            else
+                this.setYRot((float) (Mth.atan2(e, g) * 57.2957763671875D));
             this.setXRot((float) (Mth.atan2(e, l) * 57.2957763671875D));
             this.setXRot(lerpRotation(this.xRotO, this.getXRot()));
             this.setYRot(lerpRotation(this.yRotO, this.getYRot()));
             var m = 0.99F;
             this.setDeltaMovement(vec3d.scale(m));
             if (!this.isNoGravity() && !bl)
-                this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.05000000074505806D, this.getDeltaMovement().z);
+                this.setDeltaMovement(
+                    this.getDeltaMovement().x,
+                    this.getDeltaMovement().y - 0.05000000074505806D,
+                    this.getDeltaMovement().z
+                );
             this.absMoveTo(h, j, k);
             this.checkInsideBlocks();
         }
@@ -180,7 +199,18 @@ public class RocketEntity extends AbstractArrow {
     }
 
     protected void explode() {
-        this.level().explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 2.0F, false, CommonMod.config.gunconfigs.rocket_breaks ? Level.ExplosionInteraction.BLOCK : Level.ExplosionInteraction.NONE);
+        this.level()
+            .explode(
+                this,
+                this.getX(),
+                this.getY(0.0625D),
+                this.getZ(),
+                2.0F,
+                false,
+                CommonMod.config.gunconfigs.rocket_breaks
+                    ? Level.ExplosionInteraction.BLOCK
+                    : Level.ExplosionInteraction.NONE
+            );
     }
 
     @Override
